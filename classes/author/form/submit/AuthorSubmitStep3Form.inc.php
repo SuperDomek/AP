@@ -116,6 +116,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
+			/* if ()
+			*
+			*/
 			$userVars[] = 'abstract';
 		}
 		$this->readUserVars($userVars);
@@ -157,6 +160,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		$templateMgr->assign('collectAbstracts', $reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE);
+		$templateMgr->assign('isAbstract', empty($this->getData('abstract')) ? false : true);
 		parent::display();
 	}
 
@@ -177,6 +181,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 
 		$reviewMode = $this->paper->getReviewMode();
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
+			/* Writing abstract data
+			*  Getting data directly from the form field
+			*/
 			$paper->setAbstract($this->getData('abstract'), null); // Localized
 		}
 
