@@ -202,15 +202,15 @@ function moveAuthor(dir, authorIndex) {
 </tr>
 	{else}{* If there is no abstract yet, put three fields for user input. *}
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="abstract" key="paper.abstract1" required="true"}</td>
+	<td width="20%" class="label">{fieldLabel name="abstract1" key="paper.abstract1" required="true"}</td>
 	<td width="80%" class="value"><textarea name="abstract[{$formLocale|escape}]" id="abstract1" class="textArea" rows="15" cols="60">{$abstract[$formLocale]|escape}</textarea></td>
 </tr>	
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="abstract" key="paper.abstract2" required="true"}</td>
+	<td width="20%" class="label">{fieldLabel name="abstract2" key="paper.abstract2" required="true"}</td>
 	<td width="80%" class="value"><textarea name="abstract[{$formLocale|escape}]" id="abstract2" class="textArea" rows="15" cols="60">{$abstract[$formLocale]|escape}</textarea></td>
 </tr>	
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="abstract" key="paper.abstract3" required="true"}</td>
+	<td width="20%" class="label">{fieldLabel name="abstract3" key="paper.abstract3" required="true"}</td>
 	<td width="80%" class="value"><textarea name="abstract[{$formLocale|escape}]" id="abstract3" class="textArea" rows="15" cols="60">{$abstract[$formLocale]|escape}</textarea></td>
 </tr>	
 	{/if}{* $isAbstract *}

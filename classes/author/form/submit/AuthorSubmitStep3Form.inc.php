@@ -33,13 +33,25 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $paper->getReviewMode();
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
-			$this->addCheck(new FormValidatorLocale($this, 'abstract', 'required', 'author.submit.form.abstractRequired'));
+			if(empty($this->getData('abstract'))){ // Creation phase: show 3 abstract fields
+				$trackDao =& DAORegistry::getDAO('TrackDAO');
+				$track = $trackDao->getTrack($paper->getTrackId());
+				$abstractWordCount = $track->getAbstractWordCount() / 3; // For one field
+				$this->addCheck(new FormValidatorLocale($this, 'abstract1', 'required', 'author.submit.form.abstractRequired'));
+				if (isset($abstractWordCount) && $abstractWordCount > 0) {
+					// The anonymous function uses an array of multi-language abstract
+					$this->addCheck(new FormValidatorCustom($this, 'abstract1', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $wordCount', 'foreach ($abstract as $localizedAbstract) {return count(explode(" ",strip_tags($localizedAbstract))) < $wordCount; }'), array($abstractWordCount)));
+				}
+			}
+			else { // getting back to already filled in abstract
+				$this->addCheck(new FormValidatorLocale($this, 'abstract', 'required', 'author.submit.form.abstractRequired'));
 
-			$trackDao =& DAORegistry::getDAO('TrackDAO');
-			$track = $trackDao->getTrack($paper->getTrackId());
-			$abstractWordCount = $track->getAbstractWordCount();
-			if (isset($abstractWordCount) && $abstractWordCount > 0) {
-				$this->addCheck(new FormValidatorCustom($this, 'abstract', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $wordCount', 'foreach ($abstract as $localizedAbstract) {return count(explode(" ",strip_tags($localizedAbstract))) < $wordCount; }'), array($abstractWordCount)));
+				$trackDao =& DAORegistry::getDAO('TrackDAO');
+				$track = $trackDao->getTrack($paper->getTrackId());
+				$abstractWordCount = $track->getAbstractWordCount();
+				if (isset($abstractWordCount) && $abstractWordCount > 0) {
+					$this->addCheck(new FormValidatorCustom($this, 'abstract', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $wordCount', 'foreach ($abstract as $localizedAbstract) {return count(explode(" ",strip_tags($localizedAbstract))) < $wordCount; }'), array($abstractWordCount)));
+				}
 			}
 		}
 	}
