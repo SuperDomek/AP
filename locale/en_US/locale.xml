@@ -183,6 +183,9 @@
 	<message key="paper.submission">Submission</message>
 	<message key="paper.submissions">Submissions</message>
 	<message key="paper.abstract">Abstract</message>
+	<message key="paper.abstract1">Abstract1</message>
+	<message key="paper.abstract2">Abstract2</message>
+	<message key="paper.abstract3">Abstract3</message>
 	<message key="paper.details">Details</message>
 	<message key="paper.location">Location</message>
 	<message key="paper.time">Time</message>
