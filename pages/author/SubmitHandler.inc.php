@@ -181,9 +181,12 @@ class SubmitHandler extends AuthorHandler {
 			// For the "abstract only" or sequential review models, nothing else needs
 			// to be collected beyond page 2.
 			$reviewMode = $paper?$paper->getReviewMode():$schedConf->getSetting('reviewMode');
-			if (($step == 3 && $reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && !$schedConf->getSetting('acceptSupplementaryReviewMaterials')) || 
+			if (($step == 3 && $reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && !$schedConf->getSetting('acceptSupplementaryReviewMaterials')) ||
 					($step == 3 && $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE && !$schedConf->getSetting('acceptSupplementaryReviewMaterials')) ||
 					($step == 5 )) {
+
+
+				
 
 				// Send a notification to associated users
 				import('notification.NotificationManager');

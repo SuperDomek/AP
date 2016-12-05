@@ -89,6 +89,11 @@ class TinyMCEPlugin extends GenericPlugin {
 							$fields[] = "authors-$i-biography";
 						}
 						$fields[] = 'abstract';
+						// EDIT Three sub-abstracts
+						$fields[] = 'abstract1';
+						$fields[] = 'abstract2';
+						$fields[] = 'abstract3';
+						// EDIT END
 						$fields[] = 'citations';
 						break;
 				}

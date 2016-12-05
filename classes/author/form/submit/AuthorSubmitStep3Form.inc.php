@@ -32,15 +32,20 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $paper->getReviewMode();
+		$formLocale = Request::getUserVar('formLocale');
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
-			if(empty($this->getData('abstract'))){ // Creation phase: show 3 abstract fields
+			if(empty($this->getData('abstract')[$formLocale])){ // Creation phase: show 3 abstract fields
 				$trackDao =& DAORegistry::getDAO('TrackDAO');
 				$track = $trackDao->getTrack($paper->getTrackId());
 				$abstractWordCount = $track->getAbstractWordCount() / 3; // For one field
 				$this->addCheck(new FormValidatorLocale($this, 'abstract1', 'required', 'author.submit.form.abstractRequired'));
+				$this->addCheck(new FormValidatorLocale($this, 'abstract2', 'required', 'author.submit.form.abstractRequired'));
+				$this->addCheck(new FormValidatorLocale($this, 'abstract3', 'required', 'author.submit.form.abstractRequired'));
 				if (isset($abstractWordCount) && $abstractWordCount > 0) {
 					// The anonymous function uses an array of multi-language abstract
 					$this->addCheck(new FormValidatorCustom($this, 'abstract1', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $wordCount', 'foreach ($abstract as $localizedAbstract) {return count(explode(" ",strip_tags($localizedAbstract))) < $wordCount; }'), array($abstractWordCount)));
+					$this->addCheck(new FormValidatorCustom($this, 'abstract2', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $wordCount', 'foreach ($abstract as $localizedAbstract) {return count(explode(" ",strip_tags($localizedAbstract))) < $wordCount; }'), array($abstractWordCount)));
+					$this->addCheck(new FormValidatorCustom($this, 'abstract3', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $wordCount', 'foreach ($abstract as $localizedAbstract) {return count(explode(" ",strip_tags($localizedAbstract))) < $wordCount; }'), array($abstractWordCount)));
 				}
 			}
 			else { // getting back to already filled in abstract
@@ -68,6 +73,14 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				'authors' => array(),
 				'title' => $paper->getTitle(null), // Localized
 				'abstract' => $paper->getAbstract(null), // Localized
+
+				// EDIT Three sub-abstracts
+				// Delete
+				'abstract1' => $paper->getAbstract(null, 1), // Localized
+				'abstract2' => $paper->getAbstract(null, 2), // Localized
+				'abstract3' => $paper->getAbstract(null, 3), // Localized
+				// EDIT END
+
 				'discipline' => $paper->getDiscipline(null), // Localized
 				'subjectClass' => $paper->getSubjectClass(null), // Localized
 				'subject' => $paper->getSubject(null), // Localized
@@ -128,10 +141,12 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
-			/* if ()
-			*
-			*/
 			$userVars[] = 'abstract';
+			// EDIT Three sub-abstracts
+			$userVars[] = 'abstract1';
+			$userVars[] = 'abstract2';
+			$userVars[] = 'abstract3';
+			// EDIT END
 		}
 		$this->readUserVars($userVars);
 
@@ -151,6 +166,11 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$reviewMode = $this->paper->getReviewMode();
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
 			$returner[] = 'abstract';
+			// EDIT Three sub-abstracts
+			$returner[] = 'abstract1';
+			$returner[] = 'abstract2';
+			$returner[] = 'abstract3';
+			// EDIT END
 		}
 		return $returner;
 	}
@@ -164,6 +184,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$countryDao =& DAORegistry::getDAO('CountryDAO');
 		$countries =& $countryDao->getCountries();
 		$templateMgr->assign_by_ref('countries', $countries);
+		$formLocale = Request::getUserVar('formLocale');
 
 		if (Request::getUserVar('addAuthor') || Request::getUserVar('delAuthor')  || Request::getUserVar('moveAuthor')) {
 			$templateMgr->assign('scrollToAuthor', true);
@@ -172,7 +193,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		$templateMgr->assign('collectAbstracts', $reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE);
-		$templateMgr->assign('isAbstract', empty($this->getData('abstract')) ? false : true);
+		// getData returns field
+		$templateMgr->assign('isAbstract', empty($this->getData('abstract')[$formLocale]) ? false : true);
+		$templateMgr->assign('test', $this->getData('abstract1')[$formLocale]);
 		parent::display();
 	}
 
@@ -187,6 +210,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$user =& Request::getUser();
+		$formLocale = Request::getUserVar('formLocale'); // nefunguje
 
 		// Update paper
 		$paper->setTitle($this->getData('title'), null); // Localized
@@ -196,7 +220,27 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			/* Writing abstract data
 			*  Getting data directly from the form field
 			*/
-			$paper->setAbstract($this->getData('abstract'), null); // Localized
+			// $paper->setAbstract($this->getData('abstract'), null); // Localized
+
+			// EDIT Three sub-abstracts
+			// The three abstracts here merge into one. After the merge there is only one abstract window visible.
+			/*$abstract1 = AppLocale::Translate('paper.abstract1');
+			$abstract2 = AppLocale::Translate('paper.abstract2');
+			$abstract3 = AppLocale::Translate('paper.abstract1');*/
+
+			$nameAbstract1 = 'Abstrakt 1';
+			$nameAbstract2 = 'Abstrakt 2';
+			$nameAbstract3 = 'Abstrakt 3';
+			$newAbstract = array();
+			// problem jak se dostanu do locale
+			$newAbstract['en_US'] = $nameAbstract1 . ': ' . $this->getData('abstract1')[$formLocale] . $nameAbstract2 . ': ' . $this->getData('abstract2')[$formLocale] . $nameAbstract3 . ': ' . $this->getData('abstract3')[$formLocale];
+			$paper->setAbstract($newAbstract, null); // Localized
+
+			// EDIT Three sub-abstracts
+			/*$paper->setAbstract($this->getData('abstract1'), null, 1); // Localized
+			$paper->setAbstract($this->getData('abstract2'), null, 2); // Localized
+			$paper->setAbstract($this->getData('abstract3'), null, 3); // Localized*/
+			// EDIT END
 		}
 
 		$paper->setDiscipline($this->getData('discipline'), null); // Localized
@@ -277,6 +321,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		for ($i=0, $count=count($deletedAuthors); $i < $count; $i++) {
 			$paper->removeAuthor($deletedAuthors[$i]);
 		}
+
+
 
 		// Save the paper
 		$paperDao->updatePaper($paper);

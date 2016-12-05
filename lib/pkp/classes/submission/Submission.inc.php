@@ -233,21 +233,50 @@ class Submission extends DataObject {
 	}
 
 	/**
-	 * Get abstract.
+	 * Get abstracts.
 	 * @param $locale
+	 * @param $absNumber int optional The sequence number of abstract (hardcoded)
 	 * @return string
 	 */
-	function getAbstract($locale) {
-		return $this->getData('abstract', $locale);
+	function getAbstract($locale, $absNumber = 0) {
+		switch ($absNumber) {
+			case 1:
+				return $this->getData('abstract1', $locale);
+				break;
+			case 2:
+				return $this->getData('abstract2', $locale);
+				break;
+			case 3:
+				return $this->getData('abstract3', $locale);
+				break;
+			default:
+				return $this->getData('abstract', $locale);
+				break;
+		}
 	}
 
 	/**
 	 * Set abstract.
 	 * @param $abstract string
+	 * @param $absNumber int optional The sequence number of abstract (hardcoded)
 	 * @param $locale
 	 */
-	function setAbstract($abstract, $locale) {
-		return $this->setData('abstract', $abstract, $locale);
+	function setAbstract($abstract, $locale, $absNumber = 0) {
+		switch ($absNumber) {
+			case 1:
+				return $this->setData('abstract1', $abstract, $locale);
+				break;
+			case 2:
+				return $this->setData('abstract2', $abstract, $locale);
+				break;
+			case 3:
+				return $this->setData('abstract3', $abstract, $locale);
+				break;
+			default:
+				return $this->setData('abstract', $abstract, $locale);
+				break;
+		}
+
 	}
 
 	/**
