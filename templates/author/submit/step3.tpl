@@ -203,7 +203,7 @@ function moveAuthor(dir, authorIndex) {
 	{else}{* If there is no abstract yet, put three fields for user input. *}
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="abstract1" key="paper.abstract1" required="true"}</td>
-	<td width="80%" class="value"><textarea name="abstract1[{$formLocale|escape}]" id="abstract1" class="textArea" rows="15" cols="60">{$abstract1[$formLocale]|escape} mezera {$abstract1[$formLocale]}</textarea></td>
+	<td width="80%" class="value"><textarea name="abstract1[{$formLocale|escape}]" id="abstract1" class="textArea" rows="15" cols="60">{$abstract1[$formLocale]|escape}</textarea></td>
 </tr>
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="abstract2" key="paper.abstract2" required="true"}</td>

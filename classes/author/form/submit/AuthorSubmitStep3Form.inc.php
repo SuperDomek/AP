@@ -210,7 +210,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$user =& Request::getUser();
-		$formLocale = Request::getUserVar('formLocale'); // nefunguje
 
 		// Update paper
 		$paper->setTitle($this->getData('title'), null); // Localized
@@ -223,24 +222,28 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			// $paper->setAbstract($this->getData('abstract'), null); // Localized
 
 			// EDIT Three sub-abstracts
-			// The three abstracts here merge into one. After the merge there is only one abstract window visible.
-			/*$abstract1 = AppLocale::Translate('paper.abstract1');
-			$abstract2 = AppLocale::Translate('paper.abstract2');
-			$abstract3 = AppLocale::Translate('paper.abstract1');*/
+			// The three abstracts from submission creation form here merge into one.
+			// After the merge there is only one abstract for the whole submission.
 
+			// initialization of abstract parts names (hardcoded)
 			$nameAbstract1 = 'Abstrakt 1';
 			$nameAbstract2 = 'Abstrakt 2';
 			$nameAbstract3 = 'Abstrakt 3';
-			$newAbstract = array();
-			// problem jak se dostanu do locale
-			$newAbstract['en_US'] = $nameAbstract1 . ': ' . $this->getData('abstract1')[$formLocale] . $nameAbstract2 . ': ' . $this->getData('abstract2')[$formLocale] . $nameAbstract3 . ': ' . $this->getData('abstract3')[$formLocale];
-			$paper->setAbstract($newAbstract, null); // Localized
-
-			// EDIT Three sub-abstracts
-			/*$paper->setAbstract($this->getData('abstract1'), null, 1); // Localized
-			$paper->setAbstract($this->getData('abstract2'), null, 2); // Localized
-			$paper->setAbstract($this->getData('abstract3'), null, 3); // Localized*/
-			// EDIT END
+			// initialization of abstracts from form
+			$abstract1 = $this->getData('abstract1');
+			$abstract2 = $this->getData('abstract2');
+			$abstract3 = $this->getData('abstract3');
+			// initialization of abstract from paper
+			$paperAbstracts = $paper->getAbstract(null);
+			// cycle through locale abstracts from form
+			// and assign each locale version in paper abstract
+			foreach ($abstract1 as $key => $value) {
+				// if current locale version is not yet in paper abstract
+ 				if(!isset($paperAbstracts[$key])){
+					$newAbstract = $nameAbstract1 . ': ' . $abstract1[$key] . '<br>' . $nameAbstract2 . ': ' . $abstract2[$key] . '<br>' . $nameAbstract3 . ': ' . $abstract3[$key];
+					$paper->setAbstract($newAbstract, $key); // Localized
+				}
+			}
 		}
 
 		$paper->setDiscipline($this->getData('discipline'), null); // Localized
