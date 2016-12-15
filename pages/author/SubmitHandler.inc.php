@@ -159,6 +159,9 @@ class SubmitHandler extends AuthorHandler {
 						}
 						$submitForm->setData('authors', $authors);
 					}
+					else if (Request::getUserVar('addClassification')){
+						$editData = true;
+					}
 					break;
 
 				case 4:
@@ -186,7 +189,7 @@ class SubmitHandler extends AuthorHandler {
 					($step == 5 )) {
 
 
-				
+
 
 				// Send a notification to associated users
 				import('notification.NotificationManager');

@@ -189,6 +189,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		if (Request::getUserVar('addAuthor') || Request::getUserVar('delAuthor')  || Request::getUserVar('moveAuthor')) {
 			$templateMgr->assign('scrollToAuthor', true);
 		}
+		elseif (Request::getUserVar('addClassification')){
+			$templateMgr->assign('scrollToIndexing', true);
+		}
 
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();

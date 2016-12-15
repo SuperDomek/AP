@@ -242,6 +242,13 @@ function moveAuthor(dir, authorIndex) {
 </tr>
 {/if}
 
+{*
+  *
+  * Enter JEL Code here
+  *
+  *
+  *}
+
 {if $currentSchedConf->getSetting('metaSubjectClass')}
 <tr valign="top">
 	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification"}</td>
@@ -249,6 +256,12 @@ function moveAuthor(dir, authorIndex) {
 </tr>
 <tr valign="top">
 	<td width="20%" class="label"><a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')|escape}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a></td>
+</tr>
+<tr valign="top">
+  <td></td>
+  <td width="20%" class="label">
+    <input type="submit" class="button" name="addClassification" value="{translate key="author.submit.addClassification"}" />
+  </td>
 </tr>
 <tr valign="top">
 	<td>&nbsp;</td>
@@ -385,6 +398,12 @@ function moveAuthor(dir, authorIndex) {
 		authors.scrollIntoView(false);
 	</script>
 	{/literal}
+{elseif $scrollToIndexing}
+  {literal}
+  <script type="text/javascript">
+    document.getElementById('indexing').scrollIntoView(true);
+  </script>
+  {/literal}
 {/if}
 
 {include file="common/footer.tpl"}

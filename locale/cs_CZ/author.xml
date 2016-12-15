@@ -21,7 +21,7 @@
 	<message key="author.submit.startHereLink">První krok postupu podání příspěvku</message>
 	<message key="author.submit.step1">Krok 1: Zahájení podání</message>
 	<message key="author.submit.step3">Krok 3: Vložení metadat příspěvku</message>
-	<message key="author.submit.step3AbstOnly">Krok 2: Vložení metadat příspěvku</message>	
+	<message key="author.submit.step3AbstOnly">Krok 2: Vložení metadat příspěvku</message>
 	<message key="author.submit.step2">Krok 2: Načtení příspěvku</message>
 	<message key="author.submit.step4">Krok 4: Načtení doplňkových souborů</message>
 	<message key="author.submit.step4a">Krok 4a: Přidání doplňkového souboru</message>
@@ -68,6 +68,7 @@
 	<message key="author.submit.reorder">Přeuspořádat jména autorů</message>
 	<message key="author.submit.selectPrincipalContact">Hlavní kontaktní osoba pro korespondenci související s publikováním.</message>
 	<message key="author.submit.addAuthor">Přidat autora</message>
+	<message key="author.submit.addClassification">Přidat JEL kód</message>
 	<message key="author.submit.deleteAuthor">Odstranit autora</message>
 	<message key="author.submit.submissionIndexingDescription">Zadejte pojmy pro indexování příspěvku; oddělte je středníkem (pojem1; pojem2; pojem3).</message>
 	<message key="author.submit.submissionSupportingAgencies">Podpora příspěvku</message>
