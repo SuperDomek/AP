@@ -223,7 +223,7 @@ function moveAuthor(dir, authorIndex) {
 <div id="indexing">
 <h3>{translate key="submission.indexing"}</h3>
 
-{if $currentSchedConf->getSetting('metaDiscipline') || $currentSchedConf->getSetting('metaSubjectClass') || $currentSchedConf->getSetting('metaSubject') || $currentSchedConf->getSetting('metaCoverage') || $currentSchedConf->getSetting('metaType')}<p>{translate key="author.submit.submissionIndexingDescription"}</p>{/if}
+<!--{if $currentSchedConf->getSetting('metaDiscipline') || $currentSchedConf->getSetting('metaSubjectClass') || $currentSchedConf->getSetting('metaSubject') || $currentSchedConf->getSetting('metaCoverage') || $currentSchedConf->getSetting('metaType')}<p>{translate key="author.submit.submissionIndexingDescription"}</p>{/if}-->
 
 <table width="100%" class="data">
 {if $currentSchedConf->getSetting('metaDiscipline')}
@@ -251,11 +251,15 @@ function moveAuthor(dir, authorIndex) {
 
 {if $currentSchedConf->getSetting('metaSubjectClass')}
 <tr valign="top">
-	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification"}</td>
+	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification"}<br>
+    <a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')|escape}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a>
+  </td>
 	<td width="80%" class="value"><input type="text" class="textField" name="subjectClass[{$formLocale|escape}]" id="subjectClass" value="{$subjectClass[$formLocale]|escape}" size="40" maxlength="255" /></td>
+  {foreach name=jelCodes from=$jelCodes key=jel_code_id item=jelCode}
+  {/foreach}
 </tr>
 <tr valign="top">
-	<td width="20%" class="label"><a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')|escape}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a></td>
+	<td width="20%" class="label"></td>
 </tr>
 <tr valign="top">
   <td></td>
