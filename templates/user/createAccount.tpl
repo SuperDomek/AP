@@ -13,6 +13,52 @@
 {include file="common/header.tpl"}
 {/strip}
 
+{literal}
+<script type="text/javascript">
+<!--
+// Sets up address
+// @key string Abbreviation for faculty to set up; if null the erase address
+function setAddress(key){
+  // process addresses from smarty into a javascript variable
+  var addresses = {{/literal}
+    {foreach from=$addresses item=address key=key name=addressloop}
+          "{$key}":"{$address}"
+    {if !$smarty.foreach.addressloop.last},{/if}
+    {/foreach}{literal}
+  };
+  // set up address in address field
+  if (key == null) {
+    //document.getElementById("mailingAddress").value = "";
+    tinyMCE.get('mailingAddress').setContent("");
+  }
+  else{
+    //document.getElementById("mailingAddress").value = addresses[key];
+    tinyMCE.get('mailingAddress').setContent(addresses[key]);
+  }
+}
+
+// shows affiliation box if required; sets up address if affiliation set up
+function showAffilBox(sel) {
+  var selected = sel.options[sel.selectedIndex];
+	if(selected.value == "else"){ //custom affil
+    document.getElementById("affil_box").style.display = "table-row";
+    // clean the prefilled boxes
+    document.getElementById("affil_text").value = "";
+    setAddress(null);
+  }
+  else if (selected.value != ""){ //selected affil
+    document.getElementById("affil_box").style.display = "none";
+    document.getElementById("affil_text").value = selected.text;
+    setAddress(selected.value);
+  }
+  else { // blank affil
+    document.getElementById("affil_box").style.display = "none";
+  }
+}
+// -->
+</script>
+{/literal}
+
 <form name="createAccount" method="post" action="{url op="createAccount"}">
 
 <p>{translate key="user.account.completeForm"}</p>
@@ -51,7 +97,7 @@
 		</td>
 	</tr>
 {/if}
-<tr valign="top">	
+<tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="username" required="true" key="user.username"}</td>
 	<td width="80%" class="value"><input type="text" name="username" value="{$username|escape}" id="username" size="20" maxlength="32" class="textField" /></td>
 </tr>
@@ -61,7 +107,7 @@
 	<td class="instruct">{translate key="user.account.usernameRestriction"}</td>
 </tr>
 {/if}
-	
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="password" required="true" key="user.password"}</td>
 	<td class="value"><input type="password" name="password" value="{$password|escape}" id="password" size="20" maxlength="32" class="textField" /></td>
@@ -97,22 +143,22 @@
 	<td class="label">{fieldLabel name="firstName" required="true" key="user.firstName"}</td>
 	<td class="value"><input type="text" id="firstName" name="firstName" value="{$firstName|escape}" size="20" maxlength="40" class="textField" /></td>
 </tr>
-	
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="middleName" key="user.middleName"}</td>
 	<td class="value"><input type="text" id="middleName" name="middleName" value="{$middleName|escape}" size="20" maxlength="40" class="textField" /></td>
 </tr>
-	
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="lastName" required="true" key="user.lastName"}</td>
 	<td class="value"><input type="text" id="lastName" name="lastName" value="{$lastName|escape}" size="20" maxlength="90" class="textField" /></td>
 </tr>
-
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="initials" key="user.initials"}</td>
 	<td class="value"><input type="text" id="initials" name="initials" value="{$initials|escape}" size="5" maxlength="5" class="textField" />&nbsp;&nbsp;{translate key="user.initialsExample"}</td>
 </tr>
-
+-->
 <tr valign="top">
 	<td class="label">{fieldLabel name="gender" key="user.gender"}</td>
 	<td class="value"><select name="gender" id="gender" size="1" class="selectMenu">
@@ -121,41 +167,53 @@
 	</td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
-	<td class="value"><textarea name="affiliation" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea></td>
+	<td class="value">
+    <select name="affiliation_select" class="selectMenu" onchange="showAffilBox(this);">
+      <option value=""></option>
+      {html_options options=$affiliations selected=$affiliation_select}
+    </select>
+  </td>
 </tr>
-
+<tr valign="top" id="affil_box" {if $affiliation_select neq 'else'}class="hidden"{/if}>
+  <td class="label">
+  </td>
+  <td class="value">
+    <textarea name="affiliation" id="affil_text" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea>
+  </td>
+</tr>
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="signature" key="user.signature"}</td>
 	<td class="value"><textarea name="signature[{$formLocale|escape}]" id="signature" rows="5" cols="40" class="textArea">{$signature[$formLocale]|escape}</textarea></td>
 </tr>
-
+-->
 <tr valign="top">
 	<td class="label">{fieldLabel name="email" required="true" key="user.email"}</td>
 	<td class="value"><input type="text" id="email" name="email" value="{$email|escape}" size="30" maxlength="90" class="textField" /></td>
 </tr>
-
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="userUrl" key="user.url"}</td>
 	<td class="value"><input type="text" id="userUrl" name="userUrl" value="{$userUrl|escape}" size="30" maxlength="90" class="textField" /></td>
 </tr>
-	
+-->
 <tr valign="top">
 	<td class="label">{fieldLabel name="phone" key="user.phone"}</td>
 	<td class="value"><input type="text" name="phone" id="phone" value="{$phone|escape}" size="15" maxlength="24" class="textField" /></td>
 </tr>
-	
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="fax" key="user.fax"}</td>
 	<td class="value"><input type="text" name="fax" id="fax" value="{$fax|escape}" size="15" maxlength="24" class="textField" /></td>
 </tr>
 
 <tr valign="top">
-	<td class="label">{fieldLabel name="mailingAddress" key="common.mailingAddress"}</td>
-	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="3" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
+	<td class="label">{fieldLabel name="mailingAddress" required="true" key="common.mailingAddress"}</td>
+	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="4" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
 </tr>
-	
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="country" key="common.country"}</td>
 	<td class="value">
@@ -165,12 +223,15 @@
 		</select>
 	</td>
 </tr>
+<tr>
 
+</tr>
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
 	<td class="value"><textarea name="biography[{$formLocale|escape}]" id="biography" rows="5" cols="40" class="textArea">{$biography[$formLocale]|escape}</textarea></td>
 </tr>
-
+-->
 <tr valign="top">
 	<td class="label">{fieldLabel name="sendPassword" key="user.sendPassword"}</td>
 	<td class="value">
@@ -187,7 +248,7 @@
 </tr>
 {/if}
 {/if}
-	
+
 {if ($allowRegReader || $allowRegReader === null) or $enableOpenAccessNotification or ($allowRegAuthor || $allowRegAuthor === null) or ($allowRegReviewer || $allowRegReviewer === null)}
 <tr valign="top">
 	<td class="label">{fieldLabel suppressId="true" name="createAs" key="user.account.createAs"}</td>

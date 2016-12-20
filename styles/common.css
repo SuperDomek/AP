@@ -65,7 +65,7 @@ a:hover {
 
 #announcementsHome {
 	width: 100%;
-	margin: 2em 0 2em 0;	
+	margin: 2em 0 2em 0;
 }
 
 #announcementsHome h3 {
@@ -118,7 +118,7 @@ table.announcements td.intro {
 }
 
 table.announcements tr.title {
-	vertical-align: top; 
+	vertical-align: top;
 }
 
 table.announcements td.title {
@@ -347,4 +347,7 @@ a.defaultFont:hover {
 a.largeFont:hover {
 	background: url(../lib/pkp/templates/images/icons/font-up.png);
 	color: none;
+}
+.hidden {
+	display:none;
 }

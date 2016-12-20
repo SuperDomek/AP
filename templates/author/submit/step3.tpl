@@ -31,6 +31,23 @@ function moveAuthor(dir, authorIndex) {
 	form.moveAuthorDir.value = dir;
 	form.moveAuthorIndex.value = authorIndex;
 	form.submit();
+
+  // shows affiliation box if required; sets up address if affiliation set up
+  function showAffilBox(sel) {
+    var selected = sel.options[sel.selectedIndex];
+  	if(selected.value == "else"){ //custom affil
+      document.getElementById("affil_box").style.display = "table-row";
+      // clean the prefilled boxes
+      document.getElementById("affil_text").value = "";
+    }
+    else if (selected.value != ""){ //selected affil
+      document.getElementById("affil_box").style.display = "none";
+      document.getElementById("affil_text").value = selected.text;
+    }
+    else { // blank affil
+      document.getElementById("affil_box").style.display = "none";
+    }
+  }
 }
 // -->
 </script>
@@ -89,15 +106,19 @@ function moveAuthor(dir, authorIndex) {
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-email" required="true" key="user.email"}</td>
 	<td width="80%" class="value"><input type="text" class="textField" name="authors[{$authorIndex|escape}][email]" id="authors-{$authorIndex|escape}-email" value="{$author.email|escape}" size="30" maxlength="90" /></td>
 </tr>
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="authors-$authorIndex-url" key="user.url"}</td>
 	<td class="value"><input type="text" name="authors[{$authorIndex|escape}][url]" id="authors-{$authorIndex|escape}-url" value="{$author.url|escape}" size="30" maxlength="90" class="textField" /></td>
 </tr>
+-->
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" key="user.affiliation"}</td>
+	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" key="user.affiliation"}<br>
+    <span class="instruct">{translate key="user.affiliation.description"}</span>
+  </td>
 	<td width="80%" class="value">
 		<textarea name="authors[{$authorIndex|escape}][affiliation]" class="textArea" id="authors-{$authorIndex|escape}-affiliation" rows="5" cols="40">{$author.affiliation|escape}</textarea><br/>
-		<span class="instruct">{translate key="user.affiliation.description"}</span>
+
 	</td>
 </tr>
 <tr valign="top">
@@ -109,10 +130,12 @@ function moveAuthor(dir, authorIndex) {
 		</select>
 	</td>
 </tr>
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
 	<td width="80%" class="value"><textarea name="authors[{$authorIndex|escape}][biography][{$formLocale|escape}]" class="textArea" id="authors-{$authorIndex|escape}-biography" rows="5" cols="40">{$author.biography[$formLocale]|escape}</textarea></td>
 </tr>
+-->
 {if $smarty.foreach.authors.total > 1}
 <tr valign="top">
 	<td colspan="2">
@@ -146,10 +169,11 @@ function moveAuthor(dir, authorIndex) {
 	<td width="80%" class="value"><input type="text" class="textField" name="authors[0][lastName]" id="authors-0-lastName" size="20" maxlength="90" /></td>
 </tr>
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-0-affiliation" key="user.affiliation"}</td>
+	<td width="20%" class="label">{fieldLabel name="authors-0-affiliation" key="user.affiliation"}<br>
+    <span class="instruct">{translate key="user.affiliation.description"}</span>
+  </td>
 	<td width="80%" class="value">
 		<textarea class="textArea" name="authors[0][affiliation]" id="authors-0-affiliation" rows="5" cols="40"></textarea><br/>
-		<span class="instruct">{translate key="user.affiliation.description"}</span>
 	</td>
 </tr>
 <tr valign="top">
@@ -165,6 +189,7 @@ function moveAuthor(dir, authorIndex) {
 	<td width="20%" class="label">{fieldLabel name="authors-0-email" required="true" key="user.email"}</td>
 	<td width="80%" class="value"><input type="text" class="textField" name="authors[0][email]" id="authors-0-email" size="30" maxlength="90" /></td>
 </tr>
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-0-url" required="true" key="user.url"}</td>
 	<td width="80%" class="value"><input type="text" class="textField" name="authors[0][url]" id="authors-0-url" size="30" maxlength="90" /></td>
@@ -173,6 +198,7 @@ function moveAuthor(dir, authorIndex) {
 	<td width="20%" class="label">{fieldLabel name="authors-0-biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
 	<td width="80%" class="value"><textarea name="authors[0][biography]" class="textArea" id="authors-0-biography[{$formLocale|escape}]" rows="5" cols="40"></textarea></td>
 </tr>
+-->
 </table>
 {/foreach}
 

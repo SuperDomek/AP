@@ -64,6 +64,7 @@ class CreateAccountForm extends Form {
 			$this->addCheck(new FormValidatorUrl($this, 'userUrl', 'optional', 'user.profile.form.urlInvalid'));
 			$this->addCheck(new FormValidatorEmail($this, 'email', 'required', 'user.profile.form.emailRequired'));
 			$this->addCheck(new FormValidator($this, 'affiliation', 'required', 'user.profile.form.affiliationRequired'));
+			$this->addCheck(new FormValidator($this, 'mailingAddress', 'required', 'user.profile.form.addressRequired'));
 			$this->addCheck(new FormValidatorCustom($this, 'email', 'required', 'user.account.form.emailExists', array(DAORegistry::getDAO('UserDAO'), 'userExistsByEmail'), array(), true));
 			if ($this->captchaEnabled) {
 				$this->addCheck(new FormValidatorCaptcha($this, 'captcha', 'captchaId', 'common.captchaField.badCaptcha'));
@@ -103,8 +104,14 @@ class CreateAccountForm extends Form {
 		$countries =& $countryDao->getCountries();
 		$templateMgr->assign_by_ref('countries', $countries);
 
+		// Initialization of Affiliation options and addresses
+		import('user.form.Affiliations');
+		$affil = new Affiliations();
+		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('addresses', $affil->getAddresses());
+
 		import('schedConf.SchedConfAction');
-		
+
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$templateMgr->assign('genderOptions', $userDao->getGenderOptions());
 
@@ -121,7 +128,7 @@ class CreateAccountForm extends Form {
 		$site =& Request::getSite();
 		$templateMgr->assign('availableLocales', $site->getSupportedLocaleNames());
 
-		$templateMgr->assign('helpTopicId', 'conference.users.index');		
+		$templateMgr->assign('helpTopicId', 'conference.users.index');
 		parent::display();
 	}
 
@@ -149,7 +156,7 @@ class CreateAccountForm extends Form {
 			'username', 'password', 'password2',
 			'salutation', 'firstName', 'middleName', 'lastName',
 			'gender', 'initials', 'country',
-			'affiliation', 'email', 'userUrl', 'phone', 'fax', 'signature',
+			'affiliation', 'affiliation_select','email', 'userUrl', 'phone', 'fax', 'signature',
 			'mailingAddress', 'biography', 'interests', 'userLocales',
 			'createAsReader', 'openAccessNotification', 'createAsAuthor',
 			'createAsReviewer', 'existingUser', 'sendPassword'
