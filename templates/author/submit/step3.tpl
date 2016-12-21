@@ -24,6 +24,7 @@
 {literal}
 <script type="text/javascript">
 <!--
+
 // Move author up/down
 function moveAuthor(dir, authorIndex) {
 	var form = document.submit;
@@ -31,23 +32,61 @@ function moveAuthor(dir, authorIndex) {
 	form.moveAuthorDir.value = dir;
 	form.moveAuthorIndex.value = authorIndex;
 	form.submit();
+}
 
-  // shows affiliation box if required; sets up address if affiliation set up
-  function showAffilBox(sel) {
-    var selected = sel.options[sel.selectedIndex];
-  	if(selected.value == "else"){ //custom affil
-      document.getElementById("affil_box").style.display = "table-row";
-      // clean the prefilled boxes
-      document.getElementById("affil_text").value = "";
-    }
-    else if (selected.value != ""){ //selected affil
-      document.getElementById("affil_box").style.display = "none";
-      document.getElementById("affil_text").value = selected.text;
-    }
-    else { // blank affil
-      document.getElementById("affil_box").style.display = "none";
+// shows affiliation box if required; sets up address if affiliation set up
+function showAffilBox(sel) {
+  //find the [authorIndex] and delete []
+  var authorIndex = sel.name.match(/\[[0-9]+\]/).toString().replace(/[\[|\]]/g,"");
+  var selected = sel.options[sel.selectedIndex];
+  var affil_box = "authors-".concat(authorIndex).concat("-affil_box");
+  var affil_text = "authors-".concat(authorIndex).concat("-affiliation");
+	if(selected.value == "else"){ //custom affil
+    document.getElementById(affil_box).style.display = "table-row";
+    // clean the prefilled boxes
+    tinyMCE.get(affil_text).setContent("");
+  }
+  else if (selected.value != ""){ //selected affil
+    document.getElementById(affil_box).style.display = "none";
+    tinyMCE.get(affil_text).setContent(selected.text);
+  }
+  else { // blank affil
+    document.getElementById(affil_box).style.display = "none";
+  }
+}
+
+// Inits the affiliation select box by the textarea content
+function initSelect() {
+  var authors = {/literal}{$authors|@count}{literal};
+  var i;
+  // process affiliations array from smarty into a javascript associative array
+  var affiliations = {{/literal}
+    {foreach from=$affiliations item=affiliation key=key name=affiliatinloop}
+          "{$key}":"{$affiliation}"
+    {if !$smarty.foreach.affiliatinloop.last},{/if}
+    {/foreach}{literal}
+  };
+  // cycle through autors affiliation select boxes
+  for (i = 0; i < authors; i++) {
+    var affil_text_id = "authors-".concat(i).concat("-affiliation");
+    var affil_select_name = "authors[".concat(i).concat("][affiliation_select]");
+    var affiliation_text = document.getElementById(affil_text_id).value;
+    var affiliation_key = val2key(affiliation_text, affiliations);
+    if (affiliation_key){
+      document.getElementsByName(affil_select_name)[0].value = affiliation_key;
     }
   }
+}
+
+// returns key of a searched value in an associative array
+function val2key(val,array){
+    for (var key in array) {
+        this_val = array[key];
+        if(this_val == val){
+            return key;
+            break;
+        }
+    }
 }
 // -->
 </script>
@@ -113,14 +152,22 @@ function moveAuthor(dir, authorIndex) {
 </tr>
 -->
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" key="user.affiliation"}<br>
-    <span class="instruct">{translate key="user.affiliation.description"}</span>
+	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" required="true" key="user.affiliation"}
   </td>
 	<td width="80%" class="value">
-		<textarea name="authors[{$authorIndex|escape}][affiliation]" class="textArea" id="authors-{$authorIndex|escape}-affiliation" rows="5" cols="40">{$author.affiliation|escape}</textarea><br/>
-
+    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectMenu" onchange="showAffilBox(this);">
+      <option value=""></option>
+      {html_options options=$affiliations selected=$author.affiliation_select|escape}
+    </select>
 	</td>
 </tr>
+<tr valign="top" id="authors-{$authorIndex|escape}-affil_box" {if $author.affiliation_select neq 'else'}class="hidden"{/if}>
+  <td><span class="instruct">{translate key="user.affiliation.description"}</span></td>
+  <td class="value">
+    <textarea name="authors[{$authorIndex|escape}][affiliation]" class="textArea" id="authors-{$authorIndex|escape}-affiliation" rows="5" cols="40">{$author.affiliation|escape}</textarea><br/>
+  </td>
+</tr>
+
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-country" key="common.country"}</td>
 	<td width="80%" class="value">
@@ -412,5 +459,13 @@ function moveAuthor(dir, authorIndex) {
 	</script>
 	{/literal}
 {/if}
+
+{* Initialization of the affiliation select boxes on first load of submit page *}
+{if $firstLoad}
+{literal}
+<script type="text/javascript">
+  initSelect();
+</script>
+{/literal}{/if}
 
 {include file="common/footer.tpl"}
