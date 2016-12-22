@@ -9,7 +9,7 @@
  * @class CreateAccountHandler
  * @ingroup pages_user
  *
- * @brief Handle requests for user account creation. 
+ * @brief Handle requests for user account creation.
  */
 
 //$Id$
@@ -30,7 +30,7 @@ class CreateAccountHandler extends UserHandler {
 	function account() {
 		$this->validate();
 		$this->setupTemplate(true);
-		
+
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 
@@ -173,7 +173,7 @@ class CreateAccountHandler extends UserHandler {
 	/**
 	 * Validation check.
 	 * Checks if conference allows user account creation.
-	 */	
+	 */
 	function validate() {
 		parent::validate(false);
 		$conference =& Request::getConference();

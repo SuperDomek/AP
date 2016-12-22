@@ -21,7 +21,7 @@
 	<message key="author.submit.step3AbstOnly">Step 2. Entering the Submission's Metadata</message>
 	<message key="author.submit.step4AbstOnly">Step 3. Uploading Supplementary Files</message>
 	<message key="author.submit.step2">Step 2. Uploading the Submission</message>
-	<message key="author.submit.step2NoAbstracts">Step 3. Uploading the Submission</message>	
+	<message key="author.submit.step2NoAbstracts">Step 3. Uploading the Submission</message>
 	<message key="author.submit.step4">Step 4. Uploading Supplementary Files</message>
 	<message key="author.submit.step4a">Step 4a. Add a Supplementary File</message>
 	<message key="author.submit.step5">Step 5. Confirming the Submission</message>
@@ -59,7 +59,7 @@
 	<message key="author.submit.commentsForDirector">Comments for Conference Director</message>
 	<message key="author.submit.comments">Enter text (optional)</message>
 	<message key="author.submit.form.authorRequired">At least one author is required.</message>
-	<message key="author.submit.form.authorRequiredFields">The first name, last name, and email address of each author is required.</message>
+	<message key="author.submit.form.authorRequiredFields">The first name, last name, email address, and affiliation of each author is required.</message>
 	<message key="author.submit.form.trackRequired">Please select an appropriate conference track for this submission.</message>
 	<message key="author.submit.form.abstractRequired">Please enter an abstract for your submission.</message>
 	<message key="author.submit.privacyStatement">Conference's Privacy Statement</message>

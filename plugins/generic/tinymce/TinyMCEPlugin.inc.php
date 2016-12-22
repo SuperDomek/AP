@@ -107,6 +107,7 @@ class TinyMCEPlugin extends GenericPlugin {
 				break;
 			case 'user/profile':
 			case 'user/account':
+			case 'user/createAccount':
 			case 'user/saveProfile':
 			case 'manager/createUser':
 			case 'manager/updateUser':
