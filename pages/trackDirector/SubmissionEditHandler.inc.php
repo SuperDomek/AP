@@ -24,14 +24,14 @@ import('pages.trackDirector.TrackDirectorHandler');
 class SubmissionEditHandler extends TrackDirectorHandler {
 	/** submission associated with the request **/
 	var $submission;
-	
+
 	/**
 	 * Constructor
 	 **/
 	function SubmissionEditHandler() {
 		parent::TrackDirectorHandler();
 	}
-	
+
 	function submission($args) {
 		$paperId = isset($args[0]) ? (int) $args[0] : 0;
 		$this->validate($paperId);
@@ -141,7 +141,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
-		
+
 		$stage = (isset($args[1]) ? (int) $args[1] : null);
 		$reviewMode = $submission->getReviewMode();
 		switch ($reviewMode) {
@@ -176,6 +176,40 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			!empty($editAssignments);
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
+
+		//if(!$submission->getReviewAssignments($stage)){ // no reviewers yet
+		if ($stage == $submission->getCurrentStage()){ //stage not disabled
+			// Get track directors assigned to this track
+			$trackDirectorsDao =& DAORegistry::getDAO('TrackDirectorsDAO');
+			$assignedDirectors =& $trackDirectorsDao->getDirectorsByTrackId($schedConf->getId(), $submission->getTrackID());
+			$directorsToAdd = array(); // IDs of track directors for paper's track
+			foreach($assignedDirectors as $assignedDirector){
+				$directorsToAdd[] = $assignedDirector->getID();
+			}
+			foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
+				// for each reviewAssignment
+				foreach($assignedDirectors as $assignedDirector){
+					// check whether it is track director's review
+					if($reviewAssignment->getReviewerId() == $assignedDirector->getID()){
+						// and if it is active
+						if(!$reviewAssignment->getCancelled()){
+							// delete track director from the list of directors to add as rev.
+							if(($key = array_search($assignedDirector->getID(), $directorsToAdd)) !== false) {
+    						unset($directorsToAdd[$key]);
+							}
+						}
+					}
+				}
+			}
+			// Assign track directors to paper as reviewers
+			if(!empty($directorsToAdd)){
+				foreach($directorsToAdd as $directorId){
+					TrackDirectorAction::addReviewer($submission, $directorId, $stage);
+				}
+				header("Refresh:0"); // reload page
+				exit();	// stop executing code so page reloads instanteously
+			}
+		}
 
 		// Prepare an array to store the 'Notify Reviewer' email logs
 		$notifyReviewerLogs = array();
@@ -955,7 +989,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$reviewId = isset($args[1]) ? (int) $args[1] : null;
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$submission =& $this->submission;
-		
+
 		TrackDirectorAction::clearReviewForm($submission, $reviewId);
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
@@ -1206,7 +1240,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$paperId = isset($args[0]) ? (int) $args[0] : 0;
 		$this->validate($paperId);
 		$submission =& $this->submission;
-		
+
 		TrackDirectorAction::restoreToQueue($submission);
 
 		Request::redirect(null, null, null, 'submission', $paperId);
@@ -1216,7 +1250,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$paperId = Request::getUserVar('paperId');
 		$this->validate($paperId);
 		$submission =& $this->submission;
-		
+
 		$send = Request::getUserVar('send')?true:false;
 		$this->setupTemplate(true, $paperId, 'summary');
 
@@ -1260,7 +1294,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$templateMgr->assign('backLinkLabel', 'submission.review');
 			return $templateMgr->display('common/message.tpl');
 		}
-		
+
 		if ($layoutFileType == 'galley') {
 			$this->uploadGalley('layoutFile', $stage);
 
@@ -1614,7 +1648,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$logId = isset($args[1]) ? (int) $args[1] : 0;
 		$this->validate($paperId);
 		$submission =& $this->submission;
-		
+
 		$this->setupTemplate(true, $paperId, 'history');
 
 		$templateMgr =& TemplateManager::getManager();
