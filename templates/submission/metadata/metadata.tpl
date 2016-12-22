@@ -11,13 +11,13 @@
 <div id="metadata">
 <h3>{translate key="submission.metadata"}</h3>
 
-{if $mayEditPaper}
+{if $mayEditPaper && !$isReviewer}
 	<p><a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">{translate key="submission.editMetadata"}</a></p>
 {/if}
-
+{if !$isReviewer}
 <div id="authors">
 <h4>{translate key="paper.authors"}</h4>
-	
+
 <table width="100%" class="data">
 	{foreach name=authors from=$submission->getAuthors() item=author}
 	<tr valign="top">
@@ -59,6 +59,7 @@
 	{/foreach}
 </table>
 </div><!-- authors -->
+{/if}
 
 <div id="titleAndAbstract">
 <h4>{translate key="submission.titleAndAbstract"}</h4>
@@ -80,7 +81,7 @@
 
 <div id="indexing">
 <h4>{translate key="submission.indexing"}</h4>
-	
+
 <table width="100%" class="data">
 	{if $currentSchedConf->getSetting('metaDiscipline')}
 	<tr valign="top">
@@ -150,7 +151,7 @@
 
 <div id="supportingAgencies">
 <h4>{translate key="submission.supportingAgencies"}</h4>
-	
+
 <table width="100%" class="data">
 	<tr valign="top">
 		<td width="20%" class="label">{translate key="submission.agencies"}</td>

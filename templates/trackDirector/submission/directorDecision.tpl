@@ -38,6 +38,7 @@
 		{/foreach}
 	</td>
 </tr>
+{if !$isReviewer}
 <tr valign="top">
 	<td class="label">{translate key="submission.notifyAuthor"}</td>
 	<td class="value" colspan="2">
@@ -58,6 +59,7 @@
 		{/if}
 	</td>
 </tr>
+{/if}
 </table>
 </div>
 <form method="post" action="{url op="directorReview" path=$stage}" enctype="multipart/form-data">
@@ -168,4 +170,3 @@
 
 	{include file="trackDirector/submission/layout.tpl"}
 {/if}
-

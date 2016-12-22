@@ -332,7 +332,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		// capture changes in review process.
 		import('paper.log.PaperLog');
 		import('paper.log.PaperEventLogEntry');
-		PaperLog::logEvent($this->paperId, PAPER_LOG_ABSTRACT_SUBMIT, LOG_TYPE_AUTHOR, $user->getId(), 'log.author.abstractSubmitted', array('submissionId' => $paper->getId(), 'authorName' => $user->getFullName()));
+		// not logging authors submission because we don't want track director to see authors
+		//PaperLog::logEvent($this->paperId, PAPER_LOG_ABSTRACT_SUBMIT, LOG_TYPE_AUTHOR, $user->getId(), 'log.author.abstractSubmitted', array('submissionId' => $paper->getId(), 'authorName' => $user->getFullName()));
 		return $this->paperId;
 	}
 }

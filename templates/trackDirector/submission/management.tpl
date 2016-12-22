@@ -15,6 +15,7 @@
 {assign var="suppFiles" value=$submission->getSuppFiles()}
 
 <table width="100%" class="data">
+  {if !$isReviewer}{*track director could be a reviewer as well*}
 	<tr>
 		<td width="20%" class="label">{translate key="paper.authors"}</td>
 		<td width="80%" colspan="2" class="value">
@@ -22,6 +23,7 @@
 			{$submission->getAuthorString()|escape} {icon name="mail" url=$url}
 		</td>
 	</tr>
+  {/if}
 	<tr>
 		<td class="label">{translate key="paper.title"}</td>
 		<td colspan="2" class="value">{$submission->getLocalizedTitle()|strip_unsafe_html}</td>
@@ -49,6 +51,7 @@
 			{/foreach}
 		</td>
 	</tr>
+  {if !$isReviewer}
 	<tr>
 		<td class="label">{translate key="submission.submitter"}</td>
 		<td colspan="2" class="value">
@@ -58,6 +61,7 @@
 			{$submitter->getFullName()|escape} {icon name="mail" url=$url}
 		</td>
 	</tr>
+  {/if}
 	<tr>
 		<td class="label">{translate key="common.dateSubmitted"}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatShort}</td>
