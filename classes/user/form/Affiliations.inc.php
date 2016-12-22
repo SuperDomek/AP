@@ -26,7 +26,7 @@ class Affiliations {
   function __construct() {
     $locale = AppLocale::getLocale();
     switch($locale) {
-      case "cz_CZ":
+      case "cs_CZ":
         $this->affiliations["CULS"] = "Česká zemědělská univerzita";
         $this->affiliations["FEM"] = "ČZU, Provozně ekonomická fakulta";
         $this->affiliations["else"] = "Jiná";
@@ -37,13 +37,12 @@ class Affiliations {
         $this->affiliations["else"] = "Specify bellow";
         break;
     }
-    //$templateMgr->assign('affiliations', $affiliations);
 
     // Initialization of addresses
     // The array keys need to be consistent with affiliations keys
     $this->addresses["CULS"] = "Česká zemědělská univerzita v Praze<br>Kamýcká 129<br>165 00 Praha 6 - Suchdol";
     $this->addresses["FEM"] = "Provozně ekonomická fakulta<br>Česká zemědělská univerzita v Praze<br>Kamýcká 129\\n165 21 Praha 6 - Suchdol";
-    //$templateMgr->assign('addresses', $addresses);
+
     return $this->checkConsistency();
   }
 
