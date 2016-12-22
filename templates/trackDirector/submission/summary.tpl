@@ -12,6 +12,7 @@
 <h3>{translate key="paper.submission"}</h3>
 
 <table width="100%" class="data">
+  {if !$isReviewer}{*track director could be a reviewer as well*}
 	<tr>
 		<td width="20%" class="label">{translate key="paper.authors"}</td>
 		<td width="80%">
@@ -19,6 +20,7 @@
 			{$submission->getAuthorString()|escape} {icon name="mail" url=$url}
 		</td>
 	</tr>
+  {/if}
 	<tr>
 		<td class="label">{translate key="paper.title"}</td>
 		<td>{$submission->getLocalizedTitle()|strip_unsafe_html}</td>

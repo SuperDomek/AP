@@ -64,6 +64,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('userId', $user->getId());
 		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign('enableComments', $enableComments);
+		$templateMgr->assign('isReviewer', $this->isReviewer());
 
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
 		$templateMgr->assign_by_ref('tracks', $trackDao->getTrackTitles($schedConf->getId()));
@@ -270,6 +271,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions());
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
+		$templateMgr->assign('isReviewer', $this->isReviewer());
 
 		if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage == REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);
@@ -344,6 +346,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('eventLogEntries', $eventLogEntries);
 		$templateMgr->assign_by_ref('emailLogEntries', $emailLogEntries);
 		$templateMgr->assign_by_ref('submissionNotes', $submissionNotes);
+		$templateMgr->assign('isReviewer', $this->isReviewer());
 
 		$templateMgr->display('trackDirector/submissionHistory.tpl');
 	}
@@ -1861,6 +1864,23 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		}
 	}
 
+	/**
+	 * Checks whether the current user is assigned as reviewer
+	 * @return bool true if the user is active reviewer
+	 */
+	function isReviewer(){
+		$user =& Request::getUser();
+		$submission =& $this->submission;
+		$stage = $submission->getCurrentStage();
+		foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
+			// for each reviewAssignment
+			// check whether this user is a reviewer and the review is active
+			if(($reviewAssignment->getReviewerId() == $user->getId()) && !$reviewAssignment->getCancelled()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	//
 	// Validation
