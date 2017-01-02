@@ -18,7 +18,7 @@
 	<message key="submission.agencies">Agentury</message>
 	<message key="submission.abstractViews">Zobrazení abstraktu</message>
 	<message key="submission.accepted">Přijata</message>
-	<message key="submission.acknowledge">Poděkovat</message>
+	<message key="submission.acknowledge">Poděkováno</message>
 	<message key="submission.addSuppFile">Přidat doplňkový soubor</message>
 	<message key="submission.ask">Vyžádáno</message>
 	<message key="submission.backToSubmissionEditing">Zpět na editaci příspěvku</message>
@@ -193,7 +193,7 @@
 	<message key="submission.peerReview"><![CDATA[Recenzní&nbsp;řízení]]></message>
 	<message key="submission.recommendation">Doporučení</message>
 	<message key="submission.rejected">Zamítnut</message>
-	<message key="submission.request">Požádat</message>
+	<message key="submission.request">Požádáno</message>
 	<message key="submission.response">Odpověď</message>
 	<message key="submission.restrictions">Omezení</message>
 	<message key="submission.reviewMetadata">Zkontrolovat metadata</message>
