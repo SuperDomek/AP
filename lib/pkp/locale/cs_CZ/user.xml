@@ -65,7 +65,8 @@
 	<message key="user.profile.changePasswordInstructions">Pro změnu hesla k Vašemu účtu vložte níže Vaše současné a nové heslo.</message>
 	<message key="user.profile.editProfile">Editovat profil</message>
 	<message key="user.profile.form.emailRequired">Je vyžadována platná emailová adresa.</message>
-	<message key="user.profile.form.affiliationRequired">Prosím, vyplňte položku pracoviště.</message>
+	<message key="user.profile.form.addressRequired">Prosíme, vyplňte Vaši korespondenční adresu.</message>
+	<message key="user.profile.form.affiliationRequired">Prosíme, vyplňte položku pracoviště.</message>
 	<message key="user.profile.form.firstNameRequired">Je vyžadováno jméno.</message>
 	<message key="user.profile.form.lastNameRequired">Je vyžadováno příjmení.</message>
 	<message key="user.profile.form.newPasswordRequired">Musíte vložit Vaše nové heslo.</message>

@@ -467,7 +467,7 @@ class ReviewAssignment extends DataObject {
 	 */
 	function setReviewRevision($reviewRevision) {
 		return $this->setData('reviewRevision', $reviewRevision);
-	}	
+	}
 
 	/**
 	 * Get review form id.
@@ -484,7 +484,7 @@ class ReviewAssignment extends DataObject {
 	function setReviewFormId($reviewFormId) {
 		return $this->setData('reviewFormId', $reviewFormId);
 	}
-	
+
 	//
 	// Files
 	//

@@ -25,7 +25,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 
 		// Validation checks for this form
 		$this->addCheck(new FormValidatorCustom($this, 'authors', 'required', 'author.submit.form.authorRequired', create_function('$authors', 'return count($authors) > 0;')));
-		$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName')));
+		$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName', 'affiliation')));
 		$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', create_function('$email, $regExp', 'return String::regexp_match($regExp, $email);'), array(ValidatorEmail::getRegexp()), false, array('email')));
 		$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'user.profile.form.urlInvalid', create_function('$url, $regExp', 'return empty($url) ? true : String::regexp_match($regExp, $url);'), array(ValidatorUrl::getRegexp()), false, array('url')));
 		$this->addCheck(new FormValidatorLocale($this, 'title', 'required', 'author.submit.form.titleRequired'));
@@ -73,14 +73,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				'authors' => array(),
 				'title' => $paper->getTitle(null), // Localized
 				'abstract' => $paper->getAbstract(null), // Localized
-
-				// EDIT Three sub-abstracts
-				// Delete
-				'abstract1' => $paper->getAbstract(null, 1), // Localized
-				'abstract2' => $paper->getAbstract(null, 2), // Localized
-				'abstract3' => $paper->getAbstract(null, 3), // Localized
-				// EDIT END
-
 				'discipline' => $paper->getDiscipline(null), // Localized
 				'subjectClass' => $paper->getSubjectClass(null), // Localized
 				'subject' => $paper->getSubject(null), // Localized
@@ -193,12 +185,17 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			$templateMgr->assign('scrollToIndexing', true);
 		}
 
+		// Initialization of Affiliation options and addresses
+		import('user.form.Affiliations');
+		$affil = new Affiliations();
+		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('addresses', $affil->getAddresses());
+
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		$templateMgr->assign('collectAbstracts', $reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE);
 		// getData returns field
 		$templateMgr->assign('isAbstract', empty($this->getData('abstract')[$formLocale]) ? false : true);
-		$templateMgr->assign('test', $this->getData('abstract1')[$formLocale]);
 		parent::display();
 	}
 
@@ -338,7 +335,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		// capture changes in review process.
 		import('paper.log.PaperLog');
 		import('paper.log.PaperEventLogEntry');
-		PaperLog::logEvent($this->paperId, PAPER_LOG_ABSTRACT_SUBMIT, LOG_TYPE_AUTHOR, $user->getId(), 'log.author.abstractSubmitted', array('submissionId' => $paper->getId(), 'authorName' => $user->getFullName()));
+		// not logging authors submission because we don't want track director to see authors
+		//PaperLog::logEvent($this->paperId, PAPER_LOG_ABSTRACT_SUBMIT, LOG_TYPE_AUTHOR, $user->getId(), 'log.author.abstractSubmitted', array('submissionId' => $paper->getId(), 'authorName' => $user->getFullName()));
 		return $this->paperId;
 	}
 }

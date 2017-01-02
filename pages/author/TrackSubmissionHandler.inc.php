@@ -19,7 +19,7 @@ import('pages.author.AuthorHandler');
 class TrackSubmissionHandler extends AuthorHandler {
 	/** submission associated with the request **/
 	var $submission;
-		
+
 	/**
 	 * Constructor
 	 **/
@@ -61,7 +61,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$this->validate($paperId, true);
 		$authorSubmission =& $this->submission;
-				
+
 		AuthorAction::deletePaperFile($authorSubmission, $fileId, $revisionId);
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
@@ -160,7 +160,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 				$stage = REVIEW_STAGE_PRESENTATION;
 				break;
 			case REVIEW_MODE_BOTH_SEQUENTIAL:
-				if ($stage != REVIEW_STAGE_ABSTRACT && $stage != REVIEW_STAGE_PRESENTATION) $stage = $submission->getCurrentStage();
+				if ($stage != REVIEW_STAGE_ABSTRACT && $stage != REVIEW_STAGE_PRESENTATION) $stage = $authorSubmission->getCurrentStage();
 				break;
 		}
 
@@ -207,7 +207,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$this->validate($paperId, true);
 		$authorSubmission =& $this->submission;
 		$this->setupTemplate(true, $paperId, 'summary');
-		
+
 		import('submission.form.SuppFileForm');
 
 		$submitForm = new SuppFileForm($authorSubmission);
@@ -242,7 +242,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('paperId', $paperId);
 		$templateMgr->assign_by_ref('suppFile', $suppFile);
-		$templateMgr->display('submission/suppFile/suppFileView.tpl');	
+		$templateMgr->display('submission/suppFile/suppFileView.tpl');
 	}
 
 	/**
@@ -369,7 +369,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$this->validate($paperId);
 		$submission =& $this->submission;
-				
+
 		if (!AuthorAction::downloadAuthorFile($submission, $fileId, $revision)) {
 			Request::redirect(null, null, null, 'submission', $paperId);
 		}

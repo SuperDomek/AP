@@ -57,7 +57,9 @@ class SubmitHandler extends AuthorHandler {
 		$this->setupTemplate(true);
 
 		$paper =& $this->paper;
-
+		$templateMgr =& TemplateManager::getManager();
+		$templateMgr->assign('firstLoad', true);
+		//echo '<script type="text/javascript"> var firstLoad = true;</script>';
 		$formClass = "AuthorSubmitStep{$step}Form";
 		import("author.form.submit.$formClass");
 
