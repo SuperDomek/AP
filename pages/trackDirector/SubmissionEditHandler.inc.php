@@ -178,6 +178,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
 
+		/* EDIT Add track directors as reviewers */
 		//if(!$submission->getReviewAssignments($stage)){ // no reviewers yet
 		if ($stage == $submission->getCurrentStage()){ //stage not disabled
 			// Get track directors assigned to this track
@@ -205,12 +206,13 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			// Assign track directors to paper as reviewers
 			if(!empty($directorsToAdd)){
 				foreach($directorsToAdd as $directorId){
-					TrackDirectorAction::addReviewer($submission, $directorId, $stage);
+					TrackDirectorAction::addReviewer($submission, $directorId, $stage, true);
 				}
 				header("Refresh:0"); // reload page
 				exit();	// stop executing code so page reloads instanteously
 			}
 		}
+		/* END EDIT */
 
 		// Prepare an array to store the 'Notify Reviewer' email logs
 		$notifyReviewerLogs = array();
@@ -245,6 +247,18 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				$reviewForm =& $reviewFormDao->getReviewForm($reviewAssignment->getReviewFormId());
 				if ($reviewForm) {
 					$reviewFormTitles[$reviewForm->getId()] = $reviewForm->getLocalizedTitle();
+				}
+
+				/* EDIT Automaticaly send Acknowledge e-mail if the review is done
+				*/
+				$reviewId =& $reviewAssignment->getId();
+				if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
+					if(!$reviewAssignment->getDateAcknowledged()){
+						if (TrackDirectorAction::thankReviewer($submission, $reviewId, false, true)) {
+							header("Refresh:0"); // reload page
+							exit();	// stop executing code so page reloads instanteously
+						}
+					}
 				}
 				unset($reviewForm);
 				$reviewFormResponses[$reviewAssignment->getId()] = $reviewFormResponseDao->reviewFormResponseExists($reviewAssignment->getId());
@@ -459,7 +473,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		if (isset($args[1]) && $args[1] != null) {
 			// Assign reviewer to paper
-			TrackDirectorAction::addReviewer($submission, (int) $args[1], $submission->getCurrentStage());
+			TrackDirectorAction::addReviewer($submission, (int) $args[1], $submission->getCurrentStage(), true);
 			Request::redirect(null, null, null, 'submissionReview', $paperId);
 
 			// FIXME: Prompt for due date.

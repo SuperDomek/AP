@@ -78,7 +78,7 @@ class TrackDirectorAction extends Action {
 				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
 				$trackDirectorSubmission->stampStatusModified();
 			} else {
-				$trackDirectorSubmission->setStatus(STATUS_QUEUED);		
+				$trackDirectorSubmission->setStatus(STATUS_QUEUED);
 				$trackDirectorSubmission->stampStatusModified();
 			}
 
@@ -167,8 +167,9 @@ class TrackDirectorAction extends Action {
 	 * @param $trackDirectorSubmission object
 	 * @param $reviewerId int
 	 * @param $stage int
+	 * @param $auto bool optional automatically send notify email
 	 */
-	function addReviewer($trackDirectorSubmission, $reviewerId, $stage) {
+	function addReviewer($trackDirectorSubmission, $reviewerId, $stage, $auto = false) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
@@ -231,7 +232,12 @@ class TrackDirectorAction extends Action {
 					$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 				}
 			}
-
+			/* EDIT Automatically send notification to the reviewer
+			*
+			*/
+			if ($auto){
+				TrackDirectorAction::notifyReviewer($trackDirectorSubmission, $reviewAssignment->getId(), false, true);
+			}
 			// Add log
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');
@@ -262,16 +268,17 @@ class TrackDirectorAction extends Action {
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');
 			PaperLog::logEvent($trackDirectorSubmission->getPaperId(), PAPER_LOG_REVIEW_CLEAR, LOG_TYPE_REVIEW, $reviewAssignment->getId(), 'log.review.reviewCleared', array('reviewerName' => $reviewer->getFullName(), 'paperId' => $trackDirectorSubmission->getPaperId(), 'stage' => $reviewAssignment->getStage()));
-		}		
+		}
 	}
 
 	/**
 	 * Notifies a reviewer about a review assignment.
 	 * @param $trackDirectorSubmission object
 	 * @param $reviewId int
+	 * @param $auto bool optional set true if e-mail to be sent automatically
 	 * @return boolean true iff ready for redirect
 	 */
-	function notifyReviewer($trackDirectorSubmission, $reviewId, $send = false) {
+	function notifyReviewer($trackDirectorSubmission, $reviewId, $send = false, $auto = false) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
@@ -302,7 +309,81 @@ class TrackDirectorAction extends Action {
 			$reviewer =& $userDao->getUser($reviewAssignment->getReviewerId());
 			if (!isset($reviewer)) return true;
 
-			if (!$email->isEnabled() || ($send && !$email->hasErrors())) {
+			/* EDIT added if statement for automatical setup of fields
+			*	Basicaly copied code from both branches bellow. First goes else for setup of fields.
+			*	Followed by elseif for sending.
+			*/
+			if($auto){
+				$weekLaterDate = strftime(Config::getVar('general', 'date_format_short'), strtotime('+1 week'));
+
+				if ($reviewAssignment->getDateDue() != null) {
+					$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), strtotime($reviewAssignment->getDateDue()));
+				} else {
+					if ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_ABSOLUTE) {
+						$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsolute');
+						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDate);
+					} elseif ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_RELATIVE) {
+						$numWeeks = max((int) $schedConf->getSetting('numWeeksPerReviewRelative'), 2);
+						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), strtotime('+' . $numWeeks . ' week'));
+					}
+
+				}
+
+				$submissionUrl = Request::url(null, null, 'reviewer', 'submission', $reviewId, $reviewerAccessKeysEnabled?array('key' => 'ACCESS_KEY'):array());
+
+				$paramArray = array(
+					'reviewerName' => $reviewer->getFullName(),
+					'weekLaterDate' => $weekLaterDate,
+					'reviewDueDate' => $reviewDueDate,
+					'reviewerUsername' => $reviewer->getUsername(),
+					'reviewerPassword' => $reviewer->getPassword(),
+					'editorialContactSignature' => $user->getContactSignature(),
+					'reviewGuidelines' => $schedConf->getLocalizedSetting('reviewGuidelines'),
+					'submissionReviewUrl' => $submissionUrl,
+					'passwordResetUrl' => Request::url(null, null, 'login', 'resetPassword', $reviewer->getUsername(), array('confirm' => Validation::generatePasswordResetHash($reviewer->getId())))
+				);
+				$email->assignParams($paramArray);
+				$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
+
+				if ($email->isEnabled()) {
+					$email->setAssoc(PAPER_EMAIL_REVIEW_NOTIFY_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
+					if ($reviewerAccessKeysEnabled) {
+						import('security.AccessKeyManager');
+						import('pages.reviewer.ReviewerHandler');
+						$accessKeyManager = new AccessKeyManager();
+
+						// Key lifetime is the typical review period plus four weeks
+						if ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_ABSOLUTE) {
+							// Get number of days from now until review deadline date
+							$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsolute');
+							$daysDiff = ($reviewDeadlineDate - strtotime(date("Y-m-d"))) / (60 * 60 * 24);
+							$keyLifetime = (round($daysDiff / 7) + 4) * 7;
+						} elseif ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_RELATIVE) {
+							$keyLifetime = ((int) $schedConf->getSetting('numWeeksPerReviewRelative') + 4) * 7;
+						}
+
+						$email->addPrivateParam('ACCESS_KEY', $accessKeyManager->createKey('ReviewerContext', $reviewer->getId(), $reviewId, $keyLifetime));
+					}
+
+					if ($preventAddressChanges) {
+						// Ensure that this messages goes to the reviewer, and the reviewer ONLY.
+						$email->clearAllRecipients();
+						$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
+					}
+					$email->send();
+				}
+
+				$reviewAssignment->setDateNotified(Core::getCurrentDate());
+				$reviewAssignment->setCancelled(0);
+				$reviewAssignment->stampModified();
+				$reviewAssignmentDao->updateReviewAssignment($reviewAssignment);
+
+				// EDIT generate automatic notification
+				import('notification.NotificationManager');
+				$notificationManager = new NotificationManager();
+				$notificationManager->createTrivialNotification('notification.notification', 'common.requestReviewer');
+			}
+			elseif (!$email->isEnabled() || ($send && !$email->hasErrors())) {
 				HookRegistry::call('TrackDirectorAction::notifyReviewer', array(&$trackDirectorSubmission, &$reviewAssignment, &$email));
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_NOTIFY_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
@@ -351,7 +432,7 @@ class TrackDirectorAction extends Action {
 							$numWeeks = max((int) $schedConf->getSetting('numWeeksPerReviewRelative'), 2);
 							$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), strtotime('+' . $numWeeks . ' week'));
 						}
-						
+
 					}
 
 					$submissionUrl = Request::url(null, null, 'reviewer', 'submission', $reviewId, $reviewerAccessKeysEnabled?array('key' => 'ACCESS_KEY'):array());
@@ -434,7 +515,7 @@ class TrackDirectorAction extends Action {
 					$email->displayEditForm(Request::url(null, null, null, 'cancelReview', 'send'), array('reviewId' => $reviewId, 'paperId' => $trackDirectorSubmission->getPaperId()));
 					return false;
 				}
-			}				
+			}
 		}
 		return true;
 	}
@@ -552,9 +633,10 @@ class TrackDirectorAction extends Action {
 	 * Thanks a reviewer for completing a review assignment.
 	 * @param $trackDirectorSubmission object
 	 * @param $reviewId int
+	 * @param $auto bool optional set true if e-mail to be sent automatically
 	 * @return boolean true iff ready for redirect
 	 */
-	function thankReviewer($trackDirectorSubmission, $reviewId, $send = false) {
+	function thankReviewer($trackDirectorSubmission, $reviewId, $send = false, $auto = false) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
@@ -571,7 +653,30 @@ class TrackDirectorAction extends Action {
 			$reviewer =& $userDao->getUser($reviewAssignment->getReviewerId());
 			if (!isset($reviewer)) return true;
 
-			if (!$email->isEnabled() || ($send && !$email->hasErrors())) {
+			/* EDIT added if statement for automatical setup of fields*/
+			if($auto){ //
+				$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
+				$paramArray = array(
+						'reviewerName' => $reviewer->getFullName(),
+						'editorialContactSignature' => $user->getContactSignature()
+					);
+				$email->assignParams($paramArray);
+				if ($email->isEnabled()) {
+					$email->setAssoc(PAPER_EMAIL_REVIEW_THANK_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
+					$email->send();
+				}
+
+				$reviewAssignment->setDateAcknowledged(Core::getCurrentDate());
+				$reviewAssignment->stampModified();
+				$reviewAssignmentDao->updateReviewAssignment($reviewAssignment);
+
+				// EDIT generate automatic notification
+				import('notification.NotificationManager');
+				$notificationManager = new NotificationManager();
+				$notificationManager->createTrivialNotification('notification.notification', 'common.thankReviewer');
+			}
+			/*END EDIT*/
+			elseif (!$email->isEnabled() || ($send && !$email->hasErrors())) {
 				HookRegistry::call('TrackDirectorAction::thankReviewer', array(&$trackDirectorSubmission, &$reviewAssignment, &$email));
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_THANK_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
@@ -647,7 +752,7 @@ class TrackDirectorAction extends Action {
 
 		if ($reviewAssignment->getPaperId() == $paperId && $reviewAssignment->getReviewerFileId() == $fileId && !HookRegistry::call('TrackDirectorAction::makeReviewerFileViewable', array(&$reviewAssignment, &$paperFile, &$viewable))) {
 			$paperFile->setViewable($viewable);
-			$paperFileDao->updatePaperFile($paperFile);				
+			$paperFileDao->updatePaperFile($paperFile);
 		}
 	}
 
@@ -785,7 +890,7 @@ class TrackDirectorAction extends Action {
 			import('paper.log.PaperEventLogEntry');
 			PaperLog::logEvent($paperId, PAPER_LOG_REVIEW_RECOMMENDATION_BY_PROXY, LOG_TYPE_REVIEW, $reviewAssignment->getId(), 'log.review.reviewRecommendationSetByProxy', array('directorName' => $user->getFullName(), 'reviewerName' => $reviewer->getFullName(), 'paperId' => $paperId, 'stage' => $reviewAssignment->getStage()));
 		}
-	}	 
+	}
 
 	/**
 	 * Clear a review form
@@ -1325,7 +1430,7 @@ import('file.PaperFileManager');
 
 			foreach ($fileIds as $fileId) {
 				$paperFileManager->deleteFile($fileId);
-			}			
+			}
 		}
 
 		$paperNoteDao->clearAllPaperNotes($paperId);
@@ -1367,7 +1472,7 @@ import('file.PaperFileManager');
 
 		if ($commentForm->validate()) {
 			$commentForm->execute();
-			
+
 			// Send a notification to associated users
 			import('notification.NotificationManager');
 			$notificationManager = new NotificationManager();
@@ -1432,7 +1537,7 @@ import('file.PaperFileManager');
 					$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_DIRECTOR_DECISION_COMMENT
 				);
 			}
-				
+
 			if ($emailComment) {
 				$commentForm->email();
 			}
@@ -1533,7 +1638,7 @@ import('file.PaperFileManager');
 						if ($reviewAssignment->getDateCompleted() != null && !$reviewAssignment->getCancelled()) {
 							// Get the comments associated with this review assignment
 							$paperComments =& $paperCommentDao->getPaperComments($trackDirectorSubmission->getPaperId(), COMMENT_TYPE_PEER_REVIEW, $reviewAssignment->getId());
-							
+
 							if ($paperComments) {
 								$body .= "------------------------------------------------------\n";
 								$body .= __('submission.comments.importPeerReviews.reviewerLetter', array('reviewerLetter' => chr(ord('A') + $reviewIndexes[$reviewAssignment->getId()]))) . "\n";
@@ -1551,10 +1656,10 @@ import('file.PaperFileManager');
 									}
 								}
 								$body .= "------------------------------------------------------\n\n";
-							} 
+							}
 							if ($reviewFormId = $reviewAssignment->getReviewFormId()){
 								$reviewId = $reviewAssignment->getId();
-								
+
 								$reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
 								$reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
 								$reviewFormElements =& $reviewFormElementDao->getReviewFormElements($reviewFormId);
@@ -1565,7 +1670,7 @@ import('file.PaperFileManager');
 								foreach ($reviewFormElements as $reviewFormElement) if ($reviewFormElement->getIncluded()) {
 									$body .= strip_tags($reviewFormElement->getLocalizedQuestion()) . ": \n";
 									$reviewFormResponse = $reviewFormResponseDao->getReviewFormResponse($reviewId, $reviewFormElement->getId());
-			
+
 									if ($reviewFormResponse) {
 										$possibleResponses = $reviewFormElement->getLocalizedPossibleResponses();
 										if (in_array($reviewFormElement->getElementType(), $reviewFormElement->getMultipleResponsesElementTypes())) {
@@ -1668,7 +1773,7 @@ import('file.PaperFileManager');
 
 		if (HookRegistry::call('TrackDirectorAction::confirmReviewForReviewer', array(&$reviewAssignment, &$reviewer))) return;
 
-		// Only confirm the review for the reviewer if 
+		// Only confirm the review for the reviewer if
 		// he has not previously done so.
 		if ($reviewAssignment->getDateConfirmed() == null) {
 			$reviewAssignment->setDeclined(0);
@@ -1724,7 +1829,7 @@ import('file.PaperFileManager');
 		}
 
 		if (isset($fileId) && $fileId != 0) {
-			// Only confirm the review for the reviewer if 
+			// Only confirm the review for the reviewer if
 			// he has not previously done so.
 			if ($reviewAssignment->getDateConfirmed() == null) {
 				$reviewAssignment->setDeclined(0);

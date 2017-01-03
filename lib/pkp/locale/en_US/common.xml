@@ -148,6 +148,7 @@
 	<message key="common.removeSelection">Remove Selection</message>
 	<message key="common.replaced">Replaced</message>
 	<message key="common.replaceFile">Replace file</message>
+	<message key="common.requestReviewer">An automatic review request e-mail was sent to the reviewer.</message>
 	<message key="common.requiredField">* Denotes required field</message>
 	<message key="common.required">Required</message>
 	<message key="common.saveAndContinue">Save and continue</message>
@@ -163,6 +164,7 @@
 	<message key="common.status">Status</message>
 	<message key="common.subject">Subject</message>
 	<message key="common.suggest">Suggest</message>
+	<message key="common.thankReviewer">An automatic thanking e-mail was sent to the reviewer.</message>
 	<message key="common.title">Title</message>
 	<message key="common.top">Top</message>
 	<message key="common.true">True</message>

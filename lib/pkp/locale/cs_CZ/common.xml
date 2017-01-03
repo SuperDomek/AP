@@ -146,6 +146,7 @@
 	<message key="common.removeSelection">Odstranit výběr</message>
 	<message key="common.replaced">Nahrazeno</message>
 	<message key="common.replaceFile">Nahradit soubor</message>
+	<message key="common.requestReviewer">Byl automaticky odeslán email s žádostí o recenzování.</message>
 	<message key="common.requiredField">* Označuje povinnou položku</message>
 	<message key="common.required">Povinný</message>
 	<message key="common.saveAndContinue">Uložit a pokračovat</message>
@@ -161,6 +162,7 @@
 	<message key="common.status">Stav</message>
 	<message key="common.subject">Předmět</message>
 	<message key="common.suggest">Doporučit</message>
+	<message key="common.thankReviewer">Byl automaticky odeslán děkovný mail recenzentovi.</message>
 	<message key="common.title">Název</message>
 	<message key="common.top">Začátek</message>
 	<message key="common.true">Ano</message>
