@@ -92,10 +92,19 @@
 		<td colspan="2" class="separator">&nbsp;</td>
 	</tr>
 	{/if}
+
+  <!--
+  Insert JEL Codes here
+  -->
+
 	{if $currentSchedConf->getSetting('metaSubjectClass')}
 	<tr valign="top">
 		<td width="20%"  class="label">{translate key="paper.subjectClassification"}</td>
-		<td width="80%" class="value">{$submission->getLocalizedSubjectClass()|escape|default:"&mdash;"}</td>
+		<td width="80%" class="value">{*$submission->getLocalizedSubjectClass()|escape|default:"&mdash;"*}
+      {foreach name=JELCodes from=$JELCodes item=JELCode}
+      {$JELCode.1}: {$JELCode.2}<br>
+      {/foreach}
+      {*$JELCodes|@print_r*}</td>
 	</tr>
 	<tr>
 		<td colspan="2" class="separator">&nbsp;</td>
