@@ -138,10 +138,14 @@
 					<h3>{translate key="submission.paperReview"}</h3>
 				{/if}
 			</td>
+      {if $isReviewer && $stage == REVIEW_STAGE_ABSTRACT}
+      {* The conference doesn't want the add reviewers button in abstract review *}
+      {else}
 			<td width="70%" class="nowrap">
 				<a href="{url op="selectReviewer" path=$submission->getPaperId()}" class="action">{translate key="director.paper.selectReviewer"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="{url op="submissionRegrets" path=$submission->getPaperId()}" class="action">{translate|escape key="trackDirector.regrets.link"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</td>
+      {/if}
 		</tr>
 	</table>
 
