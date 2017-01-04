@@ -10,7 +10,7 @@
   * Localization strings for the cs_CZ (Czech) locale.
   * Translated by Pavel Zufan (pavel.zufan 'at' gmail.com)
   * Corrections, migration to the OCS 2.3.x by Ivo Vesely and Petr Petyovsky (petyovsky 'at' feec.vutbr.cz)
-  *   
+  *
   *
   * $Id: locale.xml 234 2012-01-05 21:20:00Z petyovsky $
   -->
@@ -123,7 +123,7 @@
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Nápověda konference</message>
-	<message key="navigation.account">Účet</message>
+	<message key="navigation.account">Vytvořit účet</message>
 	<message key="navigation.archive">Archiv</message>
 	<message key="navigation.current">Aktuální konference</message>
 	<message key="navigation.otherConferences">Ostatní konference</message>
@@ -286,7 +286,7 @@
 	<message key="schedConf.registration.type">Typ registrace účastníka</message>
 	<message key="schedConf.registration.cost">Poplatek</message>
 	<message key="schedConf.registrationTypes.noneAvailable">K dispozici nejsou žádné typy registrace.</message>
-	<message key="schedConf.registrationOptions.noneAvailable">K dispozici nejsou žádné možnosti registrace.</message>		
+	<message key="schedConf.registrationOptions.noneAvailable">K dispozici nejsou žádné možnosti registrace.</message>
 	<message key="schedConf.registration.register">Registrovat</message>
 	<message key="schedConf.registration.typeCloses">(Končí dne {$closingDate})</message>
 	<message key="schedConf.registration.typeClosed">(Registrace uzavřena {$closingDate})</message>
@@ -747,7 +747,7 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="installer.filesDirInstructions"><![CDATA[Vložte kompletní cestu k existující knihovně, kam budou ukládány načtené soubory. Tato knihovna by neměla být přímo přístupná z webu. <strong>Před instalací se ujistěte, že tato knihovna existuje a je otevřena k zápisu.</strong> Cesty v systému Windows využívají lomítka, jako např. "C:/mojekonference/soubory".]]></message>
 	<message key="installer.databaseSettingsInstructions">OCS vyžaduje přístup k SQL databázi, v níž bude ukládat data. Podívejte se na systémové požadavky uvedené výše, kde jsou specifikovány podporované databáze. V níže uvedených polích uveďte nastavení, která se použijí k přístupu do databáze.</message>
 	<message key="installer.installApplication">Instalovat Open Conference Systems</message>
-	<message key="installer.upgradeApplication">Aktualizovat Open Conference Systems</message>	
+	<message key="installer.upgradeApplication">Aktualizovat Open Conference Systems</message>
 	<message key="installer.reinstallAfterDatabaseError"><![CDATA[<strong>Upozornění:</strong> Pokud se instalace nezdařila v průběhu instalace databáze, může být před dalším pokusem o instalaci nutné vymazat Vaši databázi OCS nebo databázové tabulky.]]></message>
 	<message key="installer.overwriteConfigFileInstructions"><![CDATA[<h4>DŮLEŽITÉ!</h4>
 <p>Instalátor nemohl automaticky přepsat konfigurační soubor. Před použitím systému otevřete soubor <tt>config.inc.php</tt> ve vhodném textovém editoru a nahraďte jeho obsah obsahem níže uvedeného textového pole.</p>]]></message>
@@ -862,8 +862,8 @@ Validace může selhat u vyhledávacích URL, která vyžadují odesílání dat
 	<message key="notification.type.submissionComment">Předseda vložil komentář: "{$param}".</message>
 	<message key="notification.type.submissions">Událost vložení příspěvku</message>
 	<message key="notification.type.suppFileModified">Doplňkový(é) soubor(y) ohledně: "{$param}" byly modifikovány.</message>
-	<message key="notification.type.userComment">Čtenář vložil komentář: "{$param}"</message>	
-	
+	<message key="notification.type.userComment">Čtenář vložil komentář: "{$param}"</message>
+
 	<message key="rt.thisConference">Prohledávat konferenci</message>
 
 	<message key="rt.comments.commentsClosed">† Uzávěrka komentářů {$closeCommentsDate}</message>

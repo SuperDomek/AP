@@ -266,7 +266,7 @@
 	<message key="navigation.register">Registrace</message>
 	<message key="navigation.search">Vyhledávání</message>
 	<message key="navigation.stepNumber">Krok {$step}</message>
-	<message key="navigation.userHome">Uživatel</message>
+	<message key="navigation.userHome">Uživatelské menu</message>
 	<message key="navigation.user">Uživatel</message>
 	<message key="notification.allow">Povolit, aby se tento typ události zobrazoval v mém seznamu oznámení.</message>
 	<message key="notification.confirmError">Vyskytla se chyba při potvrzování vašeho přihlášení.</message>

@@ -120,7 +120,7 @@
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Conference Help</message>
-	<message key="navigation.account">Account</message>
+	<message key="navigation.account">Create account</message>
 	<message key="navigation.archive">Archive</message>
 	<message key="navigation.current">Current Conferences</message>
 	<message key="navigation.otherConferences">Other Conferences</message>
