@@ -84,8 +84,8 @@
 	<message key="director.paper.commentsRequired">The comments field is required.</message>
 	<message key="director.paper.archiveSubmission">Reject and Archive Submission</message>
 	<message key="director.paper.restoreToQueue">Restore to Active List</message>
-	<message key="director.paper.assignTrackDirector">Add Track Director</message>
-	<message key="director.paper.assignDirector">Add Director</message>
+	<message key="director.paper.assignTrackDirector">Add co-editor</message>
+	<message key="director.paper.assignDirector">Add main editor</message>
 	<message key="director.paper.selectDirector">Select {$roleName}</message>
 	<message key="director.paper.selectDecision">Select decision</message>
 	<message key="director.paper.decision.invitePresentation">Invite Presentation</message>

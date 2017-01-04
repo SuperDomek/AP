@@ -30,7 +30,7 @@
 		<td>{$submission->getTrackTitle()|escape}</td>
 	</tr>
 	<tr>
-		<td class="label">{translate key="user.role.director"}</td>
+		<td class="label">{translate key="user.role.trackDirector"}</td>
 		<td>
 			{assign var=editAssignments value=$submission->getEditAssignments()}
 			{foreach from=$editAssignments item=editAssignment}

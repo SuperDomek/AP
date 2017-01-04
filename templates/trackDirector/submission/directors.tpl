@@ -9,7 +9,7 @@
  * $Id$
  *}
 <div id="directors">
-<h3>{translate key="user.role.directors"}</h3>
+<h3>{translate key="user.role.trackDirectors"}</h3>
 <table width="100%" class="listing">
 	<tr class="heading" valign="bottom">
 		<td width="{if $isDirector}20%{else}25%{/if}">&nbsp;</td>

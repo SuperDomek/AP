@@ -233,7 +233,7 @@
 	<message key="submissions.pendingPresentation">Čeká na nahrání</message>
 	<message key="submissions.expired">Uplynula</message>
 	<message key="submissions.directorDecision">Rozhodnutí předsedy</message>
-	<message key="submissions.directorRuling">Výkonný předseda</message>
+	<message key="submissions.directorRuling">Výkonný hlavní editor</message>
 	<message key="trackDirector.galley.replaceGalley">Nahradit šablonu</message>
 	<message key="submission.abstract">Abstrakt</message>
 	<message key="submission.paper">Příspěvek</message>
@@ -323,13 +323,13 @@
 
 	<!-- Roles -->
 	<message key="user.role.manager">Manažer konference</message>
-	<message key="user.role.director">Předseda</message>
-	<message key="user.role.trackDirector">Garant sekce</message>
+	<message key="user.role.director">Hlavní editor</message>
+	<message key="user.role.trackDirector">Ko-editor</message>
 	<message key="user.role.author">Autor</message>
 
 	<message key="user.role.managers">Manažeři konference</message>
-	<message key="user.role.directors">Předsedové</message>
-	<message key="user.role.trackDirectors">Garanti sekcí</message>
+	<message key="user.role.directors">Hlavní editoři</message>
+	<message key="user.role.trackDirectors">Ko-editoři</message>
 	<message key="user.role.authors">Autoři</message>
 
 	<!--
@@ -340,7 +340,7 @@
 
 	<message key="event.logType.paper">Příspěvek</message>
 	<message key="event.logType.author">Autor</message>
-	<message key="event.logType.director">Předseda</message>
+	<message key="event.logType.director">Hlavní editor</message>
 	<message key="event.logType.review">Posudek</message>
 	<message key="event.logType.conference">Konference</message>
 
@@ -859,7 +859,7 @@ Validace může selhat u vyhledávacích URL, která vyžadují odesílání dat
 	<message key="notification.type.reviewerFormComment">Oponent vložil recenzní posudek: "{$param}".</message>
 	<message key="notification.type.reviewing">Událost recenze</message>
 	<message key="notification.type.site">Událost na stránkách</message>
-	<message key="notification.type.submissionComment">Předseda vložil komentář: "{$param}".</message>
+	<message key="notification.type.submissionComment">Hlavní editor vložil komentář: "{$param}".</message>
 	<message key="notification.type.submissions">Událost vložení příspěvku</message>
 	<message key="notification.type.suppFileModified">Doplňkový(é) soubor(y) ohledně: "{$param}" byly modifikovány.</message>
 	<message key="notification.type.userComment">Čtenář vložil komentář: "{$param}"</message>
