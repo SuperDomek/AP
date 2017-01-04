@@ -253,9 +253,9 @@ function showAffilBox(sel) {
 <tr valign="top">
 	<td class="label">{fieldLabel suppressId="true" name="createAs" key="user.account.createAs"}</td>
 	<td class="value">
-		{if $allowRegReader || $allowRegReader === null}
+	<!--{if $allowRegReader || $allowRegReader === null}
 			<input type="checkbox" name="createAsReader" id="createAsReader" value="1"{if $createAsReader} checked="checked"{/if} /> <label for="createAsReader">{translate key="user.role.reader"}</label>: {translate key="user.account.readerDescription"}<br />
-		{/if}
+		{/if}-->
 		{if $enableOpenAccessNotification}
 			<input type="checkbox" name="openAccessNotification" id="openAccessNotification" value="1"{if $openAccessNotification} checked="checked"{/if} /> <label for="openAccessNotification">{translate key="user.role.reader"}</label>: {translate key="user.account.openAccessNotificationDescription"}<br />
 		{/if}

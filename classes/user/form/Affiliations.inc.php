@@ -41,7 +41,7 @@ class Affiliations {
     // Initialization of addresses
     // The array keys need to be consistent with affiliations keys
     $this->addresses["CULS"] = "Česká zemědělská univerzita v Praze<br>Kamýcká 129<br>165 00 Praha 6 - Suchdol";
-    $this->addresses["FEM"] = "Provozně ekonomická fakulta<br>Česká zemědělská univerzita v Praze<br>Kamýcká 129\\n165 21 Praha 6 - Suchdol";
+    $this->addresses["FEM"] = "Provozně ekonomická fakulta<br>Česká zemědělská univerzita v Praze<br>Kamýcká 129<br>165 21 Praha 6 - Suchdol";
 
     return $this->checkConsistency();
   }
