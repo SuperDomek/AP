@@ -70,7 +70,7 @@
 	<message key="author.submit.addAuthor">Přidat autora</message>
 	<message key="author.submit.deleteAuthor">Odstranit autora</message>
 	<message key="author.submit.submissionIndexingDescription">Zadejte pojmy pro indexování příspěvku; oddělte je středníkem (pojem1; pojem2; pojem3).</message>
-	<message key="author.submit.submissionSupportingAgencies">Podpora příspěvku</message>
+	<message key="author.submit.submissionSupportingAgencies">Dedikace</message>
 	<message key="author.submit.submissionSupportingAgenciesDescription">Uveďte partnery, kteří poskytli finanční či jinou podporu prezentované práce.</message>
 	<message key="author.submit.subjectClassInstructions">Použijte klasifikační systém pod uvedeným odkazem a vyberte klasifikační pojmy a případně číselné kódy.</message>
 	<message key="author.submit.languageInstructions"><![CDATA[English=en; French=fr; Spanish=es. <a href="http://www.loc.gov/standards/iso639-2/php/code_list.php" target="_blank">Další kódy</a>.]]></message>

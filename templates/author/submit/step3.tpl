@@ -406,7 +406,7 @@ function val2key(val,array){
 
 <tr valign="top">
 	<td rowspan="2" width="20%" class="label">{fieldLabel name="language" key="paper.language"}</td>
-	<td width="80%" class="value"><input type="text" class="textField" name="language" id="language" value="{$language|escape}" size="5" maxlength="10" /></td>
+	<td width="80%" class="value"><input type="text" class="textField" name="language" id="language" value="{$language|escape}" size="5" maxlength="10" disabled /></td>
 </tr>
 <tr valign="top">
 	<td><span class="instruct">{translate key="author.submit.languageInstructions"}</span></td>
@@ -417,12 +417,12 @@ function val2key(val,array){
 
 <div id="supportingAgencies">
 <h3>{translate key="author.submit.submissionSupportingAgencies"}</h3>
-<p>{translate key="author.submit.submissionSupportingAgenciesDescription"}</p>
+<!--<p>{translate key="author.submit.submissionSupportingAgenciesDescription"}</p>-->
 
 <table width="100%" class="data">
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="sponsor" key="submission.agencies"}</td>
-	<td width="80%" class="value"><input type="text" class="textField" name="sponsor[{$formLocale|escape}]" id="sponsor" value="{$sponsor[$formLocale]|escape}" size="60" maxlength="255" /></td>
+	<!--<td width="20%" class="label">{fieldLabel name="sponsor" key="submission.agencies"}</td>-->
+	<td width="100%" class="value" colspan="2"><textarea class="textArea" name="sponsor[{$formLocale|escape}]" id="sponsor" cols="100" rows="3">{$sponsor[$formLocale]|escape}</textarea></td>
 </tr>
 </table>
 </div>

@@ -23,14 +23,16 @@
 
 {foreach from=$userConferences item=conference}
 {assign var="hasRole" value=1}
+{assign var="conferenceId" value=$conference->getId()}
+{assign var="conferencePath" value=$conference->getPath()}
+
 <div id="conference">
+  {if $isValid.ConferenceManager.$conferenceId.0}
 <h4><a href="{url conference=$conference->getPath() page="user"}">{$conference->getConferenceTitle()|escape}</a></h4>
-	{assign var="conferenceId" value=$conference->getId()}
-	{assign var="conferencePath" value=$conference->getPath()}
+
 	{* Display conference roles *}
-	
+
 	<table width="100%" class="info">
-		{if $isValid.ConferenceManager.$conferenceId.0}
 			<tr>
 				<td>&#187; <a href="{url conference=$conferencePath page="manager"}">{translate key="user.role.manager"}</a></td>
 				<td></td>
@@ -38,9 +40,9 @@
 				<td></td>
 				<td align="right">{if $setupIncomplete.$conferenceId}[<a href="{url conference=$conferencePath schedConf=$schedConfPath  page="manager" op="setup" path="1"}">{translate key="manager.schedConfSetup"}</a>]{/if}</td>
 			</tr>
-		{/if}
-	</table>
 
+	</table>
+{/if}
 	{* Display scheduled conference roles *}
 	{foreach from=$userSchedConfs[$conferenceId] item=schedConf}
 		<div id="schedConf">
@@ -118,7 +120,7 @@
 				<td width="14%"></td>
 				<td width="33%"></td>
 			</tr>
-				
+
 		</table>
 	</div>
 	{/foreach}
