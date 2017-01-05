@@ -260,9 +260,9 @@ function showAffilBox(sel) {
 			<input type="checkbox" name="openAccessNotification" id="openAccessNotification" value="1"{if $openAccessNotification} checked="checked"{/if} /> <label for="openAccessNotification">{translate key="user.role.reader"}</label>: {translate key="user.account.openAccessNotificationDescription"}<br />
 		{/if}
 		{if $allowRegAuthor || $allowRegAuthor === null}
-			<input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1"{if $createAsAuthor} checked="checked"{/if} /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="user.account.authorDescription"}<br />
+			<input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1" checked="checked" /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="user.account.authorDescription"}<br />
     {else}
-      <input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1"{if $createAsAuthor} checked="checked"{/if} disabled /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="author.submit.notAccepting"}<br />
+      <input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1" disabled /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="author.submit.notAccepting"}<br />
 		{/if}
 		{if $allowRegReviewer || $allowRegReviewer === null}
       <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="user.account.reviewerDescriptionNoInterests"}
