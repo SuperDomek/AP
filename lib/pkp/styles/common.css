@@ -162,7 +162,7 @@ input.defaultButton {
 	margin: 0;
 	padding: 0;
 	padding-top: 0.5em;
-	font-size: 0.7em;
+	font-size: 1em;
 	border-top: 2px dotted #000;
 }
 
@@ -368,7 +368,7 @@ ul.formErrorList {
  */
 
 ul.menu {
-	margin: 0;
+	margin: 0.3em 0 0 0;
 	padding: 0;
 }
 
