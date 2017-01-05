@@ -240,7 +240,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			foreach ($abstract1 as $key => $value) {
 				// if current locale version is not yet in paper abstract
  				if(!isset($paperAbstracts[$key])){
-					$newAbstract = $nameAbstract1 . ': ' . $abstract1[$key] . '<br>' . $nameAbstract2 . ': ' . $abstract2[$key] . '<br>' . $nameAbstract3 . ': ' . $abstract3[$key];
+					 $newAbstract = $nameAbstract1 . ': ' . $abstract1[$key] . '<br>' . $nameAbstract2 . ': ' . $abstract2[$key] . '<br>' . $nameAbstract3 . ': ' . $abstract3[$key];
+					// version without TinyMCE
+					//$newAbstract = $nameAbstract1 . ': ' . $abstract1[$key] . '\\n' . $nameAbstract2 . ': ' . $abstract2[$key] . '\\n' . $nameAbstract3 . ': ' . $abstract3[$key];
 					$paper->setAbstract($newAbstract, $key); // Localized
 				}
 			}

@@ -28,12 +28,12 @@ function setAddress(key){
   };
   // set up address in address field
   if (key == null) {
-    //document.getElementById("mailingAddress").value = "";
-    tinyMCE.get('mailingAddress').setContent("");
+    document.getElementById("mailingAddress").value = "";
+    //tinyMCE.get('mailingAddress').setContent("");
   }
   else{
-    //document.getElementById("mailingAddress").value = addresses[key];
-    tinyMCE.get('mailingAddress').setContent(addresses[key]);
+    document.getElementById("mailingAddress").value = addresses[key];
+    //tinyMCE.get('mailingAddress').setContent(addresses[key]);
   }
 }
 
@@ -253,16 +253,21 @@ function showAffilBox(sel) {
 <tr valign="top">
 	<td class="label">{fieldLabel suppressId="true" name="createAs" key="user.account.createAs"}</td>
 	<td class="value">
-		{if $allowRegReader || $allowRegReader === null}
-			<input type="checkbox" name="createAsReader" id="createAsReader" value="1"{if $createAsReader} checked="checked"{/if} /> <label for="createAsReader">{translate key="user.role.reader"}</label>: {translate key="user.account.readerDescription"}<br />
-		{/if}
+	{*if $allowRegReader || $allowRegReader === null*}
+			<input type="hidden" name="createAsReader" id="createAsReader" value="1"{if $createAsReader} checked="checked"{/if} /><!-- <label for="createAsReader">{translate key="user.role.reader"}</label>: {translate key="user.account.readerDescription"}<br />-->
+		{*/if*}
 		{if $enableOpenAccessNotification}
 			<input type="checkbox" name="openAccessNotification" id="openAccessNotification" value="1"{if $openAccessNotification} checked="checked"{/if} /> <label for="openAccessNotification">{translate key="user.role.reader"}</label>: {translate key="user.account.openAccessNotificationDescription"}<br />
 		{/if}
 		{if $allowRegAuthor || $allowRegAuthor === null}
-			<input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1"{if $createAsAuthor} checked="checked"{/if} /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="user.account.authorDescription"}<br />
+			<input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1" checked="checked" /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="user.account.authorDescription"}<br />
+    {else}
+      <input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1" disabled /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="author.submit.notAccepting"}<br />
 		{/if}
-		{if $allowRegReviewer || $allowRegReviewer === null}<input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {if $existingUser}{translate key="user.account.reviewerDescriptionNoInterests"}{else}{translate key="user.account.reviewerDescription"} <input type="text" name="interests[{$formLocale|escape}]" value="{$interests[$formLocale]|escape}" size="20" maxlength="255" class="textField" />{/if}
+		{if $allowRegReviewer || $allowRegReviewer === null}
+      <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="user.account.reviewerDescriptionNoInterests"}
+    {else}
+      <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} disabled /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="reviewer.notAccepting"}
 		{/if}
 	</td>
 </tr>

@@ -210,7 +210,7 @@ class AuthorAction extends Action {
 	 * TODO: Complete list of files author has access to
 	 */
 	function downloadAuthorFile($paper, $fileId, $revision = null) {
-		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');		
+		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
 
 		$submission =& $authorSubmissionDao->getAuthorSubmission($paper->getId());
 
@@ -302,6 +302,14 @@ class AuthorAction extends Action {
 		// Directors acting as Authors can always edit.
 		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) || Validation::isTrackDirector($schedConf->getConferenceId(), $schedConf->getId())) return true;
 
+		// Submission having an abstract decision cannot be edited anymore
+		$decisionsAbs = $authorSubmission->getDecisions(REVIEW_STAGE_ABSTRACT);
+		if(!empty($decisionsAbs)) return false;
+
+		// After the deadline for Submitting cannot be edited
+		$submissionsCloseDate = $schedConf->getSetting('submissionsCloseDate');
+		if (time() > $submissionsCloseDate) return false;
+
 		// Incomplete submissions can always be edited.
 		if ($authorSubmission->getSubmissionProgress() != 0) return true;
 
@@ -315,6 +323,7 @@ class AuthorAction extends Action {
 		if ($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS) return true;
 
 		// If there are open reviews for the submission, it may not be edited.
+		/*
 		$assignments = $authorSubmission->getReviewAssignments(null);
 		if (is_array($assignments)) foreach ($assignments as $round => $roundAssignments) {
 			if (is_array($roundAssignments)) foreach($roundAssignments as $assignment) {
@@ -327,7 +336,7 @@ class AuthorAction extends Action {
 					return false;
 				}
 			}
-		}
+		}*/
 
 		// If the conference isn't closed, the author may edit the submission.
 		if (strtotime($schedConf->getEndDate()) > time()) return true;

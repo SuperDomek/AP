@@ -14,6 +14,52 @@
 {include file="common/header.tpl"}
 {/strip}
 
+{literal}
+<script type="text/javascript">
+<!--
+// Sets up address
+// @key string Abbreviation for faculty to set up; if null the erase address
+function setAddress(key){
+  // process addresses from smarty into a javascript variable
+  var addresses = {{/literal}
+    {foreach from=$addresses item=address key=key name=addressloop}
+          "{$key}":"{$address}"
+    {if !$smarty.foreach.addressloop.last},{/if}
+    {/foreach}{literal}
+  };
+  // set up address in address field
+  if (key == null) {
+    document.getElementById("mailingAddress").value = "";
+    //tinyMCE.get('mailingAddress').setContent("");
+  }
+  else{
+    document.getElementById("mailingAddress").value = addresses[key];
+    //tinyMCE.get('mailingAddress').setContent(addresses[key]);
+  }
+}
+
+// shows affiliation box if required; sets up address if affiliation set up
+function showAffilBox(sel) {
+  var selected = sel.options[sel.selectedIndex];
+	if(selected.value == "else"){ //custom affil
+    document.getElementById("affil_box").style.display = "table-row";
+    // clean the prefilled boxes
+    document.getElementById("affil_text").value = "";
+    setAddress(null);
+  }
+  else if (selected.value != ""){ //selected affil
+    document.getElementById("affil_box").style.display = "none";
+    document.getElementById("affil_text").value = selected.text;
+    setAddress(selected.value);
+  }
+  else { // blank affil
+    document.getElementById("affil_box").style.display = "none";
+  }
+}
+// -->
+</script>
+{/literal}
+
 <form name="profile" method="post" action="{url op="saveProfile"}" enctype="multipart/form-data">
 
 {include file="common/formErrors.tpl"}
@@ -61,13 +107,31 @@
 		</select>
 	</td>
 </tr>
-<tr valign="top">
+<!--<tr valign="top">
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
 	<td class="value">
 		<textarea name="affiliation" id="affiliation" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea><br/>
 		<span class="instruct">{translate key="user.affiliation.description"}</span>
 	</td>
+</tr>-->
+
+<tr valign="top" >
+	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
+	<td class="value">
+    <select name="affiliation_select" class="selectMenu" onchange="showAffilBox(this);">
+      <option value=""></option>
+      {html_options options=$affiliations selected=$affiliation_select}
+    </select>
+  </td>
 </tr>
+<tr valign="top" id="affil_box" {if $affiliation_select neq 'else'}class="hidden"{/if}>
+  <td class="label">
+  </td>
+  <td class="value">
+    <textarea name="affiliation" id="affil_text" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea>
+  </td>
+</tr>
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="signature" key="user.signature"}</td>
 	<td class="value"><textarea name="signature[{$formLocale|escape}]" id="signature" rows="5" cols="40" class="textArea">{$signature[$formLocale]|escape}</textarea></td>
@@ -90,7 +154,7 @@
 </tr>
 <tr valign="top">
 	<td class="label">{fieldLabel name="mailingAddress" key="common.mailingAddress"}</td>
-	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="3" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
+	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="5" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
 </tr>
 <tr valign="top">
 	<td class="label">{fieldLabel name="country" key="common.country"}</td>
@@ -113,7 +177,7 @@
 </tr>
 <tr valign="top">
 	<td class="label">{fieldLabel name="interests" key="user.interests"}</td>
-	<td class="value"><textarea name="interests[{$formLocale|escape}]" id="interests" rows="5" cols="40" class="textarea">{$interests[$formLocale]|escape}</textarea></td>
+	<td class="value"><textarea name="interests[{$formLocale|escape}]" id="interests" rows="5" cols="40" class="textArea">{$interests[$formLocale]|escape}</textarea></td>
 </tr>
 <tr valign="top">
 	<td class="label">{fieldLabel name="biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>

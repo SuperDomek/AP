@@ -19,7 +19,7 @@
 }
 
 #sidebar div.block {
-	font-size: 1em;
+	font-size: 1.4em;
 	padding-bottom: 1.5em;
 }
 
@@ -39,4 +39,3 @@
 #sidebar input.textField, #sidebar select.selectMenu, #sidebar input.button {
 	font-size: 1em;
 }
-
