@@ -486,6 +486,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<!-- Reviewer -->
 	<message key="reviewer.completedReviews">Hotovo</message>
 	<message key="reviewer.averageQuality">Hodnocení</message>
+	<message key="reviewer.notAccepting">Registrace recenzentů je momentálně uzavřena.</message>
 
 	<!-- Used in submission review -->
 	<message key="reviewer.paper.fileToBeReviewed">Soubor k oponentuře</message>

@@ -483,6 +483,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<!-- Reviewer -->
 	<message key="reviewer.completedReviews">Done</message>
 	<message key="reviewer.averageQuality">Rating</message>
+	<message key="reviewer.notAccepting">Registration for reviewers is currently not open.</message>
 
 	<!-- Used in submission review -->
 	<message key="reviewer.paper.fileToBeReviewed">File to be reviewed</message>

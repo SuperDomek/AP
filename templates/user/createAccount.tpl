@@ -261,8 +261,13 @@ function showAffilBox(sel) {
 		{/if}
 		{if $allowRegAuthor || $allowRegAuthor === null}
 			<input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1"{if $createAsAuthor} checked="checked"{/if} /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="user.account.authorDescription"}<br />
+    {else}
+      <input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1"{if $createAsAuthor} checked="checked"{/if} disabled /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="author.submit.notAccepting"}<br />
 		{/if}
-		{if $allowRegReviewer || $allowRegReviewer === null}<input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {if $existingUser}{translate key="user.account.reviewerDescriptionNoInterests"}{else}{translate key="user.account.reviewerDescription"} <input type="text" name="interests[{$formLocale|escape}]" value="{$interests[$formLocale]|escape}" size="20" maxlength="255" class="textField" />{/if}
+		{if $allowRegReviewer || $allowRegReviewer === null}
+      <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="user.account.reviewerDescriptionNoInterests"}
+    {else}
+      <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} disabled /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="reviewer.notAccepting"}
 		{/if}
 	</td>
 </tr>
