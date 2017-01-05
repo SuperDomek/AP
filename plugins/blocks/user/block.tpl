@@ -38,6 +38,9 @@
 				<tr>
 					<td colspan="2"><input type="checkbox" id="remember" name="remember" value="1" /> <label for="remember">{translate key="plugins.block.user.rememberMe"}</label></td>
 				</tr>
+        <tr>
+          <td colspan="2"><a href="{url page="user" op="account"}">{translate key="navigation.account"}</a></td>
+        </tr>
 				<tr>
 					<td colspan="2"><input type="submit" value="{translate key="user.login"}" class="button" /></td>
 				</tr>

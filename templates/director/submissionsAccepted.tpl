@@ -23,7 +23,7 @@
 		<td width="8%">{translate key="common.order"}</td>
 		<td width="10%" align="right">{sort_search key="common.status" sort="status"}</td>
 	</tr>
-	
+
 	{iterate from=submissions item=submission}
 
 	<tr>
@@ -76,7 +76,7 @@
 		<td colspan="7" class="nodata">{translate key="submissions.noSubmissions"}</td>
 	</tr>
 	<tr>
-		<td colspan="6" class="endseparator">&nbsp;</td>
+		<td colspan="7" class="endseparator">&nbsp;</td>
 	</tr>
 {else}
 	<tr>

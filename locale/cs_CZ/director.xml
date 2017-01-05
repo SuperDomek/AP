@@ -86,8 +86,8 @@
 	<message key="director.paper.commentsRequired">Pole "Komentáře" je povinné.</message>
 	<message key="director.paper.archiveSubmission">Archivovat příspěvek</message>
 	<message key="director.paper.restoreToQueue">Obnovit na seznam aktivních</message>
-	<message key="director.paper.assignTrackDirector">Vložit garanta sekce</message>
-	<message key="director.paper.assignDirector">Vložit garanta</message>
+	<message key="director.paper.assignTrackDirector">Vložit ko-editora</message>
+	<message key="director.paper.assignDirector">Vložit hlavního editora</message>
 	<message key="director.paper.selectDirector">Zvolit {$roleName}</message>
 	<message key="director.paper.selectDecision">Vybrat rozhodnutí</message>
 	<message key="director.paper.decision.invitePresentation">Požádat o prezentaci</message>
