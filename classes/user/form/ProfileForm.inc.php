@@ -105,13 +105,19 @@ class ProfileForm extends Form {
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('username', $user->getUsername());
 
+		// Initialization of Affiliation options and addresses
+		import('user.form.Affiliations');
+		$affil = new Affiliations();
+		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('addresses', $affil->getAddresses());
+
 		$site =& Request::getSite();
 		$templateMgr->assign('availableLocales', $site->getSupportedLocaleNames());
 
 		$roleDao =& DAORegistry::getDAO('RoleDAO');
 		$schedConfDao =& DAORegistry::getDAO('SchedConfDAO');
 		$userSettingsDao =& DAORegistry::getDAO('UserSettingsDAO');
-		$userDao =& DAORegistry::getDAO('UserDAO');		
+		$userDao =& DAORegistry::getDAO('UserDAO');
 
 		$schedConfs =& $schedConfDao->getEnabledSchedConfs();
 		$schedConfs =& $schedConfs->toArray();
@@ -126,7 +132,7 @@ class ProfileForm extends Form {
 
 		$countryDao =& DAORegistry::getDAO('CountryDAO');
 		$countries =& $countryDao->getCountries();
-		
+
 		$templateMgr->assign('genderOptions', $userDao->getGenderOptions());
 
 		$templateMgr->assign_by_ref('schedConfs', $schedConfs);
