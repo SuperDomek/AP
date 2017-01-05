@@ -29,7 +29,7 @@ class Affiliations {
       case "cs_CZ":
         $this->affiliations["CULS"] = "Česká zemědělská univerzita";
         $this->affiliations["FEM"] = "ČZU, Provozně ekonomická fakulta";
-        $this->affiliations["else"] = "Jiná";
+        $this->affiliations["else"] = "Jiné";
         break;
       case "en_US":
         $this->affiliations["CULS"] = "Czech University of Life Sciences";
@@ -40,8 +40,8 @@ class Affiliations {
 
     // Initialization of addresses
     // The array keys need to be consistent with affiliations keys
-    $this->addresses["CULS"] = "Česká zemědělská univerzita v Praze<br>Kamýcká 129<br>165 00 Praha 6 - Suchdol";
-    $this->addresses["FEM"] = "Provozně ekonomická fakulta<br>Česká zemědělská univerzita v Praze<br>Kamýcká 129<br>165 21 Praha 6 - Suchdol";
+    $this->addresses["CULS"] = "Česká zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
+    $this->addresses["FEM"] = "Provozně ekonomická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
 
     return $this->checkConsistency();
   }

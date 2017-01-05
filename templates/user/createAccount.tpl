@@ -28,12 +28,12 @@ function setAddress(key){
   };
   // set up address in address field
   if (key == null) {
-    //document.getElementById("mailingAddress").value = "";
-    tinyMCE.get('mailingAddress').setContent("");
+    document.getElementById("mailingAddress").value = "";
+    //tinyMCE.get('mailingAddress').setContent("");
   }
   else{
-    //document.getElementById("mailingAddress").value = addresses[key];
-    tinyMCE.get('mailingAddress').setContent(addresses[key]);
+    document.getElementById("mailingAddress").value = addresses[key];
+    //tinyMCE.get('mailingAddress').setContent(addresses[key]);
   }
 }
 

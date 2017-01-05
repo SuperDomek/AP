@@ -44,11 +44,13 @@ function showAffilBox(sel) {
 	if(selected.value == "else"){ //custom affil
     document.getElementById(affil_box).style.display = "table-row";
     // clean the prefilled boxes
-    tinyMCE.get(affil_text).setContent("");
+    document.getElementById(affil_text).value = "";
+    //tinyMCE.get(affil_text).setContent("");
   }
   else if (selected.value != ""){ //selected affil
     document.getElementById(affil_box).style.display = "none";
-    tinyMCE.get(affil_text).setContent(selected.text);
+    document.getElementById(affil_text).value = selected.text;
+    //tinyMCE.get(affil_text).setContent(selected.text);
   }
   else { // blank affil
     document.getElementById(affil_box).style.display = "none";
