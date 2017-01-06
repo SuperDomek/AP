@@ -15,6 +15,7 @@
 //$Id$
 
 import("author.form.submit.AuthorSubmitForm");
+import('classes.submission.common.JELCodes');
 
 class AuthorSubmitStep3Form extends AuthorSubmitForm {
 	/**
@@ -141,7 +142,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			// EDIT END
 		}
 		$this->readUserVars($userVars);
-
+		var_dump($authors);
 		// Load the track. This is used in the step 2 form to
 		// determine whether or not to display indexing options.
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
@@ -190,6 +191,13 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
 		$templateMgr->assign('addresses', $affil->getAddresses());
+
+		// Initialization of the JEL codes class
+
+		$JEL = new JELCodes();
+		$paperId = $this->paper->getID();
+		$templateMgr->assign('JELCodes', $JEL->getCodes($paperId));
+		$templateMgr->assign('JELClassification', $JEL->getClassification());
 
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();

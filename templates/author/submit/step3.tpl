@@ -24,6 +24,7 @@
 {literal}
 <script type="text/javascript">
 <!--
+var JELCount = {/literal}{$JELCodes|@count}{literal};
 
 // Move author up/down
 function moveAuthor(dir, authorIndex) {
@@ -89,6 +90,16 @@ function val2key(val,array){
             break;
         }
     }
+}
+
+var JELCount = {/literal}{$JELCodes|@count}{literal};
+// Adds a JEL code field
+function addJEL(){
+  var newDiv = document.createElement('div');
+  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu">{/literal}{html_options options=$JELClassification}{literal}</select>`);
+  newDiv.innerHTML = select;
+  document.getElementById("JELblock").appendChild(newDiv);
+  JELCount++;
 }
 // -->
 </script>
@@ -329,9 +340,19 @@ function val2key(val,array){
 	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification"}<br>
     <a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')|escape}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a>
   </td>
-	<td width="80%" class="value"><input type="text" class="textField" name="subjectClass[{$formLocale|escape}]" id="subjectClass" value="{$subjectClass[$formLocale]|escape}" size="40" maxlength="255" /></td>
-  {foreach name=jelCodes from=$jelCodes key=jel_code_id item=jelCode}
-  {/foreach}
+	<td width="80%" class="value" ><!--<input type="text" class="textField" name="subjectClass[{$formLocale|escape}]" id="subjectClass" value="{$subjectClass[$formLocale]|escape}" size="40" maxlength="255" />-->
+    <div id="JELblock">
+      {foreach name=JELCodes from=$JELCodes key=jel_code_id item=JELCode}
+        <select name="subjectClass[{$jel_code_id}]" id="subjectClass" class="selectMenu">
+          {html_options options=$JELClassification selected=$JELCode.1}
+        </select>
+      {foreachelse}
+      <select name="subjectClass[0]" id="subjectClass" class="selectMenu">
+        {html_options options=$JELClassification selected=$JELCode.1}
+      </select>
+      {/foreach}
+    </div>
+  </td>
 </tr>
 <tr valign="top">
 	<td width="20%" class="label"></td>
@@ -339,7 +360,7 @@ function val2key(val,array){
 <tr valign="top">
   <td></td>
   <td width="20%" class="label">
-    <input type="submit" class="button" name="addClassification" value="{translate key="author.submit.addClassification"}" />
+    <input type="button" class="button" name="addClassification" value="{translate key="author.submit.addClassification"}" onclick="addJEL();" />
   </td>
 </tr>
 <tr valign="top">

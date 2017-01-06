@@ -28,9 +28,9 @@
 	{if $displayFavicon}<link rel="icon" href="{$faviconDir}/{$displayFavicon.uploadName|escape:"url"}" type="{$displayFavicon.mimeType|escape}" />{/if}
 	<link rel="stylesheet" href="{$baseUrl}/lib/pkp/styles/common.css" type="text/css" />
 	<link rel="stylesheet" href="{$baseUrl}/styles/common.css" type="text/css" />
-	
+
 	<!-- Base Jquery -->
-	{if $allowCDN}<script src="http://www.google.com/jsapi"></script>
+	{if $allowCDN}<script src="https://www.google.com/jsapi"></script>
 	<script>
 		google.load("jquery", "1");
 		google.load("jqueryui", "1");
@@ -40,7 +40,7 @@
 	<script type="text/javascript" src="{$baseUrl}/lib/pkp/js/lib/jquery/plugins/jqueryUi.min.js"></script>
 	{/if}
 	<!-- Add javascript required for font sizer -->
-	<script type="text/javascript" src="{$baseUrl}/lib/pkp/js/jquery.cookie.js"></script>	
+	<script type="text/javascript" src="{$baseUrl}/lib/pkp/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="{$baseUrl}/lib/pkp/js/fontController.js" ></script>
 	<script type="text/javascript">{literal}
 		$(function(){
