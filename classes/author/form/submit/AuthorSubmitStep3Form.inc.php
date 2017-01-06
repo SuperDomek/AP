@@ -67,6 +67,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 	 */
 	function initData() {
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
+		$JEL = new JELCodes();
+		$paperId = $this->paper->getID();
 
 		if (isset($this->paper)) {
 			$paper =& $this->paper;
@@ -75,7 +77,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				'title' => $paper->getTitle(null), // Localized
 				'abstract' => $paper->getAbstract(null), // Localized
 				'discipline' => $paper->getDiscipline(null), // Localized
-				'subjectClass' => $paper->getSubjectClass(null), // Localized
+				'subjectClass' => $JEL->getCodes($paperId),
 				'subject' => $paper->getSubject(null), // Localized
 				'coverageGeo' => $paper->getCoverageGeo(null), // Localized
 				'coverageChron' => $paper->getCoverageChron(null), // Localized
@@ -142,7 +144,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			// EDIT END
 		}
 		$this->readUserVars($userVars);
-		var_dump($authors);
+		//var_dump($this->getData('authors'));
 		// Load the track. This is used in the step 2 form to
 		// determine whether or not to display indexing options.
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
@@ -154,7 +156,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 	 * @return array
 	 */
 	function getLocaleFieldNames() {
-		$returner = array('title', 'subjectClass', 'subject', 'coverageGeo', 'coverageChron', 'coverageSample', 'type', 'sponsor');
+		$returner = array('title', 'subject', 'coverageGeo', 'coverageChron', 'coverageSample', 'type', 'sponsor');
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
@@ -196,8 +198,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 
 		$JEL = new JELCodes();
 		$paperId = $this->paper->getID();
-		$templateMgr->assign('JELCodes', $JEL->getCodes($paperId));
 		$templateMgr->assign('JELClassification', $JEL->getClassification());
+
 
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
@@ -218,6 +220,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$user =& Request::getUser();
+
+		$JEL = new JELCodes();
+		$paperId = $this->paper->getID();
 
 		// Update paper
 		$paper->setTitle($this->getData('title'), null); // Localized
@@ -256,8 +261,16 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			}
 		}
 
+		// Set up JEL codes
+		$JELCodes = $JEL->getCodes();
+		foreach ($this->getData('subjectClass') as $key => $value) {
+				$JEL->setCode($paperId, $value, $JEL->getKeyword($value));
+		}
+
+
+
 		$paper->setDiscipline($this->getData('discipline'), null); // Localized
-		$paper->setSubjectClass($this->getData('subjectClass'), null); // Localized
+		//$paper->setSubjectClass($this->getData('subjectClass'), null); // Localized
 		$paper->setSubject($this->getData('subject'), null); // Localized
 		$paper->setCoverageGeo($this->getData('coverageGeo'), null); // Localized
 		$paper->setCoverageChron($this->getData('coverageChron'), null); // Localized

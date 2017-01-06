@@ -92,11 +92,13 @@ function val2key(val,array){
     }
 }
 
-var JELCount = {/literal}{$JELCodes|@count}{literal};
+var JELCount = {/literal}{$subjectClass|@count}{literal};
 // Adds a JEL code field
 function addJEL(){
   var newDiv = document.createElement('div');
-  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu">{/literal}{html_options options=$JELClassification}{literal}</select>`);
+  // compensation for a paper without JEL codes
+  if(JELCount === 0) JELCount++;
+  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select>`);
   newDiv.innerHTML = select;
   document.getElementById("JELblock").appendChild(newDiv);
   JELCount++;
@@ -337,18 +339,20 @@ function addJEL(){
 
 {if $currentSchedConf->getSetting('metaSubjectClass')}
 <tr valign="top">
-	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification"}<br>
+	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification" required="true"}<br>
     <a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')|escape}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a>
   </td>
-	<td width="80%" class="value" ><!--<input type="text" class="textField" name="subjectClass[{$formLocale|escape}]" id="subjectClass" value="{$subjectClass[$formLocale]|escape}" size="40" maxlength="255" />-->
+	<td width="80%" class="value" >
     <div id="JELblock">
-      {foreach name=JELCodes from=$JELCodes key=jel_code_id item=JELCode}
+      {foreach name=JELCodes from=$subjectClass key=jel_code_id item=JELCode}
         <select name="subjectClass[{$jel_code_id}]" id="subjectClass" class="selectMenu">
-          {html_options options=$JELClassification selected=$JELCode.1}
+          <option value=""></option>
+          {html_options options=$JELClassification selected=$JELCode}
         </select>
       {foreachelse}
       <select name="subjectClass[0]" id="subjectClass" class="selectMenu">
-        {html_options options=$JELClassification selected=$JELCode.1}
+        <option value=""></option>
+        {html_options options=$JELClassification}
       </select>
       {/foreach}
     </div>

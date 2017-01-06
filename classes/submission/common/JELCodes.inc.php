@@ -74,6 +74,22 @@ class JELCodes {
 		if(!empty($this->JELClassification)) return $this->JELClassification;
 	}
 
+	/**
+	*	Returns a keyword for a given code
+	* @return string
+	*/
+	function getKeyword($code){
+		foreach ($this->JELClassification as $key => $optgroup) {
+			foreach ($optgroup as $JELCode => $keyword) {
+				if($JELCode === $code){
+					return $keyword;
+				}
+			}
+		}
+		error_log("Error while getting JEL keyword: Key not found.");
+		return false;
+	}
+
   /**
 	 * Returns an associative array with matching rows from the db for the paper
 	 * @param $paper object
