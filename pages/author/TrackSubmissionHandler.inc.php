@@ -346,6 +346,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$this->setupTemplate(true, $paperId, 'summary');
 
+		$templateMgr =& TemplateManager::getManager();
+		$templateMgr->assign('firstLoad', true);
+
 		AuthorAction::viewMetadata($submission, ROLE_ID_AUTHOR);
 	}
 

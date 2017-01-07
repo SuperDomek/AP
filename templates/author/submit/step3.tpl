@@ -63,9 +63,9 @@ function initSelect() {
   var i;
   // process affiliations array from smarty into a javascript associative array
   var affiliations = {{/literal}
-    {foreach from=$affiliations item=affiliation key=key name=affiliatinloop}
+    {foreach from=$affiliations item=affiliation key=key name=affiliationloop}
           "{$key}":"{$affiliation}"
-    {if !$smarty.foreach.affiliatinloop.last},{/if}
+    {if !$smarty.foreach.affiliationloop.last},{/if}
     {/foreach}{literal}
   };
   // cycle through autors affiliation select boxes
