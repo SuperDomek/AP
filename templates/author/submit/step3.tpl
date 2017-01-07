@@ -24,7 +24,6 @@
 {literal}
 <script type="text/javascript">
 <!--
-var JELCount = {/literal}{$JELCodes|@count}{literal};
 
 // Move author up/down
 function moveAuthor(dir, authorIndex) {

@@ -84,7 +84,7 @@ class MetadataForm extends Form {
 			$paper =& $this->paper;
 			$JEL = new JELCodes();
 			$paperId = $this->paper->getID();
-			
+
 			$this->_data = array(
 				'authors' => array(),
 				'title' => $paper->getTitle(null), // Localized
@@ -147,6 +147,12 @@ class MetadataForm extends Form {
 		$templateMgr->assign('paperId', isset($this->paper)?$this->paper->getPaperId():null);
 		$templateMgr->assign('rolePath', Request::getRequestedPage());
 		$templateMgr->assign('canViewAuthors', $this->canViewAuthors);
+
+		// Initialization of Affiliation options and addresses
+		import('user.form.Affiliations');
+		$affil = new Affiliations();
+		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('addresses', $affil->getAddresses());
 
 		// Initialization of the JEL codes class
 		$JEL = new JELCodes();
