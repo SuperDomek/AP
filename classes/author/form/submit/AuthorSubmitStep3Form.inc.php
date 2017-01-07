@@ -200,7 +200,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$templateMgr->assign('addresses', $affil->getAddresses());
 
 		// Initialization of the JEL codes class
-
 		$JEL = new JELCodes();
 		$paperId = $this->paper->getID();
 		$templateMgr->assign('JELClassification', $JEL->getClassification());

@@ -29,6 +29,27 @@ function moveAuthor(dir, authorIndex) {
 	form.moveAuthorIndex.value = authorIndex;
 	form.submit();
 }
+
+// Global variable for the count of select boxes
+var JELCount = {/literal}{$subjectClass|@count}{literal};
+
+// Adds a JEL code field
+function addJEL(){
+  var newDiv = document.createElement('div');
+  // compensation for a paper without JEL codes
+  if(JELCount === 0) JELCount++;
+  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select><a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{/literal}{$baseUrl}{literal}/templates/images/icons/delete.gif"/></a>`);
+  newDiv.innerHTML = select;
+  document.getElementById("JELblock").appendChild(newDiv);
+  JELCount++;
+}
+
+// Delete the parent div of passed object
+function delDiv(sel){
+  var parent = sel.parentNode;
+  parent.parentNode.removeChild(parent);
+}
+
 // -->
 </script>
 {/literal}
@@ -61,6 +82,7 @@ function moveAuthor(dir, authorIndex) {
 <input type="hidden" name="moveAuthor" value="0" />
 <input type="hidden" name="moveAuthorDir" value="" />
 <input type="hidden" name="moveAuthorIndex" value="" />
+<input type="hidden" name="language" id="language" value="en" />
 
 <table width="100%" class="data">
 	{foreach name=authors from=$authors key=authorIndex item=author}
@@ -200,8 +222,6 @@ function moveAuthor(dir, authorIndex) {
 <div id="indexing">
 <h3>{translate key="submission.indexing"}</h3>
 
-{if $currentSchedConf->getSetting('metaDiscipline') || $currentSchedConf->getSetting('metaSubjectClass') || $currentSchedConf->getSetting('metaSubject') || $currentSchedConf->getSetting('metaCoverage') || $currentSchedConf->getSetting('metaType')}<p>{translate key="author.submit.submissionIndexingDescription"}</p>{/if}
-
 <table width="100%" class="data">
 	{if $currentSchedConf->getSetting('metaDiscipline')}
 	<tr valign="top">
@@ -218,21 +238,49 @@ function moveAuthor(dir, authorIndex) {
 		<td colspan="2" class="separator">&nbsp;</td>
 	</tr>
 	{/if}
+
+  {* JEL Classification *}
 	{if $currentSchedConf->getSetting('metaSubjectClass')}
-	<tr valign="top">
-		<td colspan="2" class="label"><a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')}</a></td>
-	</tr>
-	<tr valign="top">
-		<td class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification"}</td>
-		<td class="value">
-			<input type="text" name="subjectClass[{$formLocale|escape}]" id="subjectClass" value="{$subjectClass[$formLocale]|escape}" size="40" maxlength="255" class="textField" />
-			<br />
-			<span class="instruct">{translate key="author.submit.subjectClassInstructions"}</span>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="separator">&nbsp;</td>
-	</tr>
+  <tr valign="top">
+  	<td rowspan="2" width="20%" class="label">{fieldLabel name="subjectClass" key="paper.subjectClassification" required="true"}<br>
+      <a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')|escape}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a>
+    </td>
+  	<td width="80%" class="value" >
+      <div id="JELblock">
+        {foreach name=JELCodes from=$subjectClass key=jel_code_id item=JELCode}
+        <div>
+          <select name="subjectClass[{$jel_code_id}]" id="subjectClass" class="selectMenu">
+            <option value=""></option>
+            {html_options options=$JELClassification selected=$JELCode}
+          </select>
+          {if $jel_code_id > 0}
+            <a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{$baseUrl}/templates/images/icons/delete.gif"/></a>
+          {/if}
+        </div>
+        {foreachelse}
+        <div>
+          <select name="subjectClass[0]" id="subjectClass" class="selectMenu">
+            <option value=""></option>
+            {html_options options=$JELClassification}
+          </select>
+        </div>
+        {/foreach}
+      </div>
+    </td>
+  </tr>
+  <tr valign="top">
+  	<td width="20%" class="label"></td>
+  </tr>
+  <tr valign="top">
+    <td></td>
+    <td width="20%" class="label">
+      <input type="button" class="button" name="addClassification" value="{translate key="author.submit.addClassification"}" onclick="addJEL();" />
+    </td>
+  </tr>
+  <tr valign="top">
+  	<td>&nbsp;</td>
+  	<td>&nbsp;</td>
+  </tr>
 	{/if}
 	{if $currentSchedConf->getSetting('metaSubject')}
 	<tr valign="top">
@@ -301,14 +349,15 @@ function moveAuthor(dir, authorIndex) {
 		<td colspan="2" class="separator">&nbsp;</td>
 	</tr>
 	{/if}
-	<tr valign="top">
+	<!-- hardcoded on top
+  <tr valign="top">
 		<td width="20%" class="label">{fieldLabel name="language" key="paper.language"}</td>
 		<td width="80%" class="value">
 			<input type="text" name="language" id="language" value="{$language|escape}" size="5" maxlength="10" class="textField" />
 			<br />
 			<span class="instruct">{translate key="author.submit.languageInstructions"}</span>
 		</td>
-	</tr>
+	</tr>-->
 </table>
 </div>
 

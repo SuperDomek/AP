@@ -342,12 +342,7 @@ function delDiv(sel){
 </tr>
 {/if}
 
-{*
-  *
-  * Enter JEL Code here
-  *
-  *
-  *}
+{* JEL Classification *}
 
 {if $currentSchedConf->getSetting('metaSubjectClass')}
 <tr valign="top">
