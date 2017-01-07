@@ -161,9 +161,6 @@ class SubmitHandler extends AuthorHandler {
 						}
 						$submitForm->setData('authors', $authors);
 					}
-					else if (Request::getUserVar('addClassification')){
-						$editData = true;
-					}
 					break;
 
 				case 4:

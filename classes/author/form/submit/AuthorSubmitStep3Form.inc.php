@@ -32,6 +32,11 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$this->addCheck(new FormValidatorLocale($this, 'title', 'required', 'author.submit.form.titleRequired'));
 
 		$schedConf =& Request::getSchedConf();
+
+		if ($schedConf->getSetting('metaSubjectClass')){
+			$this->addCheck(new FormValidatorCustom($this, 'subjectClass', 'required', 'author.submit.form.subjectClassRequired', create_function('$subjectClass', 'foreach ($subjectClass as $oneSubClass) { if($oneSubClass === "")  return false;} return true;')));
+		}
+
 		$reviewMode = $paper->getReviewMode();
 		$formLocale = Request::getUserVar('formLocale');
 		if ($reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE) {
@@ -199,7 +204,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$JEL = new JELCodes();
 		$paperId = $this->paper->getID();
 		$templateMgr->assign('JELClassification', $JEL->getClassification());
-
 
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();

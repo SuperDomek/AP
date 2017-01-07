@@ -71,6 +71,10 @@ input.textField, select.selectMenu, textarea.textArea, input.uploadField {
 	font-size: 1em;
 }
 
+select.selectMenu {
+	width: 60%;
+}
+
 input.button {
 	padding-left: 0.5em;
 	padding-right: 0.5em;

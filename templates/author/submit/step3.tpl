@@ -92,17 +92,26 @@ function val2key(val,array){
     }
 }
 
+// Global variable for the count of select boxes
 var JELCount = {/literal}{$subjectClass|@count}{literal};
+
 // Adds a JEL code field
 function addJEL(){
   var newDiv = document.createElement('div');
   // compensation for a paper without JEL codes
   if(JELCount === 0) JELCount++;
-  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select>`);
+  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select><a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{/literal}{$baseUrl}{literal}/templates/images/icons/delete.gif"/></a>`);
   newDiv.innerHTML = select;
   document.getElementById("JELblock").appendChild(newDiv);
   JELCount++;
 }
+
+// Delete the parent div of passed object
+function delDiv(sel){
+  var parent = sel.parentNode;
+  parent.parentNode.removeChild(parent);
+}
+
 // -->
 </script>
 {/literal}
@@ -135,6 +144,9 @@ function addJEL(){
 <input type="hidden" name="moveAuthor" value="0" />
 <input type="hidden" name="moveAuthorDir" value="" />
 <input type="hidden" name="moveAuthorIndex" value="" />
+
+<!-- hardcoded english language -->
+<input type="hidden" name="language" id="language" value="en" />
 
 {foreach name=authors from=$authors key=authorIndex item=author}
 <input type="hidden" name="authors[{$authorIndex|escape}][authorId]" value="{$author.authorId|escape}" />
@@ -345,15 +357,22 @@ function addJEL(){
 	<td width="80%" class="value" >
     <div id="JELblock">
       {foreach name=JELCodes from=$subjectClass key=jel_code_id item=JELCode}
+      <div>
         <select name="subjectClass[{$jel_code_id}]" id="subjectClass" class="selectMenu">
           <option value=""></option>
           {html_options options=$JELClassification selected=$JELCode}
         </select>
+        {if $jel_code_id > 0}
+          <a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{$baseUrl}/templates/images/icons/delete.gif"/></a>
+        {/if}
+      </div>
       {foreachelse}
-      <select name="subjectClass[0]" id="subjectClass" class="selectMenu">
-        <option value=""></option>
-        {html_options options=$JELClassification}
-      </select>
+      <div>
+        <select name="subjectClass[0]" id="subjectClass" class="selectMenu">
+          <option value=""></option>
+          {html_options options=$JELClassification}
+        </select>
+      </div>
       {/foreach}
     </div>
   </td>
@@ -448,13 +467,14 @@ function addJEL(){
 </tr>
 {/if}
 
+<!-- Hidden language select; the setting is hardcoded to english on top
 <tr valign="top">
 	<td rowspan="2" width="20%" class="label">{fieldLabel name="language" key="paper.language"}</td>
 	<td width="80%" class="value"><input type="text" class="textField" name="language" id="language" value="{$language|escape}" size="5" maxlength="10" disabled /></td>
 </tr>
 <tr valign="top">
 	<td><span class="instruct">{translate key="author.submit.languageInstructions"}</span></td>
-</tr>
+</tr>-->
 </table>
 </div>
 <div class="separator"></div>
