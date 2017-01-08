@@ -77,6 +77,9 @@ function initSelect() {
     if (affiliation_key){
       document.getElementsByName(affil_select_name)[0].value = affiliation_key;
     }
+    else {
+      document.getElementsByName(affil_select_name)[0].value = "else";
+    }
   }
 }
 
@@ -89,6 +92,7 @@ function val2key(val,array){
             break;
         }
     }
+    return false;
 }
 
 // Global variable for the count of select boxes
@@ -99,7 +103,7 @@ function addJEL(){
   var newDiv = document.createElement('div');
   // compensation for a paper without JEL codes
   if(JELCount === 0) JELCount++;
-  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select><a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{/literal}{$baseUrl}{literal}/templates/images/icons/delete.gif"/></a>`);
+  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectForm selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select><a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{/literal}{$baseUrl}{literal}/templates/images/icons/delete.gif"/></a>`);
   newDiv.innerHTML = select;
   document.getElementById("JELblock").appendChild(newDiv);
   JELCount++;
@@ -181,7 +185,7 @@ function delDiv(sel){
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" required="true" key="user.affiliation"}
   </td>
 	<td width="80%" class="value">
-    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectMenu" onchange="showAffilBox(this);">
+    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this);">
       <option value=""></option>
       {html_options options=$affiliations selected=$author.affiliation_select|escape}
     </select>
@@ -197,7 +201,7 @@ function delDiv(sel){
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-country" key="common.country"}</td>
 	<td width="80%" class="value">
-		<select name="authors[{$authorIndex|escape}][country]" id="authors-{$authorIndex|escape}-country" class="selectMenu">
+		<select name="authors[{$authorIndex|escape}][country]" id="authors-{$authorIndex|escape}-country" class="selectForm selectMenu">
 			<option value=""></option>
 			{html_options options=$countries selected=$author.country}
 		</select>
@@ -252,7 +256,7 @@ function delDiv(sel){
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-0-country" key="common.country"}</td>
 	<td width="80%" class="value">
-		<select name="authors[0][country]" id="authors-0-country" class="selectMenu">
+		<select name="authors[0][country]" id="authors-0-country" class="selectForm selectMenu">
 			<option value=""></option>
 			{html_options options=$countries}
 		</select>
@@ -352,7 +356,7 @@ function delDiv(sel){
     <div id="JELblock">
       {foreach name=JELCodes from=$subjectClass key=jel_code_id item=JELCode}
       <div>
-        <select name="subjectClass[{$jel_code_id}]" id="subjectClass" class="selectMenu">
+        <select name="subjectClass[{$jel_code_id}]" id="subjectClass" class="selectForm selectMenu">
           <option value=""></option>
           {html_options options=$JELClassification selected=$JELCode}
         </select>
@@ -362,7 +366,7 @@ function delDiv(sel){
       </div>
       {foreachelse}
       <div>
-        <select name="subjectClass[0]" id="subjectClass" class="selectMenu">
+        <select name="subjectClass[0]" id="subjectClass" class="selectForm selectMenu">
           <option value=""></option>
           {html_options options=$JELClassification}
         </select>

@@ -94,7 +94,7 @@
 	{/if}
 
   <!--
-  Insert JEL Codes here
+  JEL Codes
   -->
 
 	{if $currentSchedConf->getSetting('metaSubjectClass')}
@@ -103,9 +103,6 @@
 		<td width="80%" class="value">
       {foreach name=JELCodes from=$JELCodes item=JELCode}
         {$JELCode.1} {$JELCode.2}<br>
-      <!--<select name="subjectClass[en_US]" id="subjectClass" class="selectMenu" disabled="disabled">
-        {html_options options=$JELClassification selected=$JELCode.1}
-      </select>-->
       {foreachelse}
         {translate key="paper.subjectClassification.noItems"}
       {/foreach}

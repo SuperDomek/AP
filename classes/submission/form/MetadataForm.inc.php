@@ -140,7 +140,7 @@ class MetadataForm extends Form {
 		$schedConf =& Request::getSchedConf();
 		$roleDao =& DAORegistry::getDAO('RoleDAO');
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
-
+		$paperId = $this->paper->getPaperId();
 		AppLocale::requireComponents(array(LOCALE_COMPONENT_OCS_DIRECTOR)); // editor.cover.xxx locale keys; FIXME?
 
 		$templateMgr =& TemplateManager::getManager();
@@ -156,6 +156,7 @@ class MetadataForm extends Form {
 
 		// Initialization of the JEL codes class
 		$JEL = new JELCodes();
+		$templateMgr->assign('JELCodes', $JEL->getCodes($paperId));
 		$templateMgr->assign('JELClassification', $JEL->getClassification());
 
 		$countryDao =& DAORegistry::getDAO('CountryDAO');

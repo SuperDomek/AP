@@ -71,7 +71,15 @@ input.textField, select.selectMenu, textarea.textArea, input.uploadField {
 	font-size: 1em;
 }
 
-select.selectMenu {
+select.selectForm {
+	background-color: #F0F0E8;
+	color: #000;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	border-top: 2px solid #666;
+	border-left: 2px solid #666;
+	border-bottom: 2px solid #E8E8E1;
+	border-right: 2px solid #E8E8E1;
+	font-size: 1em;
 	width: 60%;
 }
 
