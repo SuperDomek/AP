@@ -77,8 +77,11 @@ function initSelect() {
     if (affiliation_key){
       document.getElementsByName(affil_select_name)[0].value = affiliation_key;
     }
-    else {
+    else if (affiliation_text != "") {
       document.getElementsByName(affil_select_name)[0].value = "else";
+    }
+    else {
+      document.getElementsByName(affil_select_name)[0].value = "";
     }
   }
 }

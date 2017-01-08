@@ -157,7 +157,7 @@ class CreateAccountForm extends Form {
 			'salutation', 'firstName', 'middleName', 'lastName',
 			'gender', 'initials', 'country',
 			'affiliation', 'affiliation_select','email', 'userUrl', 'phone', 'fax', 'signature',
-			'mailingAddress', 'biography', 'interests', 'userLocales',
+			'mailingAddress', 'billingAddress' , 'biography', 'interests', 'userLocales',
 			'createAsReader', 'openAccessNotification', 'createAsAuthor',
 			'createAsReviewer', 'existingUser', 'sendPassword'
 		);
@@ -249,6 +249,7 @@ class CreateAccountForm extends Form {
 			$user->setPhone($this->getData('phone'));
 			$user->setFax($this->getData('fax'));
 			$user->setMailingAddress($this->getData('mailingAddress'));
+			$user->setBillingAddress($this->getData('billingAddress'));
 			$user->setBiography($this->getData('biography'), null); // Localized
 			$user->setInterests($this->getData('interests'), null); // Localized
 			$user->setDateRegistered(Core::getCurrentDate());
