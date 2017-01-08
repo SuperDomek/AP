@@ -16,6 +16,7 @@
 
 import('pages.author.AuthorHandler');
 
+
 class TrackSubmissionHandler extends AuthorHandler {
 	/** submission associated with the request **/
 	var $submission;
@@ -25,6 +26,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 	 **/
 	function TrackSubmissionHandler() {
 		parent::AuthorHandler();
+
 	}
 
 	/**
@@ -106,6 +108,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 				break;
 		}
 
+
 		$publishedPaperDao =& DAORegistry::getDAO('PublishedPaperDAO');
 		$publishedPaper =& $publishedPaperDao->getPublishedPaperByPaperId($submission->getPaperId());
 
@@ -115,6 +118,12 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
 		$track =& $trackDao->getTrack($submission->getTrackId());
 		$templateMgr->assign_by_ref('track', $track);
+
+		// testing JEL codes class
+		import('classes.submission.common.JELCodes');
+		$JEL = new JELCodes();
+		$templateMgr->assign('JELCodes', $JEL->getCodes($paperId));
+		$templateMgr->assign('JELClassification', $JEL->getClassification());
 
 		$templateMgr->assign_by_ref('submission', $submission);
 		$templateMgr->assign_by_ref('publishedPaper', $publishedPaper);
@@ -336,6 +345,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$submission =& $this->submission;
 
 		$this->setupTemplate(true, $paperId, 'summary');
+
+		$templateMgr =& TemplateManager::getManager();
+		$templateMgr->assign('firstLoad', true);
 
 		AuthorAction::viewMetadata($submission, ROLE_ID_AUTHOR);
 	}

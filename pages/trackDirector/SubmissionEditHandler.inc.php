@@ -66,6 +66,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('enableComments', $enableComments);
 		$templateMgr->assign('isReviewer', $this->isReviewer());
 
+		// testing JEL codes class
+		import('classes.submission.common.JELCodes');
+		$JEL = new JELCodes();
+		$templateMgr->assign('JELCodes', $JEL->getCodes($paperId));
+		$templateMgr->assign('JELClassification', $JEL->getClassification());
+
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
 		$templateMgr->assign_by_ref('tracks', $trackDao->getTrackTitles($schedConf->getId()));
 		if ($enableComments) {
@@ -949,6 +955,9 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$this->validate($paperId);
 		$submission =& $this->submission;
 		$this->setupTemplate(true, $paperId, 'summary');
+
+		$templateMgr =& TemplateManager::getManager();
+		$templateMgr->assign('firstLoad', true);
 
 		TrackDirectorAction::viewMetadata($submission, ROLE_ID_TRACK_DIRECTOR);
 	}

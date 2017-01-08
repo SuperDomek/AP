@@ -15,6 +15,7 @@
 //$Id$
 
 import('form.Form');
+import('classes.submission.common.JELCodes');
 
 class MetadataForm extends Form {
 	/** @var Paper current paper */
@@ -55,6 +56,11 @@ class MetadataForm extends Form {
 			$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName')));
 			$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', create_function('$email, $regExp', 'return String::regexp_match($regExp, $email);'), array(ValidatorEmail::getRegexp()), false, array('email')));
 			$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'user.profile.form.urlInvalid', create_function('$url, $regExp', 'return empty($url) ? true : String::regexp_match($regExp, $url);'), array(ValidatorUrl::getRegexp()), false, array('url')));
+
+			if ($schedConf->getSetting('metaSubjectClass')){
+				$this->addCheck(new FormValidatorCustom($this, 'subjectClass', 'required', 'author.submit.form.subjectClassRequired', create_function('$subjectClass', 'foreach ($subjectClass as $oneSubClass) { if($oneSubClass === "")  return false;} return true;')));
+			}
+
 		} else {
 			parent::Form('submission/metadata/metadataView.tpl');
 		}
@@ -76,12 +82,15 @@ class MetadataForm extends Form {
 	function initData() {
 		if (isset($this->paper)) {
 			$paper =& $this->paper;
+			$JEL = new JELCodes();
+			$paperId = $this->paper->getID();
+
 			$this->_data = array(
 				'authors' => array(),
 				'title' => $paper->getTitle(null), // Localized
 				'abstract' => $paper->getAbstract(null), // Localized
 				'discipline' => $paper->getDiscipline(null), // Localized
-				'subjectClass' => $paper->getSubjectClass(null), // Localized
+				'subjectClass' => $JEL->getCodes($paperId),
 				'subject' => $paper->getSubject(null), // Localized
 				'coverageGeo' => $paper->getCoverageGeo(null), // Localized
 				'coverageChron' => $paper->getCoverageChron(null), // Localized
@@ -121,7 +130,7 @@ class MetadataForm extends Form {
 	 * @return array
 	 */
 	function getLocaleFieldNames() {
-		return array('title', 'abstract', 'subjectClass', 'subject', 'coverageGeo', 'coverageChron', 'coverageSample', 'type', 'sponsor', 'citations');
+		return array('title', 'abstract', 'subject', 'coverageGeo', 'coverageChron', 'coverageSample', 'type', 'sponsor', 'citations');
 	}
 
 	/**
@@ -131,13 +140,24 @@ class MetadataForm extends Form {
 		$schedConf =& Request::getSchedConf();
 		$roleDao =& DAORegistry::getDAO('RoleDAO');
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
-
+		$paperId = $this->paper->getPaperId();
 		AppLocale::requireComponents(array(LOCALE_COMPONENT_OCS_DIRECTOR)); // editor.cover.xxx locale keys; FIXME?
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('paperId', isset($this->paper)?$this->paper->getPaperId():null);
 		$templateMgr->assign('rolePath', Request::getRequestedPage());
 		$templateMgr->assign('canViewAuthors', $this->canViewAuthors);
+
+		// Initialization of Affiliation options and addresses
+		import('user.form.Affiliations');
+		$affil = new Affiliations();
+		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('addresses', $affil->getAddresses());
+
+		// Initialization of the JEL codes class
+		$JEL = new JELCodes();
+		$templateMgr->assign('JELCodes', $JEL->getCodes($paperId));
+		$templateMgr->assign('JELClassification', $JEL->getClassification());
 
 		$countryDao =& DAORegistry::getDAO('CountryDAO');
 		$templateMgr->assign('countries', $countryDao->getCountries());
@@ -185,6 +205,9 @@ class MetadataForm extends Form {
 		$authorDao =& DAORegistry::getDAO('AuthorDAO');
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
 
+		$JEL = new JELCodes();
+		$paperId = $this->paper->getID();
+
 		// Update paper
 
 		$paper =& $this->paper;
@@ -193,8 +216,14 @@ class MetadataForm extends Form {
 		$track =& $trackDao->getTrack($paper->getTrackId());
 		$paper->setAbstract($this->getData('abstract'), null); // Localized
 
+		// Set up JEL codes
+		$JELCodes = $JEL->getCodes();
+		foreach ($this->getData('subjectClass') as $key => $value) {
+				$JEL->setCode($paperId, $value, $JEL->getKeyword($value));
+		}
+
 		$paper->setDiscipline($this->getData('discipline'), null); // Localized
-		$paper->setSubjectClass($this->getData('subjectClass'), null); // Localized
+		//$paper->setSubjectClass($this->getData('subjectClass'), null); // Localized
 		$paper->setSubject($this->getData('subject'), null); // Localized
 		$paper->setCoverageGeo($this->getData('coverageGeo'), null); // Localized
 		$paper->setCoverageChron($this->getData('coverageChron'), null); // Localized

@@ -68,6 +68,7 @@
 	<message key="author.submit.reorder">Přeuspořádat jména autorů</message>
 	<message key="author.submit.selectPrincipalContact">Hlavní kontaktní osoba pro korespondenci související s publikováním.</message>
 	<message key="author.submit.addAuthor">Přidat autora</message>
+	<message key="author.submit.addClassification">Přidat JEL kód</message>
 	<message key="author.submit.deleteAuthor">Odstranit autora</message>
 	<message key="author.submit.submissionIndexingDescription">Zadejte pojmy pro indexování příspěvku; oddělte je středníkem (pojem1; pojem2; pojem3).</message>
 	<message key="author.submit.submissionSupportingAgencies">Dedikace</message>
@@ -77,6 +78,7 @@
 	<message key="presenter.submit.form.authorRequired">Zadejte alespoň jednoho autora.</message>
 	<message key="presenter.submit.form.authorRequiredFields">Zadejte jméno, příjmení a emailovou adresu každého autora.</message>
 	<message key="author.submit.form.titleRequired">Zadejte, prosím, název vašeho příspěvku.</message>
+	<message key="author.submit.form.subjectClassRequired">Není možné odesla prázdné pole s klasifikací.</message>
 	<message key="author.submit.form.wordCountAlert">Překročil jste limit počtu slov definovaný pro abstrakt v sekci této konference.</message>
 	<message key="author.submit.submissionFile">Soubor s příspěvkem</message>
 	<message key="author.submit.uploadSubmissionFile">Načíst soubor s příspěvkem</message>

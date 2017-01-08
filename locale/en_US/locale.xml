@@ -170,7 +170,8 @@
 	<message key="paper.suppFiles">Supplementary File(s)</message>
 	<message key="paper.suppFilesAbbrev">Supp. files</message>
 	<message key="paper.discipline">Academic discipline and sub-disciplines</message>
-	<message key="paper.subjectClassification">Subject classification</message>
+	<message key="paper.subjectClassification">JEL classification</message>
+	<message key="paper.subjectClassification.noItems">No items</message>
 	<message key="paper.subject">Keywords</message>
 	<message key="paper.coverage">Coverage</message>
 	<message key="paper.coverageGeo">Geo-spatial coverage</message>

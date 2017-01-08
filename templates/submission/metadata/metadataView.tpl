@@ -15,7 +15,7 @@
 
 {if $canViewAuthors}
 <h3>{translate key="paper.authors"}</h3>
-	
+
 <table width="100%" class="data">
 	{foreach name=authors from=$authors key=authorIndex item=author}
 	<tr valign="top">
@@ -73,7 +73,7 @@
 
 
 <h3>{translate key="submission.indexing"}</h3>
-	
+
 <table width="100%" class="data">
 	{if $currentSchedConf->getSetting('metaDiscipline')}
 	<tr valign="top">
@@ -84,18 +84,25 @@
 		<td colspan="2" class="separator">&nbsp;</td>
 	</tr>
 	{/if}
+
+{* JEL Code *}
+
 	{if $currentSchedConf->getSetting('metaSubjectClass')}
-	<tr valign="top">
-		<td colspan="2" class="label"><a href="{$currentSchedConf->getSetting('metaSubjectClassUrl')}" target="_blank">{$currentSchedConf->getLocalizedSetting('metaSubjectClassTitle')|escape}</a></td>
-	</tr>
-	<tr valign="top">
-		<td width="20%"class="label">{translate key="paper.subjectClassification"}</td>
-		<td width="80%" class="value">{$subjectClass[$formLocale]|escape|default:"&mdash;"}</td>
+  <tr valign="top">
+		<td width="20%"  class="label">{translate key="paper.subjectClassification"}</td>
+		<td width="80%" class="value">
+      {foreach name=JELCodes from=$JELCodes item=JELCode}
+        {$JELCode.1} {$JELCode.2}<br>
+      {foreachelse}
+        {translate key="paper.subjectClassification.noItems"}
+      {/foreach}
+    </td>
 	</tr>
 	<tr>
 		<td colspan="2" class="separator">&nbsp;</td>
 	</tr>
 	{/if}
+
 	{if $currentSchedConf->getSetting('metaSubject')}
 	<tr valign="top">
 		<td width="20%" class="label">{translate key="paper.subject"}</td>
@@ -148,7 +155,7 @@
 
 
 <h3>{translate key="submission.supportingAgencies"}</h3>
-	
+
 <table width="100%" class="data">
 	<tr valign="top">
 		<td width="20%" class="label">{translate key="submission.agencies"}</td>
