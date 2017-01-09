@@ -186,6 +186,9 @@ class ProfileForm extends Form {
 			'phone' => $user->getPhone(),
 			'fax' => $user->getFax(),
 			'mailingAddress' => $user->getMailingAddress(),
+			'billingAddress' => $user->getBillingAddress(),
+			'companyId' => $user->getCompanyId(),
+			'VATRegNo' => $user->getVATRegNo(),
 			'country' => $user->getCountry(),
 			'timeZone' => $user->getTimeZone(),
 			'biography' => $user->getBiography(null), // Localized
@@ -217,6 +220,9 @@ class ProfileForm extends Form {
 			'phone',
 			'fax',
 			'mailingAddress',
+			'billingAddress',
+			'companyId',
+			'VATRegNo',
 			'country',
 			'timeZone',
 			'biography',
@@ -251,6 +257,9 @@ class ProfileForm extends Form {
 		$user->setPhone($this->getData('phone'));
 		$user->setFax($this->getData('fax'));
 		$user->setMailingAddress($this->getData('mailingAddress'));
+		$user->setBillingAddress($this->getData('billingAddress'));
+		$user->setCompanyId($this->getData('companyId'));
+		$user->setVATRegNo($this->getData('VATRegNo'));
 		$user->setCountry($this->getData('country'));
 		$user->setTimeZone($this->getData('timeZone'));
 		$user->setBiography($this->getData('biography'), null); // Localized

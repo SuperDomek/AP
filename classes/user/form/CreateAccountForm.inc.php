@@ -157,7 +157,7 @@ class CreateAccountForm extends Form {
 			'salutation', 'firstName', 'middleName', 'lastName',
 			'gender', 'initials', 'country',
 			'affiliation', 'affiliation_select','email', 'userUrl', 'phone', 'fax', 'signature',
-			'mailingAddress', 'billingAddress', 'companyId', 'VATRegNo','biography', 'interests', 'userLocales',
+			'mailingAddress', 'billingAddress', 'companyId', 'VATRegNo', 'biography', 'interests', 'userLocales',
 			'createAsReader', 'openAccessNotification', 'createAsAuthor',
 			'createAsReviewer', 'existingUser', 'sendPassword'
 		);

@@ -156,6 +156,22 @@ function showAffilBox(sel) {
 	<td class="label">{fieldLabel name="mailingAddress" key="common.mailingAddress"}</td>
 	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="5" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
 </tr>
+
+<tr valign="top">
+	<td class="label">{fieldLabel name="billingAddress" key="common.billingAddress"}</td>
+	<td class="value"><textarea name="billingAddress" id="billingAddress" rows="4" cols="40" class="textArea">{$billingAddress|escape}</textarea></td>
+</tr>
+
+<tr valign="top">
+	<td class="label">{fieldLabel name="companyId" key="common.companyId"}</td>
+	<td class="value"><input type="text" name="companyId" id="companyId" size="15" maxlength="24" class="textField" value="{$companyId|escape}"/></td>
+</tr>
+
+<tr valign="top">
+	<td class="label">{fieldLabel name="VATRegNo" key="common.VATRegNo"}</td>
+	<td class="value"><input type="text" name="VATRegNo" id="VATRegNo" size="15" maxlength="24" class="textField" value="{$VATRegNo|escape}"/></td>
+</tr>
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="country" key="common.country"}</td>
 	<td class="value">
