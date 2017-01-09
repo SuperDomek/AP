@@ -117,6 +117,8 @@
 	<message key="common.manage">Spravovat</message>
 	<message key="common.mailingAddress">Poštovní adresa</message>
 	<message key="common.billingAddress">Fakturační adresa</message>
+	<message key="common.companyId">IČO</message>
+	<message key="common.VATRegNo">DIČ</message>
 	<message key="common.minute">Minuta(y)</message>
 	<message key="common.modify">Změnit</message>
 	<message key="common.month">Měsíc</message>

@@ -336,6 +336,38 @@ class PKPUser extends DataObject {
 	}
 
 	/**
+	 * Get company registration number.
+	 * @return string
+	 */
+	function getCompanyId() {
+		return $this->getData('companyId');
+	}
+
+	/**
+	 * Set company registration number.
+	 * @param $companyId string
+	 */
+	function setCompanyId($companyId) {
+		return $this->setData('companyId', $companyId);
+	}
+
+	/**
+	 * Get value added tax registration number.
+	 * @return string
+	 */
+	function getVATRegNo() {
+		return $this->getData('VATRegNo');
+	}
+
+	/**
+	 * Set value added tax registration number.
+	 * @param $VATRegNo string
+	 */
+	function setVATRegNo($VATRegNo) {
+		return $this->setData('VATRegNo', $VATRegNo);
+	}
+
+	/**
 	 * Get country.
 	 * @return string
 	 */

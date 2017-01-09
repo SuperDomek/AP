@@ -167,6 +167,8 @@ class PKPUserDAO extends DAO {
 		$user->setFax($row['fax']);
 		$user->setMailingAddress($row['mailing_address']);
 		$user->setBillingAddress($row['billing_address']);
+		$user->setCompanyId($row['company_id']);
+		$user->setVATRegNo($row['vat_reg_no']);
 		$user->setCountry($row['country']);
 		$user->setLocales(isset($row['locales']) && !empty($row['locales']) ? explode(':', $row['locales']) : array());
 		$user->setDateLastEmail($this->datetimeFromDB($row['date_last_email']));
@@ -197,9 +199,9 @@ class PKPUserDAO extends DAO {
 		}
 		$this->update(
 			sprintf('INSERT INTO users
-				(username, password, salutation, first_name, middle_name, initials, last_name, gender, affiliation, email, url, phone, fax, mailing_address, billing_address, country, locales, date_last_email, date_registered, date_validated, date_last_login, must_change_password, disabled, disabled_reason, auth_id, auth_str)
+				(username, password, salutation, first_name, middle_name, initials, last_name, gender, affiliation, email, url, phone, fax, mailing_address, billing_address, company_id, vat_reg_no, country, locales, date_last_email, date_registered, date_validated, date_last_login, must_change_password, disabled, disabled_reason, auth_id, auth_str)
 				VALUES
-				(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, %s, %s, %s, %s, ?, ?, ?, ?, ?)',
+				(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, %s, %s, %s, %s, ?, ?, ?, ?, ?)',
 				$this->datetimeToDB($user->getDateLastEmail()), $this->datetimeToDB($user->getDateRegistered()), $this->datetimeToDB($user->getDateValidated()), $this->datetimeToDB($user->getDateLastLogin())),
 			array(
 				$user->getUsername(),
@@ -217,6 +219,8 @@ class PKPUserDAO extends DAO {
 				$user->getFax(),
 				$user->getMailingAddress(),
 				$user->getBillingAddress(),
+				$user->getCompanyId(),
+				$user->getVATRegNo(),
 				$user->getCountry(),
 				join(':', $user->getLocales()),
 				$user->getMustChangePassword() ? 1 : 0,
@@ -269,6 +273,8 @@ class PKPUserDAO extends DAO {
 					fax = ?,
 					mailing_address = ?,
 					billing_address = ?,
+					company_id = ?,
+					vat_reg_no = ?,
 					country = ?,
 					locales = ?,
 					date_last_email = %s,
@@ -297,6 +303,8 @@ class PKPUserDAO extends DAO {
 				$user->getFax(),
 				$user->getMailingAddress(),
 				$user->getBillingAddress(),
+				$user->getCompanyId(),
+				$user->getVATRegNo(),
 				$user->getCountry(),
 				join(':', $user->getLocales()),
 				$user->getMustChangePassword() ? 1 : 0,
