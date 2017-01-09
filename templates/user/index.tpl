@@ -66,7 +66,7 @@
 							<span class="disabled">0 {translate key="common.queue.short.submissionsInReview"}</span>
 						{/if}
 					</td>
-					<td align="right">[<a href="{url conference=$conferencePath schedConf=$schedConfPath  page="director" op="notifyUsers"}">{translate key="director.notifyUsers"}</a>]</td>
+					<td align="right"><a href="{url conference=$conferencePath schedConf=$schedConfPath  page="director" op="notifyUsers"}"><button type="button">{translate key="director.notifyUsers"}</button></a></td>
 				</tr>
 			{/if}
 			{if $isValid.TrackDirector.$conferenceId.$schedConfId}
@@ -96,7 +96,7 @@
 							<a href="{url conference=$conferencePath schedConf=$schedConfPath  page="author"}">{$authorSubmissionsCount[0]} {translate key="common.queue.short.active"}</a>
 						{else}<span class="disabled">0 {translate key="common.queue.short.active"}</span>{/if}
 					</td>
-					<td align="right">[<a href="{url conference=$conferencePath schedConf=$schedConfPath  page="author" op="submit"}">{translate key="author.submit"}</a>]</td>
+					<td align="right"><a href="{url conference=$conferencePath schedConf=$schedConfPath  page="author" op="submit"}"><button type="button">{translate key="author.submit"}</button></a></td>
 				</tr>
 			{/if}
 			{if $isValid.Reviewer.$conferenceId.$schedConfId}
