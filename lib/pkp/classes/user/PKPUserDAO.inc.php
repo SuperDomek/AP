@@ -198,7 +198,6 @@ class PKPUserDAO extends DAO {
 		if ($user->getDateLastLogin() == null) {
 			$user->setDateLastLogin(Core::getCurrentDate());
 		}
-		error_log($user->getAffiliationSelect());
 		$this->update(
 			sprintf('INSERT INTO users
 				(username, password, salutation, first_name, middle_name, initials, last_name, gender, affiliation_select, affiliation, email, url, phone, fax, mailing_address, billing_address, company_id, vat_reg_no, country, locales, date_last_email, date_registered, date_validated, date_last_login, must_change_password, disabled, disabled_reason, auth_id, auth_str)
