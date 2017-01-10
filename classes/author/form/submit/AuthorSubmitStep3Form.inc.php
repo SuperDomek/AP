@@ -204,6 +204,12 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$paperId = $this->paper->getID();
 		$templateMgr->assign('JELClassification', $JEL->getClassification());
 
+		// limit of abstracts
+		$trackDao =& DAORegistry::getDAO('TrackDAO');
+		$track = $trackDao->getTrack($this->paper->getTrackId());
+		$abstractWordCount = $track->getAbstractWordCount(); // total
+		$templateMgr->assign('abstractWordCount', $abstractWordCount);
+
 		$schedConf =& Request::getSchedConf();
 		$reviewMode = $this->paper->getReviewMode();
 		$templateMgr->assign('collectAbstracts', $reviewMode != REVIEW_MODE_PRESENTATIONS_ALONE);

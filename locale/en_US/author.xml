@@ -62,6 +62,7 @@
 	<message key="author.submit.form.authorRequiredFields">The first name, last name, email address, and affiliation of each author is required.</message>
 	<message key="author.submit.form.trackRequired">Please select an appropriate conference track for this submission.</message>
 	<message key="author.submit.form.abstractRequired">Please enter an abstract for your submission.</message>
+	<message key="author.submit.form.abstractLimit">The whole abstract cannot exceed more than 250 words.</message>
 	<message key="author.submit.privacyStatement">Conference's Privacy Statement</message>
 	<message key="author.submit.reorderInstructions">Reorder authors to appear in the order they will be listed on publication.</message>
 	<message key="author.submit.reorder">Reorder author's name</message>
