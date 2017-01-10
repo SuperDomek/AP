@@ -54,7 +54,7 @@ a:hover {
  */
 
 #navbar a {
-	font-size: 1.2em;
+	font-size: 1.1em;
 	letter-spacing: 0.05em;
 }
 
@@ -203,7 +203,7 @@ pre {
  * Table styles
  */
 
-/* Disabled - causes the dotted border merge into uneven solid border 
+/* Disabled - causes the dotted border merge into uneven solid border
 table.listing {
 	border-collapse: collapse;
 }*/
