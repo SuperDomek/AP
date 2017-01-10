@@ -38,6 +38,46 @@ function setAddress(key){
   }
 }
 
+// Inits the affiliation select box by the textarea content
+function initSelect() {
+  // process affiliations array from smarty into a javascript associative array
+  var affiliations = {{/literal}
+    {foreach from=$affiliations item=affiliation key=key name=affiliationloop}
+          "{$key}":"{$affiliation}"
+    {if !$smarty.foreach.affiliationloop.last},{/if}
+    {/foreach}{literal}
+  };
+  var affil_select_name = "affil_select";
+  var affil_box = "affil_box";
+  // var affiliation_text = document.getElementById("affil_text").value;
+  var affiliation_text = "{/literal}{$user->getAffiliation()}{literal}";
+  var affiliation_key = val2key(affiliation_text, affiliations);
+  if (affiliation_key){
+    document.getElementById(affil_select_name).value = affiliation_key;
+    document.getElementById("affil_text").value = affiliations[affiliation_key];
+  }
+  else if (affiliation_text != ""){
+    document.getElementById(affil_select_name).value = "else";
+    document.getElementById(affil_box).style.display = "table-row";
+    document.getElementById("affil_text").value = "{/literal}{$user->getAffiliation()}{literal}";
+  }
+  else {
+    document.getElementsByName(affil_select_name).value = "";
+  }
+}
+
+// returns key of a searched value in an associative array
+function val2key(val,array){
+    for (var key in array) {
+        this_val = array[key];
+        if(this_val == val){
+            return key;
+            break;
+        }
+    }
+    return false;
+}
+
 // shows affiliation box if required; sets up address if affiliation set up
 function showAffilBox(sel) {
   var selected = sel.options[sel.selectedIndex];
@@ -107,18 +147,11 @@ function showAffilBox(sel) {
 		</select>
 	</td>
 </tr>
-<!--<tr valign="top">
-	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
-	<td class="value">
-		<textarea name="affiliation" id="affiliation" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea><br/>
-		<span class="instruct">{translate key="user.affiliation.description"}</span>
-	</td>
-</tr>-->
 
 <tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
 	<td class="value">
-    <select name="affiliation_select" class="selectMenu" onchange="showAffilBox(this);">
+    <select name="affiliation_select" id="affil_select" class="selectMenu" onchange="showAffilBox(this);">
       <option value=""></option>
       {html_options options=$affiliations selected=$affiliation_select}
     </select>
@@ -128,7 +161,7 @@ function showAffilBox(sel) {
   <td class="label">
   </td>
   <td class="value">
-    <textarea name="affiliation" id="affil_text" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea>
+    <textarea name="affiliation" id="affil_text" rows="5" cols="40" class="textArea">{$user->getAffiliation()|escape}</textarea>
   </td>
 </tr>
 
@@ -260,5 +293,13 @@ function showAffilBox(sel) {
 </form>
 
 <p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+
+{* Initialization of the affiliation select boxes on first load of submit page *}
+{if $firstLoad}
+{literal}
+<script type="text/javascript">
+  initSelect();
+</script>
+{/literal}{/if}
 
 {include file="common/footer.tpl"}

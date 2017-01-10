@@ -15,7 +15,7 @@
   -->
 
 <locale name="cs_CZ" full_name = "Čeština">
-	<message key="author.submit">Nový příspěvek</message>
+	<message key="author.submit">Vložit abstrakt</message>
 	<message key="author.track">Aktivní příspěvky</message>
 	<message key="author.submit.startHere">Podání příspěvku na tuto konferenci začněte zde.</message>
 	<message key="author.submit.startHereLink">První krok postupu podání příspěvku</message>

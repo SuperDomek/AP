@@ -35,16 +35,15 @@ function moveAuthor(dir, authorIndex) {
 }
 
 // shows affiliation box if required; sets up address if affiliation set up
-function showAffilBox(sel) {
+function showAffilBox(sel, authorIndex, originalText) {
   //find the [authorIndex] and delete []
-  var authorIndex = sel.name.match(/\[[0-9]+\]/).toString().replace(/[\[|\]]/g,"");
   var selected = sel.options[sel.selectedIndex];
   var affil_box = "authors-".concat(authorIndex).concat("-affil_box");
   var affil_text = "authors-".concat(authorIndex).concat("-affiliation");
 	if(selected.value == "else"){ //custom affil
     document.getElementById(affil_box).style.display = "table-row";
-    // clean the prefilled boxes
-    document.getElementById(affil_text).value = "";
+    // Set up original affiliation text if available in the system
+    document.getElementById(affil_text).value = originalText;
     //tinyMCE.get(affil_text).setContent("");
   }
   else if (selected.value != ""){ //selected affil
@@ -72,6 +71,7 @@ function initSelect() {
   for (i = 0; i < authors; i++) {
     var affil_text_id = "authors-".concat(i).concat("-affiliation");
     var affil_select_name = "authors[".concat(i).concat("][affiliation_select]");
+    var affil_box = "authors-".concat(i).concat("-affil_box");
     var affiliation_text = document.getElementById(affil_text_id).value;
     var affiliation_key = val2key(affiliation_text, affiliations);
     if (affiliation_key){
@@ -79,6 +79,7 @@ function initSelect() {
     }
     else if (affiliation_text != "") {
       document.getElementsByName(affil_select_name)[0].value = "else";
+      document.getElementById(affil_box).style.display = "table-row";
     }
     else {
       document.getElementsByName(affil_select_name)[0].value = "";
@@ -188,7 +189,7 @@ function delDiv(sel){
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" required="true" key="user.affiliation"}
   </td>
 	<td width="80%" class="value">
-    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this);">
+    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this, {$authorIndex|escape}, '{$author.affiliation|escape}');">
       <option value=""></option>
       {html_options options=$affiliations selected=$author.affiliation_select|escape}
     </select>
