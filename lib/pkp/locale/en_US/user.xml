@@ -77,6 +77,7 @@
 	<message key="user.profile.form.publishedNotifications">New issue published email notifications</message>
 	<message key="user.profile.form.urlInvalid">The specified URL is not valid. Please double-check the URL and try again. (Hint: Try adding http:// to the beginning of the URL.)</message>
 	<message key="user.profile.form.usernameRequired">A username is required.</message>
+	<message key="user.profile.form.VATRequired">A VAT registration number is required.</message>
 	<message key="user.profile.leavePasswordBlank">Leave the password fields blank to keep the current password.</message>
 	<message key="user.profile.newPassword">New password</message>
 	<message key="user.profile.oldPassword">Current password</message>

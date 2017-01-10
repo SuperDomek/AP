@@ -77,6 +77,7 @@
 	<message key="user.profile.form.publishedNotifications">Emailová oznámení o vydání nového čísla</message>
 	<message key="user.profile.form.urlInvalid">Specifikovaná URL není platná. Překontrolujte URL a zkuste to znovu. (Tip: Zkuste přidat http:// na začátek URL.)</message>
 	<message key="user.profile.form.usernameRequired">Je vyžadováno uživatelské jméno.</message>
+	<message key="user.profile.form.VATRequired">Je vyžadováno vyplnění DIČ.</message>
 	<message key="user.profile.leavePasswordBlank">Aby bylo zachováno současné heslo, nechte políčka pro zadání hesla prázdná.</message>
 	<message key="user.profile.newPassword">Nové heslo</message>
 	<message key="user.profile.oldPassword">Současné heslo</message>
