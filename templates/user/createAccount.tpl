@@ -16,40 +16,70 @@
 {literal}
 <script type="text/javascript">
 <!--
-// Sets up address
-// @key string Abbreviation for faculty to set up; if null the erase address
-function setAddress(key){
-  // process addresses from smarty into a javascript variable
-  var addresses = {{/literal}
+// Global variable for addresses
+var addresses = null;
+// Global variable for Company Reg Numbers
+var companyIds = null;
+// GLobal variable for VAT Reg. Numbers
+var vatRegNos = null;
+
+// Processes addresses from smarty into a javascript variable
+function initVars() {
+  addresses = {{/literal}
     {foreach from=$addresses item=address key=key name=addressloop}
           "{$key}":"{$address}"
     {if !$smarty.foreach.addressloop.last},{/if}
     {/foreach}{literal}
   };
+  companyIds = {{/literal}
+    {foreach from=$companyIds item=ID key=key name=IDloop}
+          "{$key}":"{$ID}"
+    {if !$smarty.foreach.IDloop.last},{/if}
+    {/foreach}{literal}
+  };
+  vatRegNos = {{/literal}
+    {foreach from=$VATRegNos item=number key=key name=numbersloop}
+          "{$key}":"{$number}"
+    {if !$smarty.foreach.numbersloop.last},{/if}
+    {/foreach}{literal}
+  };
+}
+
+// Sets up address, affiliation, CompanyId and VATRegNo
+// @key string Abbreviation for faculty to set up; if null then erase
+// @key string Affiliation text to set up
+function setInfo(key, affil_text){
   // set up address in address field
   if (key == null) {
     document.getElementById("mailingAddress").value = "";
+    document.getElementById("affil_text").value = "";
+    document.getElementById("companyId").value = "";
+    document.getElementById("VATRegNo").value = "";
     //tinyMCE.get('mailingAddress').setContent("");
   }
   else{
     document.getElementById("mailingAddress").value = addresses[key];
+    document.getElementById("affil_text").value = affil_text;
+    document.getElementById("companyId").value = companyIds["CULS"];
+    document.getElementById("VATRegNo").value = vatRegNos["CULS"];
     //tinyMCE.get('mailingAddress').setContent(addresses[key]);
   }
 }
 
 // shows affiliation box if required; sets up address if affiliation set up
 function showAffilBox(sel) {
+  // init global arrays if not already
+  if (addresses === null) initVars();
+
   var selected = sel.options[sel.selectedIndex];
 	if(selected.value == "else"){ //custom affil
     document.getElementById("affil_box").style.display = "table-row";
     // clean the prefilled boxes
-    document.getElementById("affil_text").value = "";
-    setAddress(null);
+    setInfo(null, null);
   }
   else if (selected.value != ""){ //selected affil
     document.getElementById("affil_box").style.display = "none";
-    document.getElementById("affil_text").value = selected.text;
-    setAddress(selected.value);
+    setInfo(selected.value, selected.text);
   }
   else { // blank affil
     document.getElementById("affil_box").style.display = "none";
@@ -170,7 +200,7 @@ function showAffilBox(sel) {
 <tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
 	<td class="value">
-    <select name="affiliation_select" class="selectMenu" onchange="showAffilBox(this);">
+    <select name="affiliation_select" id="affil_select" class="selectMenu" onchange="showAffilBox(this);">
       <option value=""></option>
       {html_options options=$affiliations selected=$affiliation_select}
     </select>

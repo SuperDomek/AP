@@ -110,6 +110,8 @@ class ProfileForm extends Form {
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
 		$templateMgr->assign('addresses', $affil->getAddresses());
+		$templateMgr->assign('companyIds', $affil->getCompanyIds());
+		$templateMgr->assign('VATRegNos', $affil->getVatRegNos());
 
 		$site =& Request::getSite();
 		$templateMgr->assign('availableLocales', $site->getSupportedLocaleNames());
@@ -138,7 +140,7 @@ class ProfileForm extends Form {
 		$templateMgr->assign_by_ref('schedConfs', $schedConfs);
 		$templateMgr->assign_by_ref('countries', $countries);
 		$templateMgr->assign('helpTopicId', 'conference.users.index');
-		$templateMgr->assign_by_ref('user', $user);
+		//$templateMgr->assign_by_ref('user', $user);
 
 		$schedConf =& Request::getSchedConf();
 		if ($schedConf) {
@@ -180,6 +182,7 @@ class ProfileForm extends Form {
 			'initials' => $user->getInitials(),
 			'lastName' => $user->getLastName(),
 			'gender' => $user->getGender(),
+			'affiliation_select' => $user->getAffiliationSelect(),
 			'affiliation' => $user->getAffiliation(),
 			'signature' => $user->getSignature(null), // Localized
 			'email' => $user->getEmail(),
@@ -201,6 +204,7 @@ class ProfileForm extends Form {
 		);
 
 
+
 	}
 
 	/**
@@ -214,6 +218,7 @@ class ProfileForm extends Form {
 			'lastName',
 			'gender',
 			'initials',
+			'affiliation_select',
 			'affiliation',
 			'signature',
 			'email',
@@ -233,7 +238,7 @@ class ProfileForm extends Form {
 			'authorRole',
 			'reviewerRole'
 		));
-
+		
 		if ($this->getData('userLocales') == null || !is_array($this->getData('userLocales'))) {
 			$this->setData('userLocales', array());
 		}
@@ -251,6 +256,7 @@ class ProfileForm extends Form {
 		$user->setLastName($this->getData('lastName'));
 		$user->setGender($this->getData('gender'));
 		$user->setInitials($this->getData('initials'));
+		$user->setAffiliationSelect($this->getData('affiliation_select'));
 		$user->setAffiliation($this->getData('affiliation'));
 		$user->setSignature($this->getData('signature'), null); // Localized
 		$user->setEmail($this->getData('email'));

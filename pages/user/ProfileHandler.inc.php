@@ -33,9 +33,6 @@ class ProfileHandler extends UserHandler {
 
 		import('user.form.ProfileForm');
 
-		$templateMgr =& TemplateManager::getManager();
-		$templateMgr->assign('firstLoad', true);
-
 		$profileForm = new ProfileForm();
 		if ($profileForm->isLocaleResubmit()) {
 			$profileForm->readInputData();

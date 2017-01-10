@@ -111,6 +111,8 @@ class CreateAccountForm extends Form {
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
 		$templateMgr->assign('addresses', $affil->getAddresses());
+		$templateMgr->assign('companyIds', $affil->getCompanyIds());
+		$templateMgr->assign('VATRegNos', $affil->getVatRegNos());
 
 		import('schedConf.SchedConfAction');
 
@@ -157,8 +159,8 @@ class CreateAccountForm extends Form {
 		$userVars = array(
 			'username', 'password', 'password2',
 			'salutation', 'firstName', 'middleName', 'lastName',
-			'gender', 'initials', 'country',
-			'affiliation', 'affiliation_select','email', 'userUrl', 'phone', 'fax', 'signature',
+			'gender', 'initials', 'country', 'affiliation_select',
+			'affiliation', 'email', 'userUrl', 'phone', 'fax', 'signature',
 			'mailingAddress', 'billingAddress', 'companyId', 'VATRegNo', 'biography', 'interests', 'userLocales',
 			'createAsReader', 'openAccessNotification', 'createAsAuthor',
 			'createAsReviewer', 'existingUser', 'sendPassword'
@@ -236,7 +238,7 @@ class CreateAccountForm extends Form {
 		} else {
 			// New user
 			$user = new User();
-
+			error_log($this->getData('affiliation_select'));
 			$user->setUsername($this->getData('username'));
 			$user->setSalutation($this->getData('salutation'));
 			$user->setFirstName($this->getData('firstName'));
@@ -259,7 +261,6 @@ class CreateAccountForm extends Form {
 			$user->setInterests($this->getData('interests'), null); // Localized
 			$user->setDateRegistered(Core::getCurrentDate());
 			$user->setCountry($this->getData('country'));
-
 			$site =& Request::getSite();
 			$availableLocales = $site->getSupportedLocales();
 

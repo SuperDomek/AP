@@ -23,6 +23,12 @@ class Affiliations {
   // to store addresses
   private $addresses = array();
 
+  // to store CompanyIds
+  private $companyIds = array();
+
+  // to store VATRegNos
+  private $VATRegNos = array();
+
   function __construct() {
     $locale = AppLocale::getLocale();
     switch($locale) {
@@ -42,6 +48,11 @@ class Affiliations {
     // The array keys need to be consistent with affiliations keys
     $this->addresses["CULS"] = "Česká zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
     $this->addresses["FEM"] = "Provozně ekonomická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
+
+    // Initialization of CompanyIds
+    $this->companyIds["CULS"] = "60460709";
+    // Initialization of VATRegNos
+    $this->VATRegNos["CULS"] = "CZ60460709";
 
     return $this->checkConsistency();
   }
@@ -63,6 +74,7 @@ class Affiliations {
 
   /**
    * Returns the array with affiliations
+   * @return array String
    */
   function getAffiliations(){
     if(!empty($this->affiliations)){
@@ -72,11 +84,34 @@ class Affiliations {
 
   /**
    * Returns the array with addresses
+   * @return array String
    */
   function getAddresses(){
     if(!empty($this->addresses)){
       return $this->addresses;
     }
+  }
+
+  /**
+   * Returns the array with Company Ids
+   * @return array String
+   */
+  function getCompanyIds(){
+    if(!empty($this->companyIds)){
+      return $this->companyIds;
+    }
+    else error_log("Error getting companyIds.");
+  }
+
+  /**
+   * Returns the array with VAT Registration Numbers
+   * @return array String
+   */
+  function getVatRegNos(){
+    if(!empty($this->VATRegNos)){
+      return $this->VATRegNos;
+    }
+    else error_log("Error getting VAT Reg. numbers.");
   }
 }
 
