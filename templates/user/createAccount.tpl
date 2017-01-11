@@ -51,9 +51,9 @@ function initVars() {
 function setInfo(selected){
   // set up address in address field
   var facultyKey = selected.parentNode.label;
-  faculty = (selected.value).concat("\\n");
-  var affil_text = selected.text
-  if (key == null) {
+  var faculty = (selected.value).concat("<br />");
+  var affil_text = selected.text;
+  if (facultyKey == null) {
     document.getElementById("mailingAddress").value = "";
     document.getElementById("affil_text").value = "";
     document.getElementById("companyId").value = "";
