@@ -48,8 +48,11 @@ function initVars() {
 // Sets up address, affiliation, CompanyId and VATRegNo
 // @key string Abbreviation for faculty to set up; if null then erase
 // @key string Affiliation text to set up
-function setInfo(key, affil_text){
+function setInfo(selected){
   // set up address in address field
+  var facultyKey = selected.parentNode.label;
+  faculty = (selected.value).concat("\\n");
+  var affil_text = selected.text
   if (key == null) {
     document.getElementById("mailingAddress").value = "";
     document.getElementById("affil_text").value = "";
@@ -58,7 +61,7 @@ function setInfo(key, affil_text){
     //tinyMCE.get('mailingAddress').setContent("");
   }
   else{
-    document.getElementById("mailingAddress").value = addresses[key];
+    document.getElementById("mailingAddress").value = faculty.concat(addresses[facultyKey]);
     document.getElementById("affil_text").value = affil_text;
     document.getElementById("companyId").value = companyIds["CULS"];
     document.getElementById("VATRegNo").value = vatRegNos["CULS"];
@@ -75,11 +78,11 @@ function showAffilBox(sel) {
 	if(selected.value == "else"){ //custom affil
     document.getElementById("affil_box").style.display = "table-row";
     // clean the prefilled boxes
-    setInfo(null, null);
+    setInfo(null);
   }
   else if (selected.value != ""){ //selected affil
     document.getElementById("affil_box").style.display = "none";
-    setInfo(selected.value, selected.text);
+    setInfo(selected);
   }
   else { // blank affil
     document.getElementById("affil_box").style.display = "none";

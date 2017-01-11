@@ -78,7 +78,7 @@ function showAffilBox(sel) {
   }
   else if (selected.value != ""){ //selected affil
     document.getElementById("affil_box").style.display = "none";
-    setInfo(selected.value, selected.text);
+    setInfo(selected.parentNode.label, selected.text);
   }
   else { // blank affil
     document.getElementById("affil_box").style.display = "none";
