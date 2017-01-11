@@ -24,6 +24,12 @@
 		</td>
 	</tr>
   {/if}
+  <tr>
+    <td width="20%" class="label">{translate key="paper.submitterId"}</td>
+    <td width="80%">
+      {$submitterId}
+    </td>
+  </tr>
 	<tr>
 		<td class="label">{translate key="paper.title"}</td>
 		<td colspan="2" class="value">{$submission->getLocalizedTitle()|strip_unsafe_html}</td>

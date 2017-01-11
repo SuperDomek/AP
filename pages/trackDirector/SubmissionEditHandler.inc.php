@@ -65,6 +65,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign('enableComments', $enableComments);
 		$templateMgr->assign('isReviewer', $this->isReviewer());
+		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		// testing JEL codes class
 		import('classes.submission.common.JELCodes');
@@ -292,6 +293,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer());
+		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage == REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);

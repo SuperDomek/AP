@@ -248,9 +248,9 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			// After the merge there is only one abstract for the whole submission.
 
 			// initialization of abstract parts names (hardcoded)
-			$nameAbstract1 = 'Abstrakt 1';
-			$nameAbstract2 = 'Abstrakt 2';
-			$nameAbstract3 = 'Abstrakt 3';
+			$nameAbstract1 = 'Paper’s objective(s)';
+			$nameAbstract2 = 'Data/Methods';
+			$nameAbstract3 = 'Results/Conclusions';
 			// initialization of abstracts from form
 			$abstract1 = $this->getData('abstract1');
 			$abstract2 = $this->getData('abstract2');
