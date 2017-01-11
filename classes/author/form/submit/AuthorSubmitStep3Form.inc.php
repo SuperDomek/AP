@@ -26,7 +26,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 
 		// Validation checks for this form
 		$this->addCheck(new FormValidatorCustom($this, 'authors', 'required', 'author.submit.form.authorRequired', create_function('$authors', 'return count($authors) > 0;')));
-		$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName', 'affiliation')));
+		$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName', 'affiliation_select', 'affiliation')));
 		$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', create_function('$email, $regExp', 'return String::regexp_match($regExp, $email);'), array(ValidatorEmail::getRegexp()), false, array('email')));
 		$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'user.profile.form.urlInvalid', create_function('$url, $regExp', 'return empty($url) ? true : String::regexp_match($regExp, $url);'), array(ValidatorUrl::getRegexp()), false, array('url')));
 		$this->addCheck(new FormValidatorLocale($this, 'title', 'required', 'author.submit.form.titleRequired'));
@@ -103,6 +103,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 						'firstName' => $authors[$i]->getFirstName(),
 						'middleName' => $authors[$i]->getMiddleName(),
 						'lastName' => $authors[$i]->getLastName(),
+						'affiliation_select' => $authors[$i]->getAffiliationSelect(),
 						'affiliation' => $authors[$i]->getAffiliation(),
 						'country' => $authors[$i]->getCountry(),
 						'email' => $authors[$i]->getEmail(),
@@ -197,7 +198,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		import('user.form.Affiliations');
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
-		$templateMgr->assign('addresses', $affil->getAddresses());
 
 		// Initialization of the JEL codes class
 		$JEL = new JELCodes();
@@ -336,6 +336,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				$author->setFirstName($authors[$i]['firstName']);
 				$author->setMiddleName($authors[$i]['middleName']);
 				$author->setLastName($authors[$i]['lastName']);
+				$author->setAffiliationSelect($authors[$i]['affiliation_select']);
 				$author->setAffiliation($authors[$i]['affiliation']);
 				$author->setCountry($authors[$i]['country']);
 				$author->setEmail($authors[$i]['email']);

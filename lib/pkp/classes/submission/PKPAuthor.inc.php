@@ -138,6 +138,22 @@ class PKPAuthor extends DataObject {
 	}
 
 	/**
+	 * Get affiliation select abbreviation.
+	 * @return string
+	 */
+	function getAffiliationSelect() {
+		return $this->getData('affiliation_select');
+	}
+
+	/**
+	 * Set affiliation select abbreviation.
+	 * @param $affiliation string
+	 */
+	function setAffiliationSelect($affiliation_select) {
+		return $this->setData('affiliation_select', $affiliation_select);
+	}
+
+	/**
 	 * Get affiliation (position, institution, etc.).
 	 * @return string
 	 */

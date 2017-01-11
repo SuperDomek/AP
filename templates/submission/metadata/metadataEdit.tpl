@@ -31,16 +31,16 @@ function moveAuthor(dir, authorIndex) {
 }
 
 // shows affiliation box if required; sets up address if affiliation set up
-function showAffilBox(sel) {
+function showAffilBox(sel, authorIndex, originalText) {
   //find the [authorIndex] and delete []
-  var authorIndex = sel.name.match(/\[[0-9]+\]/).toString().replace(/[\[|\]]/g,"");
+  //var authorIndex = sel.name.match(/\[[0-9]+\]/).toString().replace(/[\[|\]]/g,"");
   var selected = sel.options[sel.selectedIndex];
   var affil_box = "authors-".concat(authorIndex).concat("-affil_box");
   var affil_text = "authors-".concat(authorIndex).concat("-affiliation");
 	if(selected.value == "else"){ //custom affil
     document.getElementById(affil_box).style.display = "table-row";
-    // clean the prefilled boxes
-    document.getElementById(affil_text).value = "";
+    // Set up original affiliation text if available in the system
+    document.getElementById(affil_text).value = originalText;
     //tinyMCE.get(affil_text).setContent("");
   }
   else if (selected.value != ""){ //selected affil
@@ -51,45 +51,6 @@ function showAffilBox(sel) {
   else { // blank affil
     document.getElementById(affil_box).style.display = "none";
   }
-}
-
-// Inits the affiliation select box by the textarea content
-function initSelect() {
-  var authors = {/literal}{$authors|@count}{literal};
-  var i;
-  // process affiliations array from smarty into a javascript associative array
-  var affiliations = {{/literal}
-    {foreach from=$affiliations item=affiliation key=key name=affiliatinloop}
-          "{$key}":"{$affiliation}"
-    {if !$smarty.foreach.affiliatinloop.last},{/if}
-    {/foreach}{literal}
-  };
-  // cycle through autors affiliation select boxes
-  for (i = 0; i < authors; i++) {
-    var affil_text_id = "authors-".concat(i).concat("-affiliation");
-    var affil_select_name = "authors[".concat(i).concat("][affiliation_select]");
-    var affiliation_text = document.getElementById(affil_text_id).value;
-    var affiliation_key = val2key(affiliation_text, affiliations);
-    if (affiliation_key){
-      document.getElementsByName(affil_select_name)[0].value = affiliation_key;
-    }
-    else {
-      document.getElementsByName(affil_select_name)[0].value = "else";
-      document.getElementById(affil_text_id).parentNode.parentNode.style.display = "table-row";
-    }
-  }
-}
-
-// returns key of a searched value in an associative array
-function val2key(val,array){
-    for (var key in array) {
-        this_val = array[key];
-        if(this_val == val){
-            return key;
-            break;
-        }
-    }
-    return false;
 }
 
 // Global variable for the count of select boxes
@@ -179,7 +140,7 @@ function delDiv(sel){
   	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" required="true" key="user.affiliation"}
     </td>
   	<td width="80%" class="value">
-      <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this);">
+      <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this, {$authorIndex|escape}, '{$author.affiliation|escape}');">
         <option value=""></option>
         {html_options options=$affiliations selected=$author.affiliation_select|escape}
       </select>
@@ -472,13 +433,5 @@ function delDiv(sel){
 <p><span class="formRequired">{translate key="common.requiredField"}</span></p>
 
 </form>
-
-{* Initialization of the affiliation select boxes on first load of submit page *}
-{if $firstLoad}
-{literal}
-<script type="text/javascript">
-  initSelect();
-</script>
-{/literal}{/if}
 
 {include file="common/footer.tpl"}

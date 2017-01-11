@@ -238,7 +238,6 @@ class CreateAccountForm extends Form {
 		} else {
 			// New user
 			$user = new User();
-			error_log($this->getData('affiliation_select'));
 			$user->setUsername($this->getData('username'));
 			$user->setSalutation($this->getData('salutation'));
 			$user->setFirstName($this->getData('firstName'));

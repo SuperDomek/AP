@@ -53,7 +53,7 @@ class MetadataForm extends Form {
 		if ($this->canEdit) {
 			parent::Form('submission/metadata/metadataEdit.tpl');
 			$this->addCheck(new FormValidatorLocale($this, 'title', 'required', 'author.submit.form.titleRequired'));
-			$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName')));
+			$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName', 'affiliation_select', 'affiliation')));
 			$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', create_function('$email, $regExp', 'return String::regexp_match($regExp, $email);'), array(ValidatorEmail::getRegexp()), false, array('email')));
 			$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'user.profile.form.urlInvalid', create_function('$url, $regExp', 'return empty($url) ? true : String::regexp_match($regExp, $url);'), array(ValidatorUrl::getRegexp()), false, array('url')));
 
@@ -110,6 +110,7 @@ class MetadataForm extends Form {
 						'firstName' => $authors[$i]->getFirstName(),
 						'middleName' => $authors[$i]->getMiddleName(),
 						'lastName' => $authors[$i]->getLastName(),
+						'affiliation_select' => $authors[$i]->getAffiliationSelect(),
 						'affiliation' => $authors[$i]->getAffiliation(),
 						'country' => $authors[$i]->getCountry(),
 						'countryLocalized' => $authors[$i]->getCountryLocalized(),
@@ -152,7 +153,6 @@ class MetadataForm extends Form {
 		import('user.form.Affiliations');
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
-		$templateMgr->assign('addresses', $affil->getAddresses());
 
 		// Initialization of the JEL codes class
 		$JEL = new JELCodes();
@@ -255,6 +255,7 @@ class MetadataForm extends Form {
 				$author->setFirstName($authors[$i]['firstName']);
 				$author->setMiddleName($authors[$i]['middleName']);
 				$author->setLastName($authors[$i]['lastName']);
+				$author->setAffiliationSelect($authors[$i]['affiliation_select']);
 				$author->setAffiliation($authors[$i]['affiliation']);
 				$author->setCountry($authors[$i]['country']);
 				$author->setEmail($authors[$i]['email']);

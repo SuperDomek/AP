@@ -141,6 +141,7 @@ class AuthorDAO extends DAO {
 				aa.first_name AS first_name,
 				aa.middle_name AS middle_name,
 				aa.last_name AS last_name,
+				aa.affiliation_select AS affiliation_select,
 				aa.affiliation AS affiliation,
 				aa.country FROM paper_authors aa,
 				papers a,
@@ -216,6 +217,7 @@ class AuthorDAO extends DAO {
 		$author->setFirstName($row['first_name']);
 		$author->setMiddleName($row['middle_name']);
 		$author->setLastName($row['last_name']);
+		$author->setAffiliationSelect($row['affiliation_select']);
 		$author->setAffiliation($row['affiliation']);
 		$author->setCountry($row['country']);
 		$author->setEmail($row['email']);
@@ -233,18 +235,19 @@ class AuthorDAO extends DAO {
 	/**
 	 * Insert a new Author.
 	 * @param $author Author
-	 */	
+	 */
 	function insertAuthor(&$author) {
 		$this->update(
 			'INSERT INTO paper_authors
-				(paper_id, first_name, middle_name, last_name, affiliation, country, email, url, primary_contact, seq)
+				(paper_id, first_name, middle_name, last_name, affiliation_select, affiliation, country, email, url, primary_contact, seq)
 				VALUES
-				(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+				(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 			array(
 				$author->getPaperId(),
 				$author->getFirstName(),
 				$author->getMiddleName() . '', // make non-null
 				$author->getLastName(),
+				$author->getAffiliationSelect() . '', // make non-null
 				$author->getAffiliation() . '', // make non-null
 				$author->getCountry(),
 				$author->getEmail(),
@@ -271,6 +274,7 @@ class AuthorDAO extends DAO {
 					first_name = ?,
 					middle_name = ?,
 					last_name = ?,
+					affiliation_select = ?,
 					affiliation = ?,
 					country = ?,
 					email = ?,
@@ -282,6 +286,7 @@ class AuthorDAO extends DAO {
 				$author->getFirstName(),
 				$author->getMiddleName() . '', // make non-null
 				$author->getLastName(),
+				$author->getAffiliationSelect() . '', // make non-null
 				$author->getAffiliation() . '', // make non-null
 				$author->getCountry(),
 				$author->getEmail(),

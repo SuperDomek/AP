@@ -56,49 +56,6 @@ function showAffilBox(sel, authorIndex, originalText) {
   }
 }
 
-// Inits the affiliation select box by the textarea content
-function initSelect() {
-  var authors = {/literal}{$authors|@count}{literal};
-  var i;
-  // process affiliations array from smarty into a javascript associative array
-  var affiliations = {{/literal}
-    {foreach from=$affiliations item=affiliation key=key name=affiliationloop}
-          "{$key}":"{$affiliation}"
-    {if !$smarty.foreach.affiliationloop.last},{/if}
-    {/foreach}{literal}
-  };
-  // cycle through autors affiliation select boxes
-  for (i = 0; i < authors; i++) {
-    var affil_text_id = "authors-".concat(i).concat("-affiliation");
-    var affil_select_name = "authors[".concat(i).concat("][affiliation_select]");
-    var affil_box = "authors-".concat(i).concat("-affil_box");
-    var affiliation_text = document.getElementById(affil_text_id).value;
-    var affiliation_key = val2key(affiliation_text, affiliations);
-    if (affiliation_key){
-      document.getElementsByName(affil_select_name)[0].value = affiliation_key;
-    }
-    else if (affiliation_text != "") {
-      document.getElementsByName(affil_select_name)[0].value = "else";
-      document.getElementById(affil_box).style.display = "table-row";
-    }
-    else {
-      document.getElementsByName(affil_select_name)[0].value = "";
-    }
-  }
-}
-
-// returns key of a searched value in an associative array
-function val2key(val,array){
-    for (var key in array) {
-        this_val = array[key];
-        if(this_val == val){
-            return key;
-            break;
-        }
-    }
-    return false;
-}
-
 // Global variable for the count of select boxes
 var JELCount = {/literal}{$subjectClass|@count}{literal};
 
@@ -311,7 +268,7 @@ function delDiv(sel){
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="abstract1" key="paper.abstract1" required="true"}</td>
 	<td width="80%" class="value">
-    <textarea name="abstract1[{$formLocale|escape}]" id="abstract1" class="textArea" rows="15" cols="60">{$abstract1[$formLocale]|escape}</textarea>  
+    <textarea name="abstract1[{$formLocale|escape}]" id="abstract1" class="textArea" rows="15" cols="60">{$abstract1[$formLocale]|escape}</textarea>
   </td>
 </tr>
 <tr valign="top">
@@ -541,13 +498,5 @@ function delDiv(sel){
   </script>
   {/literal}
 {/if}
-
-{* Initialization of the affiliation select boxes on first load of submit page *}
-{if $firstLoad}
-{literal}
-<script type="text/javascript">
-  initSelect();
-</script>
-{/literal}{/if}
 
 {include file="common/footer.tpl"}
