@@ -34,7 +34,7 @@ class UserHandler extends Handler {
 
 		$user =& Request::getUser();
 		$userId = $user->getId();
-		
+
 		$setupIncomplete = array();
 		$submissionsCount = array();
 		$isValid = array();
@@ -49,7 +49,7 @@ class UserHandler extends Handler {
 
 		$conference =& Request::getConference();
 		$templateMgr->assign('helpTopicId', 'user.userHome');
-		
+
 		$allConferences = $allSchedConfs = array();
 
 		if ($conference == null) { // Curently at site level
@@ -63,7 +63,7 @@ class UserHandler extends Handler {
 			while ($conference =& $conferences->next()) {
 				$conferenceId = $conference->getId();
 				$schedConfId = 0;
-				
+
 				// First, the generic roles for this conference
 				$roles =& $roleDao->getRolesByUserId($userId, $conferenceId, 0);
 				if (!empty($roles)) {
@@ -73,7 +73,7 @@ class UserHandler extends Handler {
 
 				// Determine if conference setup is incomplete, to provide a message for JM
 				$setupIncomplete[$conferenceId] = $this->checkIncompleteSetup($conference);
-				
+
 				$this->getRoleDataForConference($userId, $conferenceId, $schedConfId, $submissionsCount, $isValid);
 
 				// Second, scheduled conference-specific roles
@@ -90,13 +90,13 @@ class UserHandler extends Handler {
 					$allSchedConfs[$conference->getId()][$schedConf->getId()] =& $schedConf;
 					unset($schedConf);
 				}
-				
+
 				// If the user has Sched. Conf. roles and no Conf. roles, push the conf. object
 				// into the conference array so it gets shown
 				if(empty($roles) && !empty($schedConfsToDisplay[$conferenceId])) {
 					$conferencesToDisplay[$conferenceId] =& $conference;
 				}
-				
+
 				$allConferences[$conference->getId()] =& $conference;
 				unset($schedConfs);
 				unset($conference);
@@ -107,7 +107,7 @@ class UserHandler extends Handler {
 		} else {  // Currently within a conference's context
 			$conferenceId = $conference->getId();
 			$userConferences = array($conference);
-			
+
 			$this->getRoleDataForConference($userId, $conferenceId, 0, $submissionsCount, $isValid);
 
 			$schedConfs =& $schedConfDao->getSchedConfsByConferenceId($conferenceId);
@@ -139,17 +139,18 @@ class UserHandler extends Handler {
 		$templateMgr->assign('userSchedConfs', $schedConfsToDisplay);
 		$templateMgr->assign('isValid', $isValid);
 		$templateMgr->assign('submissionsCount', $submissionsCount);
-		$templateMgr->assign('setupIncomplete', $setupIncomplete); 
+		$templateMgr->assign('setupIncomplete', $setupIncomplete);
+		$templateMgr->assign('userId', $userId);
 		$templateMgr->display('user/index.tpl');
 	}
 
 	/**
 	 * Gather information about a user's role within a conference.
 	 * @param $userId int
-	 * @param $conferenceId int 
+	 * @param $conferenceId int
 	 * @param $submissionsCount array reference
 	 * @param $isValid array reference
-	
+
 	 */
 	function getRoleDataForConference($userId, $conferenceId, $schedConfId, &$submissionsCount, &$isValid) {
 		if (Validation::isConferenceManager($conferenceId)) {
@@ -170,22 +171,22 @@ class UserHandler extends Handler {
 			$reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
 			$submissionsCount["Reviewer"][$conferenceId][$schedConfId] = $reviewerSubmissionDao->getSubmissionsCount($userId, $schedConfId);
 			$isValid["Reviewer"][$conferenceId][$schedConfId] = true;
-		} 
+		}
 		if (Validation::isAuthor($conferenceId, $schedConfId)) {
 			$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
 			$submissionsCount["Author"][$conferenceId][$schedConfId] = $authorSubmissionDao->getSubmissionsCount($userId, $schedConfId);
 			$isValid["Author"][$conferenceId][$schedConfId] = true;
 		}
 	}
-	
+
 	/**
 	 * Determine if the conference's setup has been sufficiently completed.
-	 * @param $conference Object 
+	 * @param $conference Object
 	 * @return boolean True iff setup is incomplete
 	 */
 	function checkIncompleteSetup($conference) {
 		if (
-			$conference->getSetting('contactEmail') == '' ||  
+			$conference->getSetting('contactEmail') == '' ||
 			$conference->getSetting('contactName') == ''
 		) return true;
 		return false;
@@ -232,7 +233,7 @@ class UserHandler extends Handler {
 		$this->addCheck(new HandlerValidatorSchedConf($this));
 		$this->validate();
 		$schedConf =& Request::getSchedConf();
-		
+
 		import('schedConf.SchedConfAction');
 		$user =& Request::getUser();
 		if (!$user) Request::redirect(null, null, 'index');

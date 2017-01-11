@@ -102,6 +102,7 @@
 	<message key="user.salutation">Salutation</message>
 	<message key="user.sendPassword">Confirmation</message>
 	<message key="user.sendPassword.description">Send me a confirmation email including my username and password</message>
+	<message key="user.specificSymbol">Your specific symbol for payment:</message>
 	<message key="user.signature">Signature</message>
 	<message key="user.title">Title</message>
 	<message key="user.url">URL</message>

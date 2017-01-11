@@ -181,6 +181,7 @@
 
 <div id="myAccount">
 <h3>{translate key="user.myAccount"}</h3>
+<p>{translate key="user.specificSymbol"} <strong>{$userId}</strong></p>
 <ul class="plain">
 	{if $hasOtherConferences}
 		{if !$showAllConferences}
