@@ -160,7 +160,7 @@ class PKPUserDAO extends DAO {
 		$user->setInitials($row['initials']);
 		$user->setLastName($row['last_name']);
 		$user->setGender($row['gender']);
-		$user->setAffiliation($row['affiliation_select']);
+		$user->setAffiliationSelect($row['affiliation_select']);
 		$user->setAffiliation($row['affiliation']);
 		$user->setEmail($row['email']);
 		$user->setUrl($row['url']);
@@ -198,10 +198,9 @@ class PKPUserDAO extends DAO {
 		if ($user->getDateLastLogin() == null) {
 			$user->setDateLastLogin(Core::getCurrentDate());
 		}
-		error_log($user->getAffiliationSelect());
 		$this->update(
 			sprintf('INSERT INTO users
-				(username, password, salutation, first_name, middle_name, initials, last_name, gender, affiliation_select, affiliation, email, url, phone, fax, mailing_address, billing_address, company_id, vat_reg_no, country, locales, date_last_email, date_registered, date_validated, date_last_login, must_change_password, disabled, disabled_reason, auth_id, auth_str)
+				(username, password, salutation, first_name, middle_name, last_name, gender, initials, affiliation_select, affiliation, email, url, phone, fax, mailing_address, billing_address, company_id, vat_reg_no, country, locales, date_last_email, date_registered, date_validated, date_last_login, must_change_password, disabled, disabled_reason, auth_id, auth_str)
 				VALUES
 				(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, %s, %s, %s, %s, ?, ?, ?, ?, ?)',
 				$this->datetimeToDB($user->getDateLastEmail()), $this->datetimeToDB($user->getDateRegistered()), $this->datetimeToDB($user->getDateValidated()), $this->datetimeToDB($user->getDateLastLogin())),
@@ -211,9 +210,9 @@ class PKPUserDAO extends DAO {
 				$user->getSalutation(),
 				$user->getFirstName(),
 				$user->getMiddleName(),
-				$user->getInitials(),
 				$user->getLastName(),
 				$user->getGender(),
+				$user->getInitials(),
 				$user->getAffiliationSelect(),
 				$user->getAffiliation(),
 				$user->getEmail(),
