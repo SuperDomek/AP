@@ -161,7 +161,7 @@ class CreateAccountForm extends Form {
 			'salutation', 'firstName', 'middleName', 'lastName',
 			'gender', 'initials', 'country', 'affiliation_select',
 			'affiliation', 'email', 'userUrl', 'phone', 'fax', 'signature',
-			'mailingAddress', 'billingAddress', 'companyId', 'VATRegNo', 'biography', 'interests', 'userLocales',
+			'mailingAddress', 'billingAddressCheck', 'billingAddress', 'companyId', 'VATRegNo', 'biography', 'interests', 'userLocales',
 			'createAsReader', 'openAccessNotification', 'createAsAuthor',
 			'createAsReviewer', 'existingUser', 'sendPassword'
 		);
@@ -253,7 +253,10 @@ class CreateAccountForm extends Form {
 			$user->setPhone($this->getData('phone'));
 			$user->setFax($this->getData('fax'));
 			$user->setMailingAddress($this->getData('mailingAddress'));
-			$user->setBillingAddress($this->getData('billingAddress'));
+			if($this->getData('billingAddressCheck'))
+				$user->setBillingAddress($this->getData('billingAddress'));
+			else
+				$user->setBillingAddress($this->getData('mailingAddress'));
 			$user->setCompanyId($this->getData('companyId'));
 			$user->setVATRegNo($this->getData('VATRegNo'));
 			$user->setBiography($this->getData('biography'), null); // Localized

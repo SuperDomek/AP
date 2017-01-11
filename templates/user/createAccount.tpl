@@ -85,6 +85,20 @@ function showAffilBox(sel) {
     document.getElementById("affil_box").style.display = "none";
   }
 }
+
+//shows Billing address textbox if the calling checkbox checked
+function showBillAddr(checkbox){
+  if(checkbox.checked) {
+    var mailAddr = '{/literal}{fieldLabel name="mailingAddress" required="true" key="common.mailingAddress"}{literal}';
+    document.getElementById("billingAddress").parentNode.parentNode.style.display = "table-row";
+    document.getElementById("mailAddrLabel").innerHTML = mailAddr;
+  }
+  else {
+    var mailBillAddr = '{/literal}{fieldLabel name="mailingAddress" required="true" key="common.mailingBillingAddress"}{literal}';
+    document.getElementById("billingAddress").parentNode.parentNode.style.display = "none";
+    document.getElementById("mailAddrLabel").innerHTML = mailBillAddr;
+  }
+}
 // -->
 </script>
 {/literal}
@@ -174,28 +188,30 @@ function showAffilBox(sel) {
 	<td class="value"><input type="text" id="firstName" name="firstName" value="{$firstName|escape}" size="20" maxlength="40" class="textField" /></td>
 </tr>
 
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="middleName" key="user.middleName"}</td>
 	<td class="value"><input type="text" id="middleName" name="middleName" value="{$middleName|escape}" size="20" maxlength="40" class="textField" /></td>
-</tr>
+</tr>-->
 
 <tr valign="top">
 	<td class="label">{fieldLabel name="lastName" required="true" key="user.lastName"}</td>
 	<td class="value"><input type="text" id="lastName" name="lastName" value="{$lastName|escape}" size="20" maxlength="90" class="textField" /></td>
 </tr>
+
 <!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="initials" key="user.initials"}</td>
 	<td class="value"><input type="text" id="initials" name="initials" value="{$initials|escape}" size="5" maxlength="5" class="textField" />&nbsp;&nbsp;{translate key="user.initialsExample"}</td>
 </tr>
--->
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="gender" key="user.gender"}</td>
 	<td class="value"><select name="gender" id="gender" size="1" class="selectMenu">
 			{html_options_translate options=$genderOptions selected=$gender}
 		</select>
 	</td>
-</tr>
+</tr>-->
 
 <tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
@@ -234,17 +250,23 @@ function showAffilBox(sel) {
 	<td class="value"><input type="text" name="phone" id="phone" value="{$phone|escape}" size="15" maxlength="24" class="textField" /></td>
 </tr>
 
+<!-- EDIT Slim registration
 <tr valign="top">
 	<td class="label">{fieldLabel name="fax" key="user.fax"}</td>
 	<td class="value"><input type="text" name="fax" id="fax" value="{$fax|escape}" size="15" maxlength="24" class="textField" /></td>
-</tr>
+</tr>-->
 
 <tr valign="top">
-	<td class="label">{fieldLabel name="mailingAddress" required="true" key="common.mailingAddress"}</td>
+	<td class="label" id="mailAddrLabel">{fieldLabel name="mailingAddress" required="true" key="common.mailingBillingAddress"}</td>
 	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="4" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
 </tr>
 
 <tr valign="top">
+  <td class="label">{fieldLabel name="billingAddressCheck" key="common.billingAddressCheck"}</td>
+  <td class="value"><input type="checkbox" name="billingAddressCheck" id="billingAddressCheck" onclick="showBillAddr(this)"/></td>
+</tr>
+
+<tr valign="top" class="hidden">
 	<td class="label">{fieldLabel name="billingAddress" key="common.billingAddress"}</td>
 	<td class="value"><textarea name="billingAddress" id="billingAddress" rows="4" cols="40" class="textArea">{$billingAddress|escape}</textarea></td>
 </tr>
@@ -284,14 +306,14 @@ function showAffilBox(sel) {
 	</td>
 </tr>
 
-{if count($availableLocales) > 1}
+<!--{if count($availableLocales) > 1}
 <tr valign="top">
 	<td class="label">{translate key="user.workingLanguages"}</td>
 	<td class="value">{foreach from=$availableLocales key=localeKey item=localeName}
 		<input type="checkbox" name="userLocales[]" id="userLocales-{$localeKey|escape}" value="{$localeKey|escape}"{if in_array($localeKey, $userLocales)} checked="checked"{/if} /> <label for="userLocales-{$localeKey|escape}">{$localeName|escape}</label><br />
 	{/foreach}</td>
 </tr>
-{/if}
+{/if}-->
 {/if}
 
 {if ($allowRegReader || $allowRegReader === null) or $enableOpenAccessNotification or ($allowRegAuthor || $allowRegAuthor === null) or ($allowRegReviewer || $allowRegReviewer === null)}
@@ -310,7 +332,7 @@ function showAffilBox(sel) {
       <input type="checkbox" name="createAsAuthor" id="createAsAuthor" value="1" disabled /> <label for="createAsAuthor">{translate key="user.role.author"}</label>: {translate key="author.submit.notAccepting"}<br />
 		{/if}
 		{if $allowRegReviewer || $allowRegReviewer === null}
-      <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="user.account.reviewerDescriptionNoInterests"}
+      <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {if $existingUser}{translate key="user.account.reviewerDescriptionNoInterests"}{else}{translate key="user.account.reviewerDescription"} <input type="text" name="interests[{$formLocale|escape}]" value="{$interests[$formLocale]|escape}" size="20" maxlength="255" class="textField" />{/if}
     {else}
       <input type="checkbox" name="createAsReviewer" id="createAsReviewer" value="1"{if $createAsReviewer} checked="checked"{/if} disabled /> <label for="createAsReviewer">{translate key="user.role.reviewer"}</label>: {translate key="reviewer.notAccepting"}
 		{/if}

@@ -588,8 +588,8 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="user.account.readerDescription">Informováni e-mailem o zveřejnění prezentací</message>
 	<message key="user.account.openAccessNotificationDescription">Oznámit emailem otevření přístupu ke konferencí.</message>
 	<message key="user.account.authorDescription">Může vkládat materiály na konferenci.</message>
-	<message key="user.account.reviewerDescriptionNoInterests">Ochota účastnit se oponentury konferenčních příspěvků.</message>
-	<message key="user.account.reviewerDescription">Ochota oponovat příspěvky na konferenci. Uvést zájmy (hlavní oblasti a metody výzkumu).</message>
+	<message key="user.account.reviewerDescriptionNoInterests">Ochota recenzovat konferenční příspěvky.</message>
+	<message key="user.account.reviewerDescription">Ochota recenzovat příspěvky na konferenci. Uveďte zájmy (hlavní oblasti a metody výzkumu).</message>
 	<message key="user.account.authorRegistrationMessage">Přestože máte na těchto stránkách již zřízen účet, nejste na ní v tomto momentě autory.</message>
 
 
