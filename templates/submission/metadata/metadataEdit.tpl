@@ -40,7 +40,7 @@ function showAffilBox(sel, authorIndex, originalText) {
 	if(selected.value == "else"){ //custom affil
     document.getElementById(affil_box).style.display = "table-row";
     // Set up original affiliation text if available in the system
-    document.getElementById(affil_text).value = originalText;
+    document.getElementById(affil_text).value = "";
     //tinyMCE.get(affil_text).setContent("");
   }
   else if (selected.value != ""){ //selected affil
@@ -161,10 +161,11 @@ function delDiv(sel){
 			</select>
 		</td>
 	</tr>
+  <!--
 	<tr valign="top">
 		<td class="label">{fieldLabel name="authors-$authorIndex-biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
 		<td class="value"><textarea name="authors[{$authorIndex|escape}][biography][{$formLocale|escape}]" id="authors-{$authorIndex|escape}-biography" rows="5" cols="40" class="textArea">{$author.biography[$formLocale]|escape}</textarea></td>
-	</tr>
+	</tr> -->
 	{if $smarty.foreach.authors.total > 1}
 	<tr valign="top">
 		<td class="label">{translate key="author.submit.reorder"}</td>

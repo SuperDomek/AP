@@ -51,7 +51,7 @@ function initVars() {
 // @key string Affiliation text to set up
 function setInfo(key, affil_text){
   // set up address in address field
-  if (key == null) {
+  if (key === null) {
     document.getElementById("mailingAddress").value = "";
     document.getElementById("affil_text").value = "";
     document.getElementById("companyId").value = "";
@@ -75,6 +75,7 @@ function showAffilBox(sel) {
   var selected = sel.options[sel.selectedIndex];
 	if(selected.value == "else"){ //custom affil
     document.getElementById("affil_box").style.display = "table-row";
+    setInfo(null, null);
   }
   else if (selected.value != ""){ //selected affil
     document.getElementById("affil_box").style.display = "none";
@@ -139,7 +140,7 @@ function showAffilBox(sel) {
 <tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
 	<td class="value">
-    <select name="affiliation_select" id="affil_select" class="selectMenu" onchange="showAffilBox(this);">
+    <select name="affiliation_select" id="affil_select" class="selectMenu selectForm" onchange="showAffilBox(this);">
       <option value=""></option>
       {html_options options=$affiliations selected=$affiliation_select}
     </select>
@@ -196,7 +197,7 @@ function showAffilBox(sel) {
 <tr valign="top">
 	<td class="label">{fieldLabel name="country" key="common.country"}</td>
 	<td class="value">
-		<select name="country" id="country" class="selectMenu">
+		<select name="country" id="country" class="selectMenu selectForm">
 			<option value=""></option>
 			{html_options options=$countries selected=$country}
 		</select>

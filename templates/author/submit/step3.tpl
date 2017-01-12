@@ -43,7 +43,7 @@ function showAffilBox(sel, authorIndex, originalText) {
 	if(selected.value == "else"){ //custom affil
     document.getElementById(affil_box).style.display = "table-row";
     // Set up original affiliation text if available in the system
-    document.getElementById(affil_text).value = originalText;
+    document.getElementById(affil_text).value = "";
     //tinyMCE.get(affil_text).setContent("");
   }
   else if (selected.value != ""){ //selected affil
@@ -147,7 +147,6 @@ function delDiv(sel){
   </td>
 	<td width="80%" class="value">
     <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this, {$authorIndex|escape}, '{$author.affiliation|escape}');">
-      <option value=""></option>
       {html_options options=$affiliations selected=$author.affiliation_select|escape}
     </select>
 	</td>

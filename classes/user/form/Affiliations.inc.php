@@ -266,11 +266,11 @@ class Affiliations {
     // The array keys need to be consistent with affiliations keys
     $this->addresses["CZU"] = "Česká zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
     $this->addresses["PEF"] = "Provozně ekonomická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
-    $this->addresses["TF"] = "Provozně ekonomická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
+    $this->addresses["TF"] = "Technická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
     $this->addresses["FAPPZ"] = "Fakulta agrobiologie, potravinových a přírodních zdrojů\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
     $this->addresses["FZP"] = "Fakulta životního prostředí\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
     $this->addresses["FLD"] = "Fakulta lesnická a dřevařská\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
-    $this->addresses["FTZ"] = "Fakulta tropického zemědělství\\nČeská zemědělská univerzita v Praze\\Kamýcká 129\\165 00 Praha 6 - Suchdol";
+    $this->addresses["FTZ"] = "Fakulta tropického zemědělství\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
     $this->addresses["IVP"] = "Institut vzdělávání a poradenství\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
 
     // Initialization of CompanyIds

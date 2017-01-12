@@ -49,11 +49,7 @@ function initVars() {
 // @key string Abbreviation for faculty to set up; if null then erase
 // @key string Affiliation text to set up
 function setInfo(selected){
-  // set up address in address field
-  var facultyKey = selected.parentNode.label;
-  var faculty = (selected.label).concat("\n");
-  var affil_text = selected.text;
-  if (facultyKey == null) {
+  if (selected === null) {
     document.getElementById("mailingAddress").value = "";
     document.getElementById("affil_text").value = "";
     document.getElementById("companyId").value = "";
@@ -61,7 +57,12 @@ function setInfo(selected){
     //tinyMCE.get('mailingAddress').setContent("");
   }
   else{
-    document.getElementById("mailingAddress").value = faculty.concat(addresses[facultyKey]);
+    var facultyKey = selected.parentNode.label;
+    //var faculty = (selected.label).concat("\n");
+    var affil_text = selected.text;
+
+    //document.getElementById("mailingAddress").value = faculty.concat(addresses[facultyKey]);
+    document.getElementById("mailingAddress").value = addresses[facultyKey];
     document.getElementById("affil_text").value = affil_text;
     document.getElementById("companyId").value = companyIds["CULS"];
     document.getElementById("VATRegNo").value = vatRegNos["CULS"];
@@ -219,7 +220,7 @@ function showBillAddr(checkbox){
 <tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
 	<td class="value">
-    <select name="affiliation_select" id="affil_select" class="selectMenu" onchange="showAffilBox(this);">
+    <select name="affiliation_select" id="affil_select" class="selectMenu selectForm" onchange="showAffilBox(this);">
       <option value=""></option>
       {html_options options=$affiliations selected=$affiliation_select}
     </select>
@@ -287,7 +288,7 @@ function showBillAddr(checkbox){
 <tr valign="top">
 	<td class="label">{fieldLabel name="country" key="common.country"}</td>
 	<td class="value">
-		<select name="country" id="country" class="selectMenu">
+		<select name="country" id="country" class="selectMenu selectForm">
 			<option value=""></option>
 			{html_options options=$countries selected=$country}
 		</select>
