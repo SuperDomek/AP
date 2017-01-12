@@ -42,10 +42,12 @@
 		<td class="label">{translate key="common.country"}</td>
 		<td class="value">{$author->getCountryLocalized()|escape|default:"&mdash;"}</td>
 	</tr>
+  <!--
 	<tr valign="top">
 		<td class="label">{translate key="user.biography"}</td>
 		<td class="value">{$author->getAuthorBiography()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
 	</tr>
+-->
 	{if $author->getPrimaryContact()}
 		<tr valign="top">
 			<td colspan="2" class="label">{translate key="author.submit.selectPrincipalContact"}</td>
@@ -102,7 +104,7 @@
 		<td width="20%"  class="label">{translate key="paper.subjectClassification"}</td>
 		<td width="80%" class="value">
       {foreach name=JELCodes from=$JELCodes item=JELCode}
-        {$JELCode.1} {$JELCode.2}<br>
+        {$JELCode.2}<br>
       {foreachelse}
         {translate key="paper.subjectClassification.noItems"}
       {/foreach}

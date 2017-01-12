@@ -120,10 +120,10 @@ function delDiv(sel){
 		</td>
 		<td width="80%" class="value"><input type="text" name="authors[{$authorIndex|escape}][firstName]" id="authors-{$authorIndex|escape}-firstName" value="{$author.firstName|escape}" size="20" maxlength="40" class="textField" /></td>
 	</tr>
-	<tr valign="top">
+	<!--<tr valign="top">
 		<td class="label">{fieldLabel name="authors-$authorIndex-middleName" key="user.middleName"}</td>
 		<td class="value"><input type="text" name="authors[{$authorIndex|escape}][middleName]" id="authors-{$authorIndex|escape}-middleName" value="{$author.middleName|escape}" size="20" maxlength="40" class="textField" /></td>
-	</tr>
+	</tr>-->
 	<tr valign="top">
 		<td class="label">{fieldLabel name="authors-$authorIndex-lastName" required="true" key="user.lastName"}</td>
 		<td class="value"><input type="text" name="authors[{$authorIndex|escape}][lastName]" id="authors-{$authorIndex|escape}-lastName" value="{$author.lastName|escape}" size="20" maxlength="90" class="textField" /></td>
@@ -132,10 +132,12 @@ function delDiv(sel){
 		<td class="label">{fieldLabel name="authors-$authorIndex-email" required="true" key="user.email"}</td>
 		<td class="value"><input type="text" name="authors[{$authorIndex|escape}][email]" id="authors-{$authorIndex|escape}-email" value="{$author.email|escape}" size="30" maxlength="90" class="textField" /></td>
 	</tr>
+  <!--
 	<tr valign="top">
 		<td class="label">{fieldLabel name="authors-$authorIndex-url" key="user.url"}</td>
 		<td class="value"><input type="text" name="authors[{$authorIndex|escape}][url]" id="authors-{$authorIndex|escape}-url" value="{$author.url|escape}" size="30" maxlength="90" class="textField" /></td>
 	</tr>
+-->
   <tr valign="top">
   	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" required="true" key="user.affiliation"}
     </td>
