@@ -264,7 +264,6 @@ class Affiliations {
 
     // Initialization of addresses
     // The array keys need to be consistent with affiliations keys
-    $this->addresses["CZU"] = "Česká zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";
     $this->addresses["PEF"] = "Provozně ekonomická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
     $this->addresses["TF"] = "Technická fakulta\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 21 Praha 6 - Suchdol";
     $this->addresses["FAPPZ"] = "Fakulta agrobiologie, potravinových a přírodních zdrojů\\nČeská zemědělská univerzita v Praze\\nKamýcká 129\\n165 00 Praha 6 - Suchdol";

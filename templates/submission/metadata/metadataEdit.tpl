@@ -247,6 +247,9 @@ function delDiv(sel){
 		<td class="label">{fieldLabel name="abstract" key="paper.abstract" required="true"}</td>
 		<td class="value"><textarea name="abstract[{$formLocale|escape}]" id="abstract" rows="15" cols="60" class="textArea">{$abstract[$formLocale]|escape}</textarea></td>
 	</tr>
+  <tr valign="top">
+    <td colspan="2"><span id="abstractCount">{translate key="author.submit.form.abstractLimit"}</span></td>
+  </tr>
 </table>
 </div>
 
