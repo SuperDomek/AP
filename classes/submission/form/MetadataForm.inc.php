@@ -57,6 +57,15 @@ class MetadataForm extends Form {
 			$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', create_function('$email, $regExp', 'return String::regexp_match($regExp, $email);'), array(ValidatorEmail::getRegexp()), false, array('email')));
 			$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'user.profile.form.urlInvalid', create_function('$url, $regExp', 'return empty($url) ? true : String::regexp_match($regExp, $url);'), array(ValidatorUrl::getRegexp()), false, array('url')));
 
+			$this->addCheck(new FormValidatorLocale($this, 'abstract', 'required', 'author.submit.form.abstractRequired'));
+			$trackDao =& DAORegistry::getDAO('TrackDAO');
+			$track = $trackDao->getTrack($paper->getTrackId());
+			/** using old methods and fields from word count; now char count **/
+			$abstractCharCount = $track->getAbstractWordCount();
+			if (isset($abstractCharCount) && $abstractCharCount > 0) {
+				$this->addCheck(new FormValidatorCustom($this, 'abstract', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $charCount', 'foreach ($abstract as $localizedAbstract) {return strlen(strip_tags($localizedAbstract)) <= $charCount; }'), array($abstractCharCount)));
+			}
+
 			if ($schedConf->getSetting('metaSubjectClass')){
 				$this->addCheck(new FormValidatorCustom($this, 'subjectClass', 'required', 'author.submit.form.subjectClassRequired', create_function('$subjectClass', 'foreach ($subjectClass as $oneSubClass) { if($oneSubClass === "")  return false;} return true;')));
 			}
