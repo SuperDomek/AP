@@ -23,6 +23,7 @@
 	<message key="author.submit.step3">Krok 3: Vložení metadat příspěvku</message>
 	<message key="author.submit.step3AbstOnly">Krok 2: Vložení metadat příspěvku</message>
 	<message key="author.submit.step2">Krok 2: Načtení příspěvku</message>
+	<message key="author.submit.step2NoAbstracts">Krok 3. Nahrání příspěvku</message>
 	<message key="author.submit.step4">Krok 4: Načtení doplňkových souborů</message>
 	<message key="author.submit.step4a">Krok 4a: Přidání doplňkového souboru</message>
 	<message key="author.submit.step5">Krok 5: Potvrzení příspěvku</message>
