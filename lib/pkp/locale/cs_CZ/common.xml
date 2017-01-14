@@ -47,6 +47,7 @@
 	<message key="common.applyAction">Provést akci</message>
 	<message key="common.assign">Přidělit</message>
 	<message key="common.assigned">Přiděleno</message>
+	<message key="common.attends">Plánuje se zúčastnit konference.</message>
 	<message key="common.back">Zpět</message>
 	<message key="common.between">mezi</message>
 	<message key="common.cancel">Zrušit</message>

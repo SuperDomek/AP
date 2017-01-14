@@ -199,6 +199,22 @@ class PKPAuthor extends DataObject {
 	}
 
 	/**
+	 * Get attendance setting for author
+	 * @return boolean
+	 */
+	function getAttends() {
+		return $this->getData('attends');
+	}
+
+	/**
+	 * Set attendance setting.
+	 * @param $attends boolean
+	 */
+	function setAttends($attends) {
+		return $this->setData('attends', (bool) $attends);
+	}
+
+	/**
 	 * Get email address.
 	 * @return string
 	 */

@@ -167,6 +167,13 @@ function delDiv(sel){
 		</select>
 	</td>
 </tr>
+
+<tr valign="top">
+	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-attends" key="common.attends"}</td>
+	<td width="80%" class="value">
+		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if $smarty.foreach.authors.total <= 1} checked="checked" {/if}/>
+	</td>
+</tr>
 <!-- EDIT Slim registration
 <tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>

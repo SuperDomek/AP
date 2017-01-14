@@ -26,18 +26,24 @@
 			{$author.firstName|escape} {$author.middleName|escape} {$author.lastName|escape} {icon name="mail" url=$url}
 		</td>
 	</tr>
-	<tr valign="top">
+	<!--<tr valign="top">
 		<td class="label">{translate key="user.url"}</td>
 		<td class="value">{$author.url|escape|default:"&mdash;"}</td>
-	</tr>
+	</tr>-->
 	<tr valign="top">
 		<td class="label">{translate key="user.affiliation"}</td>
 		<td class="value">{$author.affiliation|escape|nl2br|default:"&mdash;"}</td>
 	</tr>
-	<tr valign="top">
+	<!--<tr valign="top">
 		<td class="label">{translate key="user.biography"}</td>
 		<td class="value">{$author.biography.$formLocale|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
-	</tr>
+	</tr>-->
+  <tr valign="top">
+  	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-attends" key="common.attends"}</td>
+  	<td width="80%" class="value">
+  		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if !$authors.attends} checked="checked" {/if}/>
+  	</td>
+  </tr>
 	{if !$smarty.foreach.authors.last}
 	<tr>
 		<td colspan="2" class="separator">&nbsp;</td>
