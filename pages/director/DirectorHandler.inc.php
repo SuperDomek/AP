@@ -37,7 +37,7 @@ class DirectorHandler extends TrackDirectorHandler {
 
 		$this->addCheck(new HandlerValidatorConference($this));
 		$this->addCheck(new HandlerValidatorSchedConf($this));
-		$this->addCheck(new HandlerValidatorRoles($this, true, null, null, array(ROLE_ID_DIRECTOR)));		
+		$this->addCheck(new HandlerValidatorRoles($this, true, null, null, array(ROLE_ID_DIRECTOR)));
 	}
 
 	/**
@@ -122,7 +122,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			if ($filterDirector == null) {
 				$filterDirector = FILTER_DIRECTOR_ALL;
 				$user->updateSetting('filterDirector', $filterDirector, 'int', $schedConfId);
-			}	
+			}
 		}
 
 		if ($filterDirector == FILTER_DIRECTOR_ME) {
@@ -139,7 +139,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			if ($filterTrack == null) {
 				$filterTrack = FILTER_TRACK_ALL;
 				$user->updateSetting('filterTrack', $filterTrack, 'int', $schedConfId);
-			}	
+			}
 		}
 
 		$rangeInfo =& Handler::getRangeInfo('submissions', array($functionName, (string) $searchField, (string) $searchMatch, (string) $search));
@@ -270,7 +270,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			$this->setupTemplate(DIRECTOR_TRACK_SUBMISSIONS, $paperId, 'summary');
 
 			// FIXME: Prompt for due date.
-			if (DirectorAction::assignDirector($paperId, $directorId, $isDirector, Request::getUserVar('send'))) {
+			if (DirectorAction::assignDirector($paperId, $directorId, $isDirector, Request::getUserVar('send'), true)) {
 				Request::redirect(null, null, null, 'submission', $paperId);
 			}
 		} else {

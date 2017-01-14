@@ -185,7 +185,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
 
-		/* EDIT Add track directors as reviewers */
+		/* EDIT Add track directors as reviewers
 		//if(!$submission->getReviewAssignments($stage)){ // no reviewers yet
 		if ($stage == $submission->getCurrentStage()){ //stage not disabled
 			// Get track directors assigned to this track
@@ -219,7 +219,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				exit();	// stop executing code so page reloads instanteously
 			}
 		}
-		/* END EDIT */
+		 END EDIT */
 
 		// Prepare an array to store the 'Notify Reviewer' email logs
 		$notifyReviewerLogs = array();

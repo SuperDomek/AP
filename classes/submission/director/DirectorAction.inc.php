@@ -34,7 +34,7 @@ class DirectorAction extends TrackDirectorAction {
 	 * @param $paperId int
 	 * @return boolean true iff ready for redirect
 	 */
-	function assignDirector($paperId, $trackDirectorId, $isDirector = false, $send = false) {
+	function assignDirector($paperId, $trackDirectorId, $isDirector = false, $send = false, $auto = false) {
 		$directorSubmissionDao =& DAORegistry::getDAO('DirectorSubmissionDAO');
 		$editAssignmentDao =& DAORegistry::getDAO('EditAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
@@ -49,7 +49,53 @@ class DirectorAction extends TrackDirectorAction {
 		import('mail.PaperMailTemplate');
 		$email = new PaperMailTemplate($directorSubmission, 'DIRECTOR_ASSIGN');
 
-		if ($user->getId() === $trackDirectorId || !$email->isEnabled() || ($send && !$email->hasErrors())) {
+		//Send the e-mail automatically
+		if ($auto == true){
+			error_log("tady");
+			$email->addRecipient($trackDirector->getEmail(), $trackDirector->getFullName());
+			$paramArray = array(
+				'editorialContactName' => $trackDirector->getFullName(),
+				'directorUsername' => $trackDirector->getUsername(),
+				'directorPassword' => $trackDirector->getPassword(),
+				'editorialContactSignature' => $user->getContactSignature(),
+				'submissionUrl' => Request::url(null, null, $isDirector?'director':'trackDirector', 'submissionReview', $paperId)
+			);
+			$email->assignParams($paramArray);
+			$email->setAssoc(PAPER_EMAIL_DIRECTOR_ASSIGN, PAPER_EMAIL_TYPE_DIRECTOR, $trackDirector->getId());
+			$email->send();
+
+			$editAssignment = new EditAssignment();
+			$editAssignment->setPaperId($paperId);
+
+			// Make the selected director the new director
+			$editAssignment->setDirectorId($trackDirectorId);
+			$editAssignment->setDateNotified(Core::getCurrentDate());
+			$editAssignment->setDateUnderway(null);
+
+			$editAssignments =& $directorSubmission->getEditAssignments();
+			array_push($editAssignments, $editAssignment);
+			$directorSubmission->setEditAssignments($editAssignments);
+
+			$directorSubmissionDao->updateDirectorSubmission($directorSubmission);
+
+			// Assign the director as a reviewer in both stages
+			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_ABSTRACT, true);
+			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, true);
+
+			// Confirm the review assignments for the director
+			$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+			$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($directorSubmission->getPaperId(), $trackDirectorId, REVIEW_STAGE_ABSTRACT);
+			TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
+			$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($directorSubmission->getPaperId(), $trackDirectorId, REVIEW_STAGE_PRESENTATION);
+			TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
+
+			// Add log
+			import('paper.log.PaperLog');
+			import('paper.log.PaperEventLogEntry');
+			PaperLog::logEvent($paperId, PAPER_LOG_DIRECTOR_ASSIGN, LOG_TYPE_DIRECTOR, $trackDirectorId, 'log.director.directorAssigned', array('directorName' => $trackDirector->getFullName(), 'paperId' => $paperId));
+			return true;
+		}
+		else if ($user->getId() === $trackDirectorId || !$email->isEnabled() || ($send && !$email->hasErrors())) {
 			HookRegistry::call('DirectorAction::assignDirector', array(&$directorSubmission, &$trackDirector, &$isDirector, &$email));
 			if ($email->isEnabled() && $user->getId() !== $trackDirectorId) {
 				$email->setAssoc(PAPER_EMAIL_DIRECTOR_ASSIGN, PAPER_EMAIL_TYPE_DIRECTOR, $trackDirector->getId());
