@@ -51,7 +51,6 @@ class DirectorAction extends TrackDirectorAction {
 
 		//Send the e-mail automatically
 		if ($auto == true){
-			error_log("tady");
 			$email->addRecipient($trackDirector->getEmail(), $trackDirector->getFullName());
 			$paramArray = array(
 				'editorialContactName' => $trackDirector->getFullName(),
