@@ -19,7 +19,10 @@
 }
 
 #sidebar {
-	
+	position: relative;
+	right: 0;
+	padding: 0.5em 0 0.5em 0;
+	text-align: right;
 }
 
 #sidebar div.block {
@@ -28,7 +31,7 @@
 
 #sidebar div.block span.blockTitle {
 	//display: block;
-	padding: 0.5em 0 0.5em 0;
+	padding: 0.2em 0 0.2em 0;
 	font-size: 1em;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;

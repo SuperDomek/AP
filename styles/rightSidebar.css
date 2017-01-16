@@ -15,8 +15,7 @@
 
 
 #headerTitle {
-	text-align: center;
-	width: 100%;
+	text-align: right;
 }
 
 #body {
@@ -24,12 +23,11 @@
 }
 
 #rightSidebar {
-	float: right;
-	width: 14%;
+	/*width: 14%;*/
 	padding: 1em 0em 1em 0em;
 	font-size: 0.65em;
 	height: 100%;
-	margin-right: 10%;
+	/*margin-right: 10%;*/
 	margin-left: 2%;
 }
 
