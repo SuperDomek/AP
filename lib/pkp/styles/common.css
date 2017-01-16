@@ -108,10 +108,11 @@ input.defaultButton {
 #headerTitle {
 	text-align: left !important;
 	margin: 0 auto;
-	padding: 0.5em 0 0.25em 10%;
+	padding: 0.5em 0 25px 10%;
 	font-family: Georgia,'Times New Roman',Times,serif;
 	font-weight: bold;
-	width: 100%;
+	width: 50%;
+	float: left;
 }
 
 #header h2 {
