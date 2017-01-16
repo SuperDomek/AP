@@ -123,6 +123,7 @@ class TrackDirectorAction extends Action {
 	 */
 	function completeReview($trackDirectorSubmission) {
 		$schedConf =& Request::getSchedConf();
+		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 
 		if($trackDirectorSubmission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL) {
 			// two-stage submission; paper required
@@ -142,14 +143,25 @@ class TrackDirectorAction extends Action {
 				// TODO: notify the author the submission must be completed.
 				// Q: should the director be given this option explicitly?
 
-				// Now, reassign all reviewers that submitted a review for the last
+				/*// Now, reassign all reviewers that submitted a review for the last
 				// stage of reviews.
 				foreach ($trackDirectorSubmission->getReviewAssignments(REVIEW_STAGE_ABSTRACT) as $reviewAssignment) {
 					if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
 						// This reviewer submitted a review; reassign them
 						TrackDirectorAction::addReviewer($trackDirectorSubmission, $reviewAssignment->getReviewerId(), REVIEW_STAGE_PRESENTATION);
 					}
+				}*/
+
+				// Assign active reviewers as reviewers in the presentation stage and automatically confirm them
+				foreach ($trackDirectorSubmission->getReviewAssignments(REVIEW_STAGE_ABSTRACT) as $reviewAssignment) {
+					if(!$reviewAssignment->getDeclined() && !$reviewAssignment->getCancelled()){
+						TrackDirectorAction::addReviewer($trackDirectorSubmission, $reviewAssignment->getReviewerId(), REVIEW_STAGE_PRESENTATION, true);
+						$reviewAssignmentPresentation = $reviewAssignmentDao->getReviewAssignment($trackDirectorSubmission->getPaperId(), $reviewAssignment->getReviewerId(), REVIEW_STAGE_PRESENTATION);
+						TrackDirectorAction::confirmReviewForReviewer($reviewAssignmentPresentation->getId());
+					}
 				}
+
+
 			}
 		}
 
@@ -208,6 +220,12 @@ class TrackDirectorAction extends Action {
 					$reviewAssignment->setReviewFormId($reviewFormId);
 				}
 			}
+
+			// Set up reviewForm for each category
+			if($stage == REVIEW_STAGE_ABSTRACT)
+				$reviewAssignment->setReviewFormId(1);
+			else if($stage == REVIEW_STAGE_PRESENTATION)
+				$reviewAssignment->setReviewFormId(2);
 
 			$trackDirectorSubmission->addReviewAssignment($reviewAssignment);
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);

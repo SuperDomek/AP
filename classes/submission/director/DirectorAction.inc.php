@@ -77,16 +77,16 @@ class DirectorAction extends TrackDirectorAction {
 
 			$directorSubmissionDao->updateDirectorSubmission($directorSubmission);
 
-			// Assign the director as a reviewer in both stages
+			// Assign the director as a reviewer in abstract stage
 			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_ABSTRACT, true);
-			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, true);
+			//TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, true);
 
 			// Confirm the review assignments for the director
 			$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 			$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($directorSubmission->getPaperId(), $trackDirectorId, REVIEW_STAGE_ABSTRACT);
 			TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
-			$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($directorSubmission->getPaperId(), $trackDirectorId, REVIEW_STAGE_PRESENTATION);
-			TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
+			//$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($directorSubmission->getPaperId(), $trackDirectorId, REVIEW_STAGE_PRESENTATION);
+			//TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
 
 			// Add log
 			import('paper.log.PaperLog');
