@@ -292,7 +292,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions());
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
-		$templateMgr->assign('isReviewer', $this->isReviewer());
+		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage == REVIEW_STAGE_PRESENTATION) {
@@ -1891,13 +1891,21 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 	/**
 	 * Checks whether the current user is assigned as reviewer
+	 * @param int constant for stage
 	 * @return bool true if the user is active reviewer
 	 */
-	function isReviewer(){
+	function isReviewer($stage){
 		$user =& Request::getUser();
 		$submission =& $this->submission;
-		$stage = $submission->getCurrentStage();
+		$stageSub = $submission->getCurrentStage();
 		foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
+			// for each reviewAssignment
+			// check whether this user is a reviewer and the review is active
+			if(($reviewAssignment->getReviewerId() == $user->getId()) && !$reviewAssignment->getCancelled()){
+				return true;
+			}
+		}
+		foreach ($submission->getReviewAssignments($stageSub) as $reviewAssignment) {
 			// for each reviewAssignment
 			// check whether this user is a reviewer and the review is active
 			if(($reviewAssignment->getReviewerId() == $user->getId()) && !$reviewAssignment->getCancelled()){
