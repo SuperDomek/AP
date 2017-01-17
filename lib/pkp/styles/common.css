@@ -117,6 +117,7 @@ input.defaultButton {
 	min-height: 120px;
 	width:100%;
 	position: relative;
+	margin-bottom: 1em;
 }
 
 #headerTitle {
