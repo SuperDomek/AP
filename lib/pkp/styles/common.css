@@ -18,10 +18,22 @@ body {
 	padding: 0;
 	background-color: #FBFBF3;
 	color: #111;
-	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-family: "etelka_textregular",Helvetica Neue, Helvetica,Arial,sans-serif;
 	text-align: center;
 }
 
+h1,h2, h3, h4, h5, h6 {
+	font-family: "etelka_textbold", sans-serif !important;
+	font-weight: 600 !important;
+}
+
+option, button, input, select, textarea {
+	font-family: "etelka_textregular",Helvetica Neue, Helvetica,Arial,sans-serif !important;
+}
+strong {
+	font-family: "etelka_textbold", sans-serif !important;
+	font-weight: bold !important;
+}
 div {
 	text-align: left;
 }
@@ -63,7 +75,6 @@ label.error {
 input.textField, select.selectMenu, textarea.textArea, input.uploadField {
 	background-color: #F0F0E8;
 	color: #000;
-	font-family: Verdana,Arial,Helvetica,sans-serif;
 	border-top: 2px solid #666;
 	border-left: 2px solid #666;
 	border-bottom: 2px solid #E8E8E1;
@@ -112,8 +123,8 @@ input.defaultButton {
 	text-align: left !important;
 	margin: 0 auto;
 	padding: 0.5em 0 0.5em 0;
-	font-family: Georgia,'Times New Roman',Times,serif;
-	font-weight: bold;
+	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-weight: 600;
 	width: 50%;
 	min-width: 550px;
 	float: left;
@@ -143,15 +154,15 @@ input.defaultButton {
 #main h2 {
 	margin: 0em 1em 0.5em 0em;
 	padding-top: 0.5em;
-	font-family: Georgia,'Times New Roman',Times,serif;
-	font-weight: normal;
+	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-weight: 600;
 }
 
 #main h3 {
 	margin: 0em 1em 0.5em 0em;
 	padding-top: 0em;
-	font-family: Georgia,'Times New Roman',Times,serif;
-	font-weight: normal;
+	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-weight: 600;
 }
 
 #navbar {
@@ -176,22 +187,23 @@ input.defaultButton {
 #content h3 {
 	margin: 0em 1em 0.25em 0em;
 	padding-top: 0.75em;
-	font-family: Georgia,'Times New Roman',Times,serif;
-	font-weight: normal;
+	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-weight: 600;
 	font-size: 1.8em;
 }
 
 #content h4 {
 	margin: .75em 1em 0.25em 0em;
-	font-family: Georgia,'Times New Roman',Times,serif;
-	font-weight: normal;
+	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-weight: 600;
 	font-size: 1.5em;
 }
 
 #content h5 {
 	margin: 0em 1em 0.25em 0em;
 	padding-top: 0.75em;
-	font-weight: bold;
+	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-weight: 600;
 	font-size: 1em;
 }
 

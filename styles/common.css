@@ -10,6 +10,30 @@
  */
 
 /**
+*	Import custom fonts
+*/
+
+@font-face {
+    font-family: "etelka_textregular";
+    src: url('fonts/etelkatext.eot'); /* IE 9 */
+		src: url('fonts/etelkatext.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/etelkatext.woff2') format('woff2'), /* Super Modern Browsers */
+       url('fonts/etelkatext.woff') format('woff'), /* Pretty Modern Browsers */
+       url('fonts/etelkatext.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('fonts/etelkatext.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+@font-face {
+    font-family: "etelka_textbold";
+    src: url('fonts/etelkatext-bold.eot'); /* IE 9 */
+		src: url('fonts/etelkatext-bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/etelkatext-bold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('fonts/etelkatext-bold.woff') format('woff'), /* Pretty Modern Browsers */
+       url('fonts/etelkatext-bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('fonts/etelkatext-bold.svg#svgFontName') format('svg'); /* Legacy iOS */
+		font-weight: bold;
+}
+
+/**
  * Common HTML elements
  */
 
