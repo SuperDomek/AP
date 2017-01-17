@@ -33,15 +33,18 @@ class IndexHandler extends Handler {
 	function index($args) {
 		$this->validate();
 		$this->setupTemplate();
-		
+
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 
 		if ($schedConf && $conference) {
 
-			// A scheduled conference was specified; display it.
+			/*// A scheduled conference was specified; display it.
 			import('pages.schedConf.SchedConfHandler');
-			SchedConfHandler::index($args);
+			SchedConfHandler::index($args);*/
+
+			// display user home page instead
+			Request::redirect(null, null, 'user');
 
 		} elseif ($conference) {
 			$redirect = $conference->getSetting('schedConfRedirect');
