@@ -128,7 +128,7 @@ class PKPLoginHandler extends Handler {
 				} elseif ($redirectNonSsl) {
 					PKPRequest::redirectNonSSL();
 				} else {
-					Request::redirectHome();
+					Request::redirect(null, null, 'user');
 				}
 			}
 
