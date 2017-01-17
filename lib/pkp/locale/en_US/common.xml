@@ -117,7 +117,7 @@
 	<message key="common.keywords">Keywords</message>
 	<message key="common.language">Language</message>
 	<message key="common.languages">Languages</message>
-	<message key="common.manage">Manage</message>
+	<message key="common.manage">Nastavení</message>
 	<message key="common.mailingAddress">Mailing Address</message>
 	<message key="common.mailingBillingAddress">Mailing and Billing Address</message>
 	<message key="common.billingAddress">Billing Address</message>
@@ -292,7 +292,7 @@
 	<message key="notification.notification">Notification</message>
 	<message key="notification.notifications">Notifications</message>
 	<message key="notification.notificationsNew">({$numNew} new)</message>
-	<message key="notification.notificationsDescription">You have {$unreadCount} unread notifications and {$readCount} read notifications.<![CDATA[  <a href="{$settingsUrl}">Click here</a> to change your notification settings.]]></message>
+	<message key="notification.notificationsDescription">You have {$unreadCount} unread notifications and {$readCount} read notifications.</message>
 	<message key="notification.settings">Notification Settings</message>
 	<message key="notification.settingsDescription">Select the system events that you wish to be notified about.  Unchecking an item will prevent notifications of the event from showing up in your notification feed.</message>
 	<message key="notification.subscribe">Subscribe</message>

@@ -115,7 +115,7 @@
 	<message key="common.keywords">Klíčová slova</message>
 	<message key="common.language">Jazyk</message>
 	<message key="common.languages">Jazyky</message>
-	<message key="common.manage">Spravovat</message>
+	<message key="common.manage">Nastavení</message>
 	<message key="common.mailingAddress">Poštovní adresa</message>
 	<message key="common.mailingBillingAddress">Poštovní a fakturační adresa</message>
 	<message key="common.billingAddress">Fakturační adresa</message>
@@ -289,8 +289,8 @@
 	<message key="notification.noneExist">Aktuálně nemáte žádná oznámení.</message>
 	<message key="notification.notification">Oznámení</message>
 	<message key="notification.notifications">Oznámení</message>
-	<message key="notification.notificationsNew">(Nové: {$numNew})</message>
-	<message key="notification.notificationsDescription"><![CDATA[Máte {$unreadCount} nepřečtených oznámení a {$readCount} přečtených oznámení.  <a href="{$settingsUrl}">Klikněte zde</a>, abyste upravili nastavení vašich oznámení.]]></message>
+	<message key="notification.notificationsNew">(Nová: {$numNew})</message>
+	<message key="notification.notificationsDescription"><![CDATA[Máte {$unreadCount} nepřečtených oznámení a {$readCount} přečtených oznámení.]]></message>
 	<message key="notification.settings">Nastavení oznámení</message>
 	<message key="notification.settingsDescription">Zvolte systémové události, o kterých chcete být informován. Zrušení zaškrtnutí u položky zabrání tomu, aby se oznámení události zobrazovalo ve Vašem seznamu oznámení.</message>
 	<message key="notification.subscribe">Přihlásit</message>

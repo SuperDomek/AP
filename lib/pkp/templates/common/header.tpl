@@ -93,7 +93,7 @@
 </h1>-->
 </div>
 {if $leftSidebarCode || $rightSidebarCode}
-	<div id="sidebar">
+
     <!--
 		{if $leftSidebarCode}
 			<div id="leftSidebar">
@@ -105,7 +105,7 @@
 				{$rightSidebarCode}
 			</div>
 		{/if}
-	</div>
+
 {/if}
 </div>
 

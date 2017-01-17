@@ -94,24 +94,28 @@ input.defaultButton {
  */
 
 #container {
-	width: 100% !important;
+	/*width: 100% !important;*/
 	min-width: 730px !important;
+	max-width: 1140px !important;
 	margin: 0px auto;
 	text-align: center;
 }
 
 #header {
-	/*width: 100%;*/
 	text-align: center;
+	min-height: 120px;
+	width:100%;
+	position: relative;
 }
 
 #headerTitle {
 	text-align: left !important;
 	margin: 0 auto;
-	padding: 0.5em 0 0.5em 10%;
+	padding: 0.5em 0 0.5em 0;
 	font-family: Georgia,'Times New Roman',Times,serif;
 	font-weight: bold;
 	width: 50%;
+	min-width: 550px;
 	float: left;
 }
 

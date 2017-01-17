@@ -15,7 +15,8 @@
 
 
 #headerTitle {
-	text-align: right;
+
+
 }
 
 #body {
@@ -23,20 +24,54 @@
 }
 
 #rightSidebar {
-	/*width: 14%;*/
-	padding: 1em 0em 1em 0em;
+	/*width: 14%;
+	padding: 1em 0em 1em 0em;*/
 	font-size: 0.65em;
-	height: 100%;
-	/*margin-right: 10%;*/
+	/*height: 100%;
+	margin-right: 10%;*/
 	margin-left: 2%;
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }
 
-* html #rightSidebar { margin-right: 5%; }
+#rightSidebar div.block {
+	font-size: 1.4em;
+	text-align: right;
+}
 
-#main {
+#rightSidebar div.block span.blockTitle {
+	display: block;
+	margin: 0.2em 0 0.2em 0;
+	font-size: 1em;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	/*border-bottom: 1px black solid;*/
+	background-color: #a5a3a5;
+	text-align: center;
+	color: #fffeff;
+}
+
+#rightSidebar div.block ul {
+	list-style:none;
+}
+
+#rightSidebar div.block span.blockSubtitle {
+	display: block;
+	padding: 0;
+}
+
+#rightSidebar input.textField, #rightSidebar select.selectMenu, #rightSidebar input.button {
+	font-size: 1em;
+}
+
+/** html #rightSidebar { margin-right: 5%; }*/
+
+/*#main {
 	float: left;
 	width: 63%;
 	margin-left: 10%;
 	display: inline;
 	overflow: hidden;
 }
+*/

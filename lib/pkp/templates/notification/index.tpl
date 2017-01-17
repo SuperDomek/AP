@@ -15,6 +15,7 @@
 <table width="100%">
 	<tr>
 		<td>{if $isUserLoggedIn}
+        <p><a href="{$url}">{translate key="notification.settings"}</a></p>
 				<p>{translate key="notification.notificationsDescription" unreadCount=$unread readCount=$read settingsUrl=$url}</p>
 			{else}
 				<p>{translate key="notification.notificationsPublicDescription" emailUrl=$emailUrl}</p>

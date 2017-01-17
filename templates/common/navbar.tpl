@@ -9,12 +9,15 @@
  *}
 <div id="navbar">
 	<ul class="menu">
-		<li><a href="{url context=$homeContext op="index"}">{translate key="navigation.home"}</a></li>
-		<li><a href="http://ap.pef.czu.cz" target="_blank">{translate key="navigation.about"}</a></li>
-    <li><a href="{url page="information" op="authors"}">{translate key="navigation.infoForAuthors"}</a></li>
+		<!--<li><a href="{url context=$homeContext op="index"}">{translate key="navigation.home"}</a></li>-->
+
 		{if $isUserLoggedIn}
-			<li><a href="{url schedConf="index" page="user"}">{translate key="navigation.userHome"}</a></li>
+			<li><a href="{url schedConf="index" page="user"}">{translate key="navigation.home"}</a></li>
+      <li><a href="http://ap.v2.czu.cz">{translate key="navigation.about"}</a></li>
+      <li><a href="https://ap.v2.czu.cz/cs/r-12146-for-authors">{translate key="navigation.infoForAuthors"}</a></li>
 		{else}
+      <li><a href="http://ap.v2.czu.cz">{translate key="navigation.about"}</a></li>
+      <li><a href="https://ap.v2.czu.cz/cs/r-12146-for-authors">{translate key="navigation.infoForAuthors"}</a></li>
 			<li><a href="{url page="login"}">{translate key="navigation.login"}</a></li>
 			<li><a href="{url page="user" op="account"}">{translate key="navigation.account"}</a></li>
 		{/if}{* $isUserLoggedIn *}
