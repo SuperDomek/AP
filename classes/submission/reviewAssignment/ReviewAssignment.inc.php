@@ -572,20 +572,42 @@ class ReviewAssignment extends DataObject {
 	/**
 	 * Get an associative array matching reviewer recommendation codes with locale strings.
 	 * (Includes default '' => "Choose One" string.)
+	 * @stage int optional
 	 * @return array recommendation => localeString
 	 */
-	function &getReviewerRecommendationOptions() {
+	function &getReviewerRecommendationOptions($stage = NULL) {
 		// Bring in reviewer constants
 		import('submission.reviewer.ReviewerSubmission');
+		if($stage == REVIEW_STAGE_ABSTRACT){
+			static $reviewerRecommendationOptions = array(
+				'' => 'common.chooseOne',
+				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
+				//SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
+				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
+				//SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
+			);
+		}
+		else if ($stage == REVIEW_STAGE_PRESENTATION) {
+			static $reviewerRecommendationOptions = array(
+				'' => 'common.chooseOne',
+				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
+				//MAJOR_REVISIONS
+				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
 
-		static $reviewerRecommendationOptions = array(
-			'' => 'common.chooseOne',
-			SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
-			SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
-			SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
-			SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
-			SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
-		);
+			);
+		}
+		else {
+			static $reviewerRecommendationOptions = array(
+				'' => 'common.chooseOne',
+				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
+				SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
+				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
+				SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
+			);
+		}
 		return $reviewerRecommendationOptions;
 	}
 

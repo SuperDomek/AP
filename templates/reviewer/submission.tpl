@@ -194,7 +194,7 @@ function confirmSubmissionCheck() {
 						</td>
 					</tr>
 				{/if}
-				<tr valign="top">
+				<!--<tr valign="top">
 					<td class="label">
 						{translate key="paper.suppFiles"}
 					</td>
@@ -214,7 +214,7 @@ function confirmSubmissionCheck() {
 				</tr>
 			{else}
 			<tr><td class="nodata">{translate key="reviewer.paper.restrictedFileAccess"}</td></tr>
-			{/if}
+			{/if}-->
 		</table>
 	</td>
 </tr>
@@ -230,11 +230,8 @@ function confirmSubmissionCheck() {
 	<tr valign="top">
 		<td>&nbsp;</td>
 		<td>
-			{translate key="submission.reviewForm"} 
-			{if $confirmedStatus and not $declined}
-				<a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">{icon name="comment"}</a>
-			{else}
-				 {icon name="comment" disabled="disabled"}
+      {if $confirmedStatus and not $declined}
+			   <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">{translate key="submission.reviewForm"} {icon name="comment"}</a>
 			{/if}
 		</td>
 	</tr>
@@ -249,7 +246,7 @@ function confirmSubmissionCheck() {
 	<tr valign="top">
 		<td>&nbsp;</td>
 		<td>
-			{translate key="event.logType.review"} 
+			{translate key="event.logType.review"}
 			{if $confirmedStatus and not $declined}
 				<a href="javascript:openComments('{url op="viewPeerReviewComments" path=$paperId|to_array:$reviewId}');" class="icon">{icon name="comment"}</a>
 			{else}
@@ -262,8 +259,9 @@ function confirmSubmissionCheck() {
 	</tr>
 {/if}{* $reviewAssignment->getReviewFormId() *}
 
+<!--
 <tr valign="top">
-	<td>{$currentStep|escape}.{assign var="currentStep" value=$currentStep+1}</td>
+	<td>{$currentStep|escape}.{*assign var="currentStep" value=$currentStep+1*}</td>
 	<td><span class="instruct">{translate key="reviewer.paper.uploadFile"}</span></td>
 </tr>
 <tr valign="top">
@@ -303,15 +301,16 @@ function confirmSubmissionCheck() {
 				<input type="file" name="upload" {if not $confirmedStatus or $declined or $submission->getCancelled()}disabled="disabled"{/if} class="uploadField" />
 				<input type="submit" name="submit" value="{translate key="common.upload"}" {if not $confirmedStatus or $declined or $submission->getCancelled()}disabled="disabled"{/if} class="button" />
 			</form>
-			<!-- <span class="instruct">
+			<span class="instruct">
 				<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a>
-			</span> -->
+			</span>
 		{/if}
 	</td>
 </tr>
+
 <tr>
 	<td colspan="2">&nbsp;</td>
-</tr>
+</tr>-->
 <tr valign="top">
 	<td>{$currentStep|escape}.{assign var="currentStep" value=$currentStep+1}</td>
 	<td><span class="instruct">{translate key="reviewer.paper.selectRecommendation"}</span></td>
@@ -334,9 +333,9 @@ function confirmSubmissionCheck() {
 						{html_options_translate options=$reviewerRecommendationOptions selected=''}
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 					<input type="submit" name="submit" onclick="return confirmSubmissionCheck()" class="button" value="{translate key="reviewer.paper.submitReview"}" {if not $confirmedStatus or $declined or $submission->getCancelled() or (!$reviewFormResponseExists and !$reviewAssignment->getMostRecentPeerReviewComment() and !$uploadedFileExists)}disabled="disabled"{/if} />
-					</form>					
+					</form>
 				{/if}
-				</td>		
+				</td>
 			</tr>
 		</table>
 	</td>
@@ -352,4 +351,3 @@ function confirmSubmissionCheck() {
 {/if}
 
 {include file="common/footer.tpl"}
-

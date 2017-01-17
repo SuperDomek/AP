@@ -1898,11 +1898,13 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$user =& Request::getUser();
 		$submission =& $this->submission;
 		$stageSub = $submission->getCurrentStage();
-		foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
-			// for each reviewAssignment
-			// check whether this user is a reviewer and the review is active
-			if(($reviewAssignment->getReviewerId() == $user->getId()) && !$reviewAssignment->getCancelled()){
-				return true;
+		if(!is_null($stage)){
+			foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
+				// for each reviewAssignment
+				// check whether this user is a reviewer and the review is active
+				if(($reviewAssignment->getReviewerId() == $user->getId()) && !$reviewAssignment->getCancelled()){
+					return true;
+				}
 			}
 		}
 		foreach ($submission->getReviewAssignments($stageSub) as $reviewAssignment) {

@@ -9,7 +9,7 @@
  * @class SubmissionReviewHandler
  * @ingroup pages_reviewer
  *
- * @brief Handle requests for submission tracking. 
+ * @brief Handle requests for submission tracking.
  */
 
 //$Id$
@@ -19,10 +19,10 @@ import('pages.reviewer.ReviewerHandler');
 class SubmissionReviewHandler extends ReviewerHandler {
 	/** submission associated with the request **/
 	var $submission;
-	
+
 	/** user associated with the request **/
 	var $user;
-		
+
 	/**
 	 * Constructor
 	 **/
@@ -37,10 +37,10 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$reviewerSubmission =& $this->submission;
 		$user =& $this->user;
 		$schedConf =& Request::getSchedConf();
-		
+
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment = $reviewAssignmentDao->getReviewAssignmentById($reviewId);
-		
+
 		$reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
 
 		if ($reviewAssignment->getDateConfirmed() == null) {
@@ -72,12 +72,12 @@ class SubmissionReviewHandler extends ReviewerHandler {
 			$templateMgr->assign('reviewerInstruction3', 'reviewer.paper.downloadSubmissionSubmission');
 
 		import('submission.reviewAssignment.ReviewAssignment');
-		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions());
+		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($reviewAssignment->getStage()));
 
 		$controlledVocabDao =& DAORegistry::getDAO('ControlledVocabDAO');
 		$templateMgr->assign('sessionTypes', $controlledVocabDao->enumerateBySymbolic('sessionTypes', ASSOC_TYPE_SCHED_CONF, $schedConf->getId()));
 
-		$templateMgr->assign('helpTopicId', 'editorial.reviewersRole.review');		
+		$templateMgr->assign('helpTopicId', 'editorial.reviewersRole.review');
 		$templateMgr->display('reviewer/submission.tpl');
 	}
 
@@ -90,7 +90,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$this->validate($reviewId);
 		$reviewerSubmission =& $this->submission;
 		$this->setupTemplate();
-		
+
 		$decline = isset($declineReview) ? 1 : 0;
 
 		if (!$reviewerSubmission->getCancelled()) {
@@ -140,7 +140,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 
 		$this->validate($reviewId);
 		$this->setupTemplate(true);
-		
+
 		if (!ReviewerAction::uploadReviewerVersion($reviewId)) {
 			$templateMgr =& TemplateManager::getManager();
 			$templateMgr->assign('pageTitle', 'submission.uploadFile');
@@ -155,7 +155,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 	/*
 	 * Delete one of the reviewer's annotated versions of a paper.
 	 */
-	function deleteReviewerVersion($args) {		
+	function deleteReviewerVersion($args) {
 		$reviewId = isset($args[0]) ? (int) $args[0] : 0;
 		$fileId = isset($args[1]) ? (int) $args[1] : 0;
 		$revision = isset($args[2]) ? (int) $args[2] : null;
@@ -187,7 +187,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 			Request::redirect(null, null, null, 'submission', $reviewId);
 		}
 	}
-	
+
 	//
 	// Review Form
 	//
@@ -198,14 +198,14 @@ class SubmissionReviewHandler extends ReviewerHandler {
 	 */
 	function editReviewFormResponse($args) {
 		$reviewId = isset($args[0]) ? $args[0] : 0;
-		
+
 		$this->validate($reviewId);
 
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
 		$reviewFormId = $reviewAssignment->getReviewFormId();
 		if ($reviewFormId != null) {
-			ReviewerAction::editReviewFormResponse($reviewId, $reviewFormId);		
+			ReviewerAction::editReviewFormResponse($reviewId, $reviewFormId);
 		}
 	}
 
