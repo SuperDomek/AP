@@ -164,6 +164,7 @@
 	<message key="paper.submissionId">Submission ID</message>
 	<message key="paper.submitterId">Author ID</message>
 	<message key="paper.title">Title</message>
+	<message key="paper.manage">Management</message>
 	<message key="paper.authors">Authors</message>
 	<message key="paper.conferenceTrack">Conference Track</message>
 	<message key="paper.file">File</message>
@@ -495,7 +496,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.restrictedFileAccess">The submission can only be viewed if the review is undertaken.</message>
 	<message key="reviewer.paper.submissionDirector">Submission Director</message>
 	<message key="reviewer.paper.reviewerCommentsDescription">Type or paste in review comments here</message>
-	<message key="reviewer.paper.directorToEnter">Director To Enter</message>
+	<message key="reviewer.paper.directorToEnter">Enter the review desicion for reviewer</message>
 	<message key="reviewer.paper.sendReminder">Send Reminder</message>
 	<message key="reviewer.paper.automatic">(Auto)</message>
 	<message key="reviewer.paper.selectRecommendation">Select a recommendation</message>

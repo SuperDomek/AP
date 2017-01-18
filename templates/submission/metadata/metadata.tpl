@@ -169,12 +169,12 @@
 </div><!-- indexing -->
 
 <div id="supportingAgencies">
-<h4>{translate key="submission.supportingAgencies"}</h4>
+<h4>{translate key="author.submit.submissionSupportingAgencies"}</h4>
 
 <table width="100%" class="data">
 	<tr valign="top">
-		<td width="20%" class="label">{translate key="submission.agencies"}</td>
-		<td width="80%" class="value">{$submission->getLocalizedSponsor()|escape|default:"&mdash;"}</td>
+		<!--<td width="20%" class="label">{translate key="submission.agencies"}</td>-->
+		<td colspan="2" class="value">{$submission->getLocalizedSponsor()|escape|default:"&mdash;"}</td>
 	</tr>
 </table>
 </div><!-- supportingAgencies -->

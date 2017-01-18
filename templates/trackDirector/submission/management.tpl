@@ -46,17 +46,6 @@
 		</td>
 	</tr>
 {/if}
-	<tr valign="top">
-		<td class="label">{translate key="paper.suppFilesAbbrev"}</td>
-		<td colspan="2" class="value">
-			{foreach name="suppFiles" from=$suppFiles item=suppFile}
-				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$suppFile->getFileId()}" class="file">{$suppFile->getFileName()|escape}</a>&nbsp;&nbsp;{$suppFile->getDateModified()|date_format:$dateFormatShort}&nbsp;&nbsp;<a href="{url op="editSuppFile" from="submission" path=$submission->getPaperId()|to_array:$suppFile->getId()}" class="action">{translate key="common.edit"}</a>&nbsp;&nbsp;&nbsp;&nbsp;{if !$notFirst}&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="addSuppFile" from="submission" path=$submission->getPaperId()}" class="action">{translate key="submission.addSuppFile"}</a>{/if}<br />
-				{assign var=notFirst value=1}
-			{foreachelse}
-				{translate key="common.none"}&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="addSuppFile" from="submission" path=$submission->getPaperId()}" class="action">{translate key="submission.addSuppFile"}</a>
-			{/foreach}
-		</td>
-	</tr>
   {if !$isReviewer}
 	<tr>
 		<td class="label">{translate key="submission.submitter"}</td>
@@ -75,10 +64,17 @@
 	<tr>
 		<td class="label">{translate key="track.track"}</td>
 		<td class="value">
-			<form action="{url op="changeTrack" paperId=$submission->getPaperId()}" method="post">
-				<select name="trackId" size="1" class="selectMenu">{html_options options=$tracks selected=$submission->getTrackId()}</select>
-				<input type="submit" value="{translate key="common.record"}" class="button" />
-			</form>
+        {if $tracks|@count == 1}
+          {assign var="trackId" value=$submission->getTrackId()}
+          {$tracks.$trackId}
+        {else}
+          <form action="{url op="changeTrack" paperId=$submission->getPaperId()}" method="post">
+            <select name="trackId" size="1" class="selectMenu" >
+              {html_options options=$tracks selected=$submission->getTrackId()}
+            </select>
+            <input type="submit" value="{translate key="common.record"}" class="button" />
+          </form>
+        {/if}
 		</td>
 	</tr>
 

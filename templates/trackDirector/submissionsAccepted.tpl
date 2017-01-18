@@ -14,7 +14,7 @@
 	<tr class="heading" valign="bottom">
 		<td width="3%">{sort_search key="common.id" sort="id"}</td>
 		<td width="4%">{sort_search key="submissions.track" sort="track"}</td>
-		<td width="4%">{sort_search key="paper.sessionType" sort="sessionType"}</td>
+		<!--<td width="4%">{sort_search key="paper.sessionType" sort="sessionType"}</td>-->
 		<td width="15%">{sort_search key="paper.authors" sort="authors"}</td>
 		<td>{sort_search key="paper.title" sort="title"}</td>
 		<td width="10%" align="right">{sort_search key="common.status" sort="status"}</td>
@@ -27,13 +27,13 @@
 	<tr valign="top">
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getTrackAbbrev()|escape}</td>
-		<td>
+		<!--<td>
 			{assign var="sessionTypeId" value=$submission->getData('sessionType')}
 			{if $sessionTypeId}
 				{assign var="sessionType" value=$sessionTypes.$sessionTypeId}
 				{$sessionType->getLocalizedName()|escape}
 			{/if}
-		</td>
+		</td>-->
 		<td>{$submission->getAuthorString(true)|truncate:40:"..."|escape}</td>
 		<td><a href="{url op="submissionReview" path=$paperId}" class="action">{$submission->getLocalizedTitle()|strip_tags|truncate:60:"..."|default:"&mdash;"}</a></td>
 		<td align="right">

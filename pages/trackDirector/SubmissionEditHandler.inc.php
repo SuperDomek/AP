@@ -146,6 +146,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$paperId = (isset($args[0]) ? $args[0] : null);
 
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
+		$user =& Request::getUser();
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
@@ -293,6 +294,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
+		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage == REVIEW_STAGE_PRESENTATION) {
@@ -1057,6 +1059,24 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$templateMgr->assign_by_ref('reviewForms', $reviewForms);
 			//$templateMgr->assign('helpTopicId','conference.managementPages.reviewForms');
 			$templateMgr->display('trackDirector/selectReviewForm.tpl');
+		}
+	}
+
+	/**
+	 * Edit or preview review form response. Calls reviewer functions to ensure
+	 * the user is reviewer.
+	 * @param $args array
+	 */
+	function editReviewFormResponse($args) {
+		$reviewId = isset($args[0]) ? $args[0] : 0;
+
+		$this->validate($reviewId);
+
+		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
+		$reviewFormId = $reviewAssignment->getReviewFormId();
+		if ($reviewFormId != null) {
+			ReviewerAction::editReviewFormResponse($reviewId, $reviewFormId);
 		}
 	}
 

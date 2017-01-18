@@ -15,11 +15,11 @@
 	</tr>
 	<tr class="heading" valign="bottom">
 		<td width="5%">{sort_search key="common.id" sort="id"}</td>
-		<td width="5%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submit" sort="submitDate"}</td>
+		<td width="5%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submitted" sort="submitDate"}</td>
 		<td width="5%">{sort_search key="submissions.track" sort="track"}</td>
-		<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>
+		<!--<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>-->
 		<td width="20%">{sort_search key="paper.authors" sort="authors"}</td>
-		<td width="20%">{sort_search key="paper.title" sort="title"}</td>
+		<td width="25%">{sort_search key="paper.title" sort="title"}</td>
 		<td width="30%">
 			<center>{translate key="submission.peerReview"}</center>
 			<table width="100%" class="nested">
@@ -37,19 +37,19 @@
 	<tr>
 		<td colspan="9" class="headseparator">&nbsp;</td>
 	</tr>
-	
+
 	{iterate from=submissions item=submission}
 	<tr valign="top">
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
 		<td>{$submission->getTrackAbbrev()|escape}</td>
-		<td>
+		<!--<td>
 			{assign var="sessionTypeId" value=$submission->getData('sessionType')}
 			{if $sessionTypeId}
 				{assign var="sessionType" value=$sessionTypes.$sessionTypeId}
 				{$sessionType->getLocalizedName()|escape}
 			{/if}
-		</td>
+		</td>-->
 		<td>{$submission->getAuthorString(true)|truncate:40:"..."|escape}</td>
 		<td><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}" class="action">{$submission->getLocalizedTitle()|strip_tags|truncate:40:"..."|default:"&mdash;"}</a></td>
 		<td>
@@ -86,7 +86,7 @@
 			{foreach from=$submission->getDecisions() item=decisions}
 				{foreach from=$decisions item=decision name=decisionList}
 					{if $smarty.foreach.decisionList.last}
-							{$decision.dateDecided|date_format:$dateFormatTrunc}				
+							{$decision.dateDecided|date_format:$dateFormatTrunc}
 					{/if}
 				{foreachelse}
 					&mdash;

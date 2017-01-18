@@ -167,6 +167,7 @@
 	<message key="paper.submissionId">ID příspěvku</message>
 	<message key="paper.submitterId">ID autora</message>
 	<message key="paper.title">Název</message>
+	<message key="paper.manage">Správa</message>
 	<message key="paper.authors">Autoři</message>
 	<message key="paper.conferenceTrack">Sekce konference</message>
 	<message key="paper.file">Soubor</message>
@@ -498,7 +499,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.restrictedFileAccess">Příspěvek lze prohlížet pouze v případě jeho projití oponenturou.</message>
 	<message key="reviewer.paper.submissionDirector">Garant příspěvků</message>
 	<message key="reviewer.paper.reviewerCommentsDescription">Vepište či vložte komentáře oponenta</message>
-	<message key="reviewer.paper.directorToEnter">Vložit garanta</message>
+	<message key="reviewer.paper.directorToEnter">Vložit doporučení za recenzenta</message>
 	<message key="reviewer.paper.sendReminder">Odeslat připomenutí</message>
 	<message key="reviewer.paper.automatic">(Auto)</message>
 	<message key="reviewer.paper.selectRecommendation">Vybrat doporučení</message>

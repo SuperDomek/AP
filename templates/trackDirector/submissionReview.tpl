@@ -45,4 +45,5 @@
 
 {include file="trackDirector/submission/directorDecision.tpl"}
 
+<br />
 {include file="common/footer.tpl"}

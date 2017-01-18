@@ -15,11 +15,11 @@
 		<td width="5%">{sort_search key="common.id" sort="id"}</td>
 		<td width="5%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submit" sort="submitDate"}</td>
 		<td width="5%">{sort_search key="submissions.track" sort="track"}</td>
-		<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>
+		<!--<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>->
   <!--
 		<td width="20%">{sort_search key="paper.authors" sort="authors"}</td>
   -->
-		<td width="20%">{sort_search key="paper.title" sort="title"}</td>
+		<td width="45%">{sort_search key="paper.title" sort="title"}</td>
 		<td width="35%">
 			<center>{translate key="submission.peerReview"}</center>
 			<table width="100%">
@@ -42,13 +42,13 @@
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
 		<td>{$submission->getTrackAbbrev()|escape}</td>
-		<td>
+		<!--<td>
 			{assign var="sessionTypeId" value=$submission->getData('sessionType')}
 			{if $sessionTypeId}
 				{assign var="sessionType" value=$sessionTypes.$sessionTypeId}
 				{$sessionType->getLocalizedName()|escape}
 			{/if}
-		</td>
+		</td>-->
   <!--
 		<td>{$submission->getAuthorString(true)|truncate:40:"..."|escape}</td>
   -->
@@ -62,7 +62,7 @@
 					{if not $assignment->getCancelled() and not $assignment->getDeclined()}
 					<tr valign="top">
 						{assign var="stage" value=$assignment->getStage()}
-						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{$stage|escape}</td>
+						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $stage == REVIEW_STAGE_ABSTRACT}{translate key="submission.abstract"}{else}{translate key="submission.paper"}{/if}</td>
 						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateNotified()}{$assignment->getDateNotified()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
 						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted() || !$assignment->getDateConfirmed()}&mdash;{else}{$assignment->getWeeksDue()|default:"&mdash;"}{/if}</td>
 						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted()}{$assignment->getDateCompleted()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>

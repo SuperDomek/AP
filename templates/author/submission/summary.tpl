@@ -27,19 +27,5 @@
 		<td class="label">{translate key="track.track"}</td>
 		<td>{$submission->getTrackTitle()|escape}</td>
 	</tr>
-	<tr>
-		<td class="label">{translate key="user.role.director"}</td>
-		<td>
-			{assign var=editAssignments value=$submission->getEditAssignments()}
-			{foreach from=$editAssignments item=editAssignment}
-				{assign var=emailString value=$editAssignment->getDirectorFullName()|concat:" <":$editAssignment->getDirectorEmail():">"}
-				{url|assign:"url" page="user" op="email" redirectUrl=$currentUrl to=$emailString|to_array subject=$submission->getLocalizedTitle()|strip_tags paperId=$submission->getPaperId()}
-				{$editAssignment->getDirectorFullName()|escape} {icon name="mail" url=$url}
-				<br/>
-			{foreachelse}
-				{translate key="common.noneAssigned"}
-			{/foreach}
-		</td>
-	</tr>
 </table>
 </div>

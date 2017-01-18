@@ -127,7 +127,8 @@ input.defaultButton {
 
 #headerTitle {
 	text-align: left !important;
-	margin: 0 auto;
+	/*margin: 0 auto;*/
+	margin-left: -11px;
 	padding: 0.5em 0 0.5em 0;
 	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
 	font-weight: 600;
@@ -160,7 +161,7 @@ input.defaultButton {
 #main h2 {
 	margin: 0em 1em 0.5em 0em;
 	padding-top: 0.5em;
-	font-family: "etelka_textbold",Georgia,'Times New Roman',Times,serif;
+	font-family: "etelka_textbold",sans-serif;
 	font-weight: 600;
 }
 
@@ -402,8 +403,10 @@ ul.menu li {
 	display: inline;
 }
 
-ul.menu li.current {
+ul.menu li.current a {
+	font-family: "etelka_textbold",sans-serif;
 	font-weight: bold;
+	color: #b62429 !important;
 }
 
 ul.menu a {
@@ -428,6 +431,7 @@ ul.steplist li {
 }
 
 ul.steplist li.current {
+	font-family: "etelka_textbold",sans-serif;
 	font-weight: bold;
 }
 

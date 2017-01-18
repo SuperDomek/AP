@@ -3,7 +3,7 @@
 /**
  * @defgroup pages_trackDirector
  */
- 
+
 /**
  * @file pages/trackDirector/index.php
  *
@@ -96,6 +96,7 @@ switch ($op) {
 	case 'selectReviewForm':
 	case 'previewReviewForm':
 	case 'viewReviewFormResponse':
+  case 'editReviewFormResponse':
 	//
 	// Misc.
 	//
