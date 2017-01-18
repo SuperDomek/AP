@@ -45,11 +45,13 @@
 	margin: 0.2em 0 0.2em 0;
 	font-size: 1em;
 	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	/*border-bottom: 1px black solid;*/
+	/*text-transform: uppercase;
+	border-bottom: 1px black solid;*/
 	background-color: #a5a3a5;
 	text-align: center;
 	color: #fffeff;
+	font-family: "etelka_textbold", sans-serif;
+	font-weight: 600;
 }
 
 #rightSidebar div.block ul {

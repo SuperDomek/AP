@@ -27,6 +27,11 @@ h1,h2, h3, h4, h5, h6 {
 	font-weight: 600 !important;
 }
 
+table.listing tr.heading td, table.listing td.heading, table.info td.heading {
+	font-family: "etelka_textbold", sans-serif !important;
+	font-weight: 600 !important;
+}
+
 option, button, input, select, textarea {
 	font-family: "etelka_textregular",Helvetica Neue, Helvetica,Arial,sans-serif !important;
 }
@@ -294,8 +299,6 @@ table.listing td {
 
 table.listing tr.heading td, table.listing td.heading, table.info td.heading {
 	font-size: 0.85em;
-	text-transform: uppercase;
-	font-weight: normal;
 	padding: 0.75em 1.5em 1em 0.5em;
 }
 
@@ -405,7 +408,7 @@ ul.menu li.current {
 
 ul.menu a {
 	font-size: 0.85em;
-	text-transform: uppercase;
+	/*text-transform: uppercase;*/
 	text-decoration: none;
 }
 
