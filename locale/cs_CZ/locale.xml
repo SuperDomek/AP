@@ -81,7 +81,9 @@
 
 	<!--  peer review -->
 	<message key="submission.reviewForm">Formulář posudku</message>
-	<message key="submission.reviewFormResponse">Reakce na posudek</message>
+	<message key="submission.reviewFormResponse">Zobrazit posudek</message>
+	<message key="submission.yourReviewFormResponse">Vyplnit posudek</message>
+	<message key="submission.confirmSubmit">Po odeslání již nepůjde posudek upravit.\nKlikněte na OK pro odeslání recenzního formuláře nebo Zrušit pro návrat na recenzní formulář.</message>
 
 	<message key="editor.paper.reviewForms">Formuláře posudků</message>
 	<message key="editor.paper.selectReviewForm">Zvolte formulář posudku</message>
@@ -89,7 +91,7 @@
 	<message key="editor.paper.confirmChangeReviewForm">Upozornění: Změna posudkového formuláře ovlivní veškeré odpovědi posuzovatelů, kteří formulář využijí. Skutečně chcete pokračovat?</message>
 
 	<message key="reviewer.paper.enterReviewForm">Klikněte na ikonu pro vyplnění posudku.</message>
-	<message key="reviewer.paper.reviewFormResponse.form.responseRequired">Vplňte prosím požadovaná pole.</message>
+	<message key="reviewer.paper.reviewFormResponse.form.responseRequired">Vyplňte prosím požadovaná pole.</message>
 
 	<!-- review forms end -->
 
@@ -184,7 +186,7 @@
 	<message key="paper.coverageSample">Charakteristiky výzkumného vzorku</message>
 	<message key="paper.type">Typ, metoda nebo přístup</message>
 	<message key="paper.language">Jazyk</message>
-	<message key="paper.trackDirector">GS</message>
+	<message key="paper.trackDirector">Ko-ed</message>
 	<message key="paper.commentsToDirector">Poznámky autora</message>
 	<message key="paper.submission">Příspěvek</message>
 	<message key="paper.submissions">Příspěvky</message>
@@ -231,7 +233,7 @@
 	<message key="submissions.queuedPaperReview">Příspěvek oponován</message>
 	<message key="submissions.published">Odesláno</message>
 	<message key="submissions.accepted">Přijato</message>
-	<message key="submissions.reviewStage">Fáze oponování</message>
+	<message key="submissions.reviewStage">Fáze</message>
 	<message key="submissions.reviewType">Typ oponentury</message>
 	<message key="submissions.pendingPresentation">Čeká na nahrání</message>
 	<message key="submissions.expired">Uplynula</message>
@@ -500,6 +502,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.submissionDirector">Garant příspěvků</message>
 	<message key="reviewer.paper.reviewerCommentsDescription">Vepište či vložte komentáře oponenta</message>
 	<message key="reviewer.paper.directorToEnter">Vložit doporučení za recenzenta</message>
+	<message key="reviewer.paper.recomendation.formFirst">Prosíme vyplňte recenzní formulář.</message>
 	<message key="reviewer.paper.sendReminder">Odeslat připomenutí</message>
 	<message key="reviewer.paper.automatic">(Auto)</message>
 	<message key="reviewer.paper.selectRecommendation">Vybrat doporučení</message>
@@ -855,12 +858,13 @@ Validace může selhat u vyhledávacích URL, která vyžadují odesílání dat
 
 	<message key="notification.type.paperSubmitted">Právě byl přijat nový příspěvek: "{$param}".</message>
 	<message key="notification.type.editing">Událost editace</message>
-	<message key="notification.type.directorDecisionComment">Byla vloženo rozhodnutí editora ohledně: "{$param}".</message>
+	<message key="notification.type.directorDecision">Bylo vloženo rozhodnutí editora ohledně: "{$param}".</message>
+	<message key="notification.type.directorDecisionComment">Bylo vložen komentář k rozhodnutí editora ohledně: "{$param}".</message>
 	<message key="notification.type.galleyModified">Šablona ohledně: "{$param}" byla modifikována.</message>
 	<message key="notification.type.metadataModified">Metadata ohledně: "{$param}'s" byly modifikovány.</message>
 	<message key="notification.type.newAnnouncement">Bylo vytvořeno nové oznámení.</message>
-	<message key="notification.type.reviewerComment">Oponent vložil komentář: "{$param}".</message>
-	<message key="notification.type.reviewerFormComment">Oponent vložil recenzní posudek: "{$param}".</message>
+	<message key="notification.type.reviewerComment">Recenzent vložil komentář: "{$param}".</message>
+	<message key="notification.type.reviewerFormComment">Recenzent vložil recenzní posudek: "{$param}".</message>
 	<message key="notification.type.reviewing">Událost recenze</message>
 	<message key="notification.type.site">Událost na stránkách</message>
 	<message key="notification.type.submissionComment">Hlavní editor vložil komentář: "{$param}".</message>

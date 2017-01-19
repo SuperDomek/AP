@@ -78,7 +78,9 @@
 
 	<!--  peer review -->
 	<message key="submission.reviewForm">Review Form</message>
-	<message key="submission.reviewFormResponse">Review Form Response</message>
+	<message key="submission.reviewFormResponse">View Review Form</message>
+	<message key="submission.yourReviewFormResponse">Fill in the Review Form</message>
+	<message key="submission.confirmSubmit">After submitting the Review Form it can no longer be edited.\nClick OK to submit the Review Form or Cancel to get back.</message>
 
 	<message key="editor.paper.reviewForms">Review Forms</message>
 	<message key="editor.paper.selectReviewForm">Select Review Form</message>
@@ -181,7 +183,7 @@
 	<message key="paper.coverageSample"> Research sample characteristics</message>
 	<message key="paper.type">Type, method or approach</message>
 	<message key="paper.language">Language</message>
-	<message key="paper.trackDirector">TD</message>
+	<message key="paper.trackDirector">Co-ed</message>
 	<message key="paper.commentsToDirector">Author comments</message>
 	<message key="paper.submission">Submission</message>
 	<message key="paper.submissions">Submissions</message>
@@ -228,7 +230,7 @@
 	<message key="submissions.queuedPaperReview">Paper In Review</message>
 	<message key="submissions.published">Posted</message>
 	<message key="submissions.accepted">Accepted</message>
-	<message key="submissions.reviewStage">Review Stage</message>
+	<message key="submissions.reviewStage">Stage</message>
 	<message key="submissions.reviewType">Review Type</message>
 	<message key="submissions.pendingPresentation">Awaiting Upload</message>
 	<message key="submissions.expired">Expired</message>
@@ -496,7 +498,8 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.restrictedFileAccess">The submission can only be viewed if the review is undertaken.</message>
 	<message key="reviewer.paper.submissionDirector">Submission Director</message>
 	<message key="reviewer.paper.reviewerCommentsDescription">Type or paste in review comments here</message>
-	<message key="reviewer.paper.directorToEnter">Enter the review desicion for reviewer</message>
+	<message key="reviewer.paper.directorToEnter">Enter the recommendation for reviewer</message>
+	<message key="reviewer.paper.recomendation.formFirst">Please fill in the Review Form first.</message>
 	<message key="reviewer.paper.sendReminder">Send Reminder</message>
 	<message key="reviewer.paper.automatic">(Auto)</message>
 	<message key="reviewer.paper.selectRecommendation">Select a recommendation</message>
@@ -846,6 +849,7 @@ Validation may fail on search URLs that require posted form data.]]></message>
 
 	<message key="notification.type.paperSubmitted">A new paper, "{$param}", has been submitted.</message>
 	<message key="notification.type.editing">Editing Events</message>
+	<message key="notification.type.directorDecision">An editor decision for "{$param}" has been added.</message>
 	<message key="notification.type.directorDecisionComment">A comment has been left on the editor decision for "{$param}".</message>
 	<message key="notification.type.galleyModified">A galley has been modified for "{$param}".</message>
 	<message key="notification.type.metadataModified">"{$param}'s" metadata has been modified.</message>

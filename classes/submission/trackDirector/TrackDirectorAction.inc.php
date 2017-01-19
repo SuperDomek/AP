@@ -101,6 +101,21 @@ class TrackDirectorAction extends Action {
 					'round' => ($stage == REVIEW_STAGE_ABSTRACT?'submission.abstractReview':'submission.paperReview')
 				)
 			);
+
+			// Send a notification to associated users
+			import('notification.NotificationManager');
+			$notificationManager = new NotificationManager();
+			$paperId = $trackDirectorSubmission->getPaperId();
+			$paperDao =& DAORegistry::getDAO('PaperDAO');
+			$paper =& $paperDao->getPaper($paperId);
+			$notificationUsers = $paper->getAssociatedUserIds(false, false);
+			foreach ($notificationUsers as $userRole) {
+				$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null, 'peerReview');
+				$notificationManager->createNotification(
+					$userRole['id'], 'notification.type.directorDecision',
+					$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_REVIEWER_FORM_COMMENT
+				);
+			}
 		}
 
 		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE) {
@@ -956,6 +971,60 @@ class TrackDirectorAction extends Action {
 				$reviewAssignment->setReviewFormId($reviewFormId);
 				$reviewAssignmentDao->updateReviewAssignment($reviewAssignment);
 			}
+		}
+	}
+
+	/**
+	 * Edit review form response.
+	 * @param $reviewId int
+	 * @param $reviewFormId int
+	 */
+	function editReviewFormResponse($reviewId, $reviewFormId) {
+		if (!HookRegistry::call('TrackDirectorAction::editReviewFormResponse', array($reviewId, $reviewFormId))) {
+			import('submission.form.ReviewFormResponseForm');
+
+			$reviewForm = new ReviewFormResponseForm($reviewId, $reviewFormId, true);
+			$reviewForm->initData();
+			$reviewForm->display();
+		}
+	}
+
+	/**
+	 * Save review form response.
+	 * @param $reviewId int
+	 * @param $reviewFormId int
+	 */
+	function saveReviewFormResponse($reviewId, $reviewFormId) {
+		if (!HookRegistry::call('TrackDirectorAction::saveReviewFormResponse', array($reviewId, $reviewFormId))) {
+			import('submission.form.ReviewFormResponseForm');
+
+			$reviewForm = new ReviewFormResponseForm($reviewId, $reviewFormId, true);
+			$reviewForm->readInputData();
+			if ($reviewForm->validate()) {
+				$reviewForm->execute();
+
+				// Send a notification to associated users
+				import('notification.NotificationManager');
+				$notificationManager = new NotificationManager();
+				$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+				$reviewAssignment = $reviewAssignmentDao->getReviewAssignmentById($reviewId);
+				$paperId = $reviewAssignment->getPaperId();
+				$paperDao =& DAORegistry::getDAO('PaperDAO');
+				$paper =& $paperDao->getPaper($paperId);
+				$notificationUsers = $paper->getAssociatedUserIds(false, false);
+				foreach ($notificationUsers as $userRole) {
+					$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null, 'peerReview');
+					$notificationManager->createNotification(
+						$userRole['id'], 'notification.type.reviewerFormComment',
+						$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_REVIEWER_FORM_COMMENT
+					);
+				}
+
+			} else {
+				$reviewForm->display();
+				return false;
+			}
+			return true;
 		}
 	}
 

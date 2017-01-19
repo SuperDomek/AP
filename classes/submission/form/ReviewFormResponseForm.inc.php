@@ -24,17 +24,21 @@ class ReviewFormResponseForm extends Form {
 	/** @var int the ID of the review form */
 	var $reviewFormId;
 
+	/** @var bool the permission to edit */
+	var $reviewerAccess;
+
 	/**
 	 * Constructor.
 	 * @param $reviewId int
 	 * @param $reviewFormId int
-	 * @param $type string
+	 * @param $reviewerAccess bool optional
 	 */
-	function ReviewFormResponseForm($reviewId, $reviewFormId) {
+	function ReviewFormResponseForm($reviewId, $reviewFormId, $reviewerAccess = false) {
 		parent::Form('submission/reviewForm/reviewFormResponse.tpl');
 
 		$this->reviewId = $reviewId;
 		$this->reviewFormId = $reviewFormId;
+		$this->reviewerAccess = $reviewerAccess;
 
 		$reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
 		$requiredReviewFormElementIds = $reviewFormElementDao->getRequiredReviewFormElementIds($this->reviewFormId);
@@ -57,12 +61,13 @@ class ReviewFormResponseForm extends Form {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment = $reviewAssignmentDao->getReviewAssignmentById($this->reviewId);
 
-		$editorPreview = Request::getRequestedPage() != 'reviewer';
+		$user =& Request::getUser();
 
-		if (!$editorPreview) {
+
+		$editorPreview = (Request::getRequestedPage() != 'reviewer') && !$this->reviewerAccess;
+		/*if (!$editorPreview) {
 			ReviewerHandler::setupTemplate(true, $reviewAssignment->getPaperId(), $this->reviewId);
-		}
-
+		}*/
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('pageTitle', 'submission.reviewFormResponse');
 		$templateMgr->assign_by_ref('reviewForm', $reviewForm);
@@ -72,6 +77,7 @@ class ReviewFormResponseForm extends Form {
 		$templateMgr->assign('paperId', $reviewAssignment->getPaperId());
 		$templateMgr->assign('isLocked', isset($reviewAssignment) && $reviewAssignment->getDateCompleted() != null);
 		$templateMgr->assign('editorPreview', $editorPreview);
+		$templateMgr->assign('windowed', $this->reviewerAccess);
 
 		parent::display();
 	}

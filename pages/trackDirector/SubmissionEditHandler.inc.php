@@ -889,7 +889,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$submission =& $this->submission;
 
 		$reviewId = Request::getUserVar('reviewId');
-
 		$recommendation = Request::getUserVar('recommendation');
 
 		if ($recommendation != null) {
@@ -904,7 +903,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$templateMgr->assign('reviewId', $reviewId);
 
 			import('submission.reviewAssignment.ReviewAssignment');
-			$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions());
+			$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($submission->getCurrentStage()));
 
 			$templateMgr->display('trackDirector/reviewerRecommendation.tpl');
 		}
@@ -1070,13 +1069,32 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	function editReviewFormResponse($args) {
 		$reviewId = isset($args[0]) ? $args[0] : 0;
 
-		$this->validate($reviewId);
 
+		$this->validateRev($reviewId);
+		$this->setupTemplate(true);
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
 		$reviewFormId = $reviewAssignment->getReviewFormId();
 		if ($reviewFormId != null) {
-			ReviewerAction::editReviewFormResponse($reviewId, $reviewFormId);
+			TrackDirectorAction::editReviewFormResponse($reviewId, $reviewFormId);
+		}
+	}
+
+	/**
+	 * Save review form response
+	 * @param $args array
+	 */
+	function saveReviewFormResponse($args) {
+		$reviewId = isset($args[0]) ? $args[0] : 0;
+		$reviewFormId = isset($args[1]) ? $args[1] : 0;
+
+		$this->validateRev($reviewId);
+		$this->setupTemplate(true);
+
+		if (TrackDirectorAction::saveReviewFormResponse($reviewId, $reviewFormId)) {
+			// Suppose opening the form in new window;reloads the calling window to get
+			// the filled in review form
+				echo "<script>window.opener.location.reload();window.close();</script>";
 		}
 	}
 
@@ -1994,6 +2012,42 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		}
 
 		$this->submission =& $trackDirectorSubmission;
+		return true;
+	}
+
+	/**
+	 * Validate that the user is an assigned reviewer for
+	 * the paper.
+	 * Redirects to reviewer index page if validation fails.
+	 * @param $reviewId Id of the review to be checked against
+	 */
+	function validateRev($reviewId) {
+		$reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
+		$schedConf =& Request::getSchedConf();
+		$user =& Request::getUser();
+
+		$isValid = true;
+		$newKey = Request::getUserVar('key');
+
+		$reviewerSubmission =& $reviewerSubmissionDao->getReviewerSubmission($reviewId);
+
+		if (!$reviewerSubmission || $reviewerSubmission->getSchedConfId() != $schedConf->getId()) {
+			$isValid = false;
+		} elseif ($user && empty($newKey)) {
+			if ($reviewerSubmission->getReviewerId() != $user->getId()) {
+				$isValid = false;
+			}
+		} else {
+			$user =& SubmissionReviewHandler::validateAccessKey($reviewerSubmission->getReviewerId(), $reviewId, $newKey);
+			if (!$user) $isValid = false;
+		}
+
+		if (!$isValid) {
+			Request::redirect(null, null, Request::getRequestedPage());
+		}
+
+		$this->submission =& $reviewerSubmission;
+		$this->user =& $user;
 		return true;
 	}
 }

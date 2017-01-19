@@ -166,18 +166,22 @@
 		<table class="data" width="100%">
 		<tr>
 			<td width="20%"><h4>{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</h4></td>
-			<td width="34%"><h4>{$reviewAssignment->getReviewerFullName()|escape}</h4></td>
-			<td width="46%">
-					{if not $reviewAssignment->getDateNotified()}
-						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action">{translate key="director.paper.clearReview"}</a>
-					{elseif $reviewAssignment->getDeclined() or not $reviewAssignment->getDateCompleted()}
-						<a href="{url op="cancelReview" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="director.paper.cancelReview"}</a>
-					{/if}
-			</td>
+			<td width="80%">
+        <strong>{$reviewAssignment->getReviewerFullName()|escape}</strong>
+        &nbsp;
+        &nbsp;
+        {*if $stage != REVIEW_STAGE_ABSTRACT*}
+  					{if not $reviewAssignment->getDateNotified()}
+  						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action">{translate key="director.paper.clearReview"}</a>
+  					{elseif $reviewAssignment->getDeclined() or not $reviewAssignment->getDateCompleted()}
+  						<a href="{url op="cancelReview" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="director.paper.cancelReview"}</a>
+  					{/if}
+        {*/if*}
+      </td>
 		</tr>
-		</table>
 
-		<table width="100%" class="data">
+
+
     <!--
 		<tr valign="top">
   		<td class="label">{translate key="submission.reviewForm"}</td>
@@ -194,9 +198,6 @@
    -->
 		<tr valign="top">
 			<td colspan="2">
-        {if $user->getId() == $reviewAssignment->getReviewerId()}
-          <strong>Je to on!</strong>
-        {/if}
 				<table width="100%" class="info">
 					<tr>
 						<td class="heading" width="25%">{translate key="submission.request"}</td>
@@ -254,7 +255,9 @@
 						&nbsp;&nbsp;{$reviewAssignment->getDateCompleted()|date_format:$dateFormatShort}
 					{else}
 						{translate key="common.none"}&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+            {if $stage != REVIEW_STAGE_ABSTRACT}
+						  <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+            {/if}
 						{if $reviewAssignment->getDateReminded()}
 							&nbsp;&nbsp;{$reviewAssignment->getDateReminded()|date_format:$dateFormatShort}
 							{if $reviewAssignment->getReminderWasAutomatic()}
@@ -275,15 +278,31 @@
 					{/if}
 				</td>
 			</tr>-->
-			{*if $reviewFormResponses[$reviewId]*}
-			<tr valign="top">
-				<td class="label">{translate key="submission.reviewFormResponse"}</td>
-				<td>
-          <a href="javascript:openComments('{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}');" class="icon">{translate key="submission.reviewForm"} {icon name="comment"}</a>
-          <!--<a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>-->
-				</td>
-			</tr>
-			{*/if*}
+
+      <!-- This is the trackDirector's review -->
+			{if $user->getId() == $reviewAssignment->getReviewerId()}
+  			<tr valign="top">
+          {if $reviewFormResponses[$reviewId]}
+    				<td class="label">{translate key="submission.reviewFormResponse"}</td>
+    				<td>
+                <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
+    				</td>
+          {else}
+            <td class="label">{translate key="submission.yourReviewFormResponse"}</td>
+            <td>
+                <a href="javascript:openComments('{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}');" class="icon">{translate key="submission.reviewForm"} {icon name="comment"}</a>
+            </td>
+          {/if}
+  			</tr>
+      {else}
+      <tr valign="top">
+        <td class="label">{translate key="submission.reviewFormResponse"}</td>
+        <td>
+          <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
+        </td>
+      </tr>
+			{/if}
+
       {if $stage != REVIEW_STAGE_ABSTRACT}
 			<tr valign="top">
 				<td class="label">{translate key="reviewer.paper.uploadedFile"}</td>
@@ -322,7 +341,16 @@
 						<a href="{url op="confirmReviewForReviewer" path=$submission->getPaperId()|to_array:$reviewAssignment->getId() accept=1}" class="action">{translate key="reviewer.paper.canDoReview"}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="confirmReviewForReviewer" path=$submission->getPaperId()|to_array:$reviewAssignment->getId() accept=0}" class="action">{translate key="reviewer.paper.cannotDoReview"}</a><br />
 					{/if}
 					{if $reviewAssignment->getDateConfirmed() && !$reviewAssignment->getDeclined()}
-						<a class="action" href="{url op="enterReviewerRecommendation" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}">{translate key="director.paper.recommendation"}</a>
+            <!-- This is the trackDirector's review -->
+            {if $user->getId() == $reviewAssignment->getReviewerId()}
+              {if $reviewFormResponses[$reviewId]}
+    					  <a class="action" href="{url op="enterReviewerRecommendation" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}">{translate key="director.paper.recommendation"}</a>
+              {else}
+                {translate key="reviewer.paper.recomendation.formFirst"}
+              {/if}
+            {else}
+              <a class="action" href="{url op="enterReviewerRecommendation" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}">{translate key="director.paper.recommendation"}</a>
+            {/if}
 					{/if}
 				</td>
 			</tr>

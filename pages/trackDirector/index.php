@@ -97,6 +97,7 @@ switch ($op) {
 	case 'previewReviewForm':
 	case 'viewReviewFormResponse':
   case 'editReviewFormResponse':
+	case 'saveReviewFormResponse':
 	//
 	// Misc.
 	//

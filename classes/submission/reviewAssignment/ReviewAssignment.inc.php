@@ -576,30 +576,31 @@ class ReviewAssignment extends DataObject {
 	 * @return array recommendation => localeString
 	 */
 	function &getReviewerRecommendationOptions($stage = NULL) {
+		static $reviewerRecommendationOptions;
 		// Bring in reviewer constants
 		import('submission.reviewer.ReviewerSubmission');
 		if($stage == REVIEW_STAGE_ABSTRACT){
-			static $reviewerRecommendationOptions = array(
+			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
 				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
 				//SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
-				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
+				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline'
 				//SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
 			);
 		}
 		else if ($stage == REVIEW_STAGE_PRESENTATION) {
-			static $reviewerRecommendationOptions = array(
+			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
 				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
 				//MAJOR_REVISIONS
-				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
+				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline'
 
 			);
 		}
 		else {
-			static $reviewerRecommendationOptions = array(
+			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
 				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',

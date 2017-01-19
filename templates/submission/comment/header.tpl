@@ -45,4 +45,3 @@
 <div id="main">
 <h2>{translate key=$pageTitle}</h2>
 <div id="content">
-

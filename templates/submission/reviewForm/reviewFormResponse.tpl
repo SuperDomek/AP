@@ -7,12 +7,15 @@
  * Review Form to enter responses/comments/answers.
  *
  *}
-{if $editorPreview}
+{if $editorPreview || $windowed}
+{if windowed}
+  {assign var="pageTitle" value="submission.yourReviewFormResponse"}
+{/if}
 {include file="submission/comment/header.tpl"}
+{include file="common/formErrors.tpl"}
 {else}
 {translate|assign:"pageTitleTranslated" key="submission.reviewFormResponse"}{assign var="pageCrumbTitle" value="submission.reviewFormResponse"}
 {include file="common/header.tpl"}
-
 {include file="common/formErrors.tpl"}
 {/if}
 
@@ -21,10 +24,26 @@
 	{assign var=disabled value=1}
 {/if}
 
+{literal}
+<script type="text/javascript">
+<!--
+  function confirmSubmit(){
+    var form = document.getElementById("saveReviewFormResponse");
+    var OK = confirm("{/literal}{translate key="submission.confirmSubmit"}{literal}");
+    if(OK == true){
+      form.submit();
+    }
+    else
+      return false;
+  }
+// -->
+</script>
+{/literal}
+
 <h3>{$reviewForm->getLocalizedTitle()}</h3>
 <p>{$reviewForm->getLocalizedDescription()}</p>
 
-<form name="saveReviewFormResponse" method="post" action="{url op="saveReviewFormResponse" path=$reviewId|to_array:$reviewForm->getId()}">
+<form id="saveReviewFormResponse" name="saveReviewFormResponse" method="post" action="{url op="saveReviewFormResponse" path=$reviewId|to_array:$reviewForm->getId()}" onsubmit="return confirmSubmit();">
 	{foreach from=$reviewFormElements name=reviewFormElements key=elementId item=reviewFormElement}
 		<p>{$reviewFormElement->getLocalizedQuestion()} {if $reviewFormElement->getRequired() == 1}*{/if}</p>
 		<p>
@@ -33,7 +52,7 @@
 			{elseif $reviewFormElement->getElementType() == REVIEW_FORM_ELEMENT_TYPE_TEXT_FIELD}
 				<input {if $disabled}onkeypress="return (event.keyCode >= 37 && event.keyCode <= 40);" {/if}type="text" name="reviewFormResponses[{$elementId}]" id="reviewFormResponses-{$elementId}" value="{$reviewFormResponses[$elementId]|escape}" size="40" maxlength="120" class="textField" />
 			{elseif $reviewFormElement->getElementType() == REVIEW_FORM_ELEMENT_TYPE_TEXTAREA}
-				<textarea {if $disabled}onkeypress="return (event.keyCode >= 37 && event.keyCode <= 40);" {/if}name="reviewFormResponses[{$elementId}]" id="reviewFormResponses-{$elementId}" rows="4" cols="40" class="textArea">{$reviewFormResponses[$elementId]|escape}</textarea>
+				<textarea {if $disabled}onkeypress="return (event.keyCode >= 37 && event.keyCode <= 40);" disabled="disabled" {/if}name="reviewFormResponses[{$elementId}]" id="reviewFormResponses-{$elementId}" rows="4" cols="40" class="textArea">{$reviewFormResponses[$elementId]|escape}</textarea>
 			{elseif $reviewFormElement->getElementType() == REVIEW_FORM_ELEMENT_TYPE_CHECKBOXES}
 				{assign var=possibleResponses value=$reviewFormElement->getLocalizedPossibleResponses()}
 				{foreach name=responses from=$possibleResponses key=responseId item=responseItem}
