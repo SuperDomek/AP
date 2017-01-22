@@ -64,7 +64,8 @@ function addJEL(){
   var newDiv = document.createElement('div');
   // compensation for a paper without JEL codes
   if(JELCount === 0) JELCount++;
-  var select = `<select name="subjectClass[`.concat(JELCount).concat(`]" id="subjectClass" class="selectForm selectMenu"><option value=""></option>{/literal}{html_options options=$JELClassification}{literal}</select><a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{/literal}{$baseUrl}{literal}/templates/images/icons/delete.gif"/></a>`);
+  var options = '{/literal}{html_options options=$JELClassification}{literal}';
+  var select = '<select name="subjectClass['.concat(JELCount).concat(']" id="subjectClass" class="selectForm selectMenu"><option value=""></option>').concat(options).concat('</select><a href="javascript:void(0)" onclick="delDiv(this);return;" title="Delete row"><img src="{/literal}{$baseUrl}{literal}/templates/images/icons/delete.gif"/></a>');
   newDiv.innerHTML = select;
   document.getElementById("JELblock").appendChild(newDiv);
   JELCount++;

@@ -31,8 +31,8 @@
 	<link rel="stylesheet" href="{$baseUrl}/styles/common.css" type="text/css" />
 
 	<!-- Base Jquery -->
-	{if $allowCDN}<script src="https://www.google.com/jsapi"></script>
-	<script>
+	{if $allowCDN}<script type='text/javascript' src="https://www.google.com/jsapi"></script>
+	<script type='text/javascript'>
 		google.load("jquery", "1");
 		google.load("jqueryui", "1");
 	</script>

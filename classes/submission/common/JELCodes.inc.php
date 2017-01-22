@@ -167,8 +167,8 @@ class JELCodes {
 			"B11" => "B11 Preclassical (Ancient, Medieval, Mercantilist, Physiocratic)",
 			"B12" => "B12 Classical (includes Adam Smith)",
 			"B13" => "B13 Neoclassical through 1925 (Austrian, Marshallian, Walrasian, Stockholm School)",
-			"B14" => "B14 Socialist &bull; Marxist",
-			"B15" => "B15 Historical &bull; Institutional &bull; Evolutionary",
+			"B14" => "B14 Socialist / Marxist",
+			"B15" => "B15 Historical / Institutional / Evolutionary",
 			"B16" => "B16 Quantitative and Mathematical",
 			"B19" => "B19 Other"
 		);
@@ -176,9 +176,9 @@ class JELCodes {
 			"B20" => "B20 General",
 			"B21" => "B21 Microeconomics",
 			"B22" => "B22 Macroeconomics",
-			"B23" => "B23 Econometrics &bull; Quantitative and Mathematical Studies",
-			"B24" => "B24 Socialist &bull; Marxist &bull; Sraffian",
-			"B25" => "B25 Historical &bull; Institutional &bull; Evolutionary &bull; Austrian",
+			"B23" => "B23 Econometrics / Quantitative and Mathematical Studies",
+			"B24" => "B24 Socialist / Marxist / Sraffian",
+			"B25" => "B25 Historical / Institutional / Evolutionary / Austrian",
 			"B26" => "B26 Financial Economics",
 			"B29" => "B29 Other"
 		);
@@ -194,8 +194,8 @@ class JELCodes {
 		);
 		$temp["&nbsp;&nbsp;Current Heterodox Approaches"] = array(
 			"B50" => "B50 General",
-			"B51" => "B51 Socialist &bull; Marxian &bull; Sraffian",
-			"B52" => "B52 Institutional &bull; Evolutionary",
+			"B51" => "B51 Socialist / Marxian / Sraffian",
+			"B52" => "B52 Institutional / Evolutionary",
 			"B53" => "B53 Austrian",
 			"B54" => "B54 Feminist Economics",
 			"B59" => "B59 Other"
@@ -717,7 +717,7 @@ class JELCodes {
 			"J80" => "J80 General",
 			"J81" => "J81 Working Conditions",
 			"J82" => "J82 Labor Force Composition",
-			"J83" => "J83 Workers' Rights",
+			"J83" => "J83 Workers Rights",
 			"J88" => "J88 Public Policy",
 			"J89" => "J89 Other"
 		);
