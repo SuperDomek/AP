@@ -182,6 +182,8 @@
 <div id="myAccount">
 <h3>{translate key="user.myAccount"}</h3>
 <p>{translate key="user.specificSymbol"} <strong>{$userId}</strong></p>
+<p>{$schedConfPostPayment}</p>
+{if $schedConfPostPayment}<p>&#187; <a href="{url page="schedConf" op="registration"}">{translate key="schedConf.registration"}</a></p>{/if}
 <ul class="plain">
 	{if $hasOtherConferences}
 		{if !$showAllConferences}

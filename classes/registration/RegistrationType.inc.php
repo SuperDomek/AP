@@ -7,7 +7,7 @@
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
  * @class RegistrationType
- * @ingroup registration 
+ * @ingroup registration
  * @see RegistrationTypeDAO
  *
  * @brief Basic class describing a registration type.
@@ -18,7 +18,7 @@
 /**
  * Registration access types
  */
-define('REGISTRATION_TYPE_ACCESS_ONLINE', 0x01); 
+define('REGISTRATION_TYPE_ACCESS_ONLINE', 0x01);
 define('REGISTRATION_TYPE_ACCESS_PHYSICAL', 0x10);
 define('REGISTRATION_TYPE_ACCESS_BOTH', 0x11);
 
@@ -136,7 +136,7 @@ class RegistrationType extends DataObject {
 
 	/**
 	 * Get registration type cost.
-	 * @return float 
+	 * @return float
 	 */
 	function getCost() {
 		return $this->getData('cost');
@@ -148,6 +148,22 @@ class RegistrationType extends DataObject {
 	 */
 	function setCost($cost) {
 		return $this->setData('cost', $cost);
+	}
+
+	/**
+	 * Get registration type cost - universal price.
+	 * @return float
+	 */
+	function getCostUni() {
+		return $this->getData('costUni');
+	}
+
+	/**
+	 * Set registration type cost - universal price.
+	 * @param $costUni float
+	 */
+	function setCostUni($costUni) {
+		return $this->setData('costUni', $costUni);
 	}
 
 	/**
@@ -164,6 +180,22 @@ class RegistrationType extends DataObject {
 	 */
 	function setCurrencyCodeAlpha($currencyCodeAlpha) {
 		return $this->setData('currencyCodeAlpha', $currencyCodeAlpha);
+	}
+
+	/**
+	 * Get registration type currency code.
+	 * @return string
+	 */
+	function getCurrencyCodeUni() {
+		return $this->getData('currencyCodeUni');
+	}
+
+	/**
+	 * Set registration type currency code.
+	 * @param $currencyCodeUni string
+	 */
+	function setCurrencyCodeUni($currencyCodeUni) {
+		return $this->setData('currencyCodeUni', $currencyCodeUni);
 	}
 
 	/**
@@ -261,7 +293,7 @@ class RegistrationType extends DataObject {
 
 		if ($months == 1) {
 			$yearsMonths .= $yearsMonths == ''  ? '1 ' : ' 1 ';
-			$yearsMonths .= AppLocale::Translate('manager.registrationTypes.month'); 
+			$yearsMonths .= AppLocale::Translate('manager.registrationTypes.month');
 		} elseif ($months > 1){
 			$yearsMonths .= $yearsMonths == ''  ? $months . ' ' : ' ' . $months . ' ';
 			$yearsMonths .= AppLocale::Translate('manager.registrationTypes.months');

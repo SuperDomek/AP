@@ -122,7 +122,7 @@
 	<message key="manager.registrationOptions.noneCreated">Nebyly vytvořeny žádné možnosti registrace.</message>
 	<message key="manager.registrationOptions.name">Možnost registrace</message>
 	<message key="manager.registrationOptions.cost">Vložné</message>
-	<message key="manager.registrationOptions.costSetInRegistrationType">Vložné pro všechny registrační možnosti musí být nastaveno pro každý typ registrace účastníka.</message>		
+	<message key="manager.registrationOptions.costSetInRegistrationType">Vložné pro všechny registrační možnosti musí být nastaveno pro každý typ registrace účastníka.</message>
 	<message key="manager.registrationOptions.currency">Měna</message>
 	<message key="manager.registrationOptions.openDate">Dostupné od</message>
 	<message key="manager.registrationOptions.closeDate">Dostupné do</message>
@@ -249,6 +249,7 @@
 	<message key="manager.registrationTypes.form.code">Kód</message>
 	<message key="manager.registrationTypes.form.code.instructions">Vložte kód (např. 1234) je-li tento typ registrace umožněn pouze tomu, komu byl sdělen předem (jako například zvaní prezentující, kteří se mohou registrovat bez poplatku).</message>
 	<message key="manager.registrationTypes.form.cost">Vložné</message>
+	<message key="manager.registrationTypes.form.costUni">Vložné v EUR</message>
 	<message key="manager.registrationTypes.form.costInstructions">Vložte číselnou hodnotu (např. 1000 nebo 1000.00). Nevkládejte žádný další text (např. ",- Kč").</message>
 	<message key="manager.registrationTypes.form.costNumeric">Vložné musí být zadáno jako kladné číslo.</message>
 	<message key="manager.registrationTypes.form.costRequired">Zadejte vložné.</message>
@@ -439,7 +440,7 @@
 	<message key="manager.scheduler.layout.hideLocations">Skrýt seznam míst konference v horní části časového rozvrhu.</message>
 	<message key="manager.scheduler.layout.hideNav">Skrýt navigační menu v horní části časového rozvrhu.</message>
 	<message key="manager.scheduler.layout.mergeSchedules">Zobrazení událostí</message>
-	<message key="manager.scheduler.layout.mergeSchedulesDescription">Zobrazit speciální události v rámci prezentací (neoznačujte, pokud chcete zobrazit speciální události pod prezentacemi).</message>	
+	<message key="manager.scheduler.layout.mergeSchedulesDescription">Zobrazit speciální události v rámci prezentací (neoznačujte, pokud chcete zobrazit speciální události pod prezentacemi).</message>
 	<message key="manager.scheduler.layout.showAuthors">Zobrazit jména autorů vedle názvu prezentací.</message>
 	<message key="manager.scheduler.layout.showEndTime">Zobrazit čas začátku a konce pro každou událost (pokud volbu neoznačíte zobrazí se pouze čas začátku).</message>
 	<message key="manager.scheduler.layout.style">Styl zobrazení časového rozvrhu konference</message>
@@ -650,7 +651,7 @@
 	<message key="manager.timeline.postPresentations">Přidat položku "Prezentace" do menu "Informace o konferenci"</message>
 	<message key="manager.timeline.postProgram">Přidat položku "Program" do menu "Informace o konferenci"</message>
 	<message key="manager.timeline.postProposalSubmission">Zahrnout popis procesu přijímání příspěvků do výpisu informací o konferenci</message>
-	<message key="manager.timeline.postRegistration">Přidat položku "Registrace účastníka" do menu "Informace o konferenci"</message>	
+	<message key="manager.timeline.postRegistration">Přidat položku "Registrace účastníka" do menu "Informace o konferenci"</message>
 	<message key="manager.timeline.postSchedule">Časový rozvrh konference</message>
 	<message key="manager.timeline.postSupporters">Přidat položku "Organizátoři a partneři" do menu "Informace o konferenci"</message>
 	<message key="manager.timeline.postTrackPolicies">Přidat položku "Podmínky sekcí" do menu "Informace o konferenci"</message>

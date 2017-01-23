@@ -120,7 +120,7 @@
 	<message key="manager.registrationOptions.noneCreated">No registration options have been created.</message>
 	<message key="manager.registrationOptions.name">Registration option</message>
 	<message key="manager.registrationOptions.cost">Cost</message>
-	<message key="manager.registrationOptions.costSetInRegistrationType">The cost for all registration options must be set once in each registration type.</message>		
+	<message key="manager.registrationOptions.costSetInRegistrationType">The cost for all registration options must be set once in each registration type.</message>
 	<message key="manager.registrationOptions.currency">Currency</message>
 	<message key="manager.registrationOptions.openDate">Available From</message>
 	<message key="manager.registrationOptions.closeDate">Available Until</message>
@@ -247,6 +247,7 @@
 	<message key="manager.registrationTypes.form.code">Code</message>
 	<message key="manager.registrationTypes.form.code.instructions">Enter a code (e.g., 1234) if registration in this type is to be restricted to those who have been issued the code to use when registering (such as invited presenters who can register at no charge).</message>
 	<message key="manager.registrationTypes.form.cost">Cost</message>
+	<message key="manager.registrationTypes.form.costUni">Cost in EUR</message>
 	<message key="manager.registrationTypes.form.costInstructions">Enter a numeric value (e.g., 40 or 40.00). Do not include any other text (e.g., $).</message>
 	<message key="manager.registrationTypes.form.costNumeric">The cost must be a positive, numeric value.</message>
 	<message key="manager.registrationTypes.form.costRequired">A cost is required.</message>
@@ -437,7 +438,7 @@
 	<message key="manager.scheduler.layout.hideLocations">Hide the Conference locations list at the top of the schedule.</message>
 	<message key="manager.scheduler.layout.hideNav">Hide the navigation menu at the top of the schedule.</message>
 	<message key="manager.scheduler.layout.mergeSchedules">Event Display</message>
-	<message key="manager.scheduler.layout.mergeSchedulesDescription">Display special events within presentations (uncheck to display special events below presentations).</message>	
+	<message key="manager.scheduler.layout.mergeSchedulesDescription">Display special events within presentations (uncheck to display special events below presentations).</message>
 	<message key="manager.scheduler.layout.showAuthors">Show authors next to presentation titles.</message>
 	<message key="manager.scheduler.layout.showEndTime">Show the start and end time for every event (uncheck to show only start time).</message>
 	<message key="manager.scheduler.layout.style">Schedule Style</message>
@@ -648,7 +649,7 @@
 	<message key="manager.timeline.postPresentations">Include Presentations in Conference Information listing</message>
 	<message key="manager.timeline.postProgram">Include Program in Conference Information listing</message>
 	<message key="manager.timeline.postProposalSubmission">Include Proposal Submission in Conference Information listing</message>
-	<message key="manager.timeline.postRegistration">Include Registration in Conference Information listing</message>	
+	<message key="manager.timeline.postRegistration">Include Registration in Conference Information listing</message>
 	<message key="manager.timeline.postSchedule">Schedule (included in Conference Information listing)</message>
 	<message key="manager.timeline.postSupporters">Include Supporters in Conference Information listing</message>
 	<message key="manager.timeline.postTrackPolicies">Include Track Policies in Conference Information listing</message>

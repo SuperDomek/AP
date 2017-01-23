@@ -30,7 +30,7 @@
 	{if $registrationType->getPublic()}
 		<tr valign="top">
 			<td class="label">
-				<strong>{$registrationType->getRegistrationTypeName()|escape}</strong>
+        <strong>{$registrationType->getRegistrationTypeName()|escape}</strong>
 			</td>
 			<td class="data">
 				{if strtotime($registrationType->getOpeningDate()) < time() && strtotime($registrationType->getClosingDate()) > time()}
