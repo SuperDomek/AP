@@ -119,6 +119,11 @@ class CreateAccountForm extends Form {
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$templateMgr->assign('genderOptions', $userDao->getGenderOptions());
 
+		// get registration types for attendance registration
+		$registrationTypeDao =& DAORegistry::getDAO('RegistrationTypeDAO');
+		$registrationTypes =& $registrationTypeDao->getRegistrationTypesBySchedConfId($schedConf->getId());
+		$templateMgr->assign('registrationTypes', $registrationTypes);
+
 		$templateMgr->assign('privacyStatement', $conference->getLocalizedSetting('privacyStatement'));
 		$templateMgr->assign('enableOpenAccessNotification', $schedConf->getSetting('enableOpenAccessNotification')==1?1:0);
 		$templateMgr->assign('allowRegReader', SchedConfAction::allowRegReader($schedConf));

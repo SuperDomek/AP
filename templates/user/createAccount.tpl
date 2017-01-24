@@ -192,30 +192,10 @@ function showBillAddr(checkbox){
 	<td class="value"><input type="text" id="firstName" name="firstName" value="{$firstName|escape}" size="20" maxlength="40" class="textField" /></td>
 </tr>
 
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td class="label">{fieldLabel name="middleName" key="user.middleName"}</td>
-	<td class="value"><input type="text" id="middleName" name="middleName" value="{$middleName|escape}" size="20" maxlength="40" class="textField" /></td>
-</tr>-->
-
 <tr valign="top">
 	<td class="label">{fieldLabel name="lastName" required="true" key="user.lastName"}</td>
 	<td class="value"><input type="text" id="lastName" name="lastName" value="{$lastName|escape}" size="20" maxlength="90" class="textField" /></td>
 </tr>
-
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td class="label">{fieldLabel name="initials" key="user.initials"}</td>
-	<td class="value"><input type="text" id="initials" name="initials" value="{$initials|escape}" size="5" maxlength="5" class="textField" />&nbsp;&nbsp;{translate key="user.initialsExample"}</td>
-</tr>
-
-<tr valign="top">
-	<td class="label">{fieldLabel name="gender" key="user.gender"}</td>
-	<td class="value"><select name="gender" id="gender" size="1" class="selectMenu">
-			{html_options_translate options=$genderOptions selected=$gender}
-		</select>
-	</td>
-</tr>-->
 
 <tr valign="top" >
 	<td class="label">{fieldLabel name="affiliation" key="user.affiliation" required="true"}</td>
@@ -233,32 +213,16 @@ function showBillAddr(checkbox){
     <textarea name="affiliation" id="affil_text" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea>
   </td>
 </tr>
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td class="label">{fieldLabel name="signature" key="user.signature"}</td>
-	<td class="value"><textarea name="signature[{$formLocale|escape}]" id="signature" rows="5" cols="40" class="textArea">{$signature[$formLocale]|escape}</textarea></td>
-</tr>
--->
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="email" required="true" key="user.email"}</td>
 	<td class="value"><input type="text" id="email" name="email" value="{$email|escape}" size="30" maxlength="90" class="textField" /></td>
 </tr>
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td class="label">{fieldLabel name="userUrl" key="user.url"}</td>
-	<td class="value"><input type="text" id="userUrl" name="userUrl" value="{$userUrl|escape}" size="30" maxlength="90" class="textField" /></td>
-</tr>
--->
+
 <tr valign="top">
 	<td class="label">{fieldLabel name="phone" key="user.phone"}</td>
 	<td class="value"><input type="text" name="phone" id="phone" value="{$phone|escape}" size="15" maxlength="24" class="textField" /></td>
 </tr>
-
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td class="label">{fieldLabel name="fax" key="user.fax"}</td>
-	<td class="value"><input type="text" name="fax" id="fax" value="{$fax|escape}" size="15" maxlength="24" class="textField" /></td>
-</tr>-->
 
 <tr valign="top">
 	<td class="label" id="mailAddrLabel">{fieldLabel name="mailingAddress" required="true" key="common.mailingBillingAddress"}</td>
@@ -294,30 +258,12 @@ function showBillAddr(checkbox){
 		</select>
 	</td>
 </tr>
-<tr>
-
-</tr>
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td class="label">{fieldLabel name="biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
-	<td class="value"><textarea name="biography[{$formLocale|escape}]" id="biography" rows="5" cols="40" class="textArea">{$biography[$formLocale]|escape}</textarea></td>
-</tr>
--->
 <tr valign="top">
 	<td class="label">{fieldLabel name="sendPassword" key="user.sendPassword"}</td>
 	<td class="value">
 		<input type="checkbox" name="sendPassword" id="sendPassword" value="1"{if $sendPassword} checked="checked"{/if} /> <label for="sendPassword">{translate key="user.sendPassword.description"}</label>
 	</td>
 </tr>
-
-<!--{if count($availableLocales) > 1}
-<tr valign="top">
-	<td class="label">{translate key="user.workingLanguages"}</td>
-	<td class="value">{foreach from=$availableLocales key=localeKey item=localeName}
-		<input type="checkbox" name="userLocales[]" id="userLocales-{$localeKey|escape}" value="{$localeKey|escape}"{if in_array($localeKey, $userLocales)} checked="checked"{/if} /> <label for="userLocales-{$localeKey|escape}">{$localeName|escape}</label><br />
-	{/foreach}</td>
-</tr>
-{/if}-->
 {/if}
 
 {if ($allowRegReader || $allowRegReader === null) or $enableOpenAccessNotification or ($allowRegAuthor || $allowRegAuthor === null) or ($allowRegReviewer || $allowRegReviewer === null)}
@@ -343,6 +289,64 @@ function showBillAddr(checkbox){
 	</td>
 </tr>
 {/if}
+</table>
+
+<h5>{translate key="schedConf.registration"}</h5>
+<table class="listing" width="100%">
+	<tr>
+		<td colspan="2" class="headseparator">&nbsp;</td>
+	</tr>
+	<tr valign="top" class="heading">
+		<td width="60%">{translate key="schedConf.registration.type"}</td>
+		<td width="60%">{translate key="schedConf.registration.cost"}</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="headseparator">&nbsp;</td>
+	</tr>
+	{assign var="isFirstRegistrationType" value=true}
+	{iterate from=registrationTypes item=registrationType}
+	{assign var="typeId" value=$registrationType->getTypeId()}
+	{if $registrationType->getPublic()}
+		<tr valign="top">
+			<td class="label">
+        <strong>{$registrationType->getRegistrationTypeName()|escape}</strong>
+			</td>
+			<td class="data">
+				{if strtotime($registrationType->getOpeningDate()) < time() && strtotime($registrationType->getClosingDate()) > time()}
+					{assign var="registrationMethodAvailable" value=1}
+					<input id="registrationType-{$typeId|escape}" type="radio" {if $isFirstRegistrationType}checked="checked" {/if}name="registrationTypeId" value="{$typeId|escape}" />
+					<label for="registrationType-{$typeId|escape}"> {$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape} / {$registrationType->getCostUni()|string_format:"%.2f"} {$registrationType->getCurrencyCodeUni()|escape}</label>
+					{translate key="schedConf.registration.typeCloses" closingDate=$registrationType->getClosingDate()|date_format:$dateFormatShort}
+					{assign var="isFirstRegistrationType" value=false}
+				{elseif strtotime($registrationType->getOpeningDate()) > time()}
+					<input type="radio" name="registrationTypeId" value="{$typeId|escape}" disabled="disabled" />
+					{$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape} / {$registrationType->getCostUni()|string_format:"%.2f"} {$registrationType->getCurrencyCodeUni()|escape}
+					{translate key="schedConf.registration.typeFuture" openingDate=$registrationType->getOpeningDate()|date_format:$dateFormatShort}
+				{else}
+					<input type="radio" name="registrationTypeId" value="{$typeId|escape}" disabled="disabled" />
+					{$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape} / {$registrationType->getCostUni()|string_format:"%.2f"} {$registrationType->getCurrencyCodeUni()|escape}
+					{translate key="schedConf.registration.typeClosed" closingDate=$registrationType->getClosingDate()|date_format:$dateFormatShort}
+				{/if}
+			</td>
+		</tr>
+		{if $registrationType->getRegistrationTypeDescription()}
+			<tr valign="top">
+				<td colspan="2">{$registrationType->getRegistrationTypeDescription()|nl2br}</td>
+			</tr>
+		{/if}
+		<tr valign="top">
+			<td colspan="2">&nbsp;</td>
+		</tr>
+	{/if}
+	{/iterate}
+	{if $registrationTypes->wasEmpty()}
+		<tr>
+			<td colspan="2" class="nodata">{translate key="schedConf.registrationTypes.noneAvailable"}</td>
+		</tr>
+	{/if}
+	<tr>
+		<td colspan="2" class="endseparator">&nbsp;</td>
+	</tr>
 </table>
 
 <p><input type="submit" value="{translate key="user.createAccount"}" class="button defaultButton" /> <input type="button" value="{translate key="common.cancel"}" class="button" onclick="document.location.href='{url page="index"}'" /></p>

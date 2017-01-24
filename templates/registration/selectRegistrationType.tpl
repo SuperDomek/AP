@@ -36,16 +36,16 @@
 				{if strtotime($registrationType->getOpeningDate()) < time() && strtotime($registrationType->getClosingDate()) > time()}
 					{assign var="registrationMethodAvailable" value=1}
 					<input id="registrationType-{$typeId|escape}" type="radio" {if $isFirstRegistrationType}checked="checked" {/if}name="registrationTypeId" value="{$typeId|escape}" />
-					<label for="registrationType-{$typeId|escape}"> {$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape}</label>
+					<label for="registrationType-{$typeId|escape}"> {$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape} / {$registrationType->getCostUni()|string_format:"%.2f"} {$registrationType->getCurrencyCodeUni()|escape}</label>
 					{translate key="schedConf.registration.typeCloses" closingDate=$registrationType->getClosingDate()|date_format:$dateFormatShort}
 					{assign var="isFirstRegistrationType" value=false}
 				{elseif strtotime($registrationType->getOpeningDate()) > time()}
 					<input type="radio" name="registrationTypeId" value="{$typeId|escape}" disabled="disabled" />
-					{$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape}
+					{$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape} / {$registrationType->getCostUni()|string_format:"%.2f"} {$registrationType->getCurrencyCodeUni()|escape}
 					{translate key="schedConf.registration.typeFuture" openingDate=$registrationType->getOpeningDate()|date_format:$dateFormatShort}
 				{else}
 					<input type="radio" name="registrationTypeId" value="{$typeId|escape}" disabled="disabled" />
-					{$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape}
+					{$registrationType->getCost()|string_format:"%.2f"} {$registrationType->getCurrencyCodeAlpha()|escape} / {$registrationType->getCostUni()|string_format:"%.2f"} {$registrationType->getCurrencyCodeUni()|escape}
 					{translate key="schedConf.registration.typeClosed" closingDate=$registrationType->getClosingDate()|date_format:$dateFormatShort}
 				{/if}
 			</td>
