@@ -54,7 +54,10 @@ class OCSQueuedPayment extends QueuedPayment {
 	function getName() {
 		switch ($this->type) {
 			case QUEUED_PAYMENT_TYPE_REGISTRATION:
-				return __('schedConf.registration');
+			$registrationDao =& DAORegistry::getDAO('RegistrationDAO');
+			$registration =& $registrationDao->getRegistration($this->getAssocId());
+			return $registration->getRegistrationTypeName();
+				//return __('schedConf.registration');
 		}
 	}
 
@@ -78,9 +81,9 @@ class OCSQueuedPayment extends QueuedPayment {
 
 				$options = '';
 				foreach ($registrationOptions as $optionId) {
-					$options .= ';' . $registrationOptionDao->getRegistrationOptionName($optionId);				
+					$options .= ';' . $registrationOptionDao->getRegistrationOptionName($optionId);
 				}
-				
+
 				$schedConfDao =& DAORegistry::getDAO('SchedConfDAO');
 				$schedConf =& $schedConfDao->getSchedConf(
 					$registrationType?$registrationType->getSchedConfId():0

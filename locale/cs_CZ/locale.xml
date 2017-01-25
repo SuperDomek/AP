@@ -258,7 +258,7 @@
 	<message key="schedConf.program">Program</message>
 	<message key="schedConf.cfp">Výzva k podávání příspěvků</message>
 	<message key="schedConf.discussion">Diskuse</message>
-	<message key="schedConf.registration">Registrace účastníka</message>
+	<message key="schedConf.registration">Správa registrace účastníka konference</message>
 	<message key="schedConf.accommodation">Ubytování</message>
 	<message key="schedConf.supporters">Organizátoři a partneři</message>
 	<message key="schedConf.timeline">Důležité termíny</message>

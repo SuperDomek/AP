@@ -291,14 +291,14 @@ function showBillAddr(checkbox){
 {/if}
 </table>
 
-<h5>{translate key="schedConf.registration"}</h5>
+<!--<h5>{translate key="schedConf.registration"}</h5>-->
 <table class="listing" width="100%">
 	<tr>
-		<td colspan="2" class="headseparator">&nbsp;</td>
+		<td colspan="2" >&nbsp;</td>
 	</tr>
 	<tr valign="top" class="heading">
-		<td width="60%">{translate key="schedConf.registration.type"}</td>
-		<td width="60%">{translate key="schedConf.registration.cost"}</td>
+		<td width="30%">{translate key="schedConf.registration.type"}</td>
+		<td width="70%">{translate key="schedConf.registration.cost"}</td>
 	</tr>
 	<tr>
 		<td colspan="2" class="headseparator">&nbsp;</td>

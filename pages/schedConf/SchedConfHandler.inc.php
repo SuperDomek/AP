@@ -225,9 +225,11 @@ class SchedConfHandler extends Handler {
 				return $templateMgr->display('common/message.tpl');
 			}
 		}
-
-		$typeId = (int) Request::getUserVar('registrationTypeId');
-		if ($typeId) {
+		$registrationId = $registrationDao->getRegistrationIdByUser($user->getId(), $schedConf->getId());
+		$registration =& $registrationDao->getRegistration($registrationId);
+		$typeId = $registration->getTypeId();
+		//$typeId = (int) Request::getUserVar('registrationTypeId');
+		//if ($typeId) { // Registration type already chosen from user registration
 			// A registration type has been chosen
 			import('registration.form.UserRegistrationForm');
 
@@ -242,13 +244,14 @@ class SchedConfHandler extends Handler {
 				$form->initData();
 			}
 			$form->display();
-		} else {
+
+		/*} else {
 			// A registration type has not been chosen; prompt for one.
 			$registrationTypeDao =& DAORegistry::getDAO('RegistrationTypeDAO');
 			$registrationTypes =& $registrationTypeDao->getRegistrationTypesBySchedConfId($schedConf->getId());
 			$templateMgr->assign_by_ref('registrationTypes', $registrationTypes);
 			return $templateMgr->display('registration/selectRegistrationType.tpl');
-		}
+		}*/
 	}
 
 	/**
