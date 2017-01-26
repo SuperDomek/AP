@@ -345,7 +345,7 @@ class CreateAccountForm extends Form {
 			error_log("Error creating accout: Registration type incorrect or not set up.");
 			Request::redirect('index');
 		}
-		if($registrationType != 0){ // 0 for not attending;hardcoded
+		if($registrationType->getTypeId() != 0){ // 0 for not attending;hardcoded
 			import('payment.ocs.OCSPaymentManager');
 			$paymentManager =& OCSPaymentManager::getManager();
 			if (!$paymentManager->isConfigured()) return REGISTRATION_NO_PAYMENT;
@@ -366,7 +366,6 @@ class CreateAccountForm extends Form {
 			$queuedPayment =& $paymentManager->createQueuedPayment($schedConf->getConferenceId(), $schedConf->getId(), QUEUED_PAYMENT_TYPE_REGISTRATION, $user->getId(), $registrationId, $cost, $registrationType->getCurrencyCodeAlpha());
 			$queuedPaymentId = $paymentManager->queuePayment($queuedPayment, time() + (60 * 60 * 24 * 30)); // 30 days to complete
 		}
-
 
 		if (!$this->existingUser) {
 			$this->sendConfirmationEmail($user, $this->getData('password'), $this->getData('sendPassword'));
