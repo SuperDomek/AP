@@ -23,7 +23,7 @@ class RegistrationTypeForm extends Form {
 	/** @var validAccesses array keys are valid registration access types */
 	var $validAccessTypes;
 
-	/** @var validCurrencies array keys are valid registration type currencies */	
+	/** @var validCurrencies array keys are valid registration type currencies */
 	var $validCurrencies;
 
 	/** @var $registrationOptionCosts array Associates registration option ID with cost */
@@ -64,12 +64,12 @@ class RegistrationTypeForm extends Form {
 		// Type name is provided
 		$this->addCheck(new FormValidatorLocale($this, 'name', 'required', 'manager.registrationTypes.form.typeNameRequired'));
 
-		// Cost	is provided and is numeric and positive	
-		$this->addCheck(new FormValidator($this, 'cost', 'required', 'manager.registrationTypes.form.costRequired'));	
+		// Cost	is provided and is numeric and positive
+		$this->addCheck(new FormValidator($this, 'cost', 'required', 'manager.registrationTypes.form.costRequired'));
 		$this->addCheck(new FormValidatorCustom($this, 'cost', 'required', 'manager.registrationTypes.form.costNumeric', create_function('$cost', 'return (is_numeric($cost) && $cost >= 0);')));
 
 		// Currency is provided and is valid value
-		$this->addCheck(new FormValidator($this, 'currency', 'required', 'manager.registrationTypes.form.currencyRequired'));	
+		$this->addCheck(new FormValidator($this, 'currency', 'required', 'manager.registrationTypes.form.currencyRequired'));
 		$this->addCheck(new FormValidatorInSet($this, 'currency', 'required', 'manager.registrationTypes.form.currencyValid', array_keys($this->validCurrencies)));
 
 		// Opening date must happen before closing date
@@ -79,7 +79,7 @@ class RegistrationTypeForm extends Form {
 			array(&$this)));
 
 		// Access type is provided and is valid value
-		$this->addCheck(new FormValidator($this, 'access', 'required', 'manager.registrationTypes.form.accessRequired'));	
+		$this->addCheck(new FormValidator($this, 'access', 'required', 'manager.registrationTypes.form.accessRequired'));
 		$this->addCheck(new FormValidatorInSet($this, 'access', 'required', 'manager.registrationTypes.form.accessValid', array_keys($this->validAccessTypes)));
 
 		// Institutional flag is valid value
@@ -136,6 +136,8 @@ class RegistrationTypeForm extends Form {
 					'description' => $registrationType->getDescription(null), // Localized
 					'cost' => $registrationType->getCost(),
 					'currency' => $registrationType->getCurrencyCodeAlpha(),
+					'costUni' => $registrationType->getCostUni(),
+					'currencyUni' => $registrationType->getCurrencyCodeUni(),
 					'openDate' => $registrationType->getOpeningDate(),
 					'closeDate' => $registrationType->getClosingDate(),
 					'expiryDate' => $registrationType->getExpiryDate(),
@@ -160,14 +162,14 @@ class RegistrationTypeForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {
-		$this->readUserVars(array('name', 'description', 'cost', 'currency', 'access', 'institutional', 'membership', 'notPublic', 'code', 'registrationOptionCosts'));
+		$this->readUserVars(array('name', 'description', 'cost', 'costUni', 'currency', 'access', 'institutional', 'membership', 'notPublic', 'code', 'registrationOptionCosts'));
 		$this->_data['openDate'] = Request::getUserDateVar('openDate');
 		$this->_data['closeDate'] = Request::getUserDateVar('closeDate');
 		$this->_data['expiryDate'] = Request::getUserVar('expiryDate')?Request::getUserDateVar('expiryDate'):null;
 	}
 
 	/**
-	 * Save registration type. 
+	 * Save registration type.
 	 */
 	function execute() {
 		$schedConf =& Request::getSchedConf();
@@ -184,7 +186,9 @@ class RegistrationTypeForm extends Form {
 		$registrationType->setName($this->getData('name'), null); // Localized
 		$registrationType->setDescription($this->getData('description'), null); // Localized
 		$registrationType->setCost(round($this->getData('cost'), 2));
+		$registrationType->setCostUni(round($this->getData('costUni'), 2));
 		$registrationType->setCurrencyCodeAlpha($this->getData('currency'));
+		$registrationType->setCurrencyCodeUni("EUR");
 		$registrationType->setOpeningDate($this->getData('openDate'));
 		$registrationType->setClosingDate($this->getData('closeDate'));
 		$registrationType->setExpiryDate($this->getData('expiryDate'));

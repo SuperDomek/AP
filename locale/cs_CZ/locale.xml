@@ -258,7 +258,7 @@
 	<message key="schedConf.program">Program</message>
 	<message key="schedConf.cfp">Výzva k podávání příspěvků</message>
 	<message key="schedConf.discussion">Diskuse</message>
-	<message key="schedConf.registration">Registrace účastníka</message>
+	<message key="schedConf.registration">Správa registrace účastníka konference</message>
 	<message key="schedConf.accommodation">Ubytování</message>
 	<message key="schedConf.supporters">Organizátoři a partneři</message>
 	<message key="schedConf.timeline">Důležité termíny</message>
@@ -293,6 +293,7 @@
 	<message key="schedConf.registrationTypes.noneAvailable">K dispozici nejsou žádné typy registrace.</message>
 	<message key="schedConf.registrationOptions.noneAvailable">K dispozici nejsou žádné možnosti registrace.</message>
 	<message key="schedConf.registration.register">Registrovat</message>
+	<message key="schedConf.registration.registerEdit">Uložit</message>
 	<message key="schedConf.registration.typeCloses">(Končí dne {$closingDate})</message>
 	<message key="schedConf.registration.typeClosed">(Registrace uzavřena {$closingDate})</message>
 	<message key="schedConf.registration.typeFuture">(Registrace začne {$openingDate})</message>
@@ -304,7 +305,7 @@
 	<message key="schedConf.registration.specialRequests">Zvláštní požadavky</message>
 	<message key="schedConf.registration.specialRequests.description">Uveďte, prosím, jakékoliv speciální požadavky či žádosti související např. se stravováním, apod.</message>
 	<message key="schedConf.registration.account">Uživatelský účet</message>
-	<message key="schedConf.registration.loggedInAs"><![CDATA[Jste přihlášeni. Potvrďte správnost níže uvedených informací. Chcete-li je upravit, využijte, prosím odkaz <a href="{$profileUrl}">Můj profil</a> nebo <a href="{$logoutUrl}">se odhlaste</a> a použijte jiný účet.]]></message>
+	<message key="schedConf.registration.loggedInAs"><![CDATA[Potvrďte správnost níže uvedených informací. Chcete-li je upravit, využijte odkaz <a href="{$profileUrl}">Můj profil</a>.]]></message>
 	<message key="schedConf.registration.createAccount.description"><![CDATA[Nejste přihlášení. K registraci na konferenci budete potřebovat zřízení účtu. Pokud ho již máte zřízen, <a href="{$loginUrl}">klikněte zde</a> a přihlaste se; jinak vyplňte níže uvedené informace a účet Vám bude vytvořen.]]></message>
 	<message key="schedConf.registration.options">Možnosti registrace</message>
 

@@ -63,7 +63,14 @@
 	<td colspan="2" class="value">
 		<span class="instruct">{translate key="manager.registrationTypes.form.costInstructions"}</span>
 		<br />
-		<input type="text" name="cost" value="{$cost|escape}" size="5" maxlength="10" id="cost" class="textField" />		
+		<input type="text" name="cost" value="{$cost|escape}" size="5" maxlength="10" id="cost" class="textField" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td class="label">{fieldLabel name="costUni" key="manager.registrationTypes.form.costUni"}</td>
+	<td colspan="2" class="value">
+		<input type="text" name="costUni" value="{$costUni|escape}" size="5" maxlength="10" id="costUni" class="textField" />
 	</td>
 </tr>
 

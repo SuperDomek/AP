@@ -54,7 +54,7 @@ class RegistrationTypeDAO extends DAO {
 			'SELECT sched_conf_id FROM registration_types WHERE type_id = ?', $typeId
 		);
 
-		$returner = isset($result->fields[0]) ? $result->fields[0] : 0;	
+		$returner = isset($result->fields[0]) ? $result->fields[0] : 0;
 
 		$result->Close();
 		unset($result);
@@ -69,7 +69,7 @@ class RegistrationTypeDAO extends DAO {
 	 */
 	function getRegistrationTypeName($typeId) {
 		$result =& $this->retrieve(
-			'SELECT COALESCE(l.setting_value, p.setting_value) FROM registration_type_settings l LEFT JOIN registration_type_settings p ON (p.type_id = ? AND p.setting_name = ? AND p.locale = ?) WHERE l.type_id = ? AND l.setting_name = ? AND l.locale = ?', 
+			'SELECT COALESCE(l.setting_value, p.setting_value) FROM registration_type_settings l LEFT JOIN registration_type_settings p ON (p.type_id = ? AND p.setting_name = ? AND p.locale = ?) WHERE l.type_id = ? AND l.setting_name = ? AND l.locale = ?',
 			array(
 				$typeId, 'name', AppLocale::getLocale(),
 				$typeId, 'name', AppLocale::getPrimaryLocale()
@@ -232,7 +232,9 @@ class RegistrationTypeDAO extends DAO {
 		$registrationType->setSchedConfId($row['sched_conf_id']);
 		$registrationType->setCode($row['code']);
 		$registrationType->setCost($row['cost']);
+		$registrationType->setCostUni($row['cost_uni']);
 		$registrationType->setCurrencyCodeAlpha($row['currency_code_alpha']);
+		$registrationType->setCurrencyCodeUni($row['currency_code_uni']);
 		$registrationType->setOpeningDate($this->dateFromDB($row['opening_date']));
 		$registrationType->setClosingDate($this->datetimeFromDB($row['closing_date']));
 		$registrationType->setExpiryDate($this->datetimeFromDB($row['expiry_date']));
@@ -270,22 +272,24 @@ class RegistrationTypeDAO extends DAO {
 	/**
 	 * Insert a new RegistrationType.
 	 * @param $registrationType RegistrationType
-	 * @return boolean 
+	 * @return boolean
 	 */
 	function insertRegistrationType(&$registrationType) {
 		$expiryDate = $registrationType->getExpiryDate();
 		$this->update(
 			sprintf('INSERT INTO registration_types
-				(sched_conf_id, cost, currency_code_alpha, opening_date, closing_date, expiry_date, access, institutional, membership, pub, seq, code)
+				(sched_conf_id, cost, currency_code_alpha, cost_uni, currency_code_uni, opening_date, closing_date, expiry_date, access, institutional, membership, pub, seq, code)
 				VALUES
-				(?, ?, ?, %s, %s, %s, ?, ?, ?, ?, ?, ?)',
+				(?, ?, ?, ?, ?, %s, %s, %s, ?, ?, ?, ?, ?, ?)',
 				$this->dateToDB($registrationType->getOpeningDate()),
 				$this->datetimeToDB($registrationType->getClosingDate()),
 				$expiryDate === null?'null':$this->datetimeToDB($expiryDate)
 			), array(
 				(int) $registrationType->getSchedConfId(),
-				(float) $registrationType->getCost(),
+				(double) $registrationType->getCost(),
 				$registrationType->getCurrencyCodeAlpha(),
+				(double) $registrationType->getCostUni(),
+				$registrationType->getCurrencyCodeUni(),
 				(int) $registrationType->getAccess(),
 				(int) $registrationType->getInstitutional(),
 				(int) $registrationType->getMembership(),
@@ -313,6 +317,8 @@ class RegistrationTypeDAO extends DAO {
 					sched_conf_id = ?,
 					cost = ?,
 					currency_code_alpha = ?,
+					cost_uni = ?,
+					currency_code_uni = ?,
 					opening_date = %s,
 					closing_date = %s,
 					expiry_date = %s,
@@ -328,8 +334,10 @@ class RegistrationTypeDAO extends DAO {
 				$expiryDate === null?'null':$this->datetimeToDB($expiryDate)
 			), array(
 				(int) $registrationType->getSchedConfId(),
-				(float) $registrationType->getCost(),
+				(double) $registrationType->getCost(),
 				$registrationType->getCurrencyCodeAlpha(),
+				(double) $registrationType->getCostUni(),
+				$registrationType->getCurrencyCodeUni(),
 				(int) $registrationType->getAccess(),
 				(int) $registrationType->getInstitutional(),
 				(int) $registrationType->getMembership(),
@@ -346,7 +354,7 @@ class RegistrationTypeDAO extends DAO {
 	/**
 	 * Delete a registration type.
 	 * @param $registrationType RegistrationType
-	 * @return boolean 
+	 * @return boolean
 	 */
 	function deleteRegistrationType(&$registrationType) {
 		return $this->deleteRegistrationTypeById($registrationType->getTypeId());
@@ -435,7 +443,7 @@ class RegistrationTypeDAO extends DAO {
 	 * @param $typeId int
 	 * @param $optionId int
 	 * @param $cost number
-	 * @return boolean 
+	 * @return boolean
 	 */
 	function insertRegistrationOptionCost($typeId, $optionId, $cost) {
 		return $this->update(
@@ -461,7 +469,7 @@ class RegistrationTypeDAO extends DAO {
 			'SELECT option_id, cost FROM registration_option_costs WHERE type_id = ?',
 			array((int) $typeId)
 		);
-		
+
 		$returner = array();
 		for ($i=1; !$result->EOF; $i++) {
 			list($optionId, $cost) = $result->fields;
@@ -483,7 +491,7 @@ class RegistrationTypeDAO extends DAO {
 			'DELETE FROM registration_option_costs WHERE type_id = ?',
 			array((int) $typeId)
 		);
-		
+
 	}
 }
 

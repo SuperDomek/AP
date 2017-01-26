@@ -119,6 +119,11 @@ class CreateAccountForm extends Form {
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$templateMgr->assign('genderOptions', $userDao->getGenderOptions());
 
+		// get registration types for attendance registration
+		$registrationTypeDao =& DAORegistry::getDAO('RegistrationTypeDAO');
+		$registrationTypes =& $registrationTypeDao->getRegistrationTypesBySchedConfId($schedConf->getId());
+		$templateMgr->assign('registrationTypes', $registrationTypes);
+
 		$templateMgr->assign('privacyStatement', $conference->getLocalizedSetting('privacyStatement'));
 		$templateMgr->assign('enableOpenAccessNotification', $schedConf->getSetting('enableOpenAccessNotification')==1?1:0);
 		$templateMgr->assign('allowRegReader', SchedConfAction::allowRegReader($schedConf));
@@ -163,7 +168,7 @@ class CreateAccountForm extends Form {
 			'affiliation', 'email', 'userUrl', 'phone', 'fax', 'signature',
 			'mailingAddress', 'billingAddressCheck', 'billingAddress', 'companyId', 'VATRegNo', 'biography', 'interests', 'userLocales',
 			'createAsReader', 'openAccessNotification', 'createAsAuthor',
-			'createAsReviewer', 'existingUser', 'sendPassword'
+			'createAsReviewer', 'existingUser', 'sendPassword', 'registrationTypeId'
 		);
 		if ($this->captchaEnabled) {
 			$userVars[] = 'captchaId';
@@ -333,6 +338,35 @@ class CreateAccountForm extends Form {
 
 			}
 		}
+		// Registering the user to the conference
+		$registrationTypeDao =& DAORegistry::getDAO('RegistrationTypeDAO');
+		$registrationType =& $registrationTypeDao->getRegistrationType($this->getData('registrationTypeId'));
+		if (!$registrationType || $registrationType->getSchedConfId() != $schedConf->getId()) {
+			error_log("Error creating accout: Registration type incorrect or not set up.");
+			Request::redirect('index');
+		}
+		if($registrationType != 0){ // 0 for not attending;hardcoded
+			import('payment.ocs.OCSPaymentManager');
+			$paymentManager =& OCSPaymentManager::getManager();
+			if (!$paymentManager->isConfigured()) return REGISTRATION_NO_PAYMENT;
+
+			import('registration.Registration');
+			$registration = new Registration();
+
+			$registration->setSchedConfId($schedConf->getId());
+			$registration->setUserId($user->getId());
+			$registration->setTypeId($this->getData('registrationTypeId'));
+			$registration->setSpecialRequests($this->getData('specialRequests') ? $this->getData('specialRequests') : null);
+			$registration->setDateRegistered(time());
+
+			$registrationDao =& DAORegistry::getDAO('RegistrationDAO');
+			$registrationId = $registrationDao->insertRegistration($registration);
+
+			$cost = $registrationType->getCost();
+			$queuedPayment =& $paymentManager->createQueuedPayment($schedConf->getConferenceId(), $schedConf->getId(), QUEUED_PAYMENT_TYPE_REGISTRATION, $user->getId(), $registrationId, $cost, $registrationType->getCurrencyCodeAlpha());
+			$queuedPaymentId = $paymentManager->queuePayment($queuedPayment, time() + (60 * 60 * 24 * 30)); // 30 days to complete
+		}
+
 
 		if (!$this->existingUser) {
 			$this->sendConfirmationEmail($user, $this->getData('password'), $this->getData('sendPassword'));

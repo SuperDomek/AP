@@ -120,7 +120,7 @@
 	<message key="manager.registrationOptions.noneCreated">No registration options have been created.</message>
 	<message key="manager.registrationOptions.name">Registration option</message>
 	<message key="manager.registrationOptions.cost">Cost</message>
-	<message key="manager.registrationOptions.costSetInRegistrationType">The cost for all registration options must be set once in each registration type.</message>		
+	<message key="manager.registrationOptions.costSetInRegistrationType">The cost for all registration options must be set once in each registration type.</message>
 	<message key="manager.registrationOptions.currency">Currency</message>
 	<message key="manager.registrationOptions.openDate">Available From</message>
 	<message key="manager.registrationOptions.closeDate">Available Until</message>
@@ -148,6 +148,7 @@
 	<message key="manager.registrationOptions.form.saveAndCreateAnotherOption">Save and Create Another</message>
 	<message key="manager.registrationOptions.form.closeBeforeOpen">The open date for this registration option must come before the close date.</message>
 	<message key="manager.registration">Registrations</message>
+	<message key="manager.registration.billingInfo">Your billing data</message>
 	<message key="manager.registration.confirmDelete">Are you sure you want to delete this registration?</message>
 	<message key="manager.registration.create">Create New Registration</message>
 	<message key="manager.registration.createTitle">Create</message>
@@ -216,6 +217,7 @@
 	<message key="manager.registrationPolicies.authorSelfArchive">Author Self-Archiving Policy</message>
 	<message key="manager.registrationPolicies.authorSelfArchiveDescription">The following policy will be included in About the Conference.</message>
 	<message key="manager.registrationPolicies.registrationAdditionalInformation">Registration Information</message>
+	<message key="manager.registrationPolicies.registrationSpecificSymbol">Please do not forget to fill in the specific symbol in your payment otherwise we are not able to pair the payment with your registration.</message>
 	<message key="manager.registrationPolicies.registrationAdditionalInformationDescription">The Registration Types and fee structure will be automatically placed under Registrations on the About the Conference page, along with the name and contact information for the Registration Manager. Additional information about registration, such as methods of payment or support for registrants in developing countries, can be added here.</message>
 	<message key="manager.registrationPolicies.registrationContact">Registration Manager</message>
 	<message key="manager.registrationPolicies.registrationContactDescription">The contact listed under Registrations in About the Conference.</message>
@@ -247,6 +249,7 @@
 	<message key="manager.registrationTypes.form.code">Code</message>
 	<message key="manager.registrationTypes.form.code.instructions">Enter a code (e.g., 1234) if registration in this type is to be restricted to those who have been issued the code to use when registering (such as invited presenters who can register at no charge).</message>
 	<message key="manager.registrationTypes.form.cost">Cost</message>
+	<message key="manager.registrationTypes.form.costUni">Cost in EUR</message>
 	<message key="manager.registrationTypes.form.costInstructions">Enter a numeric value (e.g., 40 or 40.00). Do not include any other text (e.g., $).</message>
 	<message key="manager.registrationTypes.form.costNumeric">The cost must be a positive, numeric value.</message>
 	<message key="manager.registrationTypes.form.costRequired">A cost is required.</message>
@@ -437,7 +440,7 @@
 	<message key="manager.scheduler.layout.hideLocations">Hide the Conference locations list at the top of the schedule.</message>
 	<message key="manager.scheduler.layout.hideNav">Hide the navigation menu at the top of the schedule.</message>
 	<message key="manager.scheduler.layout.mergeSchedules">Event Display</message>
-	<message key="manager.scheduler.layout.mergeSchedulesDescription">Display special events within presentations (uncheck to display special events below presentations).</message>	
+	<message key="manager.scheduler.layout.mergeSchedulesDescription">Display special events within presentations (uncheck to display special events below presentations).</message>
 	<message key="manager.scheduler.layout.showAuthors">Show authors next to presentation titles.</message>
 	<message key="manager.scheduler.layout.showEndTime">Show the start and end time for every event (uncheck to show only start time).</message>
 	<message key="manager.scheduler.layout.style">Schedule Style</message>
@@ -648,7 +651,7 @@
 	<message key="manager.timeline.postPresentations">Include Presentations in Conference Information listing</message>
 	<message key="manager.timeline.postProgram">Include Program in Conference Information listing</message>
 	<message key="manager.timeline.postProposalSubmission">Include Proposal Submission in Conference Information listing</message>
-	<message key="manager.timeline.postRegistration">Include Registration in Conference Information listing</message>	
+	<message key="manager.timeline.postRegistration">Include Registration in Conference Information listing</message>
 	<message key="manager.timeline.postSchedule">Schedule (included in Conference Information listing)</message>
 	<message key="manager.timeline.postSupporters">Include Supporters in Conference Information listing</message>
 	<message key="manager.timeline.postTrackPolicies">Include Track Policies in Conference Information listing</message>

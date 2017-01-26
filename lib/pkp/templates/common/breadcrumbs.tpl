@@ -8,8 +8,8 @@
  *
  *}
 <div id="breadcrumb">
-  {* The conference home is the user home *}
-	<a href="{url schedConf="index" page="user"}">{translate key="navigation.home"}</a> &gt;
+  {* Hardcoded: The conference home is the user home on the current conference*}
+	<a href="{url conference="ap" schedConf="2017" page="user"}">{translate key="navigation.home"}</a> &gt;
 	{foreach from=$pageHierarchy item=hierarchyLink}
 		<a href="{$hierarchyLink[0]|escape}" class="hierarchyLink">{if not $hierarchyLink[2]}{translate key=$hierarchyLink[1]}{else}{$hierarchyLink[1]|escape}{/if}</a> &gt;
 	{/foreach}

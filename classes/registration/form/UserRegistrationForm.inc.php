@@ -99,6 +99,11 @@ class UserRegistrationForm extends Form {
 		$registrationOptions =& $registrationOptionDao->getRegistrationOptionsBySchedConfId($schedConf->getId());
 		$templateMgr->assign_by_ref('registrationOptions', $registrationOptions);
 		$templateMgr->assign('registrationTypeId', $this->typeId);
+		//$templateMgr->assign('typeId', (int) Request::getUserVar('registrationTypeId'));
+
+		$registrationTypeDao =& DAORegistry::getDAO('RegistrationTypeDAO');
+		$registrationTypes =& $registrationTypeDao->getRegistrationTypesBySchedConfId($schedConf->getId());
+		$templateMgr->assign_by_ref('registrationTypes', $registrationTypes);
 
 		$templateMgr->assign('userLoggedIn', $user?true:false);
 		$templateMgr->assign('requestUri', $_SERVER['REQUEST_URI']);
@@ -282,10 +287,11 @@ class UserRegistrationForm extends Form {
 		}
 
 		$queuedPayment =& $paymentManager->createQueuedPayment($schedConf->getConferenceId(), $schedConf->getId(), QUEUED_PAYMENT_TYPE_REGISTRATION, $user->getId(), $registrationId, $cost, $registrationType->getCurrencyCodeAlpha());
-		$queuedPaymentId = $paymentManager->queuePayment($queuedPayment, time() + (60 * 60 * 24 * 30)); // 30 days to complete
+		$queuedPaymentId = $paymentManager->queuePayment($queuedPayment); // No limit
+		//$queuedPaymentId = $paymentManager->queuePayment($queuedPayment, time() + (60 * 60 * 24 * 30)); // 30 days to complete
 
 		if ($cost == 0) {
-			$paymentManager->fulfillQueuedPayment($queuedPaymentId, $queuedPayment);
+			//$paymentManager->fulfillQueuedPayment($queuedPaymentId, $queuedPayment);
 			return REGISTRATION_FREE;
 		} else {
 			$paymentManager->displayPaymentForm($queuedPaymentId, $queuedPayment);
