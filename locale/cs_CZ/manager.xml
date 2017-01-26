@@ -150,6 +150,7 @@
 	<message key="manager.registrationOptions.form.saveAndCreateAnotherOption">Uložit a vytvořit další</message>
 	<message key="manager.registrationOptions.form.closeBeforeOpen">Datum otevření této možnosti registrace musí předcházet datum uzávěrky.</message>
 	<message key="manager.registration">Registrace</message>
+	<message key="manager.registration.billingInfo">Vaše fakturační údaje</message>
 	<message key="manager.registration.confirmDelete">Skutečně si přejete vymazat tuto registraci?</message>
 	<message key="manager.registration.create">Vytvořit novou registraci</message>
 	<message key="manager.registration.createTitle">Vytvořit</message>
@@ -218,6 +219,7 @@
 	<message key="manager.registrationPolicies.authorSelfArchive">Postup autorské sebe-archivace</message>
 	<message key="manager.registrationPolicies.authorSelfArchiveDescription">Následující pokyny budou uvedeny v sekci "Podrobnosti o konferenci".</message>
 	<message key="manager.registrationPolicies.registrationAdditionalInformation">Registrační informace</message>
+	<message key="manager.registrationPolicies.registrationSpecificSymbol">Prosíme nezapomeňte uvést specifický symbol do platby, jinak nebudeme schopni přiřadit platbu k Vaší registraci.</message>
 	<message key="manager.registrationPolicies.registrationAdditionalInformationDescription">Typy registrací a struktura poplatku bude automaticky umístěna pod nadpisem "Registrace" v sekci "Podrobnosti o konferenci", spolu se jménem a kontaktními informacemi na Manažera registrací. Sem lze vložit i další informace o registraci, jako např. způsoby platby nebo podpora pro registrující se v rozvojových zemích.</message>
 	<message key="manager.registrationPolicies.registrationContact">Manažer registrací</message>
 	<message key="manager.registrationPolicies.registrationContactDescription">Kontaktní osoba uvedená pod nadpisem "Registrace" v sekci "Podrobnosti o konferenci".</message>

@@ -49,17 +49,8 @@
   </table>
 </div>
 
-{assign var="registrationAdditionalInformation" value=$schedConf->getLocalizedSetting('registrationAdditionalInformation')}
-{if $registrationAdditionalInformation}
-<div id="registrationAdditionalInformation">
-	<h3>{translate key="manager.registrationPolicies.registrationAdditionalInformation"}</h3>
-
-	<p>{$registrationAdditionalInformation|nl2br}</p>
-</div>
-	<div class="separator"></div>
-{/if}
 <div id="account">
-<h3>{translate key="schedConf.registration.account"}</h3>
+<h3>{translate key="manager.registration.billingInfo"}</h3>
 {if $userLoggedIn}
 	{url|assign:"logoutUrl" page="login" op="signOut" source=$requestUri}
 	{url|assign:"profileUrl" page="user" op="profile"}
@@ -77,6 +68,10 @@
 		<tr valign="top">
 			<td class="label">{translate key="user.phone"}</td>
 			<td class="value">{$user->getPhone()|escape}</td>
+		</tr>
+    <tr valign="top">
+			<td class="label">{translate key="user.specificSymbol"}</td>
+			<td class="value">{$user->getId()|escape}</td>
 		</tr>
 		<tr valign="top">
 			<td class="label">{translate key="common.billingAddress"}</td>
@@ -208,6 +203,18 @@
 </div>
 <div class="separator"></div>
 
+{assign var="registrationAdditionalInformation" value=$schedConf->getLocalizedSetting('registrationAdditionalInformation')}
+{if $registrationAdditionalInformation}
+<div id="registrationAdditionalInformation">
+	<h3>{translate key="manager.registrationPolicies.registrationAdditionalInformation"}</h3>
+
+	<p>{$registrationAdditionalInformation|nl2br} {$user->getId()}</p>
+  <p>{translate key="manager.registrationPolicies.registrationSpecificSymbol"}</p>
+</div>
+	<div class="separator"></div>
+{/if}
+
+
 {if $currentSchedConf->getSetting('registrationName')}
 <div id="registrationContact">
 <h3>{translate key="manager.registrationPolicies.registrationContact"}</h3>
@@ -238,7 +245,7 @@
 <div class="separator"></div>
 {/if}{* if displaying reg manager info *}
 
-<p><input type="submit" value="{translate key="schedConf.registration.register"}" class="button defaultButton" /></p>
+<p><input type="submit" value="{translate key="schedConf.registration.registerEdit"}" class="button defaultButton" /></p>
 
 </form>
 

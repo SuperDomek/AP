@@ -148,6 +148,7 @@
 	<message key="manager.registrationOptions.form.saveAndCreateAnotherOption">Save and Create Another</message>
 	<message key="manager.registrationOptions.form.closeBeforeOpen">The open date for this registration option must come before the close date.</message>
 	<message key="manager.registration">Registrations</message>
+	<message key="manager.registration.billingInfo">Your billing data</message>
 	<message key="manager.registration.confirmDelete">Are you sure you want to delete this registration?</message>
 	<message key="manager.registration.create">Create New Registration</message>
 	<message key="manager.registration.createTitle">Create</message>
@@ -216,6 +217,7 @@
 	<message key="manager.registrationPolicies.authorSelfArchive">Author Self-Archiving Policy</message>
 	<message key="manager.registrationPolicies.authorSelfArchiveDescription">The following policy will be included in About the Conference.</message>
 	<message key="manager.registrationPolicies.registrationAdditionalInformation">Registration Information</message>
+	<message key="manager.registrationPolicies.registrationSpecificSymbol">Please do not forget to fill in the specific symbol in your payment otherwise we are not able to pair the payment with your registration.</message>
 	<message key="manager.registrationPolicies.registrationAdditionalInformationDescription">The Registration Types and fee structure will be automatically placed under Registrations on the About the Conference page, along with the name and contact information for the Registration Manager. Additional information about registration, such as methods of payment or support for registrants in developing countries, can be added here.</message>
 	<message key="manager.registrationPolicies.registrationContact">Registration Manager</message>
 	<message key="manager.registrationPolicies.registrationContactDescription">The contact listed under Registrations in About the Conference.</message>

@@ -103,7 +103,7 @@
 	<message key="user.sendPassword">Potvrzení</message>
 	<message key="user.sendPassword.description">Pošli mi e-mail s potvrzením obsahující mé uživatelské jméno a heslo</message>
 	<message key="user.signature">Podpis</message>
-	<message key="user.specificSymbol">Váš specifický symbol pro platbu:</message>
+	<message key="user.specificSymbol">Specifický symbol pro platbu</message>
 	<message key="user.title">Titul</message>
 	<message key="user.url">URL</message>
 	<message key="user.userHome">Uživatel</message>

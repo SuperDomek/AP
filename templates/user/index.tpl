@@ -181,15 +181,15 @@
 
 <div id="myAccount">
 <h3>{translate key="user.myAccount"}</h3>
-<p>{translate key="user.specificSymbol"} <strong>{$userId}</strong></p>
-<p>{$schedConfPostPayment}</p>
-{if $schedConfPostPayment}<p>&#187; <a href="{url page="schedConf" op="registration"}">{translate key="schedConf.registration"}</a></p>{/if}
+<p>{translate key="user.specificSymbol"}: <strong>{$userId}</strong></p>
+
 <ul class="plain">
 	{if $hasOtherConferences}
 		{if !$showAllConferences}
 			<li>&#187; <a href="{url conference="index" page="user"}">{translate key="user.showAllConferences"}</a></li>
 		{/if}
 	{/if}
+  {if $schedConfPostPayment}<li>&#187; <a href="{url page="schedConf" op="registration"}">{translate key="schedConf.registration"}</a></li>{/if}
 	<li>&#187; <a href="{url page="user" op="profile"}">{translate key="user.editMyProfile"}</a></li>
 	<li>&#187; <a href="{url page="user" op="changePassword"}">{translate key="user.changeMyPassword"}</a></li>
 	<li>&#187; <a href="{url page="login" op="signOut"}">{translate key="user.logOut"}</a></li>
