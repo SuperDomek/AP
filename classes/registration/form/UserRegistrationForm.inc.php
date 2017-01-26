@@ -290,6 +290,24 @@ class UserRegistrationForm extends Form {
 		$queuedPaymentId = $paymentManager->queuePayment($queuedPayment); // No limit
 		//$queuedPaymentId = $paymentManager->queuePayment($queuedPayment, time() + (60 * 60 * 24 * 30)); // 30 days to complete
 
+		// Notify the user that the registration type was changed
+		list($registrationEmail, $registrationName, $registrationContactSignature) = $this->getRegistrationContactInformation($schedConf->getId());
+
+		$paramArray = array(
+			'registrantName' => $user->getFullName(),
+			'schedConfName' => $schedConf->getSchedConfTitle(),
+			'registrationType' => $registrationType->getSummaryString(),
+			'username' => $user->getUsername(),
+			'registrationContactSignature' => $registrationContactSignature
+		);
+
+		import('mail.MailTemplate');
+		$mail = new MailTemplate('REGISTRATION_NOTIFY', null, null, null, null, false);
+		$mail->setFrom($registrationEmail, $registrationName);
+		$mail->assignParams($paramArray);
+		$mail->addRecipient($user->getEmail(), $user->getFullName());
+		$mail->send();
+
 		if ($cost == 0) {
 			//$paymentManager->fulfillQueuedPayment($queuedPaymentId, $queuedPayment);
 			return REGISTRATION_FREE;
@@ -298,6 +316,30 @@ class UserRegistrationForm extends Form {
 		}
 
 		return REGISTRATION_SUCCESSFUL;
+	}
+
+	/**
+	 * Get the scheduled conference's contact information
+	 * @param $schedConfId int
+	 * @return array
+	 */
+	function getRegistrationContactInformation($schedConfId) {
+		$schedConfSettingsDao =& DAORegistry::getDAO('SchedConfSettingsDAO');
+
+		$registrationName = $schedConfSettingsDao->getSetting($schedConfId, 'registrationName');
+		$registrationEmail = $schedConfSettingsDao->getSetting($schedConfId, 'registrationEmail');
+		$registrationPhone = $schedConfSettingsDao->getSetting($schedConfId, 'registrationPhone');
+		$registrationFax = $schedConfSettingsDao->getSetting($schedConfId, 'registrationFax');
+		$registrationMailingAddress = $schedConfSettingsDao->getSetting($schedConfId, 'registrationMailingAddress');
+		$registrationContactSignature = $registrationName;
+
+		if ($registrationMailingAddress != '') $registrationContactSignature .= "\n" . $registrationMailingAddress;
+		if ($registrationPhone != '') $registrationContactSignature .= "\n" . AppLocale::Translate('user.phone') . ': ' . $registrationPhone;
+		if ($registrationFax != '')	$registrationContactSignature .= "\n" . AppLocale::Translate('user.fax') . ': ' . $registrationFax;
+
+		$registrationContactSignature .= "\n" . AppLocale::Translate('user.email') . ': ' . $registrationEmail;
+
+		return array($registrationEmail, $registrationName, $registrationContactSignature);
 	}
 }
 

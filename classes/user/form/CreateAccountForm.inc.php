@@ -365,7 +365,14 @@ class CreateAccountForm extends Form {
 			$cost = $registrationType->getCost();
 			$queuedPayment =& $paymentManager->createQueuedPayment($schedConf->getConferenceId(), $schedConf->getId(), QUEUED_PAYMENT_TYPE_REGISTRATION, $user->getId(), $registrationId, $cost, $registrationType->getCurrencyCodeAlpha());
 			$queuedPaymentId = $paymentManager->queuePayment($queuedPayment, time() + (60 * 60 * 24 * 30)); // 30 days to complete
+
+			// Notify the user by mail that he was registered to the conference
+			// Cancelled - too many e-mails
+
 		}
+
+
+		// End registration
 
 		if (!$this->existingUser) {
 			$this->sendConfirmationEmail($user, $this->getData('password'), $this->getData('sendPassword'));

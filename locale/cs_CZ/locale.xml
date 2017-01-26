@@ -125,7 +125,7 @@
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Nápověda konference</message>
-	<message key="navigation.account">Vytvořit účet</message>
+	<message key="navigation.account">Registrace</message>
 	<message key="navigation.archive">Archiv</message>
 	<message key="navigation.current">Aktuální konference</message>
 	<message key="navigation.otherConferences">Ostatní konference</message>
