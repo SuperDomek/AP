@@ -75,40 +75,42 @@ function sortSearch(heading, direction) {
 <div id="registrations">
 <table width="100%" class="listing">
 	<tr>
-		<td colspan="5" class="headseparator">&nbsp;</td>
+		<td colspan="6" class="headseparator">&nbsp;</td>
 	</tr>
 	<tr class="heading" valign="bottom">
-		<td width="32%">{sort_search key="manager.registration.user" sort="user"}</td>
+		<td width="27%">{sort_search key="manager.registration.user" sort="user"}</td>
+    <td width="5%">{translate key="common.specSymbol"}</td>
 		<td width="25%">{sort_search key="manager.registration.registrationType" sort="type"}</td>
 		<td width="15%">{sort_search key="manager.registration.dateRegistered" sort="registered"}</td>
 		<td width="15%">{sort_search key="manager.registration.datePaid" sort="paid"}</td>
 		<td width="13%">{translate key="common.action"}</td>
 	</tr>
 	<tr>
-		<td colspan="5" class="headseparator">&nbsp;</td>
+		<td colspan="6" class="headseparator">&nbsp;</td>
 	</tr>
 {iterate from=registrations item=registration}
 	<tr valign="top">
 		<td>{$registration->getUserFullName()|escape}</td>
+    <td>{$registration->getUserId()|escape}</td>
 		<td>{$registration->getRegistrationTypeName()|escape}</td>
 		<td>{$registration->getDateRegistered()|date_format:$dateFormatShort}</td>
 		<td>{$registration->getDatePaid()|date_format:$dateFormatShort}</td>
 		<td><a href="{url op="editRegistration" path=$registration->getId()}" class="action">{translate key="common.edit"}</a>&nbsp;|&nbsp;<a href="{url op="deleteRegistration" path=$registration->getId()}" onclick="return confirm('{translate|escape:"jsparam" key="manager.registration.confirmDelete"}')" class="action">{translate key="common.delete"}</a></td>
 	</tr>
 	<tr>
-		<td colspan="5" class="{if $registrations->eof()}end{/if}separator">&nbsp;</td>
+		<td colspan="6" class="{if $registrations->eof()}end{/if}separator">&nbsp;</td>
 	</tr>
 {/iterate}
 {if $registrations->wasEmpty()}
 	<tr>
-		<td colspan="5" class="nodata">{translate key="manager.registration.noneCreated"}</td>
+		<td colspan="6" class="nodata">{translate key="manager.registration.noneCreated"}</td>
 	</tr>
 	<tr>
-		<td colspan="5" class="endseparator">&nbsp;</td>
+		<td colspan="6" class="endseparator">&nbsp;</td>
 	</tr>
 {else}
 	<tr>
-		<td colspan="2" align="left">{page_info iterator=$registrations}</td>
+		<td colspan="3" align="left">{page_info iterator=$registrations}</td>
 		<td colspan="3" align="right">{page_links anchor="registrations" name="registrations" iterator=$registrations searchField=$searchField searchMatch=$searchMatch search=$search dateSearchField=$dateSearchField dateFromDay=$dateFromDay dateFromYear=$dateFromYear dateFromMonth=$dateFromMonth dateToDay=$dateToDay dateToYear=$dateToYear dateToMonth=$dateToMonth sort=$sort sortDirection=$sortDirection}</td>
 	</tr>
 {/if}

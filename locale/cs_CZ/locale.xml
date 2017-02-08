@@ -122,6 +122,7 @@
 	<message key="common.pageHeader.altText">Obrázek hlavičky stránky</message>
 	<message key="common.homePageHeader.altText">Obrázek hlavičky domovské stránky</message>
 	<message key="common.conferenceHomepageImage.altText">Obrázek na domovské stránce konference</message>
+	<message key="common.specSymbol">Spec. symbol</message>
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Nápověda konference</message>

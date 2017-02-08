@@ -119,6 +119,7 @@
 	<message key="common.pageHeader.altText">Page Header Image</message>
 	<message key="common.homePageHeader.altText">Homepage Header Image</message>
 	<message key="common.conferenceHomepageImage.altText">Conference Homepage Image</message>
+	<message key="common.specSymbol">Spec. symbol</message>
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Conference Help</message>
