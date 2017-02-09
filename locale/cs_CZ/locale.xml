@@ -858,6 +858,7 @@ Validace může selhat u vyhledávacích URL, která vyžadují odesílání dat
 	<message key="notification.mailListDescription">Pokud si přejete být informováni o aktualitách a nových informacích vztahujících se k této konferenci, zadejte prosím svou emailovou adresu.</message>
 	<message key="notification.notificationsPublicDescription"><![CDATA[Tato stránka zobrazuje důležité aktuality ohledně konference, jako například nové příspěvky nebo oznámení. K automatizovanému odběru těchto aktualit můžete využít RSS kanál (kliknutím na obrázek napravo), nebo   <a href="{$emailUrl}">email.</a>]]></message>
 
+	<message key="notification.type.youAssignedDirector">Byl jste přiřazen/a k příspěvku "{$param}" jako ko-editor.</message>
 	<message key="notification.type.paperSubmitted">Právě byl přijat nový příspěvek: "{$param}".</message>
 	<message key="notification.type.editing">Událost editace</message>
 	<message key="notification.type.directorDecision">Bylo vloženo rozhodnutí editora ohledně: "{$param}".</message>

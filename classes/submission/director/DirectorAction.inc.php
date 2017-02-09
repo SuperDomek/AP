@@ -48,7 +48,6 @@ class DirectorAction extends TrackDirectorAction {
 
 		import('mail.PaperMailTemplate');
 		$email = new PaperMailTemplate($directorSubmission, 'DIRECTOR_ASSIGN');
-
 		//Send the e-mail automatically
 		if ($auto == true){
 			$email->addRecipient($trackDirector->getEmail(), $trackDirector->getFullName());
@@ -77,6 +76,17 @@ class DirectorAction extends TrackDirectorAction {
 
 			$directorSubmissionDao->updateDirectorSubmission($directorSubmission);
 
+			// Send a notification to the new trackDirector
+			import('notification.NotificationManager');
+			$notificationManager = new NotificationManager();
+			$paperDao =& DAORegistry::getDAO('PaperDAO');
+			$paper =& $paperDao->getPaper($paperId);
+			$url = Request::url(null, null, 'trackDirector', 'submissionReview', $paper->getId(), null, 'peerReview');
+			$notificationManager->createNotification(
+				$trackDirectorId, 'notification.type.youAssignedDirector',
+				$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_REVIEWER_FORM_COMMENT
+			);
+
 			// Assign the director as a reviewer in abstract stage
 			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_ABSTRACT, true);
 			//TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, true);
@@ -87,7 +97,6 @@ class DirectorAction extends TrackDirectorAction {
 			TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
 			//$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($directorSubmission->getPaperId(), $trackDirectorId, REVIEW_STAGE_PRESENTATION);
 			//TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
-
 			// Add log
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');
@@ -100,7 +109,6 @@ class DirectorAction extends TrackDirectorAction {
 				$email->setAssoc(PAPER_EMAIL_DIRECTOR_ASSIGN, PAPER_EMAIL_TYPE_DIRECTOR, $trackDirector->getId());
 				$email->send();
 			}
-
 			$editAssignment = new EditAssignment();
 			$editAssignment->setPaperId($paperId);
 
