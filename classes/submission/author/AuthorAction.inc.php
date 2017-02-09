@@ -302,25 +302,24 @@ class AuthorAction extends Action {
 		// Directors acting as Authors can always edit.
 		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) || Validation::isTrackDirector($schedConf->getConferenceId(), $schedConf->getId())) return true;
 
-		// Submission having an abstract decision cannot be edited anymore
-		$decisionsAbs = $authorSubmission->getDecisions(REVIEW_STAGE_ABSTRACT);
-		if(!empty($decisionsAbs)) return false;
-
-		// After the deadline for Submitting cannot be edited
-		$submissionsCloseDate = $schedConf->getSetting('submissionsCloseDate');
-		if (time() > $submissionsCloseDate) return false;
-
 		// Incomplete submissions can always be edited.
 		if ($authorSubmission->getSubmissionProgress() != 0) return true;
 
 		// Archived or declined submissions can never be edited.
 		if ($authorSubmission->getStatus() == STATUS_ARCHIVED || $authorSubmission->getStatus() == STATUS_DECLINED) return false;
 
+		// Submissions in Presentation stage cannot be edited anymore
+		if ($authorSubmission->getSubmissionStatus() == REVIEW_STAGE_PRESENTATION) return false;
+
 		// If the last recorded editorial decision on the current stage
 		// was "Revisions Required", the author may edit the submission.
 		$decisions = $authorSubmission->getDecisions($authorSubmission->getCurrentStage());
 		$decision = array_shift($decisions);
 		if ($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS) return true;
+
+		// After the deadline for Submitting cannot be edited
+		$submissionsCloseDate = $schedConf->getSetting('submissionsCloseDate');
+		if (time() > $submissionsCloseDate) return false;
 
 		// If there are open reviews for the submission, it may not be edited.
 		/*
