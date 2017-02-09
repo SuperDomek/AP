@@ -108,7 +108,7 @@ class TrackDirectorAction extends Action {
 			$paperId = $trackDirectorSubmission->getPaperId();
 			$paperDao =& DAORegistry::getDAO('PaperDAO');
 			$paper =& $paperDao->getPaper($paperId);
-			$notificationUsers = $paper->getAssociatedUserIds(false, false);
+			$notificationUsers = $paper->getAssociatedUserIds(true, false);
 			foreach ($notificationUsers as $userRole) {
 				$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null, 'peerReview');
 				$notificationManager->createNotification(
