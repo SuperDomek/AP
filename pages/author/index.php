@@ -3,7 +3,7 @@
 /**
  * @defgroup pages_author
  */
- 
+
 /**
  * @file index.php
  *
@@ -42,6 +42,7 @@ switch ($op) {
 	case 'saveSuppFile':
 	case 'addSuppFile':
 	case 'submissionReview':
+  case 'viewReviewFormResponse':
 	case 'uploadRevisedVersion':
 	case 'viewMetadata':
 	case 'saveMetadata':

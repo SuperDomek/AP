@@ -128,6 +128,28 @@ class AuthorAction extends Action {
 	//
 
 	/**
+	 * View review form response.
+	 * @param $authorSubmission object
+	 * @param $reviewId int
+	 */
+	function viewReviewFormResponse($authorSubmission, $reviewId) {
+		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
+
+		if (HookRegistry::call('AuthorAction::viewReviewFormResponse', array(&$authorSubmission, &$reviewAssignment, &$reviewId))) return $reviewId;
+
+		if (isset($reviewAssignment) && $reviewAssignment->getPaperId() == $authorSubmission->getPaperId()) {
+			$reviewFormId = $reviewAssignment->getReviewFormId();
+			if ($reviewFormId != null) {
+				import('submission.form.ReviewFormResponseForm');
+				$reviewForm = new ReviewFormResponseForm($reviewId, $reviewFormId);
+				$reviewForm->initData();
+				$reviewForm->display();
+			}
+		}
+	}
+
+	/**
 	 * View director decision comments.
 	 * @param $paper object
 	 */

@@ -185,6 +185,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
 		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments($stage));
+		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexesForStage($paperId, $stage));
 		$templateMgr->assign('stage', $stage);
 		$templateMgr->assign_by_ref('reviewFilesByStage', $reviewFilesByStage);
 		$templateMgr->assign_by_ref('authorViewableFilesByStage', $authorViewableFilesByStage);
@@ -194,6 +195,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('revisedFile', $authorSubmission->getRevisedFile());
 		$templateMgr->assign_by_ref('suppFiles', $authorSubmission->getSuppFiles());
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
+
+		import('submission.reviewAssignment.ReviewAssignment');
+		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions());
 
 		// FIXME: Author code should not use track director object
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
@@ -205,6 +209,21 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$templateMgr->assign('helpTopicId', 'editorial.authorsRole.review');
 		$templateMgr->display('author/submissionReview.tpl');
+	}
+
+	/**
+	 * View review form response.
+	 * @param $args array ($paperId, $reviewId)
+	 */
+	function viewReviewFormResponse($args) {
+		$paperId = isset($args[0]) ? (int) $args[0] : 0;
+		$this->validate($paperId, true);
+		$submission =& $this->submission;
+		$this->setupTemplate(true, $paperId, 'summary');
+
+		$reviewId = isset($args[1]) ? (int) $args[1] : null;
+
+		AuthorAction::viewReviewFormResponse($submission, $reviewId);
 	}
 
 	/**

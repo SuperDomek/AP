@@ -71,5 +71,28 @@
 			</td>
 		</tr>
 	{/if}
+
+  {assign var="start" value="A"|ord}
+	{foreach from=$reviewAssignments item=reviewAssignment key=reviewKey}
+    {assign var="reviewId" value=$reviewAssignment->getId()}
+    {if not $reviewAssignment->getCancelled()}
+      {assign var="reviewIndex" value=$reviewIndexes[$reviewId]}
+      <td class="label" width="20%">
+        <h5>{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</h5>
+      </td>
+      <td class="value" width="80%">
+        {if $reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== ''}
+          {assign var="recommendation" value=$reviewAssignment->getRecommendation()}
+          {translate key=$reviewerRecommendationOptions.$recommendation}
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
+        {else}
+          {translate key="common.none"}
+        {/if}
+      </td>
+    {/if}
+  {foreachelse}
+    {translate key="common.noneAssigned"}
+  {/foreach}
 </table>
 </div>
