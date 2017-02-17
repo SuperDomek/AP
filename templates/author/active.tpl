@@ -40,14 +40,19 @@
 					{assign var=decision value=$submission->getMostRecentDecision()}
 					{if $currentStage==REVIEW_STAGE_PRESENTATION}
 						<a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
-							{if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}{translate key="author.submissions.queuedPaperReviewRevisions"}
+              {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+              $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+              $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+                {translate key="author.submissions.queuedPaperReviewRevisions"}
 							{else}{translate key="submissions.queuedPaperReview"}
 							{/if}
 						</a>
 					{else}
 						<a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
-							{if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}{translate key="author.submissions.queuedAbstractReviewRevisions"}
-
+							{if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+              $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+              $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+                {translate key="author.submissions.queuedAbstractReviewRevisions"}
 							{else}{translate key="submissions.queuedAbstractReview"}
 							{/if}
 						</a>
@@ -68,10 +73,9 @@
 					</a>
 				{else}
 					<a class="action" href="{$submitUrl}">{translate key="submissions.pendingPresentation"}</a>
-				{/if}	
+				{/if}
 			</td>
 		{/if}
-
 	</tr>
 
 	<tr>

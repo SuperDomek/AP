@@ -88,10 +88,14 @@
 	<message key="director.paper.assignDirector">Add main editor</message>
 	<message key="director.paper.selectDirector">Select {$roleName}</message>
 	<message key="director.paper.selectDecision">Select decision</message>
-	<message key="director.paper.decision.invitePresentation">Invite Presentation</message>
-	<message key="director.paper.decision.accept">Accept Submission</message>
+	<message key="director.abstract.decision.invitePresentation">Accept abstract without change</message>
+	<message key="director.abstract.decision.pendingRevisions">Accept abstract with suggestions</message>
+	<message key="director.abstract.decision.decline">Reject abstract</message>
+	<message key="director.paper.decision.accept">Accept paper without changes</message>
 	<message key="director.paper.decision.pendingRevisions">Revisions Required</message>
-	<message key="director.paper.decision.decline">Decline Submission</message>
+	<message key="director.paper.decision.pendingMinorRevisions">Accept paper after minor revisions</message>
+	<message key="director.paper.decision.pendingMajorRevisions">Accept paper after major revisions</message>
+	<message key="director.paper.decision.decline">Reject paper</message>
 	<message key="director.paper.moveToLayout">Move to Layout</message>
 	<message key="director.paper.createGalley">This file is ready for publication.</message>
 	<message key="director.paper.completeReview">Mark review as completed</message>

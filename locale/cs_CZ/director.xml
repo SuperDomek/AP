@@ -90,9 +90,14 @@
 	<message key="director.paper.assignDirector">Vložit hlavního editora</message>
 	<message key="director.paper.selectDirector">Zvolit {$roleName}</message>
 	<message key="director.paper.selectDecision">Vybrat rozhodnutí</message>
+	<message key="director.abstract.decision.invitePresentation">Přijmout abstrakt beze změn</message>
+	<message key="director.abstract.decision.pendingRevisions">Přijmout abstrakt po úpravách</message>
+	<message key="director.abstract.decision.decline">Odmítnout abstrakt</message>
 	<message key="director.paper.decision.invitePresentation">Požádat o prezentaci</message>
-	<message key="director.paper.decision.accept">Přijmout příspěvek</message>
+	<message key="director.paper.decision.accept">Přijmout příspěvek beze změn</message>
 	<message key="director.paper.decision.pendingRevisions">Jsou vyžadovány úpravy</message>
+	<message key="director.paper.decision.pendingMinorRevisions">Přijmout po malých úpravách</message>
+	<message key="director.paper.decision.pendingMajorRevisions">Přijmout po velkých úpravách</message>
 	<message key="director.paper.decision.decline">Odmítnout příspěvek</message>
 	<message key="director.paper.moveToLayout">Přesunout do tiskového rozvržení</message>
 	<message key="director.paper.createGalley">Tento soubor je připraven k publikaci.</message>

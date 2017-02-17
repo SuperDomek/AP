@@ -3,7 +3,7 @@
 /**
  * @defgroup submission
  */
- 
+
 /**
  * @file Action.inc.php
  *
@@ -23,6 +23,8 @@ define('SUBMISSION_DIRECTOR_DECISION_INVITE', 1);
 define('SUBMISSION_DIRECTOR_DECISION_ACCEPT', 2);
 define('SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS', 3);
 define('SUBMISSION_DIRECTOR_DECISION_DECLINE', 4);
+define('SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS', 5);
+define('SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS', 6);
 
 class Action {
 	/**
@@ -119,7 +121,7 @@ class Action {
 					return $metadataForm->display();
 				}
 				$metadataForm->execute();
-				
+
 				// Send a notification to associated users
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
@@ -195,7 +197,7 @@ class Action {
 
 			if ($commentForm->validate()) {
 				$commentForm->execute();
-				
+
 				// Send a notification to associated users
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();

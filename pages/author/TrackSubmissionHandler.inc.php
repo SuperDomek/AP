@@ -179,7 +179,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$reviewFilesByStage =& $reviewAssignmentDao->getReviewFilesByStage($paperId);
 		$authorViewableFilesByStage =& $reviewAssignmentDao->getAuthorViewableFilesByStage($paperId);
 
-		$directorDecisions = $authorSubmission->getDecisions($authorSubmission->getCurrentStage());
+		$directorDecisions = $authorSubmission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
 
 		$templateMgr =& TemplateManager::getManager();
@@ -197,12 +197,12 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
 
 		import('submission.reviewAssignment.ReviewAssignment');
-		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions());
+		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
 
 		// FIXME: Author code should not use track director object
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$trackDirectorSubmission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($authorSubmission->getPaperId());
-		$templateMgr->assign_by_ref('directorDecisionOptions', $trackDirectorSubmission->getDirectorDecisionOptions());
+		$templateMgr->assign_by_ref('directorDecisionOptions', $trackDirectorSubmission->getDirectorDecisionOptions(null, $stage));
 
 		// Determine whether or not certain features should be disabled (i.e. past deadline)
 		$templateMgr->assign('mayEditPaper', AuthorAction::mayEditPaper($authorSubmission));

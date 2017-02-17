@@ -518,8 +518,13 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.schedule.response">Vaše odpověď</message>
 	<message key="reviewer.paper.schedule.submitted">Oponentura vložena</message>
 	<message key="reviewer.paper.schedule.due">Termín oponentury</message>
-	<message key="reviewer.paper.decision.accept">Přijmout příspěvek</message>
+	<message key="reviewer.paper.abstract.accept">Přijmout abstrakt beze změn</message>
+	<message key="reviewer.paper.abstract.pendingRevisions">Přijmout abstrakt po úpravách</message>
+	<message key="reviewer.paper.abstract.decline">Odmítnout abstrakt</message>
+	<message key="reviewer.paper.decision.accept">Přijmout příspěvek beze změn</message>
 	<message key="reviewer.paper.decision.pendingRevisions">Jsou vyžadovány úpravy</message>
+	<message key="reviewer.paper.decision.pendingMinorRevisions">Přijmout po malých úpravách</message>
+	<message key="reviewer.paper.decision.pendingMajorRevisions">Přijmout po velkých úpravách</message>
 	<message key="reviewer.paper.decision.resubmitElsewhere">Podat jinam</message>
 	<message key="reviewer.paper.decision.decline">Odmítnout příspěvek</message>
 	<message key="reviewer.paper.decision.seeComments">Prohlížet komentáře</message>

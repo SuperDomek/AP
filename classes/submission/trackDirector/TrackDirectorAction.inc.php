@@ -83,7 +83,7 @@ class TrackDirectorAction extends Action {
 			}
 
 			$trackDirectorSubmission->addDecision($directorDecision, $stage);
-			$decisions = TrackDirectorSubmission::getDirectorDecisionOptions();
+			$decisions = TrackDirectorSubmission::getDirectorDecisionOptions(null, $stage);
 			// Add log
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');
@@ -1666,6 +1666,8 @@ import('file.PaperFileManager');
 				$templateName = 'SUBMISSION_PAPER_ACCEPT';
 				break;
 			case SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS:
+			case SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS:
+			case SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS:
 				$templateName = $isAbstract?'SUBMISSION_ABSTRACT_REVISE':'SUBMISSION_PAPER_REVISE';
 				break;
 			case SUBMISSION_DIRECTOR_DECISION_DECLINE:

@@ -75,7 +75,7 @@ class TrackDirectorSubmission extends Paper {
 			$this->directorDecisions[$stage] = array();
 
 		array_push($this->directorDecisions[$stage], $directorDecision);
-	}		
+	}
 
 	/**
 	 * Remove a review assignment.
@@ -231,9 +231,9 @@ class TrackDirectorSubmission extends Paper {
 		return $this->directorDecisions[$stage] = $directorDecisions;
 	}
 
-	// 
+	//
 	// Files
-	//	
+	//
 
 	/**
 	 * Get submission file for this paper.
@@ -441,11 +441,28 @@ class TrackDirectorSubmission extends Paper {
 	 */
 	function &getDirectorDecisionOptions($schedConf = null, $stage = null) {
 		$directorDecisionOptions = array('' => 'common.chooseOne');
-		if (!$schedConf || ($stage == REVIEW_STAGE_ABSTRACT && $this->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL)) $directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_INVITE] = 'director.paper.decision.invitePresentation';
-		if (!$schedConf || ($stage != REVIEW_STAGE_ABSTRACT || $this->getReviewMode() != REVIEW_MODE_BOTH_SEQUENTIAL)) $directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_ACCEPT] = 'director.paper.decision.accept';
-
-		$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.paper.decision.pendingRevisions';
-		$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.paper.decision.decline';
+		if (!$schedConf || $this->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL){
+			if($stage == REVIEW_STAGE_ABSTRACT){
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_INVITE] = 'director.abstract.decision.invitePresentation';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.abstract.decision.pendingRevisions';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.abstract.decision.decline';
+			}
+			else if($stage == REVIEW_STAGE_PRESENTATION){
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_ACCEPT] = 'director.paper.decision.accept';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS] = 'director.paper.decision.pendingMinorRevisions';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS] = 'director.paper.decision.pendingMajorRevisions';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.paper.decision.decline';
+			}
+		}
+		else if (!$schedConf || $this->getReviewMode() != REVIEW_MODE_BOTH_SEQUENTIAL){
+			$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_ACCEPT] = 'director.paper.decision.accept';
+			$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.paper.decision.pendingRevisions';
+			$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.paper.decision.decline';
+		}
+		else{
+			$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.paper.decision.pendingRevisions';
+			$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.paper.decision.decline';
+		}
 		return $directorDecisionOptions;
 	}
 

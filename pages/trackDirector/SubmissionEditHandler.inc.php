@@ -290,7 +290,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('rateReviewerOnQuality', $schedConf->getSetting('rateReviewerOnQuality'));
 		$templateMgr->assign('showPeerReviewOptions', $showPeerReviewOptions);
 		$templateMgr->assign_by_ref('tracks', $tracks->toArray());
-		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions());
+		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions(null, $stage));
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
@@ -302,7 +302,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		}
 
 		import('submission.reviewAssignment.ReviewAssignment');
-		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions());
+		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
 		$templateMgr->assign_by_ref('reviewerRatingOptions', ReviewAssignment::getReviewerRatingOptions());
 
 		$templateMgr->assign('isCurrent', $isCurrent);
@@ -433,6 +433,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 			TrackDirectorAction::recordDecision($submission, $decision, $stage);
 		} else {
+			/* no need for switching
 			switch ($decision) {
 				case SUBMISSION_DIRECTOR_DECISION_ACCEPT:
 				case SUBMISSION_DIRECTOR_DECISION_INVITE:
@@ -440,7 +441,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				case SUBMISSION_DIRECTOR_DECISION_DECLINE:
 					TrackDirectorAction::recordDecision($submission, $decision, $stage);
 					break;
-			}
+			}*/
+			TrackDirectorAction::recordDecision($submission, $decision, $stage);
 		}
 
 		Request::redirect(null, null, null, 'submissionReview', array($paperId, $stage));

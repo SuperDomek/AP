@@ -20,6 +20,8 @@ define('SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS', 2);
 define('SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE', 4);
 define('SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE', 5);
 define('SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS', 6);
+define('SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_MINOR_REVISIONS', 7);
+define('SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_MAJOR_REVISIONS', 8);
 
 define('SUBMISSION_REVIEWER_RATING_VERY_GOOD', 5);
 define('SUBMISSION_REVIEWER_RATING_GOOD', 4);
@@ -582,10 +584,10 @@ class ReviewAssignment extends DataObject {
 		if($stage == REVIEW_STAGE_ABSTRACT){
 			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
-				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
-				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
+				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.abstract.accept',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.abstract.pendingRevisions',
 				//SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
-				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline'
+				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.abstract.decline'
 				//SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
 			);
 		}
@@ -593,8 +595,8 @@ class ReviewAssignment extends DataObject {
 			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
-				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
-				//MAJOR_REVISIONS
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_MINOR_REVISIONS => 'reviewer.paper.decision.pendingMinorRevisions',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_MAJOR_REVISIONS => 'reviewer.paper.decision.pendingMajorRevisions',
 				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline'
 
 			);
