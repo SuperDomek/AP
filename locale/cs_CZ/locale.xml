@@ -519,7 +519,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.schedule.submitted">Oponentura vložena</message>
 	<message key="reviewer.paper.schedule.due">Termín oponentury</message>
 	<message key="reviewer.paper.decision.accept">Přijmout příspěvek</message>
-	<message key="reviewer.paper.decision.pendingRevisions">Požadavek na opravy</message>
+	<message key="reviewer.paper.decision.pendingRevisions">Jsou vyžadovány úpravy</message>
 	<message key="reviewer.paper.decision.resubmitElsewhere">Podat jinam</message>
 	<message key="reviewer.paper.decision.decline">Odmítnout příspěvek</message>
 	<message key="reviewer.paper.decision.seeComments">Prohlížet komentáře</message>
