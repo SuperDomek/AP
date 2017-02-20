@@ -164,13 +164,15 @@ class TrackDirectorSubmissionDAO extends DAO {
 			}
 		}
 
-		// Update director decisions; hacked necessarily to iterate by reference.
-		foreach (array(REVIEW_STAGE_ABSTRACT, REVIEW_STAGE_PRESENTATION) as $i) {
+		// Update director decisions; first two REVIEW_STAGE_ABSTRACT, REVIEW_STAGE_PRESENTATION
+		// the next are more rounds of review
+		for ($i = 1; $i <= $trackDirectorSubmission->getCurrentStage(); $i++) {
 			$directorDecisions = $trackDirectorSubmission->getDecisions($i);
 			$insertedDecision = false;
 			if (is_array($directorDecisions)) {
-				for ($j = 0; $j < count($directorDecisions); $j++) {
-					$directorDecision =& $directorDecisions[$j];
+				foreach($directorDecisions as $key => $directorDecision){
+				//for ($j = 0; $j < count($directorDecisions); $j++) {
+					//$directorDecision =& $directorDecisions[$j];
 					if ($directorDecision['editDecisionId'] == null) {
 						$this->update(
 							sprintf('INSERT INTO edit_decisions
@@ -727,7 +729,7 @@ class TrackDirectorSubmissionDAO extends DAO {
 					LEFT JOIN review_assignments ar ON (ar.reviewer_id = u.user_id AND ar.cancelled = 0 AND ar.paper_id = ? AND ar.stage = ?) ' .
 					($joinComplete ? 'LEFT JOIN review_assignments ac ON (ac.reviewer_id = u.user_id AND ac.date_completed IS NOT NULL) ' : '') .
 					($joinIncomplete ? 'LEFT JOIN review_assignments ai ON (ai.reviewer_id = u.user_id AND ai.date_completed IS NULL) ' : '') .
-					($joinInterests ? 'LEFT JOIN user_settings s ON (u.user_id = s.user_id AND s.setting_name = ?) ' : '') . 
+					($joinInterests ? 'LEFT JOIN user_settings s ON (u.user_id = s.user_id AND s.setting_name = ?) ' : '') .
 				'WHERE u.user_id = r.user_id AND
 					r.sched_conf_id = ? AND
 					r.role_id = ? ' . $searchSql . ' ' .
@@ -833,7 +835,7 @@ class TrackDirectorSubmissionDAO extends DAO {
 
 		return $statistics;
 	}
-	
+
 	/**
 	 * Map a column heading value to a database value for sorting
 	 * @param string
@@ -848,7 +850,7 @@ class TrackDirectorSubmissionDAO extends DAO {
 			case 'authors': return 'author_name';
 			case 'title': return 'submission_title';
 			case 'status': return 'p.status';
-			case 'active': return 'incomplete';		
+			case 'active': return 'incomplete';
 			case 'reviewerName': return 'u.last_name';
 			case 'quality': return 'average_quality';
 			case 'done': return 'completed';

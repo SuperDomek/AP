@@ -1123,10 +1123,24 @@ class TrackDirectorAction extends Action {
 		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
 		if (HookRegistry::call('TrackDirectorAction::uploadReviewVersion', array(&$trackDirectorSubmission))) return true;
 
-		if ($trackDirectorSubmission->getReviewFileId() != null) {
+		if ($trackDirectorSubmission->getReviewFileId() != null) { // if this is not the first review file
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName, $trackDirectorSubmission->getReviewFileId());
 			// Increment the review revision.
 			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
+
+			// Increment the stage
+			$currentStage = $trackDirectorSubmission->getCurrentStage();
+			$trackDirectorSubmission->setCurrentStage($currentStage + 1);
+			$trackDirectorSubmission->stampStatusModified();
+
+			// Reassign all reviewers from the previous round of review
+			$previousStage = $trackDirectorSubmission->getCurrentStage() - 1;
+			foreach($trackDirectorSubmission->getReviewAssignments($previousStage) as $reviewAssignment){
+				if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
+					// Then this reviewer submitted a review.
+					TrackDirectorAction::addReviewer($trackDirectorSubmission, $reviewAssignment->getReviewerId(), $trackDirectorSubmission->getCurrentStage(), true);
+				}
+			}
 		} else {
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName);
 			$trackDirectorSubmission->setReviewRevision(1);
@@ -1139,6 +1153,12 @@ class TrackDirectorAction extends Action {
 
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 		}
+
+		// Add log
+		import('paper.log.PaperLog');
+		import('paper.log.PaperEventLogEntry');
+		PaperLog::logEvent($trackDirectorSubmission->getPaperId(), PAPER_LOG_REVIEW_REVISION, LOG_TYPE_DIRECTOR, $reviewFileId, 'log.review.resubmit');
+
 		return true;
 	}
 

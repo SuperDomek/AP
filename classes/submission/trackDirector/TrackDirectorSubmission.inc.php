@@ -447,7 +447,7 @@ class TrackDirectorSubmission extends Paper {
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.abstract.decision.pendingRevisions';
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.abstract.decision.decline';
 			}
-			else if($stage == REVIEW_STAGE_PRESENTATION){
+			else if($stage >= REVIEW_STAGE_PRESENTATION){
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_ACCEPT] = 'director.paper.decision.accept';
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS] = 'director.paper.decision.pendingMinorRevisions';
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS] = 'director.paper.decision.pendingMajorRevisions';
