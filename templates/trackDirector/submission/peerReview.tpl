@@ -142,7 +142,7 @@
 					<h3>{translate key="submission.abstractReview"}</h3>
 				{else}{* REVIEW_STAGE_PRESENTATION *}
 					<h3>{translate key="submission.paperReview"}</h3>
-          <strong>Stage {$submission->getCurrentStage()-1}</strong>
+          <strong>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</strong>
 				{/if}
 			</td>
       {if $isReviewer && $stage == REVIEW_STAGE_ABSTRACT}

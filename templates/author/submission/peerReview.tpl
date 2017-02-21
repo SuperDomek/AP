@@ -18,7 +18,7 @@
 {assign var="viewableFiles" value=$authorViewableFilesByStage[$stage]}
 
 <table class="data" width="100%">
-	{if $stage == REVIEW_STAGE_PRESENTATION}
+	{if $stage >= REVIEW_STAGE_PRESENTATION}
 		<tr valign="top">
 			<td class="label" width="20%">
 				{translate key="submission.reviewVersion"}
