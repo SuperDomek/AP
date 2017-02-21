@@ -30,7 +30,7 @@
 				{translate key="submission.abstractReview"}</a>
 		</li>
 		<li {if $stage==REVIEW_STAGE_PRESENTATION}class="current"{/if}>
-			<a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_PRESENTATION}">
+			<a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}">
 				{translate key="submission.paperReview"}</a>
 		</li>
 	{else}

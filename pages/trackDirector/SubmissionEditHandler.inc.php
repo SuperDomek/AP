@@ -111,28 +111,32 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$cancelsAndRegrets = $reviewAssignmentDao->getCancelsAndRegrets($paperId);
 		$reviewFilesByStage = $reviewAssignmentDao->getReviewFilesByStage($paperId);
 
-		$stages = $submission->getReviewAssignments();
+		$reviewAssignmentStages = $submission->getReviewAssignments();
 		$numStages = $submission->getCurrentStage();
 
 		$directorDecisions = $submission->getDecisions();
 
 		$reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
 		$reviewFormResponses = array();
-		if (isset($stages[$numStages-1])) {
-			foreach ($stages[$numStages-1] as $stage) {
-				$reviewFormResponses[$stage->getReviewId()] = $reviewFormResponseDao->reviewFormResponseExists($stage->getReviewId());
+
+		for($i = 1; $i < $numStages; $i++){ // cycling through all the stages except the current one
+			if (isset($reviewAssignmentStages[$i])) {
+				foreach ($reviewAssignmentStages[$i] as $reviewAssignment) {
+					$reviewFormResponses[$reviewAssignment->getReviewId()] = $reviewFormResponseDao->reviewFormResponseExists($reviewAssignment->getReviewId());
+				}
 			}
 		}
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('reviewMode', $submission->getReviewMode());
 		$templateMgr->assign_by_ref('submission', $submission);
-		$templateMgr->assign_by_ref('reviewAssignmentStages', $stages);
+		$templateMgr->assign_by_ref('reviewAssignmentStages', $reviewAssignmentStages);
 		$templateMgr->assign('reviewFormResponses', $reviewFormResponses);
 		$templateMgr->assign_by_ref('cancelsAndRegrets', $cancelsAndRegrets);
 		$templateMgr->assign_by_ref('reviewFilesByStage', $reviewFilesByStage);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
-		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions());
+		$templateMgr->assign_by_ref('directorDecisionOptionsAbstract', TrackDirectorSubmission::getDirectorDecisionOptions(null, REVIEW_STAGE_ABSTRACT));
+		$templateMgr->assign_by_ref('directorDecisionOptionsPaper', TrackDirectorSubmission::getDirectorDecisionOptions(null, REVIEW_STAGE_PRESENTATION));
 		$templateMgr->assign('rateReviewerOnQuality', $schedConf->getSetting('rateReviewerOnQuality'));
 
 		import('submission.reviewAssignment.ReviewAssignment');
