@@ -182,11 +182,10 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$directorDecisions = $authorSubmission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
-
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
-		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments($stage));
-		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexesForStage($paperId, $stage));
+		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());
+		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexes($paperId));
 		$templateMgr->assign('stage', $stage);
 		$templateMgr->assign_by_ref('reviewFilesByStage', $reviewFilesByStage);
 		$templateMgr->assign_by_ref('authorViewableFilesByStage', $authorViewableFilesByStage);

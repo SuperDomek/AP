@@ -119,7 +119,7 @@
 
 <div id="peerReview">
 
-{if ($stage == REVIEW_STAGE_PRESENTATION && $submission->getCurrentStage() != REVIEW_STAGE_PRESENTATION)}
+{if ($stage == $smarty.const.REVIEW_STAGE_PRESENTATION && $submission->getCurrentStage() != $smarty.const.REVIEW_STAGE_PRESENTATION)}
 	{assign var="isStageDisabled" value=true}
 {/if}
 
@@ -138,14 +138,14 @@
 			<td width="30%">
 				{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
 					<h3>{translate key="submission.review"}</h3>
-				{elseif $stage == REVIEW_STAGE_ABSTRACT}
+				{elseif $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
 					<h3>{translate key="submission.abstractReview"}</h3>
 				{else}{* REVIEW_STAGE_PRESENTATION *}
 					<h3>{translate key="submission.paperReview"}</h3>
           <strong>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</strong>
 				{/if}
 			</td>
-      {if $isReviewer && $stage == REVIEW_STAGE_ABSTRACT}
+      {if $isReviewer && $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
       {* The conference doesn't want the add reviewers button in abstract review *}
       {else}
 			<td width="70%" class="nowrap">
@@ -256,7 +256,7 @@
 						&nbsp;&nbsp;{$reviewAssignment->getDateCompleted()|date_format:$dateFormatShort}
 					{else}
 						{translate key="common.none"}&nbsp;&nbsp;&nbsp;&nbsp;
-            {if $stage != REVIEW_STAGE_ABSTRACT}
+            {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
 						  <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
             {/if}
 						{if $reviewAssignment->getDateReminded()}
@@ -304,7 +304,7 @@
       </tr>
 			{/if}
 
-      {if $stage != REVIEW_STAGE_ABSTRACT}
+      {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
 			<tr valign="top">
 				<td class="label">{translate key="reviewer.paper.uploadedFile"}</td>
 				<td>

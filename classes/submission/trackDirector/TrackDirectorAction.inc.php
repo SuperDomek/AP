@@ -170,6 +170,7 @@ class TrackDirectorAction extends Action {
 				// Assign active reviewers as reviewers in the presentation stage and automatically confirm them
 				foreach ($trackDirectorSubmission->getReviewAssignments(REVIEW_STAGE_ABSTRACT) as $reviewAssignment) {
 					if(!$reviewAssignment->getDeclined() && !$reviewAssignment->getCancelled()){
+						// reviewAssignment is active
 						TrackDirectorAction::addReviewer($trackDirectorSubmission, $reviewAssignment->getReviewerId(), REVIEW_STAGE_PRESENTATION, true);
 						$reviewAssignmentPresentation = $reviewAssignmentDao->getReviewAssignment($trackDirectorSubmission->getPaperId(), $reviewAssignment->getReviewerId(), REVIEW_STAGE_PRESENTATION);
 						TrackDirectorAction::confirmReviewForReviewer($reviewAssignmentPresentation->getId());
