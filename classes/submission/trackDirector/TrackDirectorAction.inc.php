@@ -179,10 +179,10 @@ class TrackDirectorAction extends Action {
 
 			}
 		}
-
+		/* HOT FIX: this update was rewriting the Requested time set up earlier
 		$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
 		$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
-		$trackDirectorSubmission->stampStatusModified();
+		$trackDirectorSubmission->stampStatusModified();*/
 
 		// Commit the paper changes
 		$paperDao =& DAORegistry::getDao('PaperDAO');
@@ -239,13 +239,13 @@ class TrackDirectorAction extends Action {
 			// Set up reviewForm for each category
 			if($stage == REVIEW_STAGE_ABSTRACT)
 				$reviewAssignment->setReviewFormId(1);
-			else if($stage == REVIEW_STAGE_PRESENTATION)
+			else if($stage >= REVIEW_STAGE_PRESENTATION)
 				$reviewAssignment->setReviewFormId(2);
 
 			$trackDirectorSubmission->addReviewAssignment($reviewAssignment);
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 
-			$reviewAssignment = $reviewAssignmentDao->getReviewAssignment($trackDirectorSubmission->getPaperId(), $reviewerId, $stage);
+			$reviewAssignment =& $reviewAssignmentDao->getReviewAssignment($trackDirectorSubmission->getPaperId(), $reviewerId, $stage);
 
 			$schedConf =& Request::getSchedConf();
 			if ($schedConf->getSetting('reviewDeadlineType') != null) {
@@ -265,9 +265,8 @@ class TrackDirectorAction extends Action {
 					$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 				}
 			}
-			/* EDIT Automatically send notification to the reviewer
-			*
-			*/
+
+			// EDIT Automatically send notification to the reviewer
 			if ($auto){
 				TrackDirectorAction::notifyReviewer($trackDirectorSubmission, $reviewAssignment->getId(), false, true);
 			}
@@ -347,6 +346,7 @@ class TrackDirectorAction extends Action {
 			*	Followed by elseif for sending.
 			*/
 			if($auto){
+				error_log("Spouštím odesílání request mailu recenzentovi");
 				$weekLaterDate = strftime(Config::getVar('general', 'date_format_short'), strtotime('+1 week'));
 
 				if ($reviewAssignment->getDateDue() != null) {
@@ -361,6 +361,7 @@ class TrackDirectorAction extends Action {
 					}
 
 				}
+				error_log("Nastaven due date na:".$reviewDueDate);
 
 				$submissionUrl = Request::url(null, null, 'reviewer', 'submission', $reviewId, $reviewerAccessKeysEnabled?array('key' => 'ACCESS_KEY'):array());
 
@@ -378,9 +379,13 @@ class TrackDirectorAction extends Action {
 				$email->assignParams($paramArray);
 				$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 
+				error_log("Nastaven příjemce na:".$reviewer->getFullName());
+
 				if ($email->isEnabled()) {
+					error_log("Šablona je povolena.");
 					$email->setAssoc(PAPER_EMAIL_REVIEW_NOTIFY_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
 					if ($reviewerAccessKeysEnabled) {
+						error_log("Povoleny AccessKeys");
 						import('security.AccessKeyManager');
 						import('pages.reviewer.ReviewerHandler');
 						$accessKeyManager = new AccessKeyManager();
@@ -403,18 +408,22 @@ class TrackDirectorAction extends Action {
 						$email->clearAllRecipients();
 						$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 					}
+					error_log("Odesílám e-mail.");
 					$email->send();
 				}
 
 				$reviewAssignment->setDateNotified(Core::getCurrentDate());
 				$reviewAssignment->setCancelled(0);
 				$reviewAssignment->stampModified();
-				$reviewAssignmentDao->updateReviewAssignment($reviewAssignment);
+				error_log($reviewAssignment->getDateNotified());
+				error_log($reviewAssignmentDao->updateReviewAssignment($reviewAssignment));
 
+				error_log("Upraven reviewAssignment: ".$reviewAssignment->getId());
 				// EDIT generate automatic notification
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
 				$notificationManager->createTrivialNotification('notification.notification', 'common.requestReviewer');
+				return true;
 			}
 			elseif (!$email->isEnabled() || ($send && !$email->hasErrors())) {
 				HookRegistry::call('TrackDirectorAction::notifyReviewer', array(&$trackDirectorSubmission, &$reviewAssignment, &$email));

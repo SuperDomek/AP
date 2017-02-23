@@ -422,19 +422,14 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		// If the director changes the decision on the first round,
 		// roll back to the abstract review stage.
-		if (
-			$submission->getCurrentStage() == REVIEW_STAGE_PRESENTATION &&
-			$stage == REVIEW_STAGE_ABSTRACT
-		) {
+		if ($submission->getCurrentStage() == REVIEW_STAGE_PRESENTATION && $stage == REVIEW_STAGE_ABSTRACT) {
 			$submission->setCurrentStage(REVIEW_STAGE_ABSTRACT);
-
 			// Now, unassign all reviewers from the paper review
 			foreach ($submission->getReviewAssignments(REVIEW_STAGE_PRESENTATION) as $reviewAssignment) {
 				if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
 					TrackDirectorAction::clearReview($submission, $reviewAssignment->getId());
 				}
 			}
-
 			TrackDirectorAction::recordDecision($submission, $decision, $stage);
 		} else {
 			/* no need for switching

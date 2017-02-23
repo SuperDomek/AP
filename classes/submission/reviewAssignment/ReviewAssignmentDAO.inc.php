@@ -489,6 +489,10 @@ class ReviewAssignmentDAO extends DAO {
 	 * @param $reviewAssignment object
 	 */
 	function updateReviewAssignment(&$reviewAssignment) {
+		error_log("Date notified z DAO: ".$reviewAssignment->getDateNotified());
+		foreach(debug_backtrace() as $key => $item){
+				error_log("Volající funkce ".$key.": ".$item['function']);
+		}
 		return $this->update(
 			sprintf('UPDATE review_assignments
 				SET	paper_id = ?,
