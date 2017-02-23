@@ -170,7 +170,7 @@ class TrackDirectorSubmissionDAO extends DAO {
 			$directorDecisions = $trackDirectorSubmission->getDecisions($i);
 			$insertedDecision = false;
 			if (is_array($directorDecisions)) {
-				foreach($directorDecisions as $key => $directorDecision){
+				foreach($directorDecisions as $key => &$directorDecision){
 				//for ($j = 0; $j < count($directorDecisions); $j++) {
 					//$directorDecision =& $directorDecisions[$j];
 					if ($directorDecision['editDecisionId'] == null) {

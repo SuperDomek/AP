@@ -81,7 +81,6 @@ class TrackDirectorAction extends Action {
 				$trackDirectorSubmission->setStatus(STATUS_QUEUED);
 				$trackDirectorSubmission->stampStatusModified();
 			}
-
 			$trackDirectorSubmission->addDecision($directorDecision, $stage);
 			$decisions = TrackDirectorSubmission::getDirectorDecisionOptions(null, $stage);
 			// Add log
