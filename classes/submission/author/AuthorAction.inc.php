@@ -331,7 +331,7 @@ class AuthorAction extends Action {
 		if ($authorSubmission->getStatus() == STATUS_ARCHIVED || $authorSubmission->getStatus() == STATUS_DECLINED) return false;
 
 		// Submissions in Presentation stage cannot be edited anymore
-		if ($authorSubmission->getSubmissionStatus() == REVIEW_STAGE_PRESENTATION) return false;
+		if ($authorSubmission->getSubmissionStatus() >= REVIEW_STAGE_PRESENTATION) return false;
 
 		// If the last recorded editorial decision on the current stage
 		// was "Revisions Required", the author may edit the submission.

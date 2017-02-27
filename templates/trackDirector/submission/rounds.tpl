@@ -138,7 +138,11 @@
     		<td colspan="4">
     			{if $reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== ''}
     				{assign var="recommendation" value=$reviewAssignment->getRecommendation()}
-    				{translate key=$reviewerRecommendationOptions.$recommendation}
+            {if $stagePlusOne == REVIEW_STAGE_ABSTRACT}
+    				  {translate key=$reviewerRecommendationOptions.$recommendation}
+            {else}
+              {translate key=$reviewerRecommendationOptions.$recommendation}
+            {/if}
     			{else}
     				{translate key="common.none"}
     			{/if}

@@ -303,35 +303,6 @@
         </td>
       </tr>
 			{/if}
-
-      {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
-			<tr valign="top">
-				<td class="label">{translate key="reviewer.paper.uploadedFile"}</td>
-				<td>
-					<table width="100%" class="data">
-						{foreach from=$reviewAssignment->getReviewerFileRevisions() item=reviewerFile key=key}
-						<tr valign="top">
-							<td valign="middle">
-								<form name="authorView{$reviewAssignment->getId()}" method="post" action="{url op="makeReviewerFileViewable"}">
-									<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewerFile->getFileId():$reviewerFile->getRevision()}" class="file">{$reviewerFile->getFileName()|escape}</a>&nbsp;&nbsp;{$reviewerFile->getDateModified()|date_format:$dateFormatShort}
-									<input type="hidden" name="reviewId" value="{$reviewAssignment->getId()}" />
-									<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-									<input type="hidden" name="fileId" value="{$reviewerFile->getFileId()}" />
-									<input type="hidden" name="revision" value="{$reviewerFile->getRevision()}" />
-									{translate key="director.paper.showAuthor"} <input type="checkbox" name="viewable" value="1"{if $reviewerFile->getViewable()} checked="checked"{/if} />
-									<input type="submit" value="{translate key="common.record"}" class="button" />
-								</form>
-							</td>
-						</tr>
-						{foreachelse}
-						<tr valign="top">
-							<td>{translate key="common.none"}</td>
-						</tr>
-						{/foreach}
-					</table>
-				</td>
-			</tr>
-      {/if}
 		{/if}
 
 		{if (($reviewAssignment->getRecommendation() === null || $reviewAssignment->getRecommendation() === '') || !$reviewAssignment->getDateConfirmed()) && $reviewAssignment->getDateNotified() && !$reviewAssignment->getDeclined()}

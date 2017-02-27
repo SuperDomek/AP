@@ -38,7 +38,7 @@
 				{if $status == STATUS_QUEUED_UNASSIGNED}{translate key="submissions.queuedUnassigned"}
 				{elseif $status == STATUS_QUEUED_REVIEW}
 					{assign var=decision value=$submission->getMostRecentDecision()}
-					{if $currentStage==REVIEW_STAGE_PRESENTATION}
+					{if $currentStage>=REVIEW_STAGE_PRESENTATION}
 						<a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
               {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
               $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
