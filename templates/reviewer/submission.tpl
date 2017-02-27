@@ -53,10 +53,10 @@ function confirmSubmissionCheck() {
 	</tr>
 {/if}{* isset($sessionTypes[$submissionType]) *}
 
-<tr valign="top">
+<!--<tr valign="top">
 	<td class="label">{translate key="paper.conferenceTrack"}</td>
 	<td class="value">{$submission->getTrackTitle()|escape}</td>
-</tr>
+</tr>-->
 <tr valign="top">
 	<td class="label">{translate key="paper.abstract"}</td>
 	<td class="value">{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br}</td>
@@ -125,24 +125,34 @@ function confirmSubmissionCheck() {
 <tr valign="top">
 	<td>&nbsp;</td>
 	<td>
-		{translate key="submission.response"}&nbsp;&nbsp;&nbsp;&nbsp;
+		<!--{translate key="submission.response"}&nbsp;&nbsp;&nbsp;&nbsp;-->
 		{if not $confirmedStatus}
 			{url|assign:"acceptUrl" op="confirmReview" reviewId=$reviewId}
 			{url|assign:"declineUrl" op="confirmReview" reviewId=$reviewId declineReview=1}
 
 			{if !$submission->getCancelled()}
-				{translate key="reviewer.paper.canDoReview"} {icon name="mail" url=$acceptUrl}
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				{translate key="reviewer.paper.cannotDoReview"} {icon name="mail" url=$declineUrl}
+        <div style="float:left;text-align:center;">
+          <a href="{$acceptUrl}" alt="Accept the review">
+			      <img src="{$baseUrl}/templates/images/icons/accept_big.png" alt="Accept the review"/><br />{translate key="reviewer.paper.canDoReview"}</a>
+        </div>
+
+        <div style="float:left;text-align:center;margin-left:2em;">
+          <a href="{$declineUrl}" alt="Reject the review">
+			      <img src="{$baseUrl}/templates/images/icons/decline_big.png" alt="Reject the review"/><br />{translate key="reviewer.paper.cannotDoReview"}</a>
+        </div>
 			{else}
-				{url|assign:"url" op="confirmReview" reviewId=$reviewId}
-				{translate key="reviewer.paper.canDoReview"} {icon name="mail" disabled="disabled" url=$acceptUrl}
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				{url|assign:"url" op="confirmReview" reviewId=$reviewId declineReview=1}
-				{translate key="reviewer.paper.cannotDoReview"} {icon name="mail" disabled="disabled" url=$declineUrl}
+        {translate key="submission.event.reviewer.reviewCancelled"}
 			{/if}
 		{else}
-			{if not $declined}{translate key="submission.accepted"}{else}{translate key="submission.rejected"}{/if}
+			{if not $declined}
+        <div style="float:left;text-align:center;">
+          <img src="{$baseUrl}/templates/images/icons/accept_big.png" alt="Accepted the review"/><br />{translate key="submission.accepted"}
+        </div>
+      {else}
+        <div style="float:left;text-align:center;">
+          <img src="{$baseUrl}/templates/images/icons/decline_big.png" alt="Rejected the review"/><br />{translate key="submission.rejected"}
+        </div>
+      {/if}
 		{/if}
 	</td>
 </tr>
@@ -231,7 +241,11 @@ function confirmSubmissionCheck() {
 		<td>&nbsp;</td>
 		<td>
       {if $confirmedStatus and not $declined}
-			   <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">{translate key="submission.reviewForm"} {icon name="comment"}</a>
+        <div style="float:left;text-align:center;">
+          <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon"}>
+            <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+          </a>
+        </div>
 			{/if}
 		</td>
 	</tr>

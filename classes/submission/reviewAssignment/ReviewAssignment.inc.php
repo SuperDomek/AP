@@ -591,7 +591,7 @@ class ReviewAssignment extends DataObject {
 				//SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
 			);
 		}
-		else if ($stage == REVIEW_STAGE_PRESENTATION) {
+		else if ($stage >= REVIEW_STAGE_PRESENTATION) {
 			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
