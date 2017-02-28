@@ -135,9 +135,7 @@ class AuthorAction extends Action {
 	function viewReviewFormResponse($authorSubmission, $reviewId) {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
-
 		if (HookRegistry::call('AuthorAction::viewReviewFormResponse', array(&$authorSubmission, &$reviewAssignment, &$reviewId))) return $reviewId;
-
 		if (isset($reviewAssignment) && $reviewAssignment->getPaperId() == $authorSubmission->getPaperId()) {
 			$reviewFormId = $reviewAssignment->getReviewFormId();
 			if ($reviewFormId != null) {
@@ -329,14 +327,18 @@ class AuthorAction extends Action {
 		// Archived or declined submissions can never be edited.
 		if ($authorSubmission->getStatus() == STATUS_ARCHIVED || $authorSubmission->getStatus() == STATUS_DECLINED) return false;
 
-		// Submissions in Presentation stage cannot be edited anymore
-		if ($authorSubmission->getCurrentStage() >= REVIEW_STAGE_PRESENTATION) return false;
+
 
 		// If the last recorded editorial decision on the current stage
 		// was "Revisions Required", the author may edit the submission.
 		$decisions = $authorSubmission->getDecisions($authorSubmission->getCurrentStage());
 		$decision = array_shift($decisions);
-		if ($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS) return true;
+		if ($decision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+		$decision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$decision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) return true;
+
+		// Submissions in Presentation stage cannot be edited anymore
+		if ($authorSubmission->getCurrentStage() >= REVIEW_STAGE_PRESENTATION) return false;
 
 		// After the deadline for Submitting cannot be edited
 		$submissionsCloseDate = $schedConf->getSetting('submissionsCloseDate');

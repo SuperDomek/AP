@@ -222,9 +222,10 @@ class TrackSubmissionHandler extends AuthorHandler {
 	 */
 	function viewReviewFormResponse($args) {
 		$paperId = isset($args[0]) ? (int) $args[0] : 0;
-		$this->validate($paperId, true);
+		$this->validate($paperId, false);
 		$submission =& $this->submission;
 		$this->setupTemplate(true, $paperId, 'summary');
+
 
 		$reviewId = isset($args[1]) ? (int) $args[1] : null;
 
