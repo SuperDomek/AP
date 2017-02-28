@@ -320,7 +320,6 @@ class AuthorAction extends Action {
 			$schedConfDao =& DAORegistry::getDAO('SchedConfDAO');
 			$schedConf =& $schedConfDao->getSchedConf($paper->getSchedConfId());
 		}
-
 		// Directors acting as Authors can always edit.
 		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) || Validation::isTrackDirector($schedConf->getConferenceId(), $schedConf->getId())) return true;
 
@@ -331,7 +330,7 @@ class AuthorAction extends Action {
 		if ($authorSubmission->getStatus() == STATUS_ARCHIVED || $authorSubmission->getStatus() == STATUS_DECLINED) return false;
 
 		// Submissions in Presentation stage cannot be edited anymore
-		if ($authorSubmission->getSubmissionStatus() >= REVIEW_STAGE_PRESENTATION) return false;
+		if ($authorSubmission->getCurrentStage() >= REVIEW_STAGE_PRESENTATION) return false;
 
 		// If the last recorded editorial decision on the current stage
 		// was "Revisions Required", the author may edit the submission.

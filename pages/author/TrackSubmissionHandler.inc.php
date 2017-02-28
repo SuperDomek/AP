@@ -182,6 +182,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$directorDecisions = $authorSubmission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
+
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
 		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());
@@ -196,6 +197,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('suppFiles', $authorSubmission->getSuppFiles());
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
 
+
 		import('submission.reviewAssignment.ReviewAssignment');
 		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
 
@@ -206,6 +208,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		// Determine whether or not certain features should be disabled (i.e. past deadline)
 		$templateMgr->assign('mayEditPaper', AuthorAction::mayEditPaper($authorSubmission));
+		$templateMgr->assign('mayUploadRevision', ($lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS));
 
 		$templateMgr->assign('helpTopicId', 'editorial.authorsRole.review');
 		$templateMgr->display('author/submissionReview.tpl');

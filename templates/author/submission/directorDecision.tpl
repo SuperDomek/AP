@@ -80,8 +80,8 @@
 		<td class="value" width="80%">
 			<form method="post" action="{url op="uploadRevisedVersion"}" enctype="multipart/form-data">
 				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-				<input type="file" {if !$mayEditPaper}disabled="disabled" {/if}name="upload" class="uploadField" />
-				<input type="submit" {if !$mayEditPaper}disabled="disabled" {/if}name="submit" value="{translate key="common.upload"}" class="button" />
+				<input type="file" {if !$mayUploadRevision}disabled="disabled" {/if}name="upload" class="uploadField" />
+				<input type="submit" {if !$mayUploadRevision}disabled="disabled" {/if}name="submit" value="{translate key="common.upload"}" class="button" />
 			</form>
 
 		</td>

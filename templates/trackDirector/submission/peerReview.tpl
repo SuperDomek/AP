@@ -64,17 +64,7 @@
 		 * show the abstract, and show any review files or
 		 * supplementary files.
 		 *}
-		<tr valign="top">
-			<td class="label" width="20%">{translate key="submission.reviewVersion"}</td>
-			{if $reviewFile}
-				<td width="80%" class="value">
-					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;
-					{$reviewFile->getDateModified()|date_format:$dateFormatShort}<!-- &nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
-				</td>
-			{else}
-				<td width="80%" class="nodata">{translate key="common.none"}</td>
-			{/if}
-		</tr>
+
 		{if not $isStageDisabled}
 		<tr valign="top">
 			<td colspan="2">
@@ -142,7 +132,7 @@
 					<h3>{translate key="submission.abstractReview"}</h3>
 				{else}{* REVIEW_STAGE_PRESENTATION *}
 					<h3>{translate key="submission.paperReview"}</h3>
-          <strong>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</strong>
+          <strong>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</strong><br />
 				{/if}
 			</td>
       {if $isReviewer && $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
@@ -154,6 +144,18 @@
 			</td>
       {/if}
 		</tr>
+    {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
+      <tr valign="top">
+    		<td class="value" colspan="2">{translate key="submission.reviewVersion"}:&nbsp;
+          {if $reviewFile}
+    				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;
+    				({$reviewFile->getDateModified()|date_format:$dateFormatShort})<!-- &nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
+      		{else}
+      			{translate key="common.none"}
+      		{/if}
+        </td>
+    	</tr>
+    {/if}
 	</table>
 
 	{assign var="start" value="A"|ord}
@@ -257,7 +259,9 @@
 					{else}
 						{translate key="common.none"}&nbsp;&nbsp;&nbsp;&nbsp;
             {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
-						  <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+              {if $user->getId() != $reviewAssignment->getReviewerId()}
+				        <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+              {/if}
             {/if}
 						{if $reviewAssignment->getDateReminded()}
 							&nbsp;&nbsp;{$reviewAssignment->getDateReminded()|date_format:$dateFormatShort}

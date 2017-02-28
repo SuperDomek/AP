@@ -247,6 +247,13 @@ class TrackDirectorAction extends Action {
 
 			$reviewAssignment =& $reviewAssignmentDao->getReviewAssignment($trackDirectorSubmission->getPaperId(), $reviewerId, $stage);
 
+			// EDIT Automatically send notification to the reviewer
+			if ($auto){
+				TrackDirectorAction::notifyReviewer($trackDirectorSubmission, $reviewAssignment->getId(), false, true);
+			}
+
+			// Accept the review for reviewer if he is also trackDirector
+
 			$schedConf =& Request::getSchedConf();
 			if ($schedConf->getSetting('reviewDeadlineType') != null) {
 				$dueDateSet = true;
@@ -266,10 +273,6 @@ class TrackDirectorAction extends Action {
 				}
 			}
 
-			// EDIT Automatically send notification to the reviewer
-			if ($auto){
-				TrackDirectorAction::notifyReviewer($trackDirectorSubmission, $reviewAssignment->getId(), false, true);
-			}
 			// Add log
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');
@@ -346,7 +349,6 @@ class TrackDirectorAction extends Action {
 			*	Followed by elseif for sending.
 			*/
 			if($auto){
-				error_log("Spouštím odesílání request mailu recenzentovi");
 				$weekLaterDate = strftime(Config::getVar('general', 'date_format_short'), strtotime('+1 week'));
 
 				if ($reviewAssignment->getDateDue() != null) {
@@ -359,9 +361,7 @@ class TrackDirectorAction extends Action {
 						$numWeeks = max((int) $schedConf->getSetting('numWeeksPerReviewRelative'), 2);
 						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), strtotime('+' . $numWeeks . ' week'));
 					}
-
 				}
-				error_log("Nastaven due date na:".$reviewDueDate);
 
 				$submissionUrl = Request::url(null, null, 'reviewer', 'submission', $reviewId, $reviewerAccessKeysEnabled?array('key' => 'ACCESS_KEY'):array());
 
@@ -379,13 +379,9 @@ class TrackDirectorAction extends Action {
 				$email->assignParams($paramArray);
 				$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 
-				error_log("Nastaven příjemce na:".$reviewer->getFullName());
-
 				if ($email->isEnabled()) {
-					error_log("Šablona je povolena.");
 					$email->setAssoc(PAPER_EMAIL_REVIEW_NOTIFY_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
 					if ($reviewerAccessKeysEnabled) {
-						error_log("Povoleny AccessKeys");
 						import('security.AccessKeyManager');
 						import('pages.reviewer.ReviewerHandler');
 						$accessKeyManager = new AccessKeyManager();
@@ -408,17 +404,15 @@ class TrackDirectorAction extends Action {
 						$email->clearAllRecipients();
 						$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 					}
-					error_log("Odesílám e-mail.");
 					$email->send();
 				}
 
 				$reviewAssignment->setDateNotified(Core::getCurrentDate());
 				$reviewAssignment->setCancelled(0);
 				$reviewAssignment->stampModified();
-				error_log($reviewAssignment->getDateNotified());
-				error_log($reviewAssignmentDao->updateReviewAssignment($reviewAssignment));
+				$reviewAssignment->getDateNotified();
+				$reviewAssignmentDao->updateReviewAssignment($reviewAssignment);
 
-				error_log("Upraven reviewAssignment: ".$reviewAssignment->getId());
 				// EDIT generate automatic notification
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
@@ -1134,16 +1128,23 @@ class TrackDirectorAction extends Action {
 
 		if ($trackDirectorSubmission->getReviewFileId() != null) { // if this is not the first review file
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName, $trackDirectorSubmission->getReviewFileId());
+			$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
 			// Increment the review revision.
 			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
 
+			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
+				$trackDirectorSubmission->setReviewFileId($reviewFileId);
+				$trackDirectorSubmission->setDirectorFileId($directorFileId);
+				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+			}
+
 			// Increment the stage
-			$currentStage = $trackDirectorSubmission->getCurrentStage();
-			$trackDirectorSubmission->setCurrentStage($currentStage + 1);
+			$previousStage = $trackDirectorSubmission->getCurrentStage();
+			$trackDirectorSubmission->setCurrentStage($previousStage + 1);
 			$trackDirectorSubmission->stampStatusModified();
 
+
 			// Reassign all reviewers from the previous round of review
-			$previousStage = $trackDirectorSubmission->getCurrentStage() - 1;
 			foreach($trackDirectorSubmission->getReviewAssignments($previousStage) as $reviewAssignment){
 				if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
 					// Then this reviewer submitted a review.
@@ -1152,16 +1153,25 @@ class TrackDirectorAction extends Action {
 			}
 		} else {
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName);
+			$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
 			$trackDirectorSubmission->setReviewRevision(1);
-		}
-		$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
 
+			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
+				$trackDirectorSubmission->setReviewFileId($reviewFileId);
+				$trackDirectorSubmission->setDirectorFileId($directorFileId);
+				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+			}
+		}
+
+
+		/*
+		$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
 		if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
 			$trackDirectorSubmission->setReviewFileId($reviewFileId);
 			$trackDirectorSubmission->setDirectorFileId($directorFileId);
 
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
-		}
+		}*/
 
 		// Add log
 		import('paper.log.PaperLog');
