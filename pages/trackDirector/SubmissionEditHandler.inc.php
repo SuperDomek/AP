@@ -301,9 +301,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
-		if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage == REVIEW_STAGE_PRESENTATION) {
+		/*if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage >= REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);
-		}
+		}*/
+
+		if ($lastDecision == SUBMISSION_DIRECTOR_DECISION_ACCEPT)
+			$templateMgr->assign('isFinalReview', true);
 
 		import('submission.reviewAssignment.ReviewAssignment');
 		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
@@ -1142,6 +1145,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				TrackDirectorAction::setEditingFile($submission, $file[0], $file[1], Request::getUserVar('createGalley'));
 			}
 
+		}elseif (Request::getUserVar('setReviewFile')) {
+			$file = explode(',', Request::getUserVar('directorDecisionFile'));
+			if (isset($file[0]) && isset($file[1])) {
+				error_log("if");
+				TrackDirectorAction::setReviewFile($submission, $file[0], $file[1]);
+			}
 		}
 
 		Request::redirect(null, null, null, 'submissionReview', $redirectArgs);

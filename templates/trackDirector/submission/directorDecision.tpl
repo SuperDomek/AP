@@ -73,29 +73,18 @@
 
 {if not $reviewingAbstractOnly}
 	<table class="data" width="100%">
-		{if $reviewFile}
-			<tr valign="top">
-				<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
-				<td width="50%" colspan="2" class="value">
-					{if $lastDecision == SUBMISSION_DIRECTOR_DECISION_ACCEPT}
-						<input type="radio" name="directorDecisionFile" value="{$reviewFile->getFileId()},{$reviewFile->getRevision()}" />
-						{assign var="sendableVersionExists" value=true}
-					{/if}
-					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;
-					{$reviewFile->getDateModified()|date_format:$dateFormatShort}
-				</td>
-			</tr>
-		{/if}
 		{foreach from=$authorFiles item=authorFile key=key}
 			<tr valign="top">
 				{if !$authorRevisionExists}
 					{assign var="authorRevisionExists" value=true}
-					<td width="20%" rowspan="{$authorFiles|@count}" class="label">{translate key="submission.authorVersion"}</td>
+					<td width="20%" rowspan="{$authorFiles|@count}" class="label">{translate key="submission.authorsRevisedVersion"}</td>
 				{/if}
 				<td width="80%" class="value" colspan="2">
-					{if $lastDecision == SUBMISSION_DIRECTOR_DECISION_ACCEPT}
+					{if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+            $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
 						<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" />
-						{assign var="sendableVersionExists" value=true}
+
+						<!--{assign var="sendableVersionExists" value=true}-->
 					{/if}
 					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;
 						{$authorFile->getDateModified()|date_format:$dateFormatShort}
@@ -103,10 +92,20 @@
 			</tr>
 		{foreachelse}
 			<tr valign="top">
-				<td width="20%" class="label">{translate key="submission.authorVersion"}</td>
+				<td width="20%" class="label">{translate key="submission.authorsRevisedVersion"}</td>
 				<td width="80%" colspan="2" class="nodata">{translate key="common.none"}</td>
 			</tr>
 		{/foreach}
+    <tr>
+      <td>
+      </td>
+      <td>
+        {* Add a javascript check for selected file *}
+        <input type="submit" name="setReviewFile" value="{translate key="form.sendReviewFile"}" class="button" />
+      </td>
+    </tr>
+
+    <!--
 		{foreach from=$directorFiles item=directorFile key=key}
 			<tr valign="top">
 				{if !$directorRevisionExists}
@@ -114,7 +113,7 @@
 					<td width="20%" rowspan="{$directorFiles|@count}" class="label">{translate key="submission.directorVersion"}</td>
 				{/if}
 				<td width="50%" class="value">
-					{if $lastDecision == SUBMISSION_DIRECTOR_DECISION_ACCEPT}
+					{if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_ACCEPT}
 						<input type="radio" name="directorDecisionFile" value="{$directorFile->getFileId()},{$directorFile->getRevision()}" />
 						{assign var="sendableVersionExists" value=true}
 					{/if}
@@ -128,10 +127,11 @@
 				<td width="20%" class="label">{translate key="submission.directorVersion"}</td>
 				<td width="80%" colspan="3" class="nodata">{translate key="common.none"}</td>
 			</tr>
-		{/foreach}
+		{/foreach}-->
 	</table>
 
-	{if $isCurrent}
+  <!--
+  {if $isCurrent}
 	<div>
 		{translate key="director.paper.uploadDirectorVersion"}
 		<input type="file" name="upload" class="uploadField" />
@@ -157,6 +157,7 @@
 		</table>
 
 	{/if}
+  -->
 {/if}
 </form>
 </div>

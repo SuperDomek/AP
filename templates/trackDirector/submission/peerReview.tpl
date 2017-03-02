@@ -245,7 +245,7 @@
 		</tr>
 
     <tr>
-  		<td colspan="2" style="border-top: 1px dotted #DDDDD0;">&nbsp;</td>
+  		<td colspan="2">&nbsp;</td>
   	</tr>
 
 		{if $reviewAssignment->getDateConfirmed() && !$reviewAssignment->getDeclined()}

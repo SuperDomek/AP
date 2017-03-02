@@ -225,7 +225,7 @@
 	<message key="submission.notifyDirector">Notify Director</message>
 	<message key="submission.directorAuthorRecord">Director/Author Email Record</message>
 	<message key="submission.directorVersion">Director Version</message>
-	<message key="submission.authorsRevisedVersion">Author's revised version of file</message>
+	<message key="submission.authorsRevisedVersion">Author's revised version</message>
 	<message key="submission.authorVersion">Author Version</message>
 	<message key="submission.layout.description">This optional step can be used to lay out submissions or change file formats either before or after submissions are sent to Presentations.</message>
 
@@ -791,7 +791,7 @@ Your server currently supports mbstring: <strong>{$supportsMBString}</strong>]]>
 	<message key="log.review.reviewAccepted">{$reviewerName} has accepted the stage {$stage} review for submission {$paperId}.</message>
 	<message key="log.review.reviewAcceptedByProxy">{$userName} has accepted the stage {$stage} review for submission {$paperId} on behalf of {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">The Director, {$userName}, has uploaded a review file for stage {$stage} of submission {$paperId} on behalf of the reviewer, {$reviewerName}.</message>
-	<message key="log.review.reviewerFile">A reviewer file has been uploaded.</message>
+	<message key="log.review.reviewerFile">A file for review has been uploaded.</message>
 	<message key="log.director.decision">A director decision ({$decision}) for paper {$paperId} was recorded by {$directorName}.</message>
 	<message key="log.director.publish">The paper was published.</message>
 	<message key="log.director.unpublish">The paper was moved back into the queue.</message>

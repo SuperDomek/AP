@@ -79,7 +79,7 @@
 		<td width="5%">{translate key="common.date"}</td>
 		<td width="5%">{translate key="event.logLevel"}</td>
 		<td width="5%">{translate key="common.type"}</td>
-		<td width="25%">{translate key="common.user"}</td>
+		<td width="25%">{translate key="common.user"} / {translate key="common.id"}</td>
 		<td>{translate key="common.event"}</td>
 		<td width="56" align="right">{translate key="common.action"}</td>
 	</tr>
@@ -90,15 +90,20 @@
 		<td>{$logEntry->getLogLevel()}</td>
 		<td>{$logEntry->getAssocTypeString()|escape}</td>
 		<td>
-			{assign var=emailString value=$logEntry->getUserFullName()|concat:" <":$logEntry->getUserEmail():">"}
-			{translate|assign:"bodyContent" key=$logEntry->getMessage() params=$logEntry->getEntryParams()}
-			{translate|assign:"titleTrans" key=$logEntry->getEventTitle()}
-			{if $logEntry->getIsTranslated()}
-				{url|assign:"url" page="user" op="email" to=$emailString|to_array redirectUrl=$currentUrl subject=$titleTrans body=$bodyContent paperId=$submission->getPaperId()}
-			{else}{* Legacy entries *}
-				{url|assign:"url" page="user" op="email" to=$emailString|to_array redirectUrl=$currentUrl subject=$titleTrans|translate body=$logEntry->getMessage() paperId=$submission->getPaperId()}
-			{/if}
-			{$logEntry->getUserFullName()|escape} {icon name="mail" url=$url}
+
+      {if $logEntry->getAssocTypeString() != "AUT"}
+  			{assign var=emailString value=$logEntry->getUserFullName()|concat:" <":$logEntry->getUserEmail():">"}
+  			{translate|assign:"bodyContent" key=$logEntry->getMessage() params=$logEntry->getEntryParams()}
+  			{translate|assign:"titleTrans" key=$logEntry->getEventTitle()}
+  			{if $logEntry->getIsTranslated()}
+  				{url|assign:"url" page="user" op="email" to=$emailString|to_array redirectUrl=$currentUrl subject=$titleTrans body=$bodyContent paperId=$submission->getPaperId()}
+  			{else}{* Legacy entries *}
+  				{url|assign:"url" page="user" op="email" to=$emailString|to_array redirectUrl=$currentUrl subject=$titleTrans|translate body=$logEntry->getMessage() paperId=$submission->getPaperId()}
+  			{/if}
+  			{$logEntry->getUserFullName()|escape} {icon name="mail" url=$url}
+      {else}
+        {$logEntry->getUserId()|escape} ({translate key="common.userHidden"})
+      {/if}
 		</td>
 		<td>
 			<strong>{translate key=$logEntry->getEventTitle()|escape}</strong>

@@ -197,7 +197,6 @@ class TrackDirectorSubmissionDAO extends DAO {
 			}
 		}
 		if ($this->reviewStageExists($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getCurrentStage())) {
-			error_log("updatuji review_revision");
 			$this->update(
 				'UPDATE	review_stages
 				SET	review_revision = ?
@@ -210,7 +209,6 @@ class TrackDirectorSubmissionDAO extends DAO {
 				)
 			);
 		} elseif ($trackDirectorSubmission->getReviewRevision()!=null) {
-			error_log("Vytvářím nový review stage.");
 			$this->createReviewStage(
 				$trackDirectorSubmission->getPaperId(),
 				$trackDirectorSubmission->getCurrentStage() === null ? 1 : $trackDirectorSubmission->getCurrentStage(),

@@ -800,7 +800,7 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="log.review.reviewAccepted">{$reviewerName} akceptoval oponenturu v rámci sekce {$stage} u příspěvku {$paperId}.</message>
 	<message key="log.review.reviewAcceptedByProxy">{$userName} přijal oponenturu příspěvku ($paperId) do sekce {$stage} v zastoupení oponenta {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">Garant {$userName} vložil soubor posudku do sekce {$stage} pro příspěvek {$paperId} v zastoupení oponenta {$reviewerName}.</message>
-	<message key="log.review.reviewerFile">Soubor oponenta byl uložen.</message>
+	<message key="log.review.reviewerFile">Byl vložen soubor k oponentuře.</message>
 	<message key="log.director.decision">Rozhodnutí garanta ({$decision}) pro příspěvek {$paperId} bylo uloženo garantem {$directorName}.</message>
 	<message key="log.director.publish">Příspěvek byl publikován.</message>
 	<message key="log.director.unpublish">Příspěvek byl přesunut zpět do fronty.</message>

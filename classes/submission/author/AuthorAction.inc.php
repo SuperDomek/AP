@@ -104,7 +104,6 @@ class AuthorAction extends Action {
 		$fileName = 'upload';
 		if ($paperFileManager->uploadError($fileName)) return false;
 		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
-
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
 			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId());
@@ -325,17 +324,17 @@ class AuthorAction extends Action {
 		if ($authorSubmission->getSubmissionProgress() != 0) return true;
 
 		// Archived or declined submissions can never be edited.
-		if ($authorSubmission->getStatus() == STATUS_ARCHIVED || $authorSubmission->getStatus() == STATUS_DECLINED) return false;
-
+		if ($authorSubmission->getStatus() == STATUS_ARCHIVED ||
+			$authorSubmission->getStatus() == STATUS_DECLINED) return false;
 
 
 		// If the last recorded editorial decision on the current stage
 		// was "Revisions Required", the author may edit the submission.
 		$decisions = $authorSubmission->getDecisions($authorSubmission->getCurrentStage());
-		$decision = array_shift($decisions);
-		if ($decision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
-		$decision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-		$decision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) return true;
+		$lastDecision = end($decisions)['decision'];
+		if ($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) return true;
 
 		// Submissions in Presentation stage cannot be edited anymore
 		if ($authorSubmission->getCurrentStage() >= REVIEW_STAGE_PRESENTATION) return false;
