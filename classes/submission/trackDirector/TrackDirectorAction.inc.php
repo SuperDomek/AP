@@ -1132,17 +1132,16 @@ class TrackDirectorAction extends Action {
 			// Increment the review revision.
 			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
 
-			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
-				$trackDirectorSubmission->setReviewFileId($reviewFileId);
-				$trackDirectorSubmission->setDirectorFileId($directorFileId);
-				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
-			}
-
 			// Increment the stage
 			$previousStage = $trackDirectorSubmission->getCurrentStage();
 			$trackDirectorSubmission->setCurrentStage($previousStage + 1);
 			$trackDirectorSubmission->stampStatusModified();
 
+			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
+				$trackDirectorSubmission->setReviewFileId($reviewFileId);
+				$trackDirectorSubmission->setDirectorFileId($directorFileId);
+				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+			}
 
 			// Reassign all reviewers from the previous round of review
 			foreach($trackDirectorSubmission->getReviewAssignments($previousStage) as $reviewAssignment){

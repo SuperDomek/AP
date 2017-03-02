@@ -142,7 +142,8 @@
           {translate key="submission.reviewVersion"}
         </td>
         <td class="value" width="80%">
-          {assign var="reviewFile" value=$reviewFilesByStage[$stage]}
+          {assign var="reviewFile" value=$reviewFilesByStage[$stageTemp]}
+          {$stageTemp}
           {if $reviewFile}
             <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
           {else}

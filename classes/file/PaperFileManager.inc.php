@@ -124,7 +124,7 @@ class PaperFileManager extends FileManager {
 	 */
 	function uploadLayoutFile($fileName, $fileId = null, $overwrite = true) {
 		return $this->handleUpload($fileName, PAPER_FILE_LAYOUT, $fileId, $overwrite);
-	}	
+	}
 
 	/**
 	 * Upload a supp file.
@@ -135,7 +135,7 @@ class PaperFileManager extends FileManager {
 	 */
 	function uploadSuppFile($fileName, $fileId = null, $overwrite = true) {
 		return $this->handleUpload($fileName, PAPER_FILE_SUPP, $fileId, $overwrite);
-	}	
+	}
 
 	/**
 	 * Upload a public file.
@@ -146,7 +146,7 @@ class PaperFileManager extends FileManager {
 	 */
 	function uploadPublicFile($fileName, $fileId = null, $overwrite = true) {
 		return $this->handleUpload($fileName, PAPER_FILE_PUBLIC, $fileId, $overwrite);
-	}	
+	}
 
 	/**
 	 * Upload a note file.
@@ -367,7 +367,7 @@ class PaperFileManager extends FileManager {
 			$revision = $currentRevision + 1;
 		} else {
 			$revision = 1;
-		}	
+		}
 
 		$sourcePaperFile = $paperFileDao->getPaperFile($sourceFileId, $sourceRevision, $this->paperId);
 
@@ -455,7 +455,7 @@ class PaperFileManager extends FileManager {
 	 * @param $originalName The name of the original file
 	 */
 	function generateFilename(&$paperFile, $type, $originalName) {
-		$extension = $this->parseFileExtension($originalName);			
+		$extension = $this->parseFileExtension($originalName);
 		$newFileName = $paperFile->getPaperId().'-'.$paperFile->getFileId().'-'.$paperFile->getRevision().'-'.$type.'.'.$extension;
 		$paperFile->setFileName($newFileName);
 		return $newFileName;
@@ -481,6 +481,7 @@ class PaperFileManager extends FileManager {
 			// Insert dummy file to generate file id FIXME?
 			$dummyFile = true;
 			$paperFile =& $this->generateDummyFile($this->paper);
+			$paperFile->setStage($this->paper->getCurrentStage());
 		} else {
 			$dummyFile = false;
 			$paperFile = new PaperFile();
@@ -489,13 +490,18 @@ class PaperFileManager extends FileManager {
 			$paperFile->setFileId($fileId);
 			$paperFile->setDateUploaded(Core::getCurrentDate());
 			$paperFile->setDateModified(Core::getCurrentDate());
+			// Hot Fix for author file uploads for revisions
+			if($type != PAPER_FILE_DIRECTOR)
+				$paperFile->setStage($this->paper->getCurrentStage() + 1);
+			else
+				$paperFile->setStage($this->paper->getCurrentStage());
 		}
 
 		$paperFile->setFileType($this->getUploadedFileType($fileName));
 		$paperFile->setFileSize($_FILES[$fileName]['size']);
 		$paperFile->setOriginalFileName(PaperFileManager::truncateFileName($_FILES[$fileName]['name'], 127));
 		$paperFile->setType($typePath);
-		$paperFile->setStage($this->paper->getCurrentStage());
+
 
 		$newFileName = $this->generateFilename($paperFile, $type, $this->getUploadedFileName($fileName));
 
