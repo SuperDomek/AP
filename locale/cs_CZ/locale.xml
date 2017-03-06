@@ -229,7 +229,7 @@
 	<message key="submission.directorAuthorRecord">Email předsedy a autora</message>
 	<message key="submission.directorVersion">Verze pro předsedu</message>
 	<message key="submission.authorsRevisedVersion">Verze souboru upraveného autorem</message>
-	<message key="submission.authorVersion">Verze pro autora</message>
+	<message key="submission.authorVersion">Nahraná revidovaná verze</message>
 	<message key="submission.layout.description">Tento volitelný krok lze využít k uspořádání příspěvků nebo ke změně formátu souborů ať už před nebo po odeslání příspěvků do Prezentací.</message>
 
 	<message key="submissions.track">Sekce</message>

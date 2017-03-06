@@ -58,49 +58,6 @@
 			{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}
 			</td>
 		</tr>
-	{else}
-		{**
-		 * This is an abstract-and-paper or paper-only review. Don't
-		 * show the abstract, and show any review files or
-		 * supplementary files.
-		 *}
-
-		{if not $isStageDisabled}
-		<tr valign="top">
-			<td colspan="2">
-				<form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
-					{translate key="director.paper.uploadReviewVersion"}
-					<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-					<input type="file" name="upload" class="uploadField" />
-					<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
-				</form>
-			</td>
-		</tr>
-		{/if}
-		{foreach from=$suppFiles item=suppFile}
-			<tr valign="top">
-				{if !$notFirstSuppFile}
-					<td class="label" rowspan="{$suppFiles|@count}">{translate key="paper.suppFilesAbbrev"}</td>
-						{assign var=notFirstSuppFile value=1}
-				{/if}
-				<td width="80%" class="value nowrap">
-					<form method="post" action="{url op="setSuppFileVisibility"}">
-						<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-						<input type="hidden" name="fileId" value="{$suppFile->getId()}" />
-						<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$suppFile->getFileId():$suppFile->getRevision()}" class="file">{$suppFile->getFileName()|escape}</a>&nbsp;&nbsp;
-						{$suppFile->getDateModified()|date_format:$dateFormatShort}
-						<label for="show">{translate key="director.paper.showSuppFile"}</label>
-						<input type="checkbox" {if !$mayEditPaper}disabled="disabled" {/if}name="show" id="show" value="1"{if $suppFile->getShowReviewers()==1} checked="checked"{/if}/>
-						<input type="submit" {if !$mayEditPaper}disabled="disabled" {/if}name="submit" value="{translate key="common.record"}" class="button" />
-					</form>
-				</td>
-			</tr>
-		{foreachelse}
-			<tr valign="top">
-				<td class="label">{translate key="paper.suppFilesAbbrev"}</td>
-				<td class="nodata">{translate key="common.none"}</td>
-			</tr>
-		{/foreach}
 	{/if}
 </table>
 

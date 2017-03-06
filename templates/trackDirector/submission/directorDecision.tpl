@@ -62,8 +62,7 @@
 {/if}
 </table>
 
-<form method="post" action="{url op="directorReview" path=$stage}" enctype="multipart/form-data">
-<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+
 {assign var=authorFiles value=$submission->getAuthorFileRevisions($stage)}
 {assign var=directorFiles value=$submission->getDirectorFileRevisions($stage)}
 {assign var=reviewFile value=$submission->getReviewFile()}
@@ -72,7 +71,11 @@
 {assign var="sendableVersionExists" value=false}
 
 {if not $reviewingAbstractOnly}
+<form method="post" action="{url op="directorReview" path=$stage}" enctype="multipart/form-data">
+  {if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+    $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
 	<table class="data" width="100%">
+    <input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
 		{foreach from=$authorFiles item=authorFile key=key}
 			<tr valign="top">
 				{if !$authorRevisionExists}
@@ -80,12 +83,9 @@
 					<td width="20%" rowspan="{$authorFiles|@count}" class="label">{translate key="submission.authorsRevisedVersion"}</td>
 				{/if}
 				<td width="80%" class="value" colspan="2">
-					{if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-            $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
-						<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" />
+					<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" />
 
 						<!--{assign var="sendableVersionExists" value=true}-->
-					{/if}
 					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;
 						{$authorFile->getDateModified()|date_format:$dateFormatShort}
 				</td>
@@ -96,6 +96,7 @@
 				<td width="80%" colspan="2" class="nodata">{translate key="common.none"}</td>
 			</tr>
 		{/foreach}
+  {if $authorFiles}
     <tr>
       <td>
       </td>
@@ -104,6 +105,24 @@
         <input type="submit" name="setReviewFile" value="{translate key="form.sendReviewFile"}" class="button" />
       </td>
     </tr>
+    {/if}
+  </table>
+</form>
+
+{if not $isStageDisabled}
+<form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
+  <table class="data" width="100%">
+		<tr valign="top">
+      <td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
+			<td width="80%" class="nodata">
+				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+				<input type="file" name="upload" class="uploadField" />
+				<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
+			</td>
+		</tr>
+  </table>
+</form>
+{/if}
 
     <!--
 		{foreach from=$directorFiles item=directorFile key=key}
@@ -128,7 +147,6 @@
 				<td width="80%" colspan="3" class="nodata">{translate key="common.none"}</td>
 			</tr>
 		{/foreach}-->
-	</table>
 
   <!--
   {if $isCurrent}
@@ -158,8 +176,9 @@
 
 	{/if}
   -->
+  {/if}
 {/if}
-</form>
+
 </div>
 {if $isFinalReview}
 

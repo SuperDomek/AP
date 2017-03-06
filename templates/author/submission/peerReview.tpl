@@ -126,19 +126,6 @@
 
       <tr valign="top">
         <td class="label" width="20%">
-          {translate key="submission.authorVersion"}
-        </td>
-        <td class="value" width="80%">
-          {foreach from=$authorFiles item=authorFile key=key}
-            <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;{$authorFile->getDateModified()|date_format:$dateFormatShort}<br />
-          {foreachelse}
-            {translate key="common.none"}
-          {/foreach}
-        </td>
-      </tr>
-
-      <tr valign="top">
-        <td class="label" width="20%">
           {translate key="submission.reviewVersion"}
         </td>
         <td class="value" width="80%">

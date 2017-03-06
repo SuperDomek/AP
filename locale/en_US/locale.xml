@@ -226,7 +226,7 @@
 	<message key="submission.directorAuthorRecord">Director/Author Email Record</message>
 	<message key="submission.directorVersion">Director Version</message>
 	<message key="submission.authorsRevisedVersion">Author's revised version</message>
-	<message key="submission.authorVersion">Author Version</message>
+	<message key="submission.authorVersion">Uploaded revised version</message>
 	<message key="submission.layout.description">This optional step can be used to lay out submissions or change file formats either before or after submissions are sent to Presentations.</message>
 
 	<message key="submissions.track">Track</message>

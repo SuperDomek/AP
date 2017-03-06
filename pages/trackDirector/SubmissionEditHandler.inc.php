@@ -1148,8 +1148,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		}elseif (Request::getUserVar('setReviewFile')) {
 			$file = explode(',', Request::getUserVar('directorDecisionFile'));
 			if (isset($file[0]) && isset($file[1])) {
-				error_log("if");
 				TrackDirectorAction::setReviewFile($submission, $file[0], $file[1]);
+				TrackDirectorAction::nextStage($submission);
 			}
 		}
 
