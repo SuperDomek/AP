@@ -1945,7 +1945,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	 * @param int constant for stage
 	 * @return bool true if the user is active reviewer
 	 */
-	function isReviewer($stage){
+	function isReviewer($stage = null){
 		$user =& Request::getUser();
 		$submission =& $this->submission;
 		$stageSub = $submission->getCurrentStage();

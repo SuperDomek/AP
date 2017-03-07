@@ -45,16 +45,18 @@
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
               {translate key="author.submissions.queuedPaperReviewRevisions"}
-            {else}{translate key="submissions.queuedPaperReview"}
+            {else}
+              {translate key="submissions.queuedPaperReview"}
             {/if}
           </a>
         {else}
-          <a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
+          <a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">
             {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
               {translate key="author.submissions.queuedAbstractReviewRevisions"}
-            {else}{translate key="submissions.queuedAbstractReview"}
+            {else}
+              {translate key="submissions.queuedAbstractReview"}
             {/if}
           </a>
         {/if}

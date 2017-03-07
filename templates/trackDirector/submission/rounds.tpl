@@ -167,7 +167,7 @@
     				<a href="javascript:openComments('{url op="viewPeerReviewComments" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="comment"}</a>{translate key="common.noComments"}
     			{/if}
     		</td>
-    	</tr>-->
+    	</tr>
      	<tr valign="top">
     		<td class="label">{translate key="reviewer.paper.uploadedFile"}</td>
     		<td colspan="4">
@@ -193,7 +193,7 @@
     				{/foreach}
     			</table>
     		</td>
-    	</tr>
+    	</tr>-->
     </table>
     </div>
     {/if}
@@ -227,13 +227,15 @@
     			{/foreach}
     		</td>
     	</tr>
-    	{foreach from=$authorFiles item=authorFile key=key}
+      {* FIX THIS - author files are not distinguishable in db from director files *}
+    	<!--
+      {foreach from=$authorFiles item=authorFile key=key}
     		<tr valign="top">
     			{if !$authorRevisionExists}
     				{assign var="authorRevisionExists" value=true}
     				<td width="20%" class="label" rowspan="{$authorFiles|@count}" class="label">{translate key="submission.authorVersion"}</td>
+            <td width="80%" class="value"><a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;{$authorFile->getDateModified()|date_format:$dateFormatShort}</td>
     			{/if}
-    			<td width="80%" class="value"><a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;{$authorFile->getDateModified()|date_format:$dateFormatShort}</td>
     		</tr>
     	{foreachelse}
     		<tr valign="top">
@@ -255,7 +257,7 @@
     			<td width="20%" class="label">{translate key="submission.directorVersion"}</td>
     			<td width="80%" colspan="4" class="nodata">{translate key="common.none"}</td>
     		</tr>
-    	{/foreach}
+    	{/foreach}-->
     </table>
   </div>
   <div class="separator"></div>
