@@ -66,7 +66,7 @@
 
 <div id="peerReview">
 
-{if ($stage == $smarty.const.REVIEW_STAGE_PRESENTATION && $submission->getCurrentStage() != $smarty.const.REVIEW_STAGE_PRESENTATION)}
+{if $submission->getCurrentStage() < $smarty.const.REVIEW_STAGE_PRESENTATION}
 	{assign var="isStageDisabled" value=true}
 {/if}
 

@@ -1150,6 +1150,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			if (isset($file[0]) && isset($file[1])) {
 				TrackDirectorAction::setReviewFile($submission, $file[0], $file[1]);
 				TrackDirectorAction::nextStage($submission);
+				$redirectArgs = array($paperId, $stage + 1);
 			}
 		}
 

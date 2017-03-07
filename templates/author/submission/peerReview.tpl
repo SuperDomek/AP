@@ -86,7 +86,11 @@
           </tr>
         {/if}
       {foreachelse}
-        {translate key="common.noneAssigned"}
+        <tr>
+          <td colspan="2">
+            {translate key="common.noneAssigned"}
+          </td>
+        </tr>
       {/foreach}
     {elseif $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION && $stageTemp >= $smarty.const.REVIEW_STAGE_PRESENTATION}
       {* Paper review *}
@@ -159,7 +163,11 @@
         </tr>
         {/if}
       {foreachelse}
-        {translate key="common.noneAssigned"}
+        <tr>
+          <td colspan="2">
+            {translate key="common.noneAssigned"}
+          </td>
+        </tr>
       {/foreach}
 
     {/if}
