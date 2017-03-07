@@ -211,7 +211,9 @@
 	<message key="submission.fromTime">Od</message>
 	<message key="submission.toTime">Do</message>
 	<message key="submission.abstractReview">Posudek abstraktu</message>
+	<message key="submission.abstractReviews">Posudky abstraktu</message>
 	<message key="submission.paperReview">Posudek příspěvku</message>
+	<message key="submission.paperReviews">Posudky příspěvku</message>
 	<message key="submission.page.abstractReview">Posudek abstraktu č. {$id}</message>
 	<message key="submission.page.paperReview">Posudek příspěvku č. {$id}</message>
 	<message key="submission.uploadFile">Nahrát příspěvek</message>
@@ -220,13 +222,14 @@
 	<message key="submission.complete.description">Přidat příspěvek na seznam přijatých prezentací.</message>
 	<message key="submission.directorDecision">Rozhodnutí</message>
 	<message key="submission.stage">Fáze&amp;nbsp;{$stage}</message>
+	<message key="submission.previousStage">Předchozí fáze recenze</message>
 	<message key="submission.directorReview">Posudek předsedy</message>
 	<message key="submission.notifyAuthor">Oznámit autorovi</message>
 	<message key="submission.notifyDirector">Informovat předsedu</message>
 	<message key="submission.directorAuthorRecord">Email předsedy a autora</message>
 	<message key="submission.directorVersion">Verze pro předsedu</message>
 	<message key="submission.authorsRevisedVersion">Verze souboru upraveného autorem</message>
-	<message key="submission.authorVersion">Verze pro autora</message>
+	<message key="submission.authorVersion">Nahraná revidovaná verze</message>
 	<message key="submission.layout.description">Tento volitelný krok lze využít k uspořádání příspěvků nebo ke změně formátu souborů ať už před nebo po odeslání příspěvků do Prezentací.</message>
 
 	<message key="submissions.track">Sekce</message>
@@ -481,10 +484,11 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="trackDirector.regrets.breadcrumb">Připomínky</message>
 	<message key="trackDirector.regrets.title">Připomínky a odmítnutí oponenta příspěvku č. {$paperId}</message>
 	<message key="trackDirector.regrets">Připomínky</message>
-	<message key="trackDirector.regrets.link">Zobrazit připomínky a odmítnutí</message>
+	<message key="trackDirector.regrets.link">Zobrazit předchozí kola recenze</message>
 	<message key="trackDirector.regrets.reviewStage">Oponentura, fáze {$stage}</message>
-	<message key="trackDirector.regrets.decisionStage">Rozhodnutí garanta, fáze {$stage}</message>
-	<message key="trackDirector.regrets.regretsAndCancels">Připomínky a odmítnutí oponenta</message>
+	<message key="trackDirector.regrets.decisionStage">Rozhodnutí ko-editora, fáze {$stage}</message>
+	<message key="trackDirector.regrets.decisionStage.abstract">Rozhodnutí ko-editora, abstrakt</message>
+	<message key="trackDirector.regrets.regretsAndCancels">Odmítnuté recenze</message>
 	<message key="trackDirector.regrets.regret">Připomínka</message>
 	<message key="trackDirector.regrets.result">Výsledek</message>
 	<message key="trackDirector.review.enrollReviewer">Zaregistrovat stávajícího uživatele jako oponenta</message>
@@ -796,7 +800,7 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="log.review.reviewAccepted">{$reviewerName} akceptoval oponenturu v rámci sekce {$stage} u příspěvku {$paperId}.</message>
 	<message key="log.review.reviewAcceptedByProxy">{$userName} přijal oponenturu příspěvku ($paperId) do sekce {$stage} v zastoupení oponenta {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">Garant {$userName} vložil soubor posudku do sekce {$stage} pro příspěvek {$paperId} v zastoupení oponenta {$reviewerName}.</message>
-	<message key="log.review.reviewerFile">Soubor oponenta byl uložen.</message>
+	<message key="log.review.reviewerFile">Byl vložen soubor k oponentuře.</message>
 	<message key="log.director.decision">Rozhodnutí garanta ({$decision}) pro příspěvek {$paperId} bylo uloženo garantem {$directorName}.</message>
 	<message key="log.director.publish">Příspěvek byl publikován.</message>
 	<message key="log.director.unpublish">Příspěvek byl přesunut zpět do fronty.</message>

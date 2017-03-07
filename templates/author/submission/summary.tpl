@@ -8,6 +8,11 @@
  *
  * $Id$
  *}
+{assign var="paperId" value=$submission->getPaperId()}
+{assign var="currentStage" value=$submission->getCurrentStage()}
+{assign var="submissionProgress" value=$submission->getSubmissionProgress()}
+{assign var="status" value=$submission->getSubmissionStatus()}
+
 <div id="submission">
 <h3>{translate key="paper.submission"}</h3>
 
@@ -27,5 +32,44 @@
 		<td class="label">{translate key="track.track"}</td>
 		<td>{$submission->getTrackTitle()|escape}</td>
 	</tr>
+  <tr>
+    <td class="label">{translate key="common.status"}</td>
+    <td>
+      {if $submissionProgress == 0}
+      {if $status == STATUS_QUEUED_UNASSIGNED}{translate key="submissions.queuedUnassigned"}
+      {elseif $status == STATUS_QUEUED_REVIEW}
+        {assign var=decision value=$submission->getMostRecentDecision()}
+        {if $currentStage>=REVIEW_STAGE_PRESENTATION}
+          <a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
+            {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+            $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+            $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+              {translate key="author.submissions.queuedPaperReviewRevisions"}
+            {else}
+              {translate key="submissions.queuedPaperReview"}
+            {/if}
+          </a>
+        {else}
+          <a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">
+            {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+            $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+            $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+              {translate key="author.submissions.queuedAbstractReviewRevisions"}
+            {else}
+              {translate key="submissions.queuedAbstractReview"}
+            {/if}
+          </a>
+        {/if}
+      {elseif $status == STATUS_QUEUED_EDITING}
+        <a href="{url op="submissionReview" path=$paperId|to_array}" class="action">{translate key="submissions.queuedEditing"}</a>
+      {/if}
+      {elseif $submissionProgress == 1}
+        {translate key="submissions.incomplete"}
+      {else}
+        {url|assign:"submitUrl" op="submit" path=$submission->getSubmissionProgress() paperId=$paperId}
+        <a class="action" href="{$submitUrl}">{translate key="submissions.pendingPresentation"}</a>
+      {/if}
+    </td>
+  </tr>
 </table>
 </div>

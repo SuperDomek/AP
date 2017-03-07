@@ -128,6 +128,7 @@
 	<message key="author.submit.finishSubmission">Dokončit odeslání</message>
 	<message key="author.submit.submissionComplete">Odeslání dokončeno. Děkujeme za odeslání příspěvku na konferenci {$conferenceTitle}.</message>
 	<message key="author.submit.expedite"><![CDATA[Je-li tento příspěvek ve formátu, který je možné publikovat bez dalších změn a editací, lze ho rovnou odeslat na stránku Sborník <a href="{$expediteUrl}" class="action">kliknutím sem</a>. (Poznámka: Tuto nabídku mají k dispozici pouze garanti sekcí.)]]></message>
-	<message key="author.paper.uploadAuthorVersion">Načíst verzi autora</message>
+	<message key="author.paper.uploadAuthorVersion">Nahrát revidovanou verzi</message>
+	<message key="author.paper.stageDisabled">Recenzní řízení ještě nezačalo. Buďto neskončila oponentura abstraktu nebo autor dosud neodeslal příspěvek k recenzi.</message>
 	<message key="presenter.submit.authorSubmitLoginMessage">Podávání materiálů na tuto konferenci je možné pouze po provedení registrace. To umožňuje garantům sekcí sledovat Vaše příspěvky a kontaktovat Vás při změně stavu Vašeho příspěvku, nebo v případě potřeby dalších informací od Vás.</message>
 </locale>

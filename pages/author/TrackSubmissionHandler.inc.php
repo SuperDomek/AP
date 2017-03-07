@@ -132,6 +132,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('submissionFile', $submission->getSubmissionFile());
 		$templateMgr->assign_by_ref('revisedFile', $submission->getRevisedFile());
 		$templateMgr->assign_by_ref('suppFiles', $submission->getSuppFiles());
+		$templateMgr->assign('reviewMode', $reviewMode);
 
 		$controlledVocabDao =& DAORegistry::getDAO('ControlledVocabDAO');
 		$templateMgr->assign('sessionTypes', $controlledVocabDao->enumerateBySymbolic('sessionTypes', ASSOC_TYPE_SCHED_CONF, $schedConf->getId()));
@@ -184,8 +185,8 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
-		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments($stage));
-		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexesForStage($paperId, $stage));
+		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());
+		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexes($paperId));
 		$templateMgr->assign('stage', $stage);
 		$templateMgr->assign_by_ref('reviewFilesByStage', $reviewFilesByStage);
 		$templateMgr->assign_by_ref('authorViewableFilesByStage', $authorViewableFilesByStage);
@@ -195,6 +196,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('revisedFile', $authorSubmission->getRevisedFile());
 		$templateMgr->assign_by_ref('suppFiles', $authorSubmission->getSuppFiles());
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
+
 
 		import('submission.reviewAssignment.ReviewAssignment');
 		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
@@ -206,6 +208,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		// Determine whether or not certain features should be disabled (i.e. past deadline)
 		$templateMgr->assign('mayEditPaper', AuthorAction::mayEditPaper($authorSubmission));
+		$templateMgr->assign('mayUploadRevision', ($lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS));
 
 		$templateMgr->assign('helpTopicId', 'editorial.authorsRole.review');
 		$templateMgr->display('author/submissionReview.tpl');
@@ -217,9 +222,10 @@ class TrackSubmissionHandler extends AuthorHandler {
 	 */
 	function viewReviewFormResponse($args) {
 		$paperId = isset($args[0]) ? (int) $args[0] : 0;
-		$this->validate($paperId, true);
+		$this->validate($paperId, false);
 		$submission =& $this->submission;
 		$this->setupTemplate(true, $paperId, 'summary');
+
 
 		$reviewId = isset($args[1]) ? (int) $args[1] : null;
 
@@ -347,7 +353,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 	 */
 	function uploadRevisedVersion() {
 		$paperId = (int) Request::getUserVar('paperId');
+		error_log("před validací");
 		$this->validate($paperId, true);
+		error_log("po validaci");
 		$submission =& $this->submission;
 
 		AuthorAction::uploadRevisedVersion($submission);

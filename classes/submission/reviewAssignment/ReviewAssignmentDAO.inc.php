@@ -81,6 +81,35 @@ class ReviewAssignmentDAO extends DAO {
 	}
 
 	/**
+	 * Determine the order of active reviews for all the stages of the given paper
+	 * @param $paperId int
+	 * @return two-level array associating stage with an array of review ID associated with number
+	 * @return ie if in stage 1 review ID 26 is first, returned['1']=['26' => 0]
+	 */
+	function &getReviewIndexes($paperId) {
+		$returner = array();
+		$index = 0;
+		$stagePrev = 0;
+		$result =& $this->retrieve(
+			'SELECT review_id, stage FROM review_assignments WHERE paper_id = ? AND (cancelled = 0 OR cancelled IS NULL) ORDER BY stage, review_id',
+			array((int) $paperId)
+			);
+
+		while (!$result->EOF) {
+			$row = $result->GetRowAssoc(false);
+			if($row['stage'] > $stagePrev) $index = 0;
+			$returner[$row['stage']] = array($row['review_id'] => $index++);
+			$stagePrev = $row['stage'];
+			$result->MoveNext();
+		}
+
+		$result->Close();
+		unset($result);
+
+		return $returner;
+	}
+
+	/**
 	 * Determine the order of active reviews for the given stage of the give paper
 	 * @param $paperId int
 	 * @param $stage int
@@ -200,7 +229,7 @@ class ReviewAssignmentDAO extends DAO {
 
 		return $reviewAssignments;
 	}
-	
+
 	/**
 	 * Get all review assignments for a review form.
 	 * @param $reviewFormId int
@@ -224,7 +253,7 @@ class ReviewAssignmentDAO extends DAO {
 
 		return $reviewAssignments;
 	}
-	
+
 	/**
 	 * Get a review file for a paper for each stage.
 	 * @param $paperId int
@@ -234,17 +263,15 @@ class ReviewAssignmentDAO extends DAO {
 		$returner = array();
 
 		$result =& $this->retrieve('
-			SELECT a.*,
-				r.stage as stage
-			FROM review_stages r,
-				paper_files a,
-				papers art
-			WHERE art.paper_id=r.paper_id
-				AND r.paper_id=?
-				AND r.paper_id=a.paper_id
-				AND a.file_id=art.review_file_id
-				AND a.revision=r.review_revision
-				AND a.paper_id=r.paper_id', 
+		SELECT a.*
+		FROM review_stages r,
+			paper_files a
+		WHERE r.paper_id=?
+			AND r.paper_id=a.paper_id
+			AND a.type LIKE "%review"
+			AND a.revision=r.review_revision
+			AND a.paper_id=r.paper_id
+			AND r.stage=a.stage',
 			(int) $paperId
 		);
 
@@ -275,7 +302,7 @@ class ReviewAssignmentDAO extends DAO {
 			WHERE	reviewer_file_id = file_id
 				AND viewable = 1
 				AND a.paper_id = ?
-			ORDER BY a.stage, a.reviewer_id, a.review_id', 
+			ORDER BY a.stage, a.reviewer_id, a.review_id',
 			array((int) $paperId)
 		);
 
@@ -312,7 +339,7 @@ class ReviewAssignmentDAO extends DAO {
 		$returner = array();
 
 		$result =& $this->retrieve(
-			'SELECT stage, MAX(last_modified) as last_modified FROM review_assignments WHERE paper_id=? GROUP BY stage', 
+			'SELECT stage, MAX(last_modified) as last_modified FROM review_assignments WHERE paper_id=? GROUP BY stage',
 			array((int) $paperId)
 		);
 
@@ -338,7 +365,7 @@ class ReviewAssignmentDAO extends DAO {
 		$returner = array();
 
 		$result =& $this->retrieve(
-			'SELECT stage, MIN(date_notified) as earliest_date FROM review_assignments WHERE paper_id=? GROUP BY stage', 
+			'SELECT stage, MIN(date_notified) as earliest_date FROM review_assignments WHERE paper_id=? GROUP BY stage',
 			array((int) $paperId)
 		);
 
@@ -428,7 +455,7 @@ class ReviewAssignmentDAO extends DAO {
 	/**
 	 * Insert a new Review Assignment.
 	 * @param $reviewAssignment ReviewAssignment
-	 */	
+	 */
 	function insertReviewAssignment(&$reviewAssignment) {
 		$this->update(
 			sprintf('INSERT INTO review_assignments
@@ -460,6 +487,9 @@ class ReviewAssignmentDAO extends DAO {
 	 * @param $reviewAssignment object
 	 */
 	function updateReviewAssignment(&$reviewAssignment) {
+		/*foreach(debug_backtrace() as $key => $item){
+				error_log("Volající funkce ".$key.": ".$item['function']);
+		}*/
 		return $this->update(
 			sprintf('UPDATE review_assignments
 				SET	paper_id = ?,

@@ -591,7 +591,7 @@ class ReviewAssignment extends DataObject {
 				//SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
 			);
 		}
-		else if ($stage == REVIEW_STAGE_PRESENTATION) {
+		else if ($stage >= REVIEW_STAGE_PRESENTATION) {
 			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
@@ -601,14 +601,16 @@ class ReviewAssignment extends DataObject {
 
 			);
 		}
-		else {
+		else { // $stage == NULL (for all the Options in all stages)
 			$reviewerRecommendationOptions = array(
 				'' => 'common.chooseOne',
 				SUBMISSION_REVIEWER_RECOMMENDATION_ACCEPT => 'reviewer.paper.decision.accept',
 				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_REVISIONS => 'reviewer.paper.decision.pendingRevisions',
-				SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_MINOR_REVISIONS => 'reviewer.paper.decision.pendingMinorRevisions',
+				SUBMISSION_REVIEWER_RECOMMENDATION_PENDING_MAJOR_REVISIONS => 'reviewer.paper.decision.pendingMajorRevisions',
+				//SUBMISSION_REVIEWER_RECOMMENDATION_RESUBMIT_ELSEWHERE => 'reviewer.paper.decision.resubmitElsewhere',
 				SUBMISSION_REVIEWER_RECOMMENDATION_DECLINE => 'reviewer.paper.decision.decline',
-				SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
+				//SUBMISSION_REVIEWER_RECOMMENDATION_SEE_COMMENTS => 'reviewer.paper.decision.seeComments'
 			);
 		}
 		return $reviewerRecommendationOptions;

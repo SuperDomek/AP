@@ -24,11 +24,11 @@
 
 <ul class="menu">
 	<li><a href="{url op="submission" path=$submission->getPaperId()}">{translate key="submission.summary"}</a></li>
-	{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL}
-		<li {if $stage==REVIEW_STAGE_ABSTRACT}class="current"{/if}><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_ABSTRACT}">
+	{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SEQUENTIAL}
+		<li {if $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}class="current"{/if}><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_ABSTRACT}">
 			{translate key="submission.abstractReview"}</a>
 		</li>
-		<li {if $stage==REVIEW_STAGE_PRESENTATION}class="current"{/if}><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_PRESENTATION}">
+		<li {if $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION}class="current"{/if}><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}">
 			{translate key="submission.paperReview"}</a>
 		</li>
 	{else}

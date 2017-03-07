@@ -104,7 +104,6 @@ class AuthorAction extends Action {
 		$fileName = 'upload';
 		if ($paperFileManager->uploadError($fileName)) return false;
 		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
-
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
 			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId());
@@ -135,9 +134,7 @@ class AuthorAction extends Action {
 	function viewReviewFormResponse($authorSubmission, $reviewId) {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
-
 		if (HookRegistry::call('AuthorAction::viewReviewFormResponse', array(&$authorSubmission, &$reviewAssignment, &$reviewId))) return $reviewId;
-
 		if (isset($reviewAssignment) && $reviewAssignment->getPaperId() == $authorSubmission->getPaperId()) {
 			$reviewFormId = $reviewAssignment->getReviewFormId();
 			if ($reviewFormId != null) {
@@ -320,7 +317,6 @@ class AuthorAction extends Action {
 			$schedConfDao =& DAORegistry::getDAO('SchedConfDAO');
 			$schedConf =& $schedConfDao->getSchedConf($paper->getSchedConfId());
 		}
-
 		// Directors acting as Authors can always edit.
 		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) || Validation::isTrackDirector($schedConf->getConferenceId(), $schedConf->getId())) return true;
 
@@ -328,16 +324,20 @@ class AuthorAction extends Action {
 		if ($authorSubmission->getSubmissionProgress() != 0) return true;
 
 		// Archived or declined submissions can never be edited.
-		if ($authorSubmission->getStatus() == STATUS_ARCHIVED || $authorSubmission->getStatus() == STATUS_DECLINED) return false;
+		if ($authorSubmission->getStatus() == STATUS_ARCHIVED ||
+			$authorSubmission->getStatus() == STATUS_DECLINED) return false;
 
-		// Submissions in Presentation stage cannot be edited anymore
-		if ($authorSubmission->getSubmissionStatus() == REVIEW_STAGE_PRESENTATION) return false;
 
 		// If the last recorded editorial decision on the current stage
 		// was "Revisions Required", the author may edit the submission.
 		$decisions = $authorSubmission->getDecisions($authorSubmission->getCurrentStage());
-		$decision = array_shift($decisions);
-		if ($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS) return true;
+		$lastDecision = end($decisions)['decision'];
+		if ($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) return true;
+
+		// Submissions in Presentation stage cannot be edited anymore
+		if ($authorSubmission->getCurrentStage() >= REVIEW_STAGE_PRESENTATION) return false;
 
 		// After the deadline for Submitting cannot be edited
 		$submissionsCloseDate = $schedConf->getSetting('submissionsCloseDate');

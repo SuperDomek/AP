@@ -125,7 +125,7 @@ class Action {
 				// Send a notification to associated users
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
-				$notificationUsers = $paper->getAssociatedUserIds();
+				$notificationUsers = $paper->getAssociatedUserIds(false, false);
 				foreach ($notificationUsers as $userRole) {
 					$url = Request::url(null, null, $userRole['role'], 'submission', $paper->getId(), null, 'metadata');
 					$notificationManager->createNotification(

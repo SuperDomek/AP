@@ -184,6 +184,7 @@
 	<message key="common.up">Up</message>
 	<message key="common.url">URL</message>
 	<message key="common.user">User</message>
+	<message key="common.userHidden">Name hidden</message>
 	<message key="common.view">View</message>
 	<message key="common.weeks">weeks</message>
 	<message key="common.width">Width</message>
@@ -230,6 +231,7 @@
 	<message key="form.resubmit">Resubmit</message>
 	<message key="form.saveToUpload">Use Save to upload file.</message>
 	<message key="form.send">Send</message>
+	<message key="form.sendReviewFile">Set as current review version</message>
 	<message key="form.submit">Submit</message>
 	<message key="help.contents">Contents</message>
 	<message key="help.help">Help</message>

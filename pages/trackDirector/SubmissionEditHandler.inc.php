@@ -111,28 +111,32 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$cancelsAndRegrets = $reviewAssignmentDao->getCancelsAndRegrets($paperId);
 		$reviewFilesByStage = $reviewAssignmentDao->getReviewFilesByStage($paperId);
 
-		$stages = $submission->getReviewAssignments();
+		$reviewAssignmentStages = $submission->getReviewAssignments();
 		$numStages = $submission->getCurrentStage();
 
 		$directorDecisions = $submission->getDecisions();
 
 		$reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
 		$reviewFormResponses = array();
-		if (isset($stages[$numStages-1])) {
-			foreach ($stages[$numStages-1] as $stage) {
-				$reviewFormResponses[$stage->getReviewId()] = $reviewFormResponseDao->reviewFormResponseExists($stage->getReviewId());
+
+		for($i = 1; $i < $numStages; $i++){ // cycling through all the stages except the current one
+			if (isset($reviewAssignmentStages[$i])) {
+				foreach ($reviewAssignmentStages[$i] as $reviewAssignment) {
+					$reviewFormResponses[$reviewAssignment->getReviewId()] = $reviewFormResponseDao->reviewFormResponseExists($reviewAssignment->getReviewId());
+				}
 			}
 		}
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('reviewMode', $submission->getReviewMode());
 		$templateMgr->assign_by_ref('submission', $submission);
-		$templateMgr->assign_by_ref('reviewAssignmentStages', $stages);
+		$templateMgr->assign_by_ref('reviewAssignmentStages', $reviewAssignmentStages);
 		$templateMgr->assign('reviewFormResponses', $reviewFormResponses);
 		$templateMgr->assign_by_ref('cancelsAndRegrets', $cancelsAndRegrets);
 		$templateMgr->assign_by_ref('reviewFilesByStage', $reviewFilesByStage);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
-		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions());
+		$templateMgr->assign_by_ref('directorDecisionOptionsAbstract', TrackDirectorSubmission::getDirectorDecisionOptions(null, REVIEW_STAGE_ABSTRACT));
+		$templateMgr->assign_by_ref('directorDecisionOptionsPaper', TrackDirectorSubmission::getDirectorDecisionOptions(null, REVIEW_STAGE_PRESENTATION));
 		$templateMgr->assign('rateReviewerOnQuality', $schedConf->getSetting('rateReviewerOnQuality'));
 
 		import('submission.reviewAssignment.ReviewAssignment');
@@ -297,9 +301,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
-		if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage == REVIEW_STAGE_PRESENTATION) {
+		/*if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage >= REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);
-		}
+		}*/
+
+		if ($lastDecision == SUBMISSION_DIRECTOR_DECISION_ACCEPT)
+			$templateMgr->assign('isFinalReview', true);
 
 		import('submission.reviewAssignment.ReviewAssignment');
 		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
@@ -418,19 +425,14 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		// If the director changes the decision on the first round,
 		// roll back to the abstract review stage.
-		if (
-			$submission->getCurrentStage() == REVIEW_STAGE_PRESENTATION &&
-			$stage == REVIEW_STAGE_ABSTRACT
-		) {
+		if ($submission->getCurrentStage() == REVIEW_STAGE_PRESENTATION && $stage == REVIEW_STAGE_ABSTRACT) {
 			$submission->setCurrentStage(REVIEW_STAGE_ABSTRACT);
-
 			// Now, unassign all reviewers from the paper review
 			foreach ($submission->getReviewAssignments(REVIEW_STAGE_PRESENTATION) as $reviewAssignment) {
 				if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
 					TrackDirectorAction::clearReview($submission, $reviewAssignment->getId());
 				}
 			}
-
 			TrackDirectorAction::recordDecision($submission, $decision, $stage);
 		} else {
 			/* no need for switching
@@ -1126,6 +1128,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$paperId = Request::getUserVar('paperId');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$submission =& $this->submission;
+		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 
 		$redirectArgs = array($paperId, $stage);
 
@@ -1143,6 +1146,14 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				TrackDirectorAction::setEditingFile($submission, $file[0], $file[1], Request::getUserVar('createGalley'));
 			}
 
+		}elseif (Request::getUserVar('setReviewFile')) {
+			$file = explode(',', Request::getUserVar('directorDecisionFile'));
+			if (isset($file[0]) && isset($file[1])) {
+				TrackDirectorAction::nextStage($submission);
+				$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
+				TrackDirectorAction::setReviewFile($submission, $file[0], $file[1]);
+				$redirectArgs = array($paperId, $stage + 1);
+			}
 		}
 
 		Request::redirect(null, null, null, 'submissionReview', $redirectArgs);
@@ -1934,7 +1945,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	 * @param int constant for stage
 	 * @return bool true if the user is active reviewer
 	 */
-	function isReviewer($stage){
+	function isReviewer($stage = null){
 		$user =& Request::getUser();
 		$submission =& $this->submission;
 		$stageSub = $submission->getCurrentStage();

@@ -33,12 +33,12 @@
 		<td>{$submission->getTrackAbbrev()|escape}</td>
 		<td>{$submission->getAuthorString(true)|truncate:40:"..."|escape}</td>
 		{if $submissionProgress == 0}
-			<td><a href="{url op="submission" path=$paperId}" class="action">{if $submission->getLocalizedTitle()}{$submission->getLocalizedTitle()|strip_tags|truncate:60:"..."}{else}{translate key="common.untitled"}{/if}</a></td>
+			<td><a href="{url op="submissionReview" path=$paperId|to_array}" class="action">{if $submission->getLocalizedTitle()}{$submission->getLocalizedTitle()|strip_tags|truncate:60:"..."}{else}{translate key="common.untitled"}{/if}</a></td>
 			<td align="right">
 				{if $status == STATUS_QUEUED_UNASSIGNED}{translate key="submissions.queuedUnassigned"}
 				{elseif $status == STATUS_QUEUED_REVIEW}
 					{assign var=decision value=$submission->getMostRecentDecision()}
-					{if $currentStage==REVIEW_STAGE_PRESENTATION}
+					{if $currentStage>=REVIEW_STAGE_PRESENTATION}
 						<a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
               {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
               $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||

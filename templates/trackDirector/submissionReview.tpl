@@ -12,7 +12,7 @@
 {if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
 	{translate|assign:"pageTitleTranslated" key="submission.page.review" id=$submission->getPaperId()}
 	{assign var="pageCrumbTitle" value="submission.review"}
-{elseif $stage==REVIEW_STAGE_ABSTRACT}
+{elseif $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
 	{translate|assign:"pageTitleTranslated" key="submission.page.abstractReview" id=$submission->getPaperId()}
 	{assign var="pageCrumbTitle" value="submission.abstractReview"}
 {else}{* REVIEW_STAGE_PRESENTATION *}
@@ -24,13 +24,13 @@
 
 <ul class="menu">
 	<li><a href="{url op="submission" path=$submission->getPaperId()}">{translate key="submission.summary"}</a></li>
-	{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL}
-		<li {if $stage==REVIEW_STAGE_ABSTRACT}class="current"{/if}>
+	{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SEQUENTIAL}
+		<li {if $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}class="current"{/if}>
 			<a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_ABSTRACT}">
 				{translate key="submission.abstractReview"}</a>
 		</li>
-		<li {if $stage==REVIEW_STAGE_PRESENTATION}class="current"{/if}>
-			<a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_PRESENTATION}">
+		<li {if $stage >= REVIEW_STAGE_PRESENTATION}class="current"{/if}>
+			<a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}">
 				{translate key="submission.paperReview"}</a>
 		</li>
 	{else}

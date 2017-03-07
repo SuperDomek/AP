@@ -48,7 +48,7 @@ class ReviewerAction extends Action {
 		$reviewer =& $userDao->getUser($reviewAssignment->getReviewerId());
 		if (!isset($reviewer)) return true;
 
-		// Only confirm the review for the reviewer if 
+		// Only confirm the review for the reviewer if
 		// he has not previously done so.
 		if ($reviewAssignment->getDateConfirmed() == null) {
 			import('mail.PaperMailTemplate');
@@ -123,12 +123,13 @@ class ReviewerAction extends Action {
 	function recordRecommendation(&$reviewerSubmission, $recommendation, $send) {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
+		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewerSubmission->getReviewId());
 
 		// Check validity of selected recommendation
-		$reviewerRecommendationOptions =& ReviewAssignment::getReviewerRecommendationOptions();
+		$reviewerRecommendationOptions =& ReviewAssignment::getReviewerRecommendationOptions($reviewAssignment->getStage());
 		if (!isset($reviewerRecommendationOptions[$recommendation])) return true;
 
-		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewerSubmission->getReviewId());
+
 		$reviewer =& $userDao->getUser($reviewAssignment->getReviewerId());
 		if (!isset($reviewer)) return true;
 
@@ -206,7 +207,7 @@ class ReviewerAction extends Action {
 	 */
 	function uploadReviewerVersion($reviewId) {
 		import('file.PaperFileManager');
-		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');		
+		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
 
 		$paperFileManager = new PaperFileManager($reviewAssignment->getPaperId());
@@ -305,7 +306,7 @@ class ReviewerAction extends Action {
 
 			if ($commentForm->validate()) {
 				$commentForm->execute();
-				
+
 				// Send a notification to associated users
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
@@ -330,7 +331,7 @@ class ReviewerAction extends Action {
 			return true;
 		}
 	}
-	
+
 		/**
 	 * Edit review form response.
 	 * @param $reviewId int
@@ -359,14 +360,14 @@ class ReviewerAction extends Action {
 			$reviewForm->readInputData();
 			if ($reviewForm->validate()) {
 				$reviewForm->execute();
-				
+
 				// Send a notification to associated users
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
 				$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 				$reviewAssignment = $reviewAssignmentDao->getReviewAssignmentById($reviewId);
 				$paperId = $reviewAssignment->getPaperId();
-				$paperDao =& DAORegistry::getDAO('PaperDAO'); 
+				$paperDao =& DAORegistry::getDAO('PaperDAO');
 				$paper =& $paperDao->getPaper($paperId);
 				$notificationUsers = $paper->getAssociatedUserIds(false, false);
 				foreach ($notificationUsers as $userRole) {
@@ -397,7 +398,7 @@ class ReviewerAction extends Action {
 	 * @param $revision int
 	 */
 	function downloadReviewerFile($reviewId, &$paper, $fileId, $revision = null) {
-		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');		
+		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
 		$conference =& Request::getConference();
 

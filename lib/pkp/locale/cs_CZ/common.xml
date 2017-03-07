@@ -182,6 +182,7 @@
 	<message key="common.up">Nahoru</message>
 	<message key="common.url">URL</message>
 	<message key="common.user">Uživatel</message>
+	<message key="common.userHidden">Jméno skryto</message>
 	<message key="common.view">Zobrazit</message>
 	<message key="common.weeks">týdny</message>
 	<message key="common.width">Šířka</message>
@@ -228,6 +229,7 @@
 	<message key="form.resubmit">Znovu poslat</message>
 	<message key="form.saveToUpload">Pro nahrání souboru použijte Uložit.</message>
 	<message key="form.send">Poslat</message>
+	<message key="form.sendReviewFile">Nastavit jako aktuální soubor k recenzi</message>
 	<message key="form.submit">Odeslat</message>
 	<message key="help.contents">Obsah</message>
 	<message key="help.help">Pomoc</message>

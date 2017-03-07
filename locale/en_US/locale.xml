@@ -208,7 +208,9 @@
 	<message key="submission.fromTime">From</message>
 	<message key="submission.toTime">To</message>
 	<message key="submission.abstractReview">Abstract Review</message>
+	<message key="submission.abstractReviews">Abstract Reviews</message>
 	<message key="submission.paperReview">Paper Review</message>
+	<message key="submission.paperReviews">Paper Reviews</message>
 	<message key="submission.page.abstractReview">#{$id} Abstract Review</message>
 	<message key="submission.page.paperReview">#{$id} Paper Review</message>
 	<message key="submission.uploadFile">Upload paper</message>
@@ -217,13 +219,14 @@
 	<message key="submission.complete.description">Add the submission to the list of accepted Presentations.</message>
 	<message key="submission.directorDecision">Director Decision</message>
 	<message key="submission.stage">Stage&amp;nbsp;{$stage}</message>
+	<message key="submission.previousStage">Previous review stages</message>
 	<message key="submission.directorReview">Director Review</message>
 	<message key="submission.notifyAuthor">Notify Author</message>
 	<message key="submission.notifyDirector">Notify Director</message>
 	<message key="submission.directorAuthorRecord">Director/Author Email Record</message>
 	<message key="submission.directorVersion">Director Version</message>
-	<message key="submission.authorsRevisedVersion">Author's revised version of file</message>
-	<message key="submission.authorVersion">Author Version</message>
+	<message key="submission.authorsRevisedVersion">Author's revised version</message>
+	<message key="submission.authorVersion">Uploaded revised version</message>
 	<message key="submission.layout.description">This optional step can be used to lay out submissions or change file formats either before or after submissions are sent to Presentations.</message>
 
 	<message key="submissions.track">Track</message>
@@ -478,10 +481,11 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="trackDirector.regrets.breadcrumb">Regrets</message>
 	<message key="trackDirector.regrets.title">#{$paperId} Reviewer Regrets &amp; Cancellations</message>
 	<message key="trackDirector.regrets">Regrets</message>
-	<message key="trackDirector.regrets.link">View Regrets, Cancels</message>
+	<message key="trackDirector.regrets.link">View previous review rounds</message>
 	<message key="trackDirector.regrets.reviewStage">Peer Review, Stage {$stage}</message>
 	<message key="trackDirector.regrets.decisionStage">Director Decision, Stage {$stage}</message>
-	<message key="trackDirector.regrets.regretsAndCancels">Reviewer Regrets &amp; Cancellations</message>
+	<message key="trackDirector.regrets.decisionStage.abstract">Director Decision, Abstract</message>
+	<message key="trackDirector.regrets.regretsAndCancels">Cancelled reviews</message>
 	<message key="trackDirector.regrets.regret">Regret</message>
 	<message key="trackDirector.regrets.result">Result</message>
 	<message key="trackDirector.review.enrollReviewer">Enroll Existing User As Reviewer</message>
@@ -787,7 +791,7 @@ Your server currently supports mbstring: <strong>{$supportsMBString}</strong>]]>
 	<message key="log.review.reviewAccepted">{$reviewerName} has accepted the stage {$stage} review for submission {$paperId}.</message>
 	<message key="log.review.reviewAcceptedByProxy">{$userName} has accepted the stage {$stage} review for submission {$paperId} on behalf of {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">The Director, {$userName}, has uploaded a review file for stage {$stage} of submission {$paperId} on behalf of the reviewer, {$reviewerName}.</message>
-	<message key="log.review.reviewerFile">A reviewer file has been uploaded.</message>
+	<message key="log.review.reviewerFile">A file for review has been uploaded.</message>
 	<message key="log.director.decision">A director decision ({$decision}) for paper {$paperId} was recorded by {$directorName}.</message>
 	<message key="log.director.publish">The paper was published.</message>
 	<message key="log.director.unpublish">The paper was moved back into the queue.</message>

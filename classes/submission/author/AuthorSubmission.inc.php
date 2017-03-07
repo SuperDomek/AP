@@ -107,7 +107,7 @@ class AuthorSubmission extends Paper {
 	 * Get review assignments for this paper.
 	 * @return array ReviewAssignments
 	 */
-	function getReviewAssignments($stage) {
+	function getReviewAssignments($stage = null) {
 		if($stage == null)
 			return $this->reviewAssignments;
 
@@ -182,7 +182,7 @@ class AuthorSubmission extends Paper {
 
 		// The submission is STATUS_QUEUED. Find out where it's queued.
 		$editAssignments = $this->getEditAssignments();
-		if (empty($editAssignments)) 
+		if (empty($editAssignments))
 			return (STATUS_QUEUED_UNASSIGNED);
 
 		$latestDecision = $this->getMostRecentDecision();
