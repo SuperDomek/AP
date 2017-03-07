@@ -263,17 +263,15 @@ class ReviewAssignmentDAO extends DAO {
 		$returner = array();
 
 		$result =& $this->retrieve('
-			SELECT a.*,
-				r.stage as stage
-			FROM review_stages r,
-				paper_files a,
-				papers art
-			WHERE art.paper_id=r.paper_id
-				AND r.paper_id=?
-				AND r.paper_id=a.paper_id
-				AND a.file_id=art.review_file_id
-				AND a.revision=r.review_revision
-				AND a.paper_id=r.paper_id',
+		SELECT a.*
+		FROM review_stages r,
+			paper_files a
+		WHERE r.paper_id=?
+			AND r.paper_id=a.paper_id
+			AND a.type LIKE "%review"
+			AND a.revision=r.review_revision
+			AND a.paper_id=r.paper_id
+			AND r.stage=a.stage',
 			(int) $paperId
 		);
 

@@ -1128,6 +1128,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$paperId = Request::getUserVar('paperId');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$submission =& $this->submission;
+		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 
 		$redirectArgs = array($paperId, $stage);
 
@@ -1148,8 +1149,9 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		}elseif (Request::getUserVar('setReviewFile')) {
 			$file = explode(',', Request::getUserVar('directorDecisionFile'));
 			if (isset($file[0]) && isset($file[1])) {
-				TrackDirectorAction::setReviewFile($submission, $file[0], $file[1]);
 				TrackDirectorAction::nextStage($submission);
+				$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
+				TrackDirectorAction::setReviewFile($submission, $file[0], $file[1]);
 				$redirectArgs = array($paperId, $stage + 1);
 			}
 		}

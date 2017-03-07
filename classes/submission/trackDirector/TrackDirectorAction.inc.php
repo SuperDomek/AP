@@ -179,12 +179,11 @@ class TrackDirectorAction extends Action {
 					TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
 				}
 			}
-		}
-
-		/*$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
-		$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
-		$trackDirectorSubmission->stampStatusModified();*/
-
+			else{
+				$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
+				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+				$trackDirectorSubmission->stampStatusModified();}
+			}
 		// Commit the paper changes
 		$paperDao =& DAORegistry::getDao('PaperDAO');
 		$paperDao->updatePaper($trackDirectorSubmission);
@@ -197,7 +196,7 @@ class TrackDirectorAction extends Action {
 	 * @param $stage int
 	 * @param $auto bool optional automatically send notify email
 	 */
-	function addReviewer($trackDirectorSubmission, $reviewerId, $stage, $auto = false) {
+	function addReviewer(&$trackDirectorSubmission, $reviewerId, $stage, $auto = false) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
@@ -1118,7 +1117,7 @@ class TrackDirectorAction extends Action {
 	 * @param $revision int
 	 * TODO: SECURITY!
 	 */
-	function setReviewFile($trackDirectorSubmission, $fileId, $revision) {
+	function setReviewFile(&$trackDirectorSubmission, $fileId, $revision) {
 		import('file.PaperFileManager');
 		$paperFileManager = new PaperFileManager($trackDirectorSubmission->getPaperId());
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
@@ -1202,7 +1201,7 @@ class TrackDirectorAction extends Action {
 	 * Moves the paper to the next review stage.
 	 * @param $trackDirectorSubmission object
 	 */
-	function nextStage($trackDirectorSubmission) {
+	function nextStage(&$trackDirectorSubmission) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 
 		// Increment the stage

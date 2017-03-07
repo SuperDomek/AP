@@ -65,6 +65,10 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$templateMgr->assign_by_ref('schedConf', $schedConf);
 		$templateMgr->assign_by_ref('reviewGuidelines', $schedConf->getLocalizedSetting('reviewGuidelines'));
 
+		if($reviewFormResponseDao->reviewFormResponseExists($reviewId) && !$reviewerSubmission->getRecommendation()){
+			$templateMgr->assign('askLeaving', true);
+		}
+
 		// The reviewer instructions differ depending on what is reviewed, and when.
 		if($reviewAssignment->getStage()==REVIEW_STAGE_ABSTRACT && $reviewerSubmission->getReviewMode() != REVIEW_MODE_BOTH_SIMULTANEOUS)
 			$templateMgr->assign('reviewerInstruction3', 'reviewer.paper.downloadSubmissionAbstractOnly');

@@ -26,13 +26,25 @@
 <script type="text/javascript">
 {literal}
 <!--
+
+var askLeaving = '{/literal}{$askLeaving}{literal}';
+
+$(window).bind("beforeunload",function() {
+  if(askLeaving == '1'){
+    return 'The recommendation is not set up yet.';
+  }
+  else return undefined;
+});
+
 function confirmSubmissionCheck() {
+  var askLeaving = '0';
 	if (document.recommendation.recommendation.value=='') {
 		alert('{/literal}{translate|escape:"javascript" key="reviewer.paper.mustSelectDecision"}{literal}');
 		return false;
 	}
 	return confirm('{/literal}{translate|escape:"javascript" key="reviewer.paper.confirmDecision"}{literal}');
 }
+
 // -->
 {/literal}
 </script>
