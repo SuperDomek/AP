@@ -820,6 +820,23 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}
 
+	function makeFileChecked() {
+		$paperId = Request::getUserVar('paperId');
+		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_EDIT);
+		$conference =& Request::getConference();
+		$schedConf =& Request::getSchedConf();
+		$submission =& $this->submission;
+
+		$reviewId = Request::getUserVar('reviewId');
+		$fileId = Request::getUserVar('fileId');
+		$revision = Request::getUserVar('revision');
+		$viewable = Request::getUserVar('checked');
+
+		TrackDirectorAction::makeFileChecked($paperId, $reviewId, $fileId, $revision, $checked);
+
+		Request::redirect(null, null, null, 'submissionReview', $paperId);
+	}
+
 	function makeReviewerFileViewable() {
 		$paperId = Request::getUserVar('paperId');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
