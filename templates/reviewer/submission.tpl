@@ -37,7 +37,7 @@ $(window).bind("beforeunload",function() {
 });
 
 function confirmSubmissionCheck() {
-  var askLeaving = '0';
+  askLeaving = '0';
 	if (document.recommendation.recommendation.value=='') {
 		alert('{/literal}{translate|escape:"javascript" key="reviewer.paper.mustSelectDecision"}{literal}');
 		return false;
