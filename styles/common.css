@@ -64,7 +64,10 @@ a:hover {
 }
 
 #footer {
-	background-color: #CAA;
+	background-color: #c3262a;
+  color: white;
+  line-height: 50px;
+  padding-left: 1%;
 }
 
 #main {

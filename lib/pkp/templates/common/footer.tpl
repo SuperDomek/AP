@@ -10,11 +10,14 @@
 {if $displayCreativeCommons}
 {translate key="common.ccLicense"}
 {/if}
+<div id="footer">
 {if $pageFooter}
-<br /><br />
-{$pageFooter}
+  <p>
+    {$pageFooter}
+  </p>
 {/if}
 {call_hook name="Templates::Common::Footer::PageFooter"}
+</div><!-- footer -->
 </div><!-- content -->
 </div><!-- main -->
 </div><!-- body -->

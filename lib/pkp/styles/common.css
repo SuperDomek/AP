@@ -145,7 +145,7 @@ input.defaultButton {
 	min-height: 50px;
 	position: static;
 	clear: both;
-	text-align: center;
+	text-align: left;	
 }
 
 #footerContent {
