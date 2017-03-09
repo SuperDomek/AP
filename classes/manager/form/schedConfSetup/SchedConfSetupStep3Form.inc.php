@@ -32,6 +32,7 @@ class SchedConfSetupStep3Form extends SchedConfSetupForm {
 				'numDaysBeforeSubmitReminder' => 'int',
 				'numWeeksPerReviewRelative'	=> 'int',
 				'numWeeksPerReviewAbsolute'	=> 'date',
+				'numWeeksPerReviewAbsoluteAbstract' => 'date',
 				'notifyAllAuthorsOnDecision' => 'bool'
 			)
 		);
@@ -55,6 +56,7 @@ class SchedConfSetupStep3Form extends SchedConfSetupForm {
 		$settingNames = array_keys($this->settings);
 		$this->readUserVars($settingNames);
 		$this->readUserDateVars(array('numWeeksPerReviewAbsolute'));
+		$this->readUserDateVars(array('numWeeksPerReviewAbsoluteAbstract'));
 	}
 
 	/**
@@ -71,6 +73,7 @@ class SchedConfSetupStep3Form extends SchedConfSetupForm {
 
 		if ($this->_data['reviewDeadlineType'] == REVIEW_DEADLINE_TYPE_ABSOLUTE) {
 			$templateMgr->assign('absoluteReviewDate', $this->_data['numWeeksPerReviewAbsolute']);
+			$templateMgr->assign('absoluteReviewDateAbstract', $this->_data['numWeeksPerReviewAbsoluteAbstract']);
 		}
 
 		if (Config::getVar('general', 'scheduled_tasks'))

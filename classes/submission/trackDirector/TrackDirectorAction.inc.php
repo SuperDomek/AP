@@ -256,8 +256,14 @@ class TrackDirectorAction extends Action {
 			if ($schedConf->getSetting('reviewDeadlineType') != null) {
 				$dueDateSet = true;
 				if ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_ABSOLUTE) {
-					$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsolute');
-					$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDate);
+					if($stage == REVIEW_STAGE_ABSTRACT){ // different deadline for abstract reviews
+						$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsoluteAbstract');
+						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDate);
+					}
+					else{
+						$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsolute');
+						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDate);
+					}
 					TrackDirectorAction::setDueDate($trackDirectorSubmission->getPaperId(), $reviewAssignment->getId(), $reviewDueDate, null, false);
 				} elseif ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_RELATIVE) {
 					TrackDirectorAction::setDueDate($trackDirectorSubmission->getPaperId(), $reviewAssignment->getId(), null, $schedConf->getSetting('numWeeksPerReviewRelative'), false);
