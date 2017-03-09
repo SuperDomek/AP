@@ -64,9 +64,14 @@
 		<input type="text" name="numWeeksPerReviewRelative" id="numWeeksPerReview" {if $numWeeksPerReviewRelative > 0} value="{$numWeeksPerReviewRelative|escape}" {/if} size="2" maxlength="8" class="textField" />&nbsp;
 		{translate key="manager.schedConfSetup.review.numWeeksPerReview2"}<br/>
 	<input type="radio" name="reviewDeadlineType" id="reviewDeadline-2" value="{$smarty.const.REVIEW_DEADLINE_TYPE_ABSOLUTE}" {if $reviewDeadlineType == $smarty.const.REVIEW_DEADLINE_TYPE_ABSOLUTE} checked="checked"{/if} />
-		{translate key="manager.schedConfSetup.review.numWeeksPerReview1b"}&nbsp;
+    {translate key="manager.schedConfSetup.review.numWeeksPerReview1b"}&nbsp;
+    {html_select_date prefix="numWeeksPerReviewAbsoluteAbstract" time=$absoluteReviewDateAbstract all_extra="class=\"selectMenu\"" start_year=$firstYear end_year=$lastYear}
+    {translate key="manager.schedConfSetup.review.numWeeksPerReview2bAbstract"}
+    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {translate key="manager.schedConfSetup.review.numWeeksPerReview1b"}&nbsp;
 		{html_select_date prefix="numWeeksPerReviewAbsolute" time=$absoluteReviewDate all_extra="class=\"selectMenu\"" start_year=$firstYear end_year=$lastYear}
-		{translate key="manager.schedConfSetup.review.numWeeksPerReview2b"}<br/>
+		{translate key="manager.schedConfSetup.review.numWeeksPerReview2b"}
+    <br />
 	<input type="checkbox" name="restrictReviewerFileAccess" id="restrictReviewerFileAccess" value="1"{if $restrictReviewerFileAccess} checked="checked"{/if} />&nbsp;<label for="restrictReviewerFileAccess">{translate key="manager.schedConfSetup.review.restrictReviewerFileAccess"}</label>
 </p>
 
