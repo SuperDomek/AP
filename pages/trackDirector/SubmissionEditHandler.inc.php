@@ -827,12 +827,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
 
-		$reviewId = Request::getUserVar('reviewId');
 		$fileId = Request::getUserVar('fileId');
 		$revision = Request::getUserVar('revision');
-		$viewable = Request::getUserVar('checked');
+		$checked = Request::getUserVar('checked');
 
-		TrackDirectorAction::makeFileChecked($paperId, $reviewId, $fileId, $revision, $checked);
+		TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked);
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}

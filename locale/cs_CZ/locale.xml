@@ -88,6 +88,7 @@
 	<message key="editor.paper.reviewForms">Formuláře posudků</message>
 	<message key="editor.paper.selectReviewForm">Zvolte formulář posudku</message>
 	<message key="editor.paper.clearReviewForm">Vymazat posudek</message>
+	<message key="editor.paper.confirmReviewFile">Zkontrolujte, zda soubor neobsahuje informace o autorovi.</message>
 	<message key="editor.paper.confirmChangeReviewForm">Upozornění: Změna posudkového formuláře ovlivní veškeré odpovědi posuzovatelů, kteří formulář využijí. Skutečně chcete pokračovat?</message>
 
 	<message key="reviewer.paper.enterReviewForm">Klikněte na ikonu pro vyplnění posudku.</message>

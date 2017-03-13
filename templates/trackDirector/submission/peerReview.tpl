@@ -105,8 +105,20 @@
       <tr valign="top">
     		<td class="value" colspan="2">{translate key="submission.reviewVersion"}:&nbsp;
           {if $reviewFile}
-    				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;
-    				({$reviewFile->getDateModified()|date_format:$dateFormatShort})<!-- &nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
+            <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;<br />
+            <br />
+            {if $reviewFile->getChecked() != 1}
+              <form method="post" action="{url op="makeFileChecked"}">
+                <input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
+                <input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
+                <input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
+                <!--<input type="hidden" name="checked" value="1"/>-->
+                {translate key="editor.paper.confirmReviewFile"}<br />
+                <button type="submit" name="checked" value="1" >OK</button>
+                <button type="submit" name="checked" value="0" >Ne</button>
+              </form>
+            {/if}
+    				<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
       		{else}
       			{translate key="common.none"}
       		{/if}

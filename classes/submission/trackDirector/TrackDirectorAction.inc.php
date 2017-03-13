@@ -780,19 +780,17 @@ class TrackDirectorAction extends Action {
 	/**
 	 * Makes a review file available to the reviewers. (first needs to be checked for author info)
 	 * @param $paperId int
-	 * @param $reviewId int
 	 * @param $fileId int
 	 * @param $revision int
 	 * @param $checked boolean
 	 */
-	function makeFileChecked($paperId, $reviewId, $fileId, $revision, $checked = false) {
+	function makeFileChecked($paperId, $fileId, $revision, $checked = false) {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 
-		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewId);
 		$paperFile =& $paperFileDao->getPaperFile($fileId, $revision);
 
-		if ($reviewAssignment->getPaperId() == $paperId && $reviewAssignment->getReviewerFileId() == $fileId && !HookRegistry::call('TrackDirectorAction::makeFileChecked', array(&$reviewAssignment, &$paperFile, &$checked))) {
+		if (!HookRegistry::call('TrackDirectorAction::makeFileChecked', array(&$paperFile, &$checked))) {
 			$paperFile->setChecked($checked);
 			$paperFileDao->updatePaperFile($paperFile);
 		}

@@ -85,6 +85,7 @@
 	<message key="editor.paper.reviewForms">Review Forms</message>
 	<message key="editor.paper.selectReviewForm">Select Review Form</message>
 	<message key="editor.paper.clearReviewForm">Clear Review Form</message>
+	<message key="editor.paper.confirmReviewFile">Check that the file doesn't contain any information about the author</message>
 	<message key="editor.paper.confirmChangeReviewForm">Warning: Changing the review form will affect any answers reviewers have made using this form. Are you sure you wish to continue?</message>
 
 	<message key="reviewer.paper.enterReviewForm">Click on icon to fill in the review form.</message>
