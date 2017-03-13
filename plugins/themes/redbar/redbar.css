@@ -95,3 +95,7 @@ input.defaultButton {
 	padding: 5px;
 	color: white;
 }
+
+form .positive {
+	background-color: green;
+}

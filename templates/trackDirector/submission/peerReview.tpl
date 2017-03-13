@@ -114,8 +114,8 @@
                 <input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
                 <!--<input type="hidden" name="checked" value="1"/>-->
                 {translate key="editor.paper.confirmReviewFile"}<br />
-                <button type="submit" name="checked" value="1" >OK</button>
-                <button type="submit" name="checked" value="0" >Ne</button>
+                <button type="submit" name="checked" value="1" class="positive">OK</button>
+                <button type="submit" name="checked" value="0" class="negative">Ne</button>
               </form>
             {/if}
     				<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
