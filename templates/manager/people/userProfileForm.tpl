@@ -63,6 +63,20 @@
 		sendAsyncRequest(req, '{/literal}{url op="suggestUsername" firstName="REPLACE1" lastName="REPLACE2" escape=false}{literal}'.replace('REPLACE1', escape(document.userForm.firstName.value)).replace('REPLACE2', escape(document.userForm.lastName.value)), null, 'get');
 	}
 
+  // shows Billing address textbox if the calling checkbox checked
+  function showBillAddr(checkbox){
+    if(checkbox.checked) {
+      var mailAddr = '{/literal}{fieldLabel name="mailingAddress" required="true" key="common.mailingAddress"}{literal}';
+      document.getElementById("billingAddress").parentNode.parentNode.style.display = "table-row";
+      document.getElementById("mailAddrLabel").innerHTML = mailAddr;
+    }
+    else {
+      var mailBillAddr = '{/literal}{fieldLabel name="mailingAddress" required="true" key="common.mailingBillingAddress"}{literal}';
+      document.getElementById("billingAddress").parentNode.parentNode.style.display = "none";
+      document.getElementById("mailAddrLabel").innerHTML = mailBillAddr;
+    }
+  }
+
 // -->
 </script>
 {/literal}
@@ -122,14 +136,16 @@
 		<td class="value"><input type="text" name="initials" id="initials" value="{$initials|escape}" size="5" maxlength="5" class="textField" />&nbsp;&nbsp;{translate key="user.initialsExample"}</td>
 	</tr>
 	{if not $userId}
-	<tr valign="top">	
-		<td class="label">{fieldLabel name="enrollAs" key="manager.people.enrollUserAs"}</td>
+  <tr valign="top">
+		<td class="label">{translate key="manager.people.enrollUserAs"}</td>
 		<td class="value">
-			<select name="enrollAs[]" id="enrollAs" multiple="multiple" size="11" class="selectMenu">
-			{html_options_translate options=$roleOptions selected=$enrollAs}
-			</select>
-			<br />
-			<span class="instruct">{translate key="manager.people.enrollUserAsDescription"}</span>
+
+				<input type="hidden" name="enrollAs[reader]" value="on" />
+
+				<input type="checkbox" id="authorRole" name="enrollAs[author]" checked="checked" />&nbsp;{fieldLabel name="authorRole" key="user.role.author"}<br/>
+
+				<input type="checkbox" id="reviewerRole" name="enrollAs[reviewer]" {if $isReviewer || $reviewerRole}checked="checked" {/if}/>&nbsp;{fieldLabel name="reviewerRole" key="user.role.reviewer"}<br/>
+
 		</td>
 	</tr>
 	<tr valign="top">
@@ -147,7 +163,7 @@
 	</tr>
 	{/if}
 	{if $authSourceOptions}
-	<tr valign="top">	
+	<tr valign="top">
 		<td class="label">{fieldLabel name="authId" key="manager.people.authSource"}</td>
 		<td class="value"><select name="authId" id="authId" size="1" class="selectMenu">
 			<option value=""></option>
@@ -186,21 +202,57 @@
 		<td class="label">&nbsp;</td>
 		<td class="value"><input type="checkbox" name="mustChangePassword" id="mustChangePassword" value="1"{if $mustChangePassword} checked="checked"{/if} /> <label for="mustChangePassword">{translate key="manager.people.userMustChangePassword"}</label></td>
 	</tr>
+  <tr valign="top">
+		<td class="label">{fieldLabel name="email" required="true" key="user.email"}</td>
+		<td class="value"><input type="text" name="email" id="email" value="{$email|escape}" size="30" maxlength="90" class="textField" /></td>
+	</tr>
 	<tr valign="top">
-		<td class="label">{fieldLabel name="affiliation" key="user.affiliation"}</td>
+		<td class="label">{fieldLabel name="affiliation" required="true" key="user.affiliation"}</td>
 		<td class="value">
 			<textarea name="affiliation" id="affiliation" rows="5" cols="40" class="textArea">{$affiliation|escape}</textarea><br/>
 			<span class="instruct">{translate key="user.affiliation.description"}</span>
 		</td>
 	</tr>
-	<tr valign="top">
-		<td class="label">{fieldLabel name="signature" key="user.signature"}</td>
-		<td class="value"><textarea name="signature[{$formLocale|escape}]" id="signature" rows="5" cols="40" class="textArea">{$signature[$formLocale]|escape}</textarea></td>
+  <tr valign="top">
+  	<td class="label" id="mailAddrLabel">{fieldLabel name="mailingAddress" required="true" key="common.mailingBillingAddress"}</td>
+  	<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="4" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
+  </tr>
+  <tr valign="top">
+    <td class="label">{fieldLabel name="billingAddressCheck" key="common.billingAddressCheck"}</td>
+    <td class="value"><input type="checkbox" name="billingAddressCheck" id="billingAddressCheck" onclick="showBillAddr(this)"/></td>
+  </tr>
+  <tr valign="top" class="hidden">
+  	<td class="label">{fieldLabel name="billingAddress" key="common.billingAddress"}</td>
+  	<td class="value"><textarea name="billingAddress" id="billingAddress" rows="4" cols="40" class="textArea">{$billingAddress|escape}</textarea></td>
+  </tr>
+  <tr valign="top">
+  	<td class="label">{fieldLabel name="companyId" key="common.companyId"}</td>
+  	<td class="value"><input type="text" name="companyId" id="companyId" size="15" maxlength="24" class="textField" value="{$companyId|escape}"/></td>
+  </tr>
+  <tr valign="top">
+  	<td class="label">{fieldLabel name="VATRegNo" key="common.VATRegNo" required="true"}</td>
+  	<td class="value"><input type="text" name="VATRegNo" id="VATRegNo" size="15" maxlength="24" class="textField" value="{$VATRegNo|escape}"/></td>
+  </tr>
+  <tr valign="top">
+		<td class="label">{fieldLabel name="country" key="common.country"}</td>
+		<td class="value">
+			<select name="country" id="country" class="selectMenu">
+				<option value=""></option>
+				{html_options options=$countries selected=$country}
+			</select>
+		</td>
 	</tr>
+  {if count($availableLocales) > 1}
 	<tr valign="top">
-		<td class="label">{fieldLabel name="email" required="true" key="user.email"}</td>
-		<td class="value"><input type="text" name="email" id="email" value="{$email|escape}" size="30" maxlength="90" class="textField" /></td>
+		<td class="label">{translate key="user.workingLanguages"}</td>
+		<td>{foreach from=$availableLocales key=localeKey item=localeName}
+			<input type="checkbox" name="userLocales[]" id="userLocales-{$localeKey|escape}" value="{$localeKey|escape}"{if $userLocales && in_array($localeKey, $userLocales)} checked="checked"{/if} /> <label for="userLocales-{$localeKey|escape}">{$localeName|escape}</label><br />
+		{/foreach}</td>
 	</tr>
+	{/if}
+  <tr>
+    <td class="separator" colspan="2">&nbsp;</td>
+  </tr>
 	<tr valign="top">
 		<td class="label">{fieldLabel name="userUrl" key="user.url"}</td>
 		<td class="value"><input type="text" name="userUrl" id="userUrl" value="{$userUrl|escape}" size="30" maxlength="90" class="textField" /></td>
@@ -221,31 +273,17 @@
 		<td class="label">{fieldLabel name="gossip" key="user.gossip"}</td>
 		<td class="value"><textarea name="gossip[{$formLocale|escape}]" id="gossip" rows="3" cols="40" class="textArea">{$gossip[$formLocale]|escape}</textarea></td>
 	</tr>
-	<tr valign="top">
-		<td class="label">{fieldLabel name="mailingAddress" key="common.mailingAddress"}</td>
-		<td class="value"><textarea name="mailingAddress" id="mailingAddress" rows="3" cols="40" class="textArea">{$mailingAddress|escape}</textarea></td>
-	</tr>
-	<tr valign="top">
-		<td class="label">{fieldLabel name="country" key="common.country"}</td>
-		<td class="value">
-			<select name="country" id="country" class="selectMenu">
-				<option value=""></option>
-				{html_options options=$countries selected=$country}
-			</select>
-		</td>
-	</tr>
+
+
 	<tr valign="top">
 		<td class="label">{fieldLabel name="biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
 		<td class="value"><textarea name="biography[{$formLocale|escape}]" id="biography" rows="5" cols="40" class="textArea">{$biography[$formLocale]|escape}</textarea></td>
 	</tr>
-	{if count($availableLocales) > 1}
-	<tr valign="top">
-		<td class="label">{translate key="user.workingLanguages"}</td>
-		<td>{foreach from=$availableLocales key=localeKey item=localeName}
-			<input type="checkbox" name="userLocales[]" id="userLocales-{$localeKey|escape}" value="{$localeKey|escape}"{if $userLocales && in_array($localeKey, $userLocales)} checked="checked"{/if} /> <label for="userLocales-{$localeKey|escape}">{$localeName|escape}</label><br />
-		{/foreach}</td>
+  <tr valign="top">
+		<td class="label">{fieldLabel name="signature" key="user.signature"}</td>
+		<td class="value"><textarea name="signature[{$formLocale|escape}]" id="signature" rows="5" cols="40" class="textArea">{$signature[$formLocale]|escape}</textarea></td>
 	</tr>
-	{/if}
+
 </table>
 
 <p><input type="submit" value="{translate key="common.save"}" class="button defaultButton" /> {if not $userId}<input type="submit" name="createAnother" value="{translate key="manager.people.saveAndCreateAnotherUser"}" class="button" /> {/if}<input type="button" value="{translate key="common.cancel"}" class="button" onclick="{if $source == ''}history.go(-1);{else}document.location='{$source|escape:"jsparam"}';{/if}" /></p>

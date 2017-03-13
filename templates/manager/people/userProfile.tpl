@@ -24,34 +24,37 @@
 		<td width="20%" class="label">{translate key="user.username"}</td>
 		<td width="80%" class="data"><strong>{$user->getUsername()|escape}</strong></td>
 	</tr>
+  {if $user->getSalutation()}
 	<tr valign="top">
 		<td class="label">{translate key="user.salutation"}</td>
 		<td class="value">{$user->getSalutation()|escape|default:"&mdash;"}</td>
 	</tr>
+  {/if}
 	<tr valign="top">
 		<td class="label">{translate key="user.firstName"}</td>
 		<td class="value">{$user->getFirstName()|escape|default:"&mdash;"}</td>
 	</tr>
+  {if $user->getMiddleName()}
 	<tr valign="top">
 		<td class="label">{translate key="user.middleName"}</td>
 		<td class="value">{$user->getMiddleName()|escape|default:"&mdash;"}</td>
 	</tr>
+  {/if}
 	<tr valign="top">
 		<td class="label">{translate key="user.lastName"}</td>
 		<td class="value">{$user->getLastName()|escape|default:"&mdash;"}</td>
 	</tr>
+  {if $user->getInitials()}
+  <tr valign="top">
+		<td class="label">{translate key="user.initials"}</td>
+		<td class="value">{$user->getInitials()|escape|default:"&mdash;"}</td>
+	</tr>
+  {/if}
 	<tr valign="top">
 		<td class="label">{translate key="user.affiliation"}</td>
 		<td class="value">{$user->getAffiliation()|escape|nl2br|default:"&mdash;"}</td>
 	</tr>
-	<tr valign="top">
-		<td class="label">{translate key="user.signature"}</td>
-		<td class="value">{$user->getLocalizedSignature()|escape|nl2br|default:"&mdash;"}</td>
-	</tr>
-	<tr valign="top">
-		<td class="label">{translate key="user.initials"}</td>
-		<td class="value">{$user->getInitials()|escape|default:"&mdash;"}</td>
-	</tr>
+  {if $user->getGender()}
 	<tr valign="top">
 		<td class="label">{translate key="user.gender"}</td>
 		<td class="value">
@@ -62,15 +65,36 @@
 			{/if}
 		</td>
 	</tr>
+  {/if}
 	<tr valign="top">
 		<td class="label">{translate key="user.email"}</td>
 		<td class="value">
-			{$user->getEmail()|escape} 
+			{$user->getEmail()|escape}
 			{assign var=emailString value=$user->getFullName()|concat:" <":$user->getEmail():">"}
 			{url|assign:"url" page="user" op="email" to=$emailString|to_array redirectUrl=$currentUrl}
 			{icon name="mail" url=$url}
 		</td>
 	</tr>
+  <tr valign="top">
+		<td class="label">{translate key="common.mailingAddress"}</td>
+		<td class="value">{$user->getMailingAddress()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
+	</tr>
+  <tr valign="top">
+  	<td class="label">{translate key="common.billingAddress"}</td>
+  	<td class="value">{$user->getBillingAddress()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
+  </tr>
+  <tr valign="top">
+  	<td class="label">{translate key="common.companyId"}</td>
+  	<td class="value">{$user->getCompanyId()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
+  </tr>
+  <tr valign="top">
+  	<td class="label">{translate key="common.VATRegNo"}</td>
+  	<td class="value">{$user->getVATRegNo()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
+  </tr>
+  <tr valign="top">
+    <td class="label">{translate key="common.country"}</td>
+    <td class="value">{$country|escape|default:"&mdash;"}</td>
+  </tr>
 	<tr valign="top">
 		<td class="label">{translate key="user.url"}</td>
 		<td class="value"><a href="{$user->getUrl()|escape:"quotes"}">{$user->getUrl()|escape}</a></td>
@@ -91,17 +115,14 @@
 		<td class="label">{translate key="user.gossip"}</td>
 		<td class="value">{$user->getLocalizedGossip()|escape|default:"&mdash;"}</td>
 	</tr>
-	<tr valign="top">
-		<td class="label">{translate key="common.mailingAddress"}</td>
-		<td class="value">{$user->getMailingAddress()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
-	</tr>
-	<tr valign="top">
-		<td class="label">{translate key="common.country"}</td>
-		<td class="value">{$country|escape|default:"&mdash;"}</td>
-	</tr>
+
 	<tr valign="top">
 		<td class="label">{translate key="user.biography"}</td>
 		<td class="value">{$user->getLocalizedBiography()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
+	</tr>
+  <tr valign="top">
+		<td class="label">{translate key="user.signature"}</td>
+		<td class="value">{$user->getLocalizedSignature()|escape|nl2br|default:"&mdash;"}</td>
 	</tr>
 	<tr valign="top">
 		<td class="label">{translate key="user.workingLanguages"}</td>
@@ -129,7 +150,7 @@
 		{translate key=$userRoles[role]->getRoleName()}
 		{if ($isConferenceManagement) ||
 				($isSchedConfManagement && $userRoles[role]->getRolePath() != 'manager')}
-			<a href="{url 
+			<a href="{url
 					op="unEnroll"
 					path=$userRoles[role]->getRoleId()
 					userId=$user->getId()}"

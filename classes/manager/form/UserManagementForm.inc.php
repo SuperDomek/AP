@@ -47,6 +47,9 @@ class UserManagementForm extends Form {
 		$this->addCheck(new FormValidator($this, 'firstName', 'required', 'user.profile.form.firstNameRequired'));
 		$this->addCheck(new FormValidator($this, 'lastName', 'required', 'user.profile.form.lastNameRequired'));
 		$this->addCheck(new FormValidatorUrl($this, 'userUrl', 'optional', 'user.profile.form.urlInvalid'));
+		$this->addCheck(new FormValidator($this, 'affiliation', 'required', 'user.profile.form.affiliationRequired'));
+		$this->addCheck(new FormValidator($this, 'mailingAddress', 'required', 'user.profile.form.addressRequired'));
+		$this->addCheck(new FormValidator($this, 'VATRegNo', 'required', 'user.profile.form.VATRequired'));
 		$this->addCheck(new FormValidatorEmail($this, 'email', 'required', 'user.profile.form.emailRequired'));
 		$this->addCheck(new FormValidatorCustom($this, 'email', 'required', 'user.account.form.emailExists', array(DAORegistry::getDAO('UserDAO'), 'userExistsByEmail'), array($this->userId, true), true));
 		$this->addCheck(new FormValidatorPost($this));
@@ -137,6 +140,9 @@ class UserManagementForm extends Form {
 					'phone' => $user->getPhone(),
 					'fax' => $user->getFax(),
 					'mailingAddress' => $user->getMailingAddress(),
+					'billingAddress' => $user->getBillingAddress(),
+					'companyId' => $user->getCompanyId(),
+					'VATRegNo' => $user->getVATRegNo(),
 					'country' => $user->getCountry(),
 					'biography' => $user->getBiography(null), // Localized
 					'interests' => $user->getInterests(null), // Localized
@@ -180,6 +186,10 @@ class UserManagementForm extends Form {
 			'phone',
 			'fax',
 			'mailingAddress',
+			'billingAddressCheck',
+			'billingAddress',
+			'companyId',
+			'VATRegNo',
 			'country',
 			'userUrl',
 			'biography',
@@ -238,6 +248,12 @@ class UserManagementForm extends Form {
 		$user->setPhone($this->getData('phone'));
 		$user->setFax($this->getData('fax'));
 		$user->setMailingAddress($this->getData('mailingAddress'));
+		if($this->getData('billingAddressCheck'))
+			$user->setBillingAddress($this->getData('billingAddress'));
+		else
+			$user->setBillingAddress($this->getData('mailingAddress'));
+		$user->setCompanyId($this->getData('companyId'));
+		$user->setVATRegNo($this->getData('VATRegNo'));
 		$user->setCountry($this->getData('country'));
 		$user->setBiography($this->getData('biography'), null); // Localized
 		$user->setInterests($this->getData('interests'), null); // Localized
@@ -303,7 +319,9 @@ class UserManagementForm extends Form {
 			$userId = $userDao->insertUser($user);
 
 			if (!empty($this->_data['enrollAs'])) {
-				foreach ($this->getData('enrollAs') as $roleName) {
+				// security; filter out roles other than reader, author and reviewer
+				$rolesToEnroll = array_filter($this->getData('enrollAs'), function($role){$allowed = array('reader','reviewer', 'author'); return in_array($role, $allowed);}, ARRAY_FILTER_USE_KEY);
+				foreach ($rolesToEnroll as $roleName => $value) {
 					// Enroll new user into an initial role
 					$roleDao =& DAORegistry::getDAO('RoleDAO');
 					$roleId = $roleDao->getRoleIdFromPath($roleName);
