@@ -125,6 +125,7 @@
             <td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
       			<td width="80%" class="nodata">
       				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+              <input type="hidden" name="newStage" value="1" />
       				<input type="file" name="upload" class="uploadField" />
       				<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
       			</td>

@@ -106,9 +106,9 @@ class AuthorAction extends Action {
 		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId());
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId(), true);
 		} else {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName);
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null, true);
 		}
 		if (!$fileId) return false;
 

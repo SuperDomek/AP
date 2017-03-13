@@ -1170,8 +1170,9 @@ class TrackDirectorAction extends Action {
 	/**
 	 * Upload the review version of a paper.
 	 * @param $trackDirectorSubmission object
+	 * @param $newStage bool Specifies if the upload of a ReviewVersion should invoke a new review stage
 	 */
-	function uploadReviewVersion($trackDirectorSubmission) {
+	function uploadReviewVersion($trackDirectorSubmission, $newStage = false) {
 		import('file.PaperFileManager');
 		$paperFileManager = new PaperFileManager($trackDirectorSubmission->getPaperId());
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
@@ -1188,7 +1189,10 @@ class TrackDirectorAction extends Action {
 			// Increment the review revision.
 			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
 
-			TrackDirectorAction::nextStage($trackDirectorSubmission);
+			if ($newStage == true)
+				TrackDirectorAction::nextStage($trackDirectorSubmission);
+			else
+				TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $reviewFileId, $trackDirectorSubmission->getReviewRevision(), true);
 
 			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
 				$trackDirectorSubmission->setReviewFileId($reviewFileId);

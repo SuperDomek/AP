@@ -1177,10 +1177,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 	function uploadReviewVersion() {
 		$paperId = Request::getUserVar('paperId');
+		$newStage = Request::getUserVar('newStage');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$submission =& $this->submission;
 
-		TrackDirectorAction::uploadReviewVersion($submission);
+		TrackDirectorAction::uploadReviewVersion($submission, $newStage);
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}
