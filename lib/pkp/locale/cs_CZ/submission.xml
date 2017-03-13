@@ -231,6 +231,8 @@
 	<message key="submission.uploadSuccessfulContinue">Váš soubor byl nahrán. Pokračujte na úpravu metadat souboru.</message>
 	<message key="submission.loadMessage">Prosím čekejte, Váš soubor je nahráván na server.</message>
 	<message key="submission.fileDetails">Detaily souboru</message>
+	<message key="submission.fileOkay">Schválit k recenzi</message>
+	<message key="submission.fileNotOkay">Nahrát opravený soubor</message>
 	<message key="submission.nameRequired">Prosím, vyplňte položku jméno.</message>
 
 	<!-- Author Submission -->

@@ -97,5 +97,11 @@ input.defaultButton {
 }
 
 form .positive {
-	background-color: green;
+	background-color: #0b9e3f;
+	font-weight: bold;
+}
+
+form .negative {
+	background-color: #e85a09;
+	font-weight: bold;
 }
