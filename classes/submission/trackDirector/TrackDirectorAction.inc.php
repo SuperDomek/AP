@@ -1184,31 +1184,45 @@ class TrackDirectorAction extends Action {
 		if (HookRegistry::call('TrackDirectorAction::uploadReviewVersion', array(&$trackDirectorSubmission))) return true;
 
 		if ($trackDirectorSubmission->getReviewFileId() != null) { // if this is not the first review file
+			error_log("uploadReviewFile " . $trackDirectorSubmission->getCurrentStage());
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName, $trackDirectorSubmission->getReviewFileId());
 			//$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
 			// Increment the review revision.
+			error_log("setReviewRevision " . $trackDirectorSubmission->getCurrentStage());
 			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
 
-			if ($newStage == true)
-				TrackDirectorAction::nextStage($trackDirectorSubmission);
-			else
+			if ($newStage == true){
+				error_log("nextStage" . $trackDirectorSubmission->getCurrentStage());
+				TrackDirectorAction::nextStage($trackDirectorSubmission, $reviewFileId, $trackDirectorSubmission->getReviewRevision());
+			}
+			else{
+				error_log("makeFileChecked " . $trackDirectorSubmission->getCurrentStage());
+				error_log("makeFileChecked: " . $trackDirectorSubmission->getPaperId() . "," . $reviewFileId . "," . $trackDirectorSubmission->getReviewRevision() . ", true");
 				TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $reviewFileId, $trackDirectorSubmission->getReviewRevision(), true);
+			}
 
-			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
+			//if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
+			if ($reviewFileId != 0) {
+				error_log("setRevievFileId " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmission->setReviewFileId($reviewFileId);
 				//$trackDirectorSubmission->setDirectorFileId($directorFileId);
+				error_log("updateTrackDirectorSubmission " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
 
 
 		} else {
+			error_log("ELSE uploadReviewFile " . $trackDirectorSubmission->getCurrentStage());
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName);
 			//$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
+			error_log("ELSE setReviewRevision " . $trackDirectorSubmission->getCurrentStage());
 			$trackDirectorSubmission->setReviewRevision(1);
 
 			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
+				error_log("ELSE setRevievFileId " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmission->setReviewFileId($reviewFileId);
 				//$trackDirectorSubmission->setDirectorFileId($directorFileId);
+				error_log("ELSE updateTrackDirectorSubmission " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
 		}
@@ -1231,11 +1245,19 @@ class TrackDirectorAction extends Action {
 	}
 
 	/**
-	 * Moves the paper to the next review stage.
+	 * Moves the paper to the next review stage and sets up next stage in the reviewFile
 	 * @param $trackDirectorSubmission object
+	 * @param $reviewFileId int optional Id of the file to be moved to the next stage
 	 */
-	function nextStage(&$trackDirectorSubmission) {
+	function nextStage(&$trackDirectorSubmission, $reviewFileId = false, $reviewRevision = false) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
+
+		if ($reviewFileId != false && $reviewRevision != false){
+			$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
+			$paperFile =& $paperFileDao->getPaperFile($reviewFileId, $reviewRevision, $trackDirectorSubmission->getPaperId());
+			$paperFile->setStage($this->paper->getCurrentStage() + 1);
+			$paperFileDao->updatePaperFile($paperFile);
+		}
 
 		// Increment the stage
 		$previousStage = $trackDirectorSubmission->getCurrentStage();

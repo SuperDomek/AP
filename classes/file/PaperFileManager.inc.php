@@ -496,9 +496,9 @@ class PaperFileManager extends FileManager {
 			$paperFile->setDateUploaded(Core::getCurrentDate());
 			$paperFile->setDateModified(Core::getCurrentDate());
 			// Hot Fix for author file uploads for revisions
-			if($type != PAPER_FILE_AUTHOR)
+/*			if($type != PAPER_FILE_AUTHOR)
 				$paperFile->setStage($this->paper->getCurrentStage() + 1);
-			else
+			else*/
 				$paperFile->setStage($this->paper->getCurrentStage());
 		}
 
