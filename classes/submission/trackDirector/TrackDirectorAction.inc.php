@@ -1158,6 +1158,7 @@ class TrackDirectorAction extends Action {
 			$newFileId = $paperFileManager->copyToReviewFile($fileId, $revision);
 
 			$trackDirectorSubmission->setReviewFileId($newFileId);
+			$trackDirectorSubmission->setReviewRevision(1); // new file uploaded
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
 
