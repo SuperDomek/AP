@@ -103,6 +103,7 @@
 	<message key="submission.email.confirmDeleteLogEntry">Jste si jistý, že chcete smazat tento záznam protokolu emailů?</message>
 	<message key="submission.email.deleteLogEntry">Smazat záznam protokolu</message>
 	<message key="submission.emailLog">Log e-mailů</message>
+	<message key="submission.event.author.authorRevision">Autor nahrál revidovaný soubor k příspěvku.</message>
 	<message key="submission.event.backToEventLog">Zpět k protokolu událostí</message>
 	<message key="submission.event.confirmClearLog">Jste si jistý, že chcete vyčistit protokol událostí pro tento příspěvek?</message>
 	<message key="submission.event.confirmDeleteLogEntry">Jste si jistý, že chcete smazat tento záznam protokolu událostí?</message>

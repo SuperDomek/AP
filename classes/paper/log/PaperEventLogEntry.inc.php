@@ -3,7 +3,7 @@
 /**
  * @defgroup paper_log
  */
- 
+
 /**
  * @file PaperEventLogEntry.inc.php
  *
@@ -48,6 +48,7 @@ define('PAPER_LOG_DIRECTOR_RESTORE', 		0x30000006);
 define('PAPER_LOG_DIRECTOR_EXPEDITE', 		0x30000007);
 define('PAPER_LOG_DIRECTOR_PUBLISH',		0x30000008);
 define('PAPER_LOG_DIRECTOR_UNPUBLISH', 		0x30000009);
+define('PAPER_LOG_DIRECTOR_CHECK', 		0x30000010);
 
 // Reviewer events 				0x40000000
 define('PAPER_LOG_REVIEW_ASSIGN', 		0x40000001);
@@ -257,7 +258,7 @@ class PaperEventLogEntry extends DataObject {
 	function setIsTranslated($isTranslated) {
 		return $this->setData('isTranslated', $isTranslated);
 	}
-	
+
 	/**
 	 * Get parameters for log message.
 	 * @return array
@@ -265,7 +266,7 @@ class PaperEventLogEntry extends DataObject {
 	function getEntryParams() {
 		return $this->getData('entryParams');
 	}
-	
+
 	/**
 	 * Get serialized parameters for log message (to store in database).
 	 * @return array
@@ -273,7 +274,7 @@ class PaperEventLogEntry extends DataObject {
 	function getEntryParamsSerialized() {
 		return serialize($this->getData('entryParams'));
 	}
-	
+
 	/**
 	 * Set parameters for log message.
 	 * @param $entryParams array

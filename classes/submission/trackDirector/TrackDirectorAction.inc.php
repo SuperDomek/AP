@@ -787,17 +787,36 @@ class TrackDirectorAction extends Action {
 	function makeFileChecked($paperId, $fileId, $revision, $checked = false) {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
-
 		$paperFile =& $paperFileDao->getPaperFile($fileId, $revision);
+		$paperDao =& DAORegistry::getDAO('PaperDAO');
+		$paper =& $paperDao->getPaper($paperId);
 
 		if (!HookRegistry::call('TrackDirectorAction::makeFileChecked', array(&$paperFile, &$checked))) {
 			$paperFile->setChecked($checked);
 			$paperFileDao->updatePaperFile($paperFile);
 		}
 
-		// Notify co-editors and reviewers
+		if ($checked == true){
+			// Notify co-editors and reviewers
+			import('notification.NotificationManager');
+			$notificationManager = new NotificationManager();
+			$notificationUsers = $paper->getAssociatedUserIds(false, true, false, false);
+			foreach ($notificationUsers as $userRole) {
+				$reviewAssignment =& $reviewAssignmentDao->getReviewAssignment($paperId, $userRole['id'], $paperFile->getStage());
+				if($reviewAssignment){
+					$url = Request::url(null, null, $userRole['role'], 'submission', $reviewAssignment->getReviewId(), null);
+					$notificationManager->createNotification(
+						$userRole['id'], 'log.director.checked',
+						null, $url, 1, NOTIFICATION_TYPE_FILE_CHECKED
+					);
+				}
+			}
 
-		// Log the action
+			// Log the action
+			import('paper.log.PaperLog');
+			import('paper.log.PaperEventLogEntry');
+			PaperLog::logEvent($paperId, PAPER_LOG_DIRECTOR_CHECK, LOG_TYPE_DIRECTOR, $fileId, 'log.director.checked');
+		}
 	}
 
 	/**
@@ -1183,47 +1202,33 @@ class TrackDirectorAction extends Action {
 		if ($paperFileManager->uploadError($fileName)) return false;
 		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
 		if (HookRegistry::call('TrackDirectorAction::uploadReviewVersion', array(&$trackDirectorSubmission))) return true;
-
 		if ($trackDirectorSubmission->getReviewFileId() != null) { // if this is not the first review file
-			error_log("uploadReviewFile " . $trackDirectorSubmission->getCurrentStage());
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName, $trackDirectorSubmission->getReviewFileId());
 			//$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
 			// Increment the review revision.
-			error_log("setReviewRevision " . $trackDirectorSubmission->getCurrentStage());
-			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
 
+			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
 			if ($newStage == true){
-				error_log("nextStage" . $trackDirectorSubmission->getCurrentStage());
 				TrackDirectorAction::nextStage($trackDirectorSubmission, $reviewFileId, $trackDirectorSubmission->getReviewRevision());
 			}
 			else{
-				error_log("makeFileChecked " . $trackDirectorSubmission->getCurrentStage());
-				error_log("makeFileChecked: " . $trackDirectorSubmission->getPaperId() . "," . $reviewFileId . "," . $trackDirectorSubmission->getReviewRevision() . ", true");
 				TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $reviewFileId, $trackDirectorSubmission->getReviewRevision(), true);
 			}
-
 			//if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
 			if ($reviewFileId != 0) {
-				error_log("setRevievFileId " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmission->setReviewFileId($reviewFileId);
 				//$trackDirectorSubmission->setDirectorFileId($directorFileId);
-				error_log("updateTrackDirectorSubmission " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
 
-
 		} else {
-			error_log("ELSE uploadReviewFile " . $trackDirectorSubmission->getCurrentStage());
 			$reviewFileId = $paperFileManager->uploadReviewFile($fileName);
 			//$directorFileId = $paperFileManager->copyToDirectorFile($reviewFileId, $trackDirectorSubmission->getReviewRevision(), $trackDirectorSubmission->getDirectorFileId());
-			error_log("ELSE setReviewRevision " . $trackDirectorSubmission->getCurrentStage());
 			$trackDirectorSubmission->setReviewRevision(1);
 
 			if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
-				error_log("ELSE setRevievFileId " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmission->setReviewFileId($reviewFileId);
 				//$trackDirectorSubmission->setDirectorFileId($directorFileId);
-				error_log("ELSE updateTrackDirectorSubmission " . $trackDirectorSubmission->getCurrentStage());
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
 		}

@@ -796,6 +796,7 @@ Your server currently supports mbstring: <strong>{$supportsMBString}</strong>]]>
 	<message key="log.director.decision">A director decision ({$decision}) for paper {$paperId} was recorded by {$directorName}.</message>
 	<message key="log.director.publish">The paper was published.</message>
 	<message key="log.director.unpublish">The paper was moved back into the queue.</message>
+	<message key="log.director.checked">The paper file was checked for author informations and cleared for review.</message>
 
 	<message key="log.director.metadataModified">The metadata for this paper was modified by {$directorName}.</message>
 	<message key="log.director.directorFile">A director version of the submission file has been uploaded.</message>
