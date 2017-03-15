@@ -289,7 +289,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		}
 
 		// Set up JEL codes
-		$JELCodes = $JEL->getCodes();
+		//$JELCodes = $JEL->getCodes();
 		foreach ($this->getData('subjectClass') as $key => $value) {
 				$JEL->setCode($paperId, $value, $JEL->getKeyword($value));
 		}

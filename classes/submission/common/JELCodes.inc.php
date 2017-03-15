@@ -72,7 +72,7 @@ class JELCodes {
 	 * @param $paper object
    * @return array
 	 */
-	function getCodes($paperID) {
+	function getCodes($paperID = null) {
     $conn = $this->_dataSource;
     if (isset($paperID)){
       $codes = $conn->Execute('SELECT * FROM paper_jel_codes WHERE paper_id = ?', array($paperID));
