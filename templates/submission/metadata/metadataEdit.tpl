@@ -168,7 +168,7 @@ function delDiv(sel){
   <tr valign="top">
   	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-attends" key="common.attends"}</td>
   	<td width="80%" class="value">
-  		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if !$authors.attends} checked="checked" {/if}/>
+  		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if $author.attends} checked="checked" {/if}/>
   	</td>
   </tr>
   <!--
