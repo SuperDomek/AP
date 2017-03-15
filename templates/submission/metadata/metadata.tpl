@@ -45,7 +45,7 @@
   <tr valign="top">
   	<td width="20%" class="label">{translate key="common.attends"}</td>
   	<td width="80%" class="value">
-  		<input type="checkbox"{if !$authors.attends} checked="checked" {/if} disabled="disabled"/>
+  		<input type="checkbox"{if $author->getAttends()} checked="checked" {/if} disabled="disabled"/>
   	</td>
   </tr>
   <!--
