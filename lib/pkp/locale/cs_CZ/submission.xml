@@ -234,6 +234,11 @@
 	<message key="submission.fileDetails">Detaily souboru</message>
 	<message key="submission.fileNotChecked">Soubor čeká na schválení editorem.</message>
 	<message key="submission.fileOkay">Schválit k recenzi</message>
+	<message key="submission.fileOkayed">Soubor zkontrolován</message>
+	<message key="submission.noFile">Není soubor</message>
+	<message key="submission.fileAccepted">Schválen</message>
+	<message key="submission.filePending">Čeká</message>
+
 	<message key="submission.fileNotOkay">Nahrát opravený soubor</message>
 	<message key="submission.nameRequired">Prosím, vyplňte položku jméno.</message>
 

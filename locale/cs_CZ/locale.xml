@@ -877,6 +877,7 @@ Validace může selhat u vyhledávacích URL, která vyžadují odesílání dat
 	<message key="notification.type.galleyModified">Šablona ohledně: "{$param}" byla modifikována.</message>
 	<message key="notification.type.metadataModified">Metadata ohledně: "{$param}'s" byly modifikovány.</message>
 	<message key="notification.type.newAnnouncement">Bylo vytvořeno nové oznámení.</message>
+	<message key="notification.type.revisionUploaded">Autor nahrál revizi příspěvku.</message>
 	<message key="notification.type.reviewerComment">Recenzent vložil komentář: "{$param}".</message>
 	<message key="notification.type.reviewerFormComment">Recenzent vložil recenzní posudek: "{$param}".</message>
 	<message key="notification.type.reviewing">Událost recenze</message>

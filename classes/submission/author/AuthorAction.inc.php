@@ -115,6 +115,21 @@ class AuthorAction extends Action {
 		$authorSubmission->setRevisedFileId($fileId);
 		$authorSubmissionDao->updateAuthorSubmission($authorSubmission);
 
+		// Send a notification to associated users
+		import('notification.NotificationManager');
+		$notificationManager = new NotificationManager();
+		$paperId = $authorSubmission->getPaperId();
+		$paperDao =& DAORegistry::getDAO('PaperDAO');
+		$paper =& $paperDao->getPaper($paperId);
+		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, true);
+		foreach ($notificationUsers as $userRole) {
+			$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null);
+			$notificationManager->createNotification(
+				$userRole['id'], 'notification.type.revisionUploaded',
+				null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
+			);
+		}
+
 		// Add log entry
 		$user =& Request::getUser();
 		import('paper.log.PaperLog');

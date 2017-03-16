@@ -868,6 +868,7 @@ Validation may fail on search URLs that require posted form data.]]></message>
 	<message key="notification.type.galleyModified">A galley has been modified for "{$param}".</message>
 	<message key="notification.type.metadataModified">"{$param}'s" metadata has been modified.</message>
 	<message key="notification.type.newAnnouncement">A new announcement has been created.</message>
+	<message key="notification.type.revisionUploaded">Author uploaded a submission revision.</message>
 	<message key="notification.type.reviewerComment">A reviewer has commented on "{$param}".</message>
 	<message key="notification.type.reviewerFormComment">A review form review has been submitted for "{$param}".</message>
 	<message key="notification.type.reviewing">Reviewing Events</message>

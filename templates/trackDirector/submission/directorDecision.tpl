@@ -93,9 +93,8 @@
     				{/if}
     				<td width="80%" class="value" colspan="2">
     					<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" />
-
-    						<!--{assign var="sendableVersionExists" value=true}-->
-    					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;
+    					{* <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp; *}
+                {$authorFile->getFileName()|escape}&nbsp;&nbsp;
     						{$authorFile->getDateModified()|date_format:$dateFormatShort}
     				</td>
     			</tr>

@@ -9,7 +9,7 @@
  * @class TrackDirectorHandler
  * @ingroup pages_trackDirector
  *
- * @brief Handle requests for track director functions. 
+ * @brief Handle requests for track director functions.
  *
  */
 
@@ -37,7 +37,7 @@ class TrackDirectorHandler extends Handler {
 	 */
 	function submissions($args, &$request) {
 		$this->index($args, $request);
-	}	
+	}
 
 	/**
 	 * Display track director index page.
@@ -60,7 +60,7 @@ class TrackDirectorHandler extends Handler {
 
 		$page = isset($args[0]) ? $args[0] : '';
 		$tracks =& $trackDao->getTrackTitles($schedConfId);
-		
+
 		$sort = Request::getUserVar('sort');
 		$sort = isset($sort) ? $sort : 'id';
 		$sortDirection = Request::getUserVar('sortDirection');
@@ -92,7 +92,7 @@ class TrackDirectorHandler extends Handler {
 			if ($filterTrack == null) {
 				$filterTrack = FILTER_TRACK_ALL;
 				$user->updateSetting('filterTrack', $filterTrack, 'int', $schedConfId);
-			}	
+			}
 		}
 
 		$rangeInfo = Handler::getRangeInfo('submissions', array($functionName, (string) $searchField, (string) $searchMatch, (string) $search));
@@ -116,7 +116,7 @@ class TrackDirectorHandler extends Handler {
 			$rangeInfo =& $submissions->getLastPageRangeInfo();
 			unset($submissions);
 		}
-		
+
 		if ($sort == 'status') {
 			// Sort all submissions by status, which is too complex to do in the DB
 			$submissionsArray = $submissions->toArray();
@@ -130,6 +130,9 @@ class TrackDirectorHandler extends Handler {
 			import('core.ArrayItemIterator');
 			$submissions =& ArrayItemIterator::fromRangeInfo($submissionsArray, $rangeInfo);
 		}
+
+
+
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('helpTopicId', $helpTopicId);
@@ -233,7 +236,7 @@ class TrackDirectorHandler extends Handler {
 		if (isset($submissionCrumb)) {
 			$pageHierarchy = array_merge($pageHierarchy, $submissionCrumb);
 		}
-	
+
 		$templateMgr->assign('pageHierarchy', $pageHierarchy);
 	}
 
