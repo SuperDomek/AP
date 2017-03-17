@@ -261,9 +261,19 @@ function confirmSubmissionCheck() {
 		<td>
       {if $confirmedStatus and not $declined}
         <div style="float:left;text-align:center;">
-          <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon"}>
-            <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
-          </a>
+          {if $reviewFile}
+            {if $reviewFile->getChecked() == 1}
+              <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
+                <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+              </a>
+            {else}
+              <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+            {/if} {* ReviewFile checked *}
+          {else}
+            <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
+              <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+            </a>
+          {/if} {* ReviewFile *}
         </div>
 			{/if}
 		</td>

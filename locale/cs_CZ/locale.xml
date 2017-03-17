@@ -242,7 +242,7 @@
 	<message key="submissions.reviewType">Typ oponentury</message>
 	<message key="submissions.pendingPresentation">Čeká na nahrání</message>
 	<message key="submissions.expired">Uplynula</message>
-	<message key="submissions.directorDecision">Rozhodnutí předsedy</message>
+	<message key="submissions.directorDecision">Rozhodnutí editora</message>
 	<message key="submissions.directorRuling">Výkonný hlavní editor</message>
 	<message key="trackDirector.galley.replaceGalley">Nahradit šablonu</message>
 	<message key="submission.abstract">Abstrakt</message>
@@ -377,7 +377,7 @@
 
 	<message key="submission.event.director.directorAssigned">Příspěvek přiřazen garantovi</message>
 	<message key="submission.event.director.directorUnassigned">Garant odebrán od příspěvku</message>
-	<message key="submission.event.director.directorDecision">Rozhodnutí garanta odesláno</message>
+	<message key="submission.event.director.directorDecision">Rozhodnutí editora odesláno</message>
 	<message key="submission.event.director.directorFile">Soubor garanta odeslán</message>
 	<message key="submission.event.director.submissionArchived">Příspěvek odeslán do archivu</message>
 	<message key="submission.event.director.submissionRestored">Příspěvek obnoven z archivu</message>
@@ -487,8 +487,8 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="trackDirector.regrets">Připomínky</message>
 	<message key="trackDirector.regrets.link">Zobrazit předchozí kola recenze</message>
 	<message key="trackDirector.regrets.reviewStage">Oponentura, fáze {$stage}</message>
-	<message key="trackDirector.regrets.decisionStage">Rozhodnutí ko-editora, fáze {$stage}</message>
-	<message key="trackDirector.regrets.decisionStage.abstract">Rozhodnutí ko-editora, abstrakt</message>
+	<message key="trackDirector.regrets.decisionStage">Rozhodnutí editora, fáze {$stage}</message>
+	<message key="trackDirector.regrets.decisionStage.abstract">Rozhodnutí editora, abstrakt</message>
 	<message key="trackDirector.regrets.regretsAndCancels">Odmítnuté recenze</message>
 	<message key="trackDirector.regrets.regret">Připomínka</message>
 	<message key="trackDirector.regrets.result">Výsledek</message>
@@ -802,7 +802,7 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="log.review.reviewAcceptedByProxy">{$userName} přijal oponenturu příspěvku ($paperId) do sekce {$stage} v zastoupení oponenta {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">Garant {$userName} vložil soubor posudku do sekce {$stage} pro příspěvek {$paperId} v zastoupení oponenta {$reviewerName}.</message>
 	<message key="log.review.reviewerFile">Byl vložen soubor k oponentuře.</message>
-	<message key="log.director.decision">Rozhodnutí garanta ({$decision}) pro příspěvek {$paperId} bylo uloženo garantem {$directorName}.</message>
+	<message key="log.director.decision">Rozhodnutí editora ({$decision}) pro příspěvek {$paperId} bylo uloženo editorem {$directorName}.</message>
 	<message key="log.director.publish">Příspěvek byl publikován.</message>
 	<message key="log.director.unpublish">Příspěvek byl přesunut zpět do fronty.</message>
 	<message key="log.director.checked">Soubor příspěvku byl zkontrolován na autorské údaje a uvolněn k recenzování.</message>

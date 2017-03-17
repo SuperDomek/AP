@@ -15,8 +15,7 @@
 	<tr class="heading" valign="bottom">
 		<td width="7%">{translate key="common.id"}</td>
 		<td width="7%"><span class="disabled">MM-DD</span><br />{translate key="common.assigned"}</td>
-		<td width="8%">{translate key="submissions.track"}</td>
-		<td width="50%">{translate key="paper.title"}</td>
+		<td width="58%">{translate key="paper.title"}</td>
 		<td width="8%">{translate key="submission.due"}</td>
 		<td width="10%">{translate key="submissions.reviewType"}</td>
     <td width="10%">{translate key="submission.fileOkayed"}</td>
@@ -30,7 +29,6 @@
 	<tr valign="top">
 		<td>{$paperId|escape}</td>
 		<td>{$submission->getDateNotified()|date_format:$dateFormatTrunc}</td>
-		<td>{$submission->getTrackAbbrev()|escape}</td>
 		<td><a href="{url op="submission" path=$reviewId}" class="action">{$submission->getLocalizedTitle()|strip_tags|truncate:60:"..."}</a></td>
 		<td class="nowrap">{$submission->getDateDue()|date_format:$dateFormatTrunc}</td>
 		{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL}
