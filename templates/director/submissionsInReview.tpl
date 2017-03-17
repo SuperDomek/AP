@@ -16,9 +16,7 @@
 	<tr class="heading" valign="bottom">
 		<td width="4%">{sort_search key="common.id" sort="id"}</td>
 		<td width="7%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submitted" sort="submitDate"}</td>
-		<td width="5%">{sort_search key="submissions.track" sort="track"}</td>
-		<!--<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>-->
-		<td width="20%">{sort_search key="paper.authors" sort="authors"}</td>
+		<td width="15%">{sort_search key="paper.authors" sort="authors"}</td>
 		<td width="27%">{sort_search key="paper.title" sort="title"}</td>
 		<td width="30%">
 			<center style="border-bottom: 1px solid gray;margin-bottom: 3px;">{translate key="submission.peerReview"}</center>
@@ -32,6 +30,7 @@
 			</table>
 		</td>
 		<td width="7%">{translate key="submissions.ruling"}</td>
+		<td width="10%">Co-editors</td>
 	</tr>
 	<tr>
 		<td colspan="9" class="headseparator">&nbsp;</td>
@@ -41,7 +40,6 @@
 	<tr valign="top">
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
-		<td>{$submission->getTrackAbbrev()|escape}</td>
 		<!--<td>
 			{assign var="sessionTypeId" value=$submission->getData('sessionType')}
 			{if $sessionTypeId}
@@ -49,7 +47,7 @@
 				{$sessionType->getLocalizedName()|escape}
 			{/if}
 		</td>-->
-		<td>{$submission->getAuthorString(true)|truncate:40:"..."|escape}</td>
+		<td>{$submission->getAuthorString(true)|truncate:30:"..."|escape}</td>
 		<td><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}" class="action">{$submission->getLocalizedTitle()|strip_tags|truncate:40:"..."|default:"&mdash;"}</a></td>
 		<td>
 		<table width="100%">
@@ -94,9 +92,7 @@
 				&mdash;
 			{/foreach}
 		</td>
-		<td>
-			{assign var="editAssignments" value=$submission->getEditAssignments()}
-		</td>
+		<td>{$submission->getTrackDirectorString(true)|truncate:30:"..."|escape}</td>
 	</tr>
 	<tr>
 		<td colspan="8" class="{if $submissions->eof()}end{/if}separator">&nbsp;</td>
