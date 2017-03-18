@@ -30,7 +30,7 @@
 			</table>
 		</td>
 		<td width="7%">{translate key="submissions.ruling"}</td>
-		<td width="10%">Co-editors</td>
+		<td width="10%">{sort_search key="user.role.trackDirectors" sort="trackDirectors"}</td>
 	</tr>
 	<tr>
 		<td colspan="9" class="headseparator">&nbsp;</td>

@@ -238,7 +238,8 @@ class DirectorSubmissionDAO extends DAO {
 				pap.last_name AS author_name,
 				t.seq, pp.seq,
 				COALESCE(ttl.setting_value, ttpl.setting_value) AS track_title,
-				COALESCE(tal.setting_value, tapl.setting_value) AS track_abbrev
+				COALESCE(tal.setting_value, tapl.setting_value) AS track_abbrev,
+				ed.last_name
 			FROM	papers p
 				INNER JOIN paper_authors pa ON (pa.paper_id = p.paper_id)
 				LEFT JOIN paper_authors pap ON (pap.paper_id = p.paper_id AND pap.primary_contact = 1)
@@ -609,6 +610,7 @@ class DirectorSubmissionDAO extends DAO {
 			case 'subLayout': return 'layout_completed';
 			case 'status': return 'p.status';
 			case 'seq': return 'pp.seq';
+			case 'trackDirectors': return 'ed.last_name';
 			default: return null;
 		}
 	}
