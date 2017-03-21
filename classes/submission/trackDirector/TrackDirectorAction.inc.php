@@ -1181,6 +1181,24 @@ class TrackDirectorAction extends Action {
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
 
+			// Send a notification to director that the file needs to be checked
+			import('notification.NotificationManager');
+			$roleDao =& DAORegistry::getDAO('RoleDAO');
+			$paperDao =& DAORegistry::getDAO('PaperDAO');
+			$notificationManager = new NotificationManager();
+			$paperId = $trackDirectorSubmission->getPaperId();
+			$paper =& $paperDao->getPaper($paperId);
+			$roleId = $roleDao->getRoleIdFromPath('director');
+			$directors =& $roleDao->getUsersByRoleId($roleId);
+			$notificationUsers = $directors->toArray();
+			foreach ($notificationUsers as $director) {
+				$url = Request::url(null, null, 'director', 'submissionReview', $paper->getId(), null);
+				$notificationManager->createNotification(
+					$director->getId(), 'notification.type.fileNeedsCheck',
+					null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
+				);
+			}
+
 			// Add log
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');
@@ -1191,6 +1209,7 @@ class TrackDirectorAction extends Action {
 	 * Upload the review version of a paper.
 	 * @param $trackDirectorSubmission object
 	 * @param $newStage bool Specifies if the upload of a ReviewVersion should invoke a new review stage
+	 *	TODO: Validation for Main director
 	 */
 	function uploadReviewVersion($trackDirectorSubmission, $newStage = false) {
 		import('file.PaperFileManager');
@@ -1208,17 +1227,18 @@ class TrackDirectorAction extends Action {
 			// Increment the review revision.
 
 			$trackDirectorSubmission->setReviewRevision($trackDirectorSubmission->getReviewRevision()+1);
-			if ($newStage == true){
-				TrackDirectorAction::nextStage($trackDirectorSubmission, $reviewFileId, $trackDirectorSubmission->getReviewRevision());
-			}
-			else{
-				TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $reviewFileId, $trackDirectorSubmission->getReviewRevision(), true);
-			}
+
 			//if ($reviewFileId != 0 && isset($directorFileId) && $directorFileId != 0) {
 			if ($reviewFileId != 0) {
 				$trackDirectorSubmission->setReviewFileId($reviewFileId);
 				//$trackDirectorSubmission->setDirectorFileId($directorFileId);
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+			}
+			if ($newStage == true){
+				TrackDirectorAction::nextStage($trackDirectorSubmission, $reviewFileId, $trackDirectorSubmission->getReviewRevision());
+			}
+			else{
+				TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getReviewFileId(), $trackDirectorSubmission->getReviewRevision() + 1, true);
 			}
 
 		} else {
@@ -1241,7 +1261,25 @@ class TrackDirectorAction extends Action {
 
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 		}*/
-
+		if($newStage == true){
+			// Send a notification to director that the file needs to be checked
+			import('notification.NotificationManager');
+			$roleDao =& DAORegistry::getDAO('RoleDAO');
+			$paperDao =& DAORegistry::getDAO('PaperDAO');
+			$notificationManager = new NotificationManager();
+			$paperId = $trackDirectorSubmission->getPaperId();
+			$paper =& $paperDao->getPaper($paperId);
+			$roleId = $roleDao->getRoleIdFromPath('director');
+			$users =& $roleDao->getUsersByRoleId($roleId);
+			$notificationUsers = $users->toArray();
+			foreach ($notificationUsers as $user) {
+				$url = Request::url(null, null, 'director', 'submissionReview', $paper->getId(), null);
+				$notificationManager->createNotification(
+					$user->getId(), 'notification.type.fileNeedsCheck',
+					null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
+				);
+			}
+		}
 		// Add log
 		import('paper.log.PaperLog');
 		import('paper.log.PaperEventLogEntry');
@@ -1261,7 +1299,7 @@ class TrackDirectorAction extends Action {
 		if ($reviewFileId != false && $reviewRevision != false){
 			$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 			$paperFile =& $paperFileDao->getPaperFile($reviewFileId, $reviewRevision, $trackDirectorSubmission->getPaperId());
-			$paperFile->setStage($this->paper->getCurrentStage() + 1);
+			$paperFile->setStage($trackDirectorSubmission->getCurrentStage() + 1);
 			$paperFileDao->updatePaperFile($paperFile);
 		}
 
