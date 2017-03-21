@@ -298,6 +298,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
+		$templateMgr->assign('isDirector', Validation::isDirector());
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
@@ -820,6 +821,22 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}
 
+	function makeFileChecked() {
+		$paperId = Request::getUserVar('paperId');
+		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_EDIT);
+		$conference =& Request::getConference();
+		$schedConf =& Request::getSchedConf();
+		$submission =& $this->submission;
+
+		$fileId = Request::getUserVar('fileId');
+		$revision = Request::getUserVar('revision');
+		$checked = Request::getUserVar('checked');
+
+		TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked);
+
+		Request::redirect(null, null, null, 'submissionReview', $paperId);
+	}
+
 	function makeReviewerFileViewable() {
 		$paperId = Request::getUserVar('paperId');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
@@ -1161,10 +1178,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 	function uploadReviewVersion() {
 		$paperId = Request::getUserVar('paperId');
+		$newStage = Request::getUserVar('newStage');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$submission =& $this->submission;
 
-		TrackDirectorAction::uploadReviewVersion($submission);
+		TrackDirectorAction::uploadReviewVersion($submission, $newStage);
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}

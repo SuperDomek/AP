@@ -82,7 +82,7 @@
 {else}
 	<table class="data" width="100%">
 		<tr valign="middle">
-			<td width="30%">
+			<td width="20%">
 				{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
 					<h3>{translate key="submission.review"}</h3>
 				{elseif $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
@@ -95,24 +95,63 @@
       {if $isReviewer && $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
       {* The conference doesn't want the add reviewers button in abstract review *}
       {else}
-			<td width="70%" class="nowrap">
+			<td width="80%" class="nowrap">
 				<a href="{url op="selectReviewer" path=$submission->getPaperId()}" class="action">{translate key="director.paper.selectReviewer"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="{url op="submissionRegrets" path=$submission->getPaperId()}" class="action">{translate|escape key="trackDirector.regrets.link"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</td>
       {/if}
 		</tr>
     {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
+      {if $reviewFile}
       <tr valign="top">
-    		<td class="value" colspan="2">{translate key="submission.reviewVersion"}:&nbsp;
-          {if $reviewFile}
-    				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;
-    				({$reviewFile->getDateModified()|date_format:$dateFormatShort})<!-- &nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
-      		{else}
-      			{translate key="common.none"}
-      		{/if}
+    		<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
+        {if $reviewFile->getChecked() == 1 || $isDirector}
+        <td width="80%" class="value">
+          <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>
         </td>
-    	</tr>
-    {/if}
+      </tr>
+        {else}
+        <td class="warning value">{translate key="submission.fileNotChecked"}</td>
+      </tr>
+        {/if}
+        {if $reviewFile->getChecked() == null && $isDirector}
+      <tr valign="top">
+        <td colspan="2">
+          <form method="post" action="{url op="makeFileChecked"}">
+            <input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
+            <input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
+            <input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
+            <!--<input type="hidden" name="checked" value="1"/>-->
+            {translate key="editor.paper.confirmReviewFile"}<br />
+            <button type="submit" name="checked" value="1" class="positive">{translate key="submission.fileOkay"}</button>
+            &nbsp;
+            <button type="submit" name="checked" value="0" class="negative">{translate key="submission.fileNotOkay"}</button>
+          </form>
+        </td>
+      </tr>
+        {elseif $reviewFile->getChecked() == 0 && $isDirector}
+      <tr valign="top">
+        <td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
+        <td width="80%" class="nodata">
+          <form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
+            <input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+            <input type="hidden" name="newStage" value="0" />
+            <input type="file" name="upload" class="uploadField" />
+            <input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
+          </form>
+        </td>
+      </tr>
+        {/if} {* $reviewFile->getChecked() *}
+    				<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
+  		{else}
+      <tr valign="top">
+    		<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
+        <td width="80%" class="value">
+          {translate key="common.none"}
+        </td>
+      </tr>
+  		{/if} {* $reviewFile *}
+    {/if} {* $stage *}
 	</table>
 
 	{assign var="start" value="A"|ord}

@@ -26,6 +26,7 @@ define('NOTIFICATION_TYPE_REVIEWER_FORM_COMMENT', 		0x1000007);
 define('NOTIFICATION_TYPE_SUBMISSION_COMMENT', 			0x1000008);
 define('NOTIFICATION_TYPE_SUPP_FILE_MODIFIED', 			0x1000009);
 define('NOTIFICATION_TYPE_USER_COMMENT', 			0x1000010);
+define('NOTIFICATION_TYPE_FILE_CHECKED', 			0x1000011);
 
 import('notification.PKPNotification');
 import('notification.NotificationDAO');
@@ -51,6 +52,7 @@ class Notification extends PKPNotification {
 				break;
 			case NOTIFICATION_TYPE_SUPP_FILE_MODIFIED:
 			case NOTIFICATION_TYPE_SUPP_FILE_ADDED:
+			case NOTIFICATION_TYPE_FILE_CHECKED:
 				return $baseUrl . 'page_attachment.gif';
 				break;
 			case NOTIFICATION_TYPE_METADATA_MODIFIED:

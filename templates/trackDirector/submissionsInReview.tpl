@@ -14,7 +14,7 @@
 	<tr class="heading" valign="bottom">
 		<td width="5%">{sort_search key="common.id" sort="id"}</td>
 		<td width="8%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submit" sort="submitDate"}</td>
-		<td width="5%">{sort_search key="submissions.track" sort="track"}</td>
+		<!--<td width="5%">{sort_search key="submissions.track" sort="track"}</td>-->
 		<!--<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>->
   <!--
 		<td width="20%">{sort_search key="paper.authors" sort="authors"}</td>
@@ -31,7 +31,8 @@
 				</tr>
 			</table>
 		</td>
-		<td width="8%">{translate key="submissions.ruling"}</td>
+		<td width="7%">{translate key="submissions.ruling"}</td>
+    <td width="6%">{translate key="submission.fileOkayed"}</td>
 	</tr>
 	<tr><td colspan="8" class="headseparator">&nbsp;</td></tr>
 
@@ -41,8 +42,8 @@
 	<tr valign="top">
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
-		<td>{$submission->getTrackAbbrev()|escape}</td>
-		<!--<td>
+		<!--<td>{$submission->getTrackAbbrev()|escape}</td>
+		<td>
 			{assign var="sessionTypeId" value=$submission->getData('sessionType')}
 			{if $sessionTypeId}
 				{assign var="sessionType" value=$sessionTypes.$sessionTypeId}
@@ -84,13 +85,27 @@
 			{foreach from=$submission->getDecisions() item=decisions}
 				{foreach from=$decisions item=decision name=decisionList}
 					{if $smarty.foreach.decisionList.last}
-						{$decision.dateDecided|date_format:$dateFormatTrunc}
+						{$decision.dateDecided|date_format:$dateFormatTrunc}<br />
 					{/if}
 				{foreachelse}
-					&mdash;
+					&mdash;<br />
 				{/foreach}
+      {foreachelse}
+				&mdash;<br />
 			{/foreach}
 		</td>
+    <td style="vertical-align: middle;">
+      {assign var=reviewFile value=$submission->getReviewFile()}
+      {if $reviewFile}
+        {if $reviewFile->getChecked() == 1}
+          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted""}</span>
+        {else}
+          <span style="color:#e85a09;">{translate key="submission.filePending"}</span>
+        {/if}
+      {else}
+        <span style="color:#a5a3a5;">{translate key="submission.noFile"}</span>
+      {/if}
+    </td>
 	</tr>
 	<tr>
 		<td colspan="8" class="{if $submissions->eof()}end{/if}separator">&nbsp;</td>

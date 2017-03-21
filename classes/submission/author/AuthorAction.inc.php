@@ -106,14 +106,29 @@ class AuthorAction extends Action {
 		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId());
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId(), true);
 		} else {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName);
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null, true);
 		}
 		if (!$fileId) return false;
 
 		$authorSubmission->setRevisedFileId($fileId);
 		$authorSubmissionDao->updateAuthorSubmission($authorSubmission);
+
+		// Send a notification to associated users
+		import('notification.NotificationManager');
+		$notificationManager = new NotificationManager();
+		$paperId = $authorSubmission->getPaperId();
+		$paperDao =& DAORegistry::getDAO('PaperDAO');
+		$paper =& $paperDao->getPaper($paperId);
+		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, true);
+		foreach ($notificationUsers as $userRole) {
+			$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null);
+			$notificationManager->createNotification(
+				$userRole['id'], 'notification.type.revisionUploaded',
+				null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
+			);
+		}
 
 		// Add log entry
 		$user =& Request::getUser();

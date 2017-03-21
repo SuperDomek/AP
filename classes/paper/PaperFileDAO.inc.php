@@ -129,7 +129,7 @@ class PaperFileDAO extends DAO {
 			$result =& $this->retrieve(
 				'SELECT a.* FROM paper_files a WHERE file_id = ? AND revision >= ? AND revision <= ?',
 				array($fileId, $start, $end)
-			);		
+			);
 		}
 
 		while (!$result->EOF) {
@@ -213,6 +213,7 @@ class PaperFileDAO extends DAO {
 		$paperFile->setStage($row['stage']);
 		$paperFile->setDateUploaded($this->datetimeFromDB($row['date_uploaded']));
 		$paperFile->setDateModified($this->datetimeFromDB($row['date_modified']));
+		$paperFile->setChecked($row['checked']);
 		$paperFile->setViewable($row['viewable']);
 		HookRegistry::call('PaperFileDAO::_returnPaperFileFromRow', array(&$paperFile, &$row));
 		return $paperFile;
@@ -222,7 +223,7 @@ class PaperFileDAO extends DAO {
 	 * Insert a new PaperFile.
 	 * @param $paperFile PaperFile
 	 * @return int
-	 */	
+	 */
 	function insertPaperFile(&$paperFile) {
 		$fileId = $paperFile->getFileId();
 		$params = array(
@@ -234,7 +235,8 @@ class PaperFileDAO extends DAO {
 			$paperFile->getOriginalFileName(),
 			$paperFile->getType(),
 			(int) $paperFile->getStage(),
-			$paperFile->getViewable()
+			$paperFile->getViewable(),
+			$paperFile->getChecked()
 		);
 
 		if ($fileId) {
@@ -243,9 +245,9 @@ class PaperFileDAO extends DAO {
 
 		$this->update(
 			sprintf('INSERT INTO paper_files
-				(' . ($fileId ? 'file_id, ' : '') . 'revision, paper_id, file_name, file_type, file_size, original_file_name, type, stage, date_uploaded, date_modified, viewable)
+				(' . ($fileId ? 'file_id, ' : '') . 'revision, paper_id, file_name, file_type, file_size, original_file_name, type, stage, date_uploaded, date_modified, viewable, checked)
 				VALUES
-				(' . ($fileId ? '?, ' : '') . '?, ?, ?, ?, ?, ?, ?, ?, %s, %s, ?)',
+				(' . ($fileId ? '?, ' : '') . '?, ?, ?, ?, ?, ?, ?, ?, %s, %s, ?, ?)',
 				$this->datetimeToDB($paperFile->getDateUploaded()), $this->datetimeToDB($paperFile->getDateModified())),
 			$params
 		);
@@ -274,7 +276,8 @@ class PaperFileDAO extends DAO {
 					stage = ?,
 					date_uploaded = %s,
 					date_modified = %s,
-					viewable = ?
+					viewable = ?,
+					checked = ?
 				WHERE file_id = ? AND revision = ?',
 				$this->datetimeToDB($paperFile->getDateUploaded()), $this->datetimeToDB($paperFile->getDateModified())),
 			array(
@@ -286,6 +289,7 @@ class PaperFileDAO extends DAO {
 				$paperFile->getType(),
 				(int) $paperFile->getStage(),
 				$paperFile->getViewable(),
+				$paperFile->getChecked(),
 				$paperFile->getFileId(),
 				$paperFile->getRevision()
 			)

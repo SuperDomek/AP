@@ -70,6 +70,7 @@ class DirectorHandler extends TrackDirectorHandler {
 
 		$directorSubmissionDao =& DAORegistry::getDAO('DirectorSubmissionDAO');
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
+		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 
 		$page = isset($args[0]) ? $args[0] : '';
 		$tracks =& $trackDao->getTrackTitles($schedConfId);
@@ -163,7 +164,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			$rangeInfo =& $submissions->getLastPageRangeInfo();
 			unset($submissions);
 		}
-
+		import('core.ArrayItemIterator');
 		if ($sort == 'status') {
 			// Sort all submissions by status, which is too complex to do in the DB
 			$submissionsArray = $submissions->toArray();
@@ -173,9 +174,29 @@ class DirectorHandler extends TrackDirectorHandler {
 				$submissionsArray = array_reverse($submissionsArray);
 			}
 			// Convert submission array back to an ItemIterator class
-			import('core.ArrayItemIterator');
+
 			$submissions =& ArrayItemIterator::fromRangeInfo($submissionsArray, $rangeInfo);
 		}
+
+		// Workaround because can't access ReviewFiles through submissions in the template
+		$reviewFiles;
+		$tempSubmissions = $submissions->toArray();
+		foreach($tempSubmissions as $submission){
+			if($submission->getCurrentStage() >= 2){ //PRESENTATION STAGE
+				$reviewAssignments = $submission->getReviewAssignments()[$submission->getCurrentStage()];
+				foreach($reviewAssignments as $reviewAssignment){
+					echo "<pre>";
+					//print_r($reviewAssignment[0]->getReviewFile());
+					echo "</pre>";
+					if($submission->getReviewFileId() == $reviewAssignment->getReviewFileId()){
+						if(!is_null($reviewAssignment->getReviewFile()))
+							$reviewFiles[$submission->getPaperId()] = (int) $reviewAssignment->getReviewFile()->getChecked();
+					}
+				}
+			}
+		}
+		$submissions =& ArrayItemIterator::fromRangeInfo($tempSubmissions, $rangeInfo);
+		// END Workaround
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('pageToDisplay', $page);
@@ -183,11 +204,11 @@ class DirectorHandler extends TrackDirectorHandler {
 		$templateMgr->assign('directorOptions', $filterDirectorOptions);
 		$templateMgr->assign('trackOptions', $filterTrackOptions);
 		$templateMgr->assign_by_ref('submissions', $submissions);
+		$templateMgr->assign_by_ref('reviewFiles', $reviewFiles); //workaround
 		$templateMgr->assign('filterDirector', $filterDirector);
 		$templateMgr->assign('filterTrack', $filterTrack);
 		$templateMgr->assign('yearOffsetFuture', SCHED_CONF_DATE_YEAR_OFFSET_FUTURE);
 		$templateMgr->assign('durationOptions', TrackDirectorHandler::getDurationOptions());
-
 		$sessionTypesArray = array();
 		$paperTypeDao = DAORegistry::getDAO('PaperTypeDAO');
 		$sessionTypes = $paperTypeDao->getPaperTypes($schedConfId);

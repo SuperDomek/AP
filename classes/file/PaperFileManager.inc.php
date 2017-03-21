@@ -30,6 +30,7 @@ import('file.FileManager');
 define('PAPER_FILE_SUBMISSION',	'SM');
 define('PAPER_FILE_REVIEW',		'RV');
 define('PAPER_FILE_DIRECTOR',		'DR');
+define('PAPER_FILE_AUTHOR',		'AU');
 define('PAPER_FILE_LAYOUT',		'LE');
 define('PAPER_FILE_PUBLIC',		'PB');
 define('PAPER_FILE_SUPP',		'SP');
@@ -111,8 +112,11 @@ class PaperFileManager extends FileManager {
 	 * @param $fileId int
 	 * @return int file ID, is false if failure
 	 */
-	function uploadDirectorDecisionFile($fileName, $fileId = null) {
-		return $this->handleUpload($fileName, PAPER_FILE_DIRECTOR, $fileId);
+	function uploadDirectorDecisionFile($fileName, $fileId = null, $author = false) {
+		if ($author)
+			return $this->handleUpload($fileName, PAPER_FILE_AUTHOR, $fileId);
+		else
+			return $this->handleUpload($fileName, PAPER_FILE_DIRECTOR, $fileId);
 	}
 
 	/**
@@ -342,6 +346,7 @@ class PaperFileManager extends FileManager {
 			case PAPER_FILE_SUPP: return 'supp';
 			case PAPER_FILE_NOTE: return 'note';
 			case PAPER_FILE_REVIEW: return 'submission/review';
+			case PAPER_FILE_AUTHOR: return 'submission/director';
 			case PAPER_FILE_DIRECTOR: return 'submission/director';
 			case PAPER_FILE_LAYOUT: return 'submission/layout';
 			case PAPER_FILE_SUBMISSION: default: return 'submission/original';
@@ -491,9 +496,9 @@ class PaperFileManager extends FileManager {
 			$paperFile->setDateUploaded(Core::getCurrentDate());
 			$paperFile->setDateModified(Core::getCurrentDate());
 			// Hot Fix for author file uploads for revisions
-			if($type != PAPER_FILE_DIRECTOR)
+/*			if($type != PAPER_FILE_AUTHOR)
 				$paperFile->setStage($this->paper->getCurrentStage() + 1);
-			else
+			else*/
 				$paperFile->setStage($this->paper->getCurrentStage());
 		}
 

@@ -20,7 +20,7 @@
 		<td>
 			{if $lastDirectorDecision}
 				{assign var="decision" value=$lastDirectorDecision.decision}
-				{translate key=$directorDecisionOptions.$decision} {$lastDirectorDecision.dateDecided|date_format:$dateFormatShort}
+				{translate key=$directorDecisionOptions.$decision} ({$lastDirectorDecision.dateDecided|date_format:$dateFormatShort})
 			{else}
 				&mdash;
 			{/if}

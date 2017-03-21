@@ -103,6 +103,7 @@
 	<message key="submission.email.confirmDeleteLogEntry">Are you sure you want to delete this email log entry?</message>
 	<message key="submission.email.deleteLogEntry">Delete Log Entry</message>
 	<message key="submission.emailLog">Email Log</message>
+	<message key="submission.event.author.authorRevision">Author uploaded a revised file to the submission.</message>
 	<message key="submission.event.backToEventLog">Back to Event Log</message>
 	<message key="submission.event.confirmClearLog">Are you sure you want to clear the event log for this submission?</message>
 	<message key="submission.event.confirmDeleteLogEntry">Are you sure you want to delete this event log entry?</message>
@@ -231,6 +232,13 @@
 	<message key="submission.uploadSuccessfulContinue">Your file has been uploaded.  Press continue to edit the file's metadata.</message>
 	<message key="submission.loadMessage">Please wait while your file is uploaded to the server.</message>
 	<message key="submission.fileDetails">File Details</message>
+	<message key="submission.fileNotChecked">File is waiting to be checked by the editor.</message>
+	<message key="submission.fileOkay">Send to review</message>
+	<message key="submission.fileOkayed">Review file checked</message>
+	<message key="submission.fileNotOkay">Revise file</message>
+	<message key="submission.noFile">No file</message>
+	<message key="submission.fileAccepted">Accepted</message>
+	<message key="submission.filePending">Pending</message>
 	<message key="submission.nameRequired">A name is required for this item.</message>
 
 	<!-- Author Submission -->

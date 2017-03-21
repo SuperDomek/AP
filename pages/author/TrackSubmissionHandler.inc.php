@@ -353,9 +353,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 	 */
 	function uploadRevisedVersion() {
 		$paperId = (int) Request::getUserVar('paperId');
-		error_log("před validací");
 		$this->validate($paperId, true);
-		error_log("po validaci");
 		$submission =& $this->submission;
 
 		AuthorAction::uploadRevisedVersion($submission);

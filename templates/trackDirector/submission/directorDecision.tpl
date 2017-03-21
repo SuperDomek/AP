@@ -93,9 +93,8 @@
     				{/if}
     				<td width="80%" class="value" colspan="2">
     					<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" />
-
-    						<!--{assign var="sendableVersionExists" value=true}-->
-    					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;
+    					{* <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp; *}
+                {$authorFile->getFileName()|escape}&nbsp;&nbsp;
     						{$authorFile->getDateModified()|date_format:$dateFormatShort}
     				</td>
     			</tr>
@@ -125,6 +124,7 @@
             <td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
       			<td width="80%" class="nodata">
       				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+              <input type="hidden" name="newStage" value="1" />
       				<input type="file" name="upload" class="uploadField" />
       				<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
       			</td>

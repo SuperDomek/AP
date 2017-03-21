@@ -206,13 +206,20 @@ function confirmSubmissionCheck() {
 						</td>
 						<td class="value" width="70%">
 							{if $reviewFile}
-							{if $submission->getDateConfirmed() or not $schedConf->getSetting('restrictReviewerAccessToFile')}
-								<a href="{url op="downloadFile" path=$reviewId|to_array:$paperId:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>
-							{else}{$reviewFile->getFileName()|escape}{/if}
-							&nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
+  							{if $submission->getDateConfirmed() or not $schedConf->getSetting('restrictReviewerAccessToFile')}
+                  {if $reviewFile->getChecked() == 1}
+  					        <a href="{url op="downloadFile" path=$reviewId|to_array:$paperId:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>
+                    &nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
+                  {else}
+                    {translate key="submission.fileNotChecked"}
+                  {/if}
+  							{else}
+                  {$reviewFile->getFileName()|escape}
+                  &nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
+                {/if} {* confirmed or not restricted *}
 							{else}
-							{translate key="common.none"}
-							{/if}
+				       {translate key="common.none"}
+							{/if} {* $reviewFile *}
 						</td>
 					</tr>
 				{/if}
@@ -254,9 +261,19 @@ function confirmSubmissionCheck() {
 		<td>
       {if $confirmedStatus and not $declined}
         <div style="float:left;text-align:center;">
-          <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon"}>
-            <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
-          </a>
+          {if $reviewFile}
+            {if $reviewFile->getChecked() == 1}
+              <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
+                <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+              </a>
+            {else}
+              <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+            {/if} {* ReviewFile checked *}
+          {else}
+            <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
+              <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+            </a>
+          {/if} {* ReviewFile *}
         </div>
 			{/if}
 		</td>

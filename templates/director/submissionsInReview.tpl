@@ -30,6 +30,7 @@
 			</table>
 		</td>
 		<td width="7%">{translate key="submissions.ruling"}</td>
+    <td width="6%">{translate key="submission.fileOkayed"}</td>
 		<td width="10%">{sort_search key="user.role.trackDirectors" sort="trackDirectors"}</td>
 	</tr>
 	<tr>
@@ -37,6 +38,7 @@
 	</tr>
 
 	{iterate from=submissions item=submission}
+  {assign var=paperId value=$submission->getPaperId()}
 	<tr valign="top">
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
@@ -83,15 +85,26 @@
 			{foreach from=$submission->getDecisions() item=decisions}
 				{foreach from=$decisions item=decision name=decisionList}
 					{if $smarty.foreach.decisionList.last}
-							{$decision.dateDecided|date_format:$dateFormatTrunc}
+							{$decision.dateDecided|date_format:$dateFormatTrunc}<br />
 					{/if}
 				{foreachelse}
-					&mdash;
+					&mdash;<br />
 				{/foreach}
 			{foreachelse}
-				&mdash;
+				&mdash;<br />
 			{/foreach}
 		</td>
+    <td style="vertical-align: middle;">
+      {if $paperId|array_key_exists:$reviewFiles}
+        {if $reviewFiles[$paperId] == 1}
+          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted""}</span>
+        {else}
+          <span style="color:#e85a09;">{translate key="submission.filePending"}</span>
+        {/if}
+      {else}
+        <span style="color:#a5a3a5;">{translate key="submission.noFile"}</span>
+      {/if}
+    </td>
 		<td>{$submission->getTrackDirectorString(true)|truncate:30:"..."|escape}</td>
 	</tr>
 	<tr>

@@ -529,8 +529,10 @@ class Paper extends Submission {
 				if ($userId) $userIds[] = array('id' =>  $userId, 'role' => 'director');
 			}
 		}
+		// Deduplicate the array because of the reviewers; So one user don't get multiple same notifications
+		$userIdsUnique = array_unique($userIds, SORT_REGULAR);
 
-		return $userIds;
+		return $userIdsUnique;
 	}
 }
 

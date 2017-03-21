@@ -3,14 +3,14 @@
 /**
  * @defgroup pages_director
  */
- 
+
 /**
  * @file index.php
  *
  * Copyright (c) 2000-2012 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @brief Handle requests for director functions. 
+ * @brief Handle requests for director functions.
  *
  * @ingroup pages_director
  */
@@ -34,6 +34,7 @@ switch ($op) {
 	case 'selectReviewer':
 	case 'notifyReviewer':
 	case 'notifyAllReviewers':
+  case 'makeFileChecked':
 	case 'userProfile':
 	case 'clearReview':
 	case 'cancelReview':

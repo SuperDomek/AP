@@ -43,6 +43,7 @@ switch ($op) {
 	case 'confirmReviewForReviewer':
 	case 'uploadReviewForReviewer':
 	case 'enterReviewerRecommendation':
+	case 'makeFileChecked':
 	case 'makeReviewerFileViewable':
 	case 'setDueDate':
 	case 'viewMetadata':

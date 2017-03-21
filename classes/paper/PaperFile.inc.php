@@ -237,6 +237,25 @@ class PaperFile extends DataObject {
 	}
 
 	/**
+	 * Get checked.
+	 * @return boolean
+	 */
+
+	function getChecked() {
+		return $this->getData('checked');
+	}
+
+
+	/**
+	 * Set checked.
+	 * @param $checked boolean
+	 */
+
+	function setChecked($checked) {
+		return $this->SetData('checked', $checked);
+	}
+
+	/**
 	 * Get viewable.
 	 * @return boolean
 	 */
