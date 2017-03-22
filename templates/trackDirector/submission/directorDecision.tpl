@@ -43,7 +43,7 @@
 		{/foreach}
 	</td>
 </tr>
-{if !$isReviewer}
+{if !$isTrackDirector}
 <tr valign="top">
 	<td class="label">{translate key="submission.notifyAuthor"}</td>
 	<td class="value" colspan="2">

@@ -164,8 +164,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			foreach ($abstract1 as $key => $localizedAbstract) {
 				$abstractTotalChars[$key] = strlen(strip_tags($localizedAbstract) . strip_tags($abstract2[$key]) . strip_tags($abstract3[$key]));
 			}
-			$this->_data['abstractTotalChars'] = $abstractTotalChars;
-			error_log($this->_data['abstractTotalChars']['en_US']);
+			$this->_data['abstractTotalChars'] = $abstractTotalChars;		
 		}
 		// END EDIT
 

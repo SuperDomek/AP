@@ -60,7 +60,7 @@ class OCSPaymentManager extends PaymentManager {
 				$registrationId = $queuedPayment->getAssocId();
 				$registrationDao =& DAORegistry::getDAO('RegistrationDAO');
 				$registration =& $registrationDao->getRegistration($registrationId);
-				if (!$registration || $registration->getUserId() != $queuedPayment->getUserId() || $registration->getSchedConfId() != $queuedPayment->getSchedConfId()) {error_log(print_r($registration, true)); return false;}
+				if (!$registration || $registration->getUserId() != $queuedPayment->getUserId() || $registration->getSchedConfId() != $queuedPayment->getSchedConfId()) {return false;}
 
 				$registration->setDatePaid(Core::getCurrentDate());
 				$registrationDao->updateRegistration($registration);

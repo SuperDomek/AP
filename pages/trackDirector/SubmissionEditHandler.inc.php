@@ -65,6 +65,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign('enableComments', $enableComments);
 		$templateMgr->assign('isReviewer', $this->isReviewer());
+		$templateMgr->assign('isTrackDirector', $this->isTrackDirector($submission));
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		// testing JEL codes class
@@ -186,7 +187,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$showPeerReviewOptions = $isCurrent && $submission->getReviewFile() != null ? true : false;
 
 		$allowRecommendation = ($isCurrent  || ($stage == REVIEW_STAGE_ABSTRACT && $reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL)) &&
-			!empty($editAssignments);
+			!empty($editAssignments) && $this->reviewsCompleteAndSet($stage);
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
 
@@ -298,6 +299,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
+		$templateMgr->assign('isTrackDirector', $this->isTrackDirector($submission));
 		$templateMgr->assign('isDirector', Validation::isDirector());
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
@@ -334,6 +336,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
+
+		// trackDirector may not see history
+		if ($this->isTrackDirector($submission)) {
+			Request::redirect(null, null, null, 'submission', $paperId);
+		}
 
 		$this->setupTemplate(true, $paperId);
 
@@ -1984,6 +1991,62 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Checks whether the current user is assigned as trackDirector to the submission
+	 * @param object submission to check against
+	 * @return bool true if the user is active trackDir of this paper
+	 */
+	function isTrackDirector($submission){
+		$user =& Request::getUser();
+
+		if($submission){
+			$editAssignments = $submission->getEditAssignments();
+			foreach ($editAssignments as $editAssignment){
+				if ($editAssignment->getDirectorId() == $user->getId())
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether review assignments are completed in stage or the whole paper
+	 * @param stage int optional stage to check the review assignments in;
+	 * @return bool true if the reviews are completed
+	 */
+	function reviewsCompleteAndSet($stage = null){
+		$user =& Request::getUser();
+		$submission =& $this->submission;
+		$counter = 0;
+		if($stage){
+			$reviewAssignments = $submission->getReviewAssignments($stage);
+			foreach ($reviewAssignments as $reviewAssignment){
+				if (!$reviewAssignment->getCancelled()){
+					if ($reviewAssignment->getRecommendation() === null ||
+						$reviewAssignment->getRecommendation() === ''){
+							return false;
+					}
+					$counter++;
+				}
+			}
+			if ($counter == 0) return false;
+		}
+		else{
+			$reviewAssignmentsStages = $submission->getReviewAssignments($stage);
+			foreach ($reviewAssignmentsStages as $reviewAssignmentsStage){
+				foreach ($reviewAssignmentStage as $reviewAssignment){
+					if (!$reviewAssignment->getCancelled()){
+						if ($reviewAssignment->getRecommendation() === null ||
+							$reviewAssignment->getRecommendation() === ''){
+								return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	//

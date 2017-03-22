@@ -36,7 +36,9 @@
 	{else}
 		<li class="current"><a href="{url op="submissionReview" path=$submission->getPaperId()}">{translate key="submission.review"}</a></li>
 	{/if}
-	<li><a href="{url op="submissionHistory" path=$submission->getPaperId()}">{translate key="submission.history"}</a></li>
+  {if !$isTrackDirector}
+	 <li><a href="{url op="submissionHistory" path=$submission->getPaperId()}">{translate key="submission.history"}</a></li>
+  {/if}
 </ul>
 
 {include file="trackDirector/submission/peerReview.tpl"}
