@@ -187,7 +187,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$showPeerReviewOptions = $isCurrent && $submission->getReviewFile() != null ? true : false;
 
 		$allowRecommendation = ($isCurrent  || ($stage == REVIEW_STAGE_ABSTRACT && $reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL)) &&
-			!empty($editAssignments);
+			!empty($editAssignments) && $this->reviewsCompleteAndSet($stage);
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
 
@@ -2009,6 +2009,44 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Checks whether review assignments are completed in stage or the whole paper
+	 * @param stage int optional stage to check the review assignments in;
+	 * @return bool true if the reviews are completed
+	 */
+	function reviewsCompleteAndSet($stage = null){
+		$user =& Request::getUser();
+		$submission =& $this->submission;
+		$counter = 0;
+		if($stage){
+			$reviewAssignments = $submission->getReviewAssignments($stage);
+			foreach ($reviewAssignments as $reviewAssignment){
+				if (!$reviewAssignment->getCancelled()){
+					if ($reviewAssignment->getRecommendation() === null ||
+						$reviewAssignment->getRecommendation() === ''){
+							return false;
+					}
+					$counter++;
+				}
+			}
+			if ($counter == 0) return false;
+		}
+		else{
+			$reviewAssignmentsStages = $submission->getReviewAssignments($stage);
+			foreach ($reviewAssignmentsStages as $reviewAssignmentsStage){
+				foreach ($reviewAssignmentStage as $reviewAssignment){
+					if (!$reviewAssignment->getCancelled()){
+						if ($reviewAssignment->getRecommendation() === null ||
+							$reviewAssignment->getRecommendation() === ''){
+								return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	//
