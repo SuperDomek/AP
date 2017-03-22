@@ -27,6 +27,7 @@
 <h3>{translate key="director.navigation.management"}</h3>
 <ul class="plain">
 	<li>&#187; <a href="{url op="notifyUsers"}">{translate key="director.notifyUsers"}</a></li>
+  <li>&#187; <a href="{url op="manageTrackDirectors"}">{translate key="director.manageTrackDirectors"}</a></li>
 </ul>
 </div>
 {include file="common/footer.tpl"}

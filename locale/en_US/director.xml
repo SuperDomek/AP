@@ -19,6 +19,7 @@
 	<message key="director.allTracks">All Tracks</message>
 	<message key="director.allDirectors">All Directors</message>
 	<message key="director.me">Me</message>
+	<message key="director.manageTrackDirectors">Manage co-editors</message>
 	<message key="director.submissionQueue.noSubmissions">No submissions in the queue.</message>
 	<message key="director.submissionQueue.saveChanges">Save changes to queued submissions?</message>
 	<message key="director.submissionArchive.noSubmissions">No submissions in the archive.</message>
