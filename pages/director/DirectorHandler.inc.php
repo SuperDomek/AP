@@ -164,6 +164,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			$rangeInfo =& $submissions->getLastPageRangeInfo();
 			unset($submissions);
 		}
+
 		import('core.ArrayItemIterator');
 		if ($sort == 'status') {
 			// Sort all submissions by status, which is too complex to do in the DB
@@ -183,19 +184,41 @@ class DirectorHandler extends TrackDirectorHandler {
 		$tempSubmissions = $submissions->toArray();
 		foreach($tempSubmissions as $submission){
 			if($submission->getCurrentStage() >= 2){ //PRESENTATION STAGE
+				// FIX warnings when no reviewAssignments in the stage
 				$reviewAssignments = $submission->getReviewAssignments()[$submission->getCurrentStage()];
-				foreach($reviewAssignments as $reviewAssignment){
-					echo "<pre>";
-					//print_r($reviewAssignment[0]->getReviewFile());
-					echo "</pre>";
-					if($submission->getReviewFileId() == $reviewAssignment->getReviewFileId()){
-						if(!is_null($reviewAssignment->getReviewFile()))
-							$reviewFiles[$submission->getPaperId()] = (int) $reviewAssignment->getReviewFile()->getChecked();
+				if($reviewAssignments){
+					foreach($reviewAssignments as $reviewAssignment){
+						if($submission->getReviewFileId() == $reviewAssignment->getReviewFileId()){
+							if(!is_null($reviewAssignment->getReviewFile()))
+								$reviewFiles[$submission->getPaperId()] = (int) $reviewAssignment->getReviewFile()->getChecked();
+						}
 					}
 				}
 			}
 		}
-		$submissions =& ArrayItemIterator::fromRangeInfo($tempSubmissions, $rangeInfo);
+
+		// Need to reinitialize the $submissions object
+		unset($submissions);
+		while (true) {
+			$submissions =& $directorSubmissionDao->$functionName(
+				$schedConfId,
+				$filterTrack,
+				$directorId,
+				$searchField,
+				$searchMatch,
+				$search,
+				null,
+				null,
+				null,
+				$rangeInfo,
+				$sort,
+				$sortDirection
+			);
+			if ($submissions->isInBounds()) break;
+			unset($rangeInfo);
+			$rangeInfo =& $submissions->getLastPageRangeInfo();
+			unset($submissions);
+		}
 		// END Workaround
 
 		$templateMgr =& TemplateManager::getManager();
