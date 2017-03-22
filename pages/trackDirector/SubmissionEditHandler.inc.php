@@ -277,7 +277,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				$reviewFormResponses[$reviewAssignment->getId()] = $reviewFormResponseDao->reviewFormResponseExists($reviewAssignment->getId());
 			}
 		}
-		if ($this->isTrackDirector($submission)) echo "Je trackDir";
 
 		$templateMgr =& TemplateManager::getManager();
 
