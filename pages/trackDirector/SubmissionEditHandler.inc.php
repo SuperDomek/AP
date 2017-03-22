@@ -338,6 +338,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
 
+		// trackDirector may not see history
+		if ($this->isTrackDirector($submission)) {
+			Request::redirect(null, null, null, 'submission', $paperId);
+		}
+
 		$this->setupTemplate(true, $paperId);
 
 		// submission notes
