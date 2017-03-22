@@ -9,13 +9,14 @@
  * $Id$
  *}
 <div id="submission">
-<h3>{translate key="paper.submission"}</h3>
+<h3>{translate key="paper.submission"} {$isTrackDirector}</h3>
 
 {assign var="submissionFile" value=$submission->getSubmissionFile()}
 {assign var="suppFiles" value=$submission->getSuppFiles()}
 
 <table width="100%" class="data">
-  {if !$isReviewer}{*track director could be a reviewer as well*}
+  {if !$isTrackDirector}{*track director could be a reviewer as well*}
+
 	<tr>
 		<td width="20%" class="label">{translate key="paper.authors"}</td>
 		<td width="80%" colspan="2" class="value">
@@ -34,19 +35,20 @@
 		<td class="label">{translate key="paper.title"}</td>
 		<td colspan="2" class="value">{$submission->getLocalizedTitle()|strip_unsafe_html}</td>
 	</tr>
-{if $submissionFile || $submission->getReviewMode() != REVIEW_MODE_ABSTRACTS_ALONE}
-	<tr>
-		<td class="label">{translate key="submission.originalFile"}</td>
-		<td colspan="2" class="value">
-			{if $submissionFile}
-				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$submissionFile->getFileId()}" class="file">{$submissionFile->getFileName()|escape}</a>&nbsp;&nbsp;{$submissionFile->getDateModified()|date_format:$dateFormatShort}
-			{else}
-				{translate key="common.none"}
-			{/if}
-		</td>
-	</tr>
-{/if}
-  {if !$isReviewer}
+{if !$isTrackDirector}
+  {if $submissionFile || $submission->getReviewMode() != REVIEW_MODE_ABSTRACTS_ALONE}
+  	<tr>
+  		<td class="label">{translate key="submission.originalFile"}</td>
+  		<td colspan="2" class="value">
+  			{if $submissionFile}
+  				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$submissionFile->getFileId()}" class="file">{$submissionFile->getFileName()|escape}</a>&nbsp;&nbsp;{$submissionFile->getDateModified()|date_format:$dateFormatShort}
+  			{else}
+  				{translate key="common.none"}
+  			{/if}
+  		</td>
+  	</tr>
+  {/if}
+
 	<tr>
 		<td class="label">{translate key="submission.submitter"}</td>
 		<td colspan="2" class="value">
@@ -56,7 +58,7 @@
 			{$submitter->getFullName()|escape} {icon name="mail" url=$url}
 		</td>
 	</tr>
-  {/if}
+{/if}
 	<tr>
 		<td class="label">{translate key="common.dateSubmitted"}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatShort}</td>

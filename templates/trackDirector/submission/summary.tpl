@@ -12,7 +12,7 @@
 <h3>{translate key="paper.submission"}</h3>
 
 <table width="100%" class="data">
-  {if !$isReviewer}{*track director could be a reviewer as well*}
+  {if !$isTrackDirector}{*track director could be a reviewer as well*}
 	<tr>
 		<td width="20%" class="label">{translate key="paper.authors"}</td>
 		<td width="80%">

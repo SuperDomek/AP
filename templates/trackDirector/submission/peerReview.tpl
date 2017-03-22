@@ -12,7 +12,7 @@
 <h3>{translate key="paper.submission"}</h3>
 
 <table width="100%" class="data">
-  {if !$isReviewer}
+  {if !$isTrackDirector}
 	<tr>
 		<td width="20%" class="label">{translate key="paper.authors"}</td>
 		<td width="80%">

@@ -65,6 +65,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign('enableComments', $enableComments);
 		$templateMgr->assign('isReviewer', $this->isReviewer());
+		$templateMgr->assign('isTrackDirector', $this->isTrackDirector($submission));
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		// testing JEL codes class
@@ -276,6 +277,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				$reviewFormResponses[$reviewAssignment->getId()] = $reviewFormResponseDao->reviewFormResponseExists($reviewAssignment->getId());
 			}
 		}
+		if ($this->isTrackDirector($submission)) echo "Je trackDir";
 
 		$templateMgr =& TemplateManager::getManager();
 
@@ -298,6 +300,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
+		$templateMgr->assign('isTrackDirector', $this->isTrackDirector($submission));
 		$templateMgr->assign('isDirector', Validation::isDirector());
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
@@ -1981,6 +1984,27 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			// check whether this user is a reviewer and the review is active
 			if(($reviewAssignment->getReviewerId() == $user->getId()) && !$reviewAssignment->getCancelled()){
 				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether the current user is assigned as trackDirector to the submission
+	 * @param object submission to check against
+	 * @return bool true if the user is active trackDir of this paper
+	 */
+	function isTrackDirector($submission){
+		$user =& Request::getUser();
+
+		if($submission){
+			$editAssignments = $submission->getEditAssignments();
+			foreach ($editAssignments as $editAssignment){
+				error_log("Ko-editor je: " . $editAssignment->getDirectorFullName());
+				error_log("Ko-Editor ID: " . $editAssignment->getDirectorId());
+				error_log("User ID: " . $user->getId());
+				if ($editAssignment->getDirectorId() == $user->getId())
+					return true;
 			}
 		}
 		return false;
