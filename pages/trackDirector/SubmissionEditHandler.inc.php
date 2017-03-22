@@ -2000,9 +2000,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		if($submission){
 			$editAssignments = $submission->getEditAssignments();
 			foreach ($editAssignments as $editAssignment){
-				error_log("Ko-editor je: " . $editAssignment->getDirectorFullName());
-				error_log("Ko-Editor ID: " . $editAssignment->getDirectorId());
-				error_log("User ID: " . $user->getId());
 				if ($editAssignment->getDirectorId() == $user->getId())
 					return true;
 			}

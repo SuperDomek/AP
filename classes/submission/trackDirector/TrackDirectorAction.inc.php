@@ -175,7 +175,6 @@ class TrackDirectorAction extends Action {
 				}
 				// Confirm Review for all the reassigned reviewers
 				foreach ($trackDirectorSubmission->getReviewAssignments(REVIEW_STAGE_PRESENTATION) as $reviewAssignment) {
-					error_log("Spouštím potvrzení");
 					TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
 				}
 			}

@@ -9,7 +9,7 @@
  * $Id$
  *}
 <div id="submission">
-<h3>{translate key="paper.submission"} {$isTrackDirector}</h3>
+<h3>{translate key="paper.submission"}</h3>
 
 {assign var="submissionFile" value=$submission->getSubmissionFile()}
 {assign var="suppFiles" value=$submission->getSuppFiles()}
