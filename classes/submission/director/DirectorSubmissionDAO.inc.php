@@ -121,7 +121,7 @@ class DirectorSubmissionDAO extends DAO {
 	/**
 	 * Insert a new DirectorSubmission.
 	 * @param $directorSubmission DirectorSubmission
-	 */	
+	 */
 	function insertDirectorSubmission(&$directorSubmission) {
 		$this->update(
 			sprintf('INSERT INTO edit_assignments
@@ -453,6 +453,44 @@ class DirectorSubmissionDAO extends DAO {
 		$submissionsCount[1] = $result->Fields('review_count');
 		$result->Close();
 
+		// Fetch a count of submissions published.
+		// "e2" and "e" are used to fetch only a single assignment
+		// if several exist.
+		$result =& $this->retrieve(
+			'SELECT	COUNT(*) AS published_count
+			FROM	papers p
+				LEFT JOIN edit_assignments e ON (p.paper_id = e.paper_id)
+				LEFT JOIN edit_assignments e2 ON (p.paper_id = e2.paper_id AND e.edit_id < e2.edit_id)
+			WHERE	p.sched_conf_id = ?
+				AND p.status = ' . STATUS_PUBLISHED . '
+				AND e2.edit_id IS NULL
+				AND e.edit_id IS NOT NULL
+				AND (p.submission_progress = 0 OR (p.review_mode = ' . REVIEW_MODE_BOTH_SEQUENTIAL . ' AND p.submission_progress <> 1))',
+			array((int) $schedConfId)
+		);
+		$submissionsCount[2] = $result->Fields('published_count');
+		$result->Close();
+
+		// Fetch a count of submissions in archive.
+		// "e2" and "e" are used to fetch only a single assignment
+		// if several exist.
+		$result =& $this->retrieve(
+			'SELECT	COUNT(*) AS archive_count
+			FROM	papers p
+				LEFT JOIN edit_assignments e ON (p.paper_id = e.paper_id)
+				LEFT JOIN edit_assignments e2 ON (p.paper_id = e2.paper_id AND e.edit_id < e2.edit_id)
+			WHERE	p.sched_conf_id = ?
+				AND p.status = ' . STATUS_ARCHIVED . '
+				AND e2.edit_id IS NULL
+				AND e.edit_id IS NOT NULL
+				AND (p.submission_progress = 0 OR (p.review_mode = ' . REVIEW_MODE_BOTH_SEQUENTIAL . ' AND p.submission_progress <> 1))',
+			array((int) $schedConfId)
+		);
+		$submissionsCount[3] = $result->Fields('archive_count');
+		$result->Close();
+
+
+
 		return $submissionsCount;
 	}
 
@@ -592,7 +630,7 @@ class DirectorSubmissionDAO extends DAO {
 	function getInsertEditId() {
 		return $this->getInsertId('edit_assignments', 'edit_id');
 	}
-	
+
 	/**
 	 * Map a column heading value to a database value for sorting
 	 * @param string
@@ -606,7 +644,7 @@ class DirectorSubmissionDAO extends DAO {
 			case 'sessionType': return 'sts.setting_value';
 			case 'authors': return 'author_name';
 			case 'title': return 'submission_title';
-			case 'active': return 'p.submission_progress';		
+			case 'active': return 'p.submission_progress';
 			case 'subLayout': return 'layout_completed';
 			case 'status': return 'p.status';
 			case 'seq': return 'pp.seq';
