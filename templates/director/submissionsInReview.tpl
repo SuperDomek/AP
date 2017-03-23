@@ -29,7 +29,7 @@
 				</tr>
 			</table>
 		</td>
-		<td width="7%">{translate key="submissions.ruling"}</td>
+		<td width="7%">{translate key="submission.decision"}</td>
     <td width="6%">{translate key="submission.fileOkayed"}</td>
 		<td width="10%">{sort_search key="user.role.trackDirectors" sort="trackDirectors"}</td>
 	</tr>
@@ -57,7 +57,7 @@
 				{foreach from=$reviewAssignments item=assignment name=assignmentList}
 					{if not $assignment->getCancelled() and not $assignment->getDeclined()}
 					<tr valign="top">
-						<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getStage() == REVIEW_STAGE_ABSTRACT}{translate key="submission.abstract"}{else}{translate key="submission.paper"}{/if}</td>
+						<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getStage() == REVIEW_STAGE_ABSTRACT}{translate key="submission.abstract"}{else}{translate key="submission.paper"} {$assignment->getStage()-1}{/if}</td>
 						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateNotified()}{$assignment->getDateNotified()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
 						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted() || !$assignment->getDateConfirmed()}&mdash;{else}{$assignment->getWeeksDue()|default:"&mdash;"}{/if}</td>
 						<td width="20%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted()}{$assignment->getDateCompleted()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
@@ -81,18 +81,31 @@
 			{/foreach}
 			</table>
 		</td>
-		<td>
-			{foreach from=$submission->getDecisions() item=decisions}
-				{foreach from=$decisions item=decision name=decisionList}
-					{if $smarty.foreach.decisionList.last}
-							{$decision.dateDecided|date_format:$dateFormatTrunc}<br />
-					{/if}
-				{foreachelse}
-					&mdash;<br />
-				{/foreach}
-			{foreachelse}
-				&mdash;<br />
-			{/foreach}
+		<td >
+      {assign var="decisionsAbstract" value=$submission->getDecisions()|@reset}
+      {assign var="decisionAbstract" value=$decisionsAbstract|@end}
+      {if $decisionAbstract.decision == SUBMISSION_DIRECTOR_DECISION_INVITE}
+        <span style="color:#0b9e3f;">ACC</span>
+      {elseif $decisionAbstract.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}
+        <span style="color:#ea5b0d;">REV</span>
+      {elseif $decisionAbstract.decision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
+        <span style="color:#e85a09;">DEC</span>
+      {else}
+        <span style="color:#a5a3a5;">&mdash;</span>
+      {/if}
+      <br />
+      {assign var="decisions" value=$submission->getDecisions()|@end}
+      {assign var="decision" value=$decisions|@end}
+      {if $decision.decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT}
+        <span style="color:#0b9e3f;">ACC</span>
+      {elseif $decision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+      $decision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+        <span style="color:#ea5b0d;">REV</span>
+      {elseif $decisionAbstract.decision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
+        <span style="color:#e85a09;">DEC</span>
+      {else}
+        <span style="color:#a5a3a5;">&mdash;</span>
+      {/if}
 		</td>
     <td style="vertical-align: middle;">
       {if $paperId|array_key_exists:$reviewFiles}

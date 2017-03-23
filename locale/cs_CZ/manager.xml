@@ -74,6 +74,7 @@
 	<message key="manager.payment.form.method">Možnosti platby registračního poplatku</message>
 	<message key="manager.payment.paymentPluginInvalid">Vyberte platnou možnost platby.</message>
 	<message key="manager.payment.paymentSettings">Možnosti platby</message>
+	<message key="manager.people">Lidé</message>
 	<message key="manager.people.allConferences">Všechny konference</message>
 	<message key="manager.people.allEnrolledUsers">Všichni přihlášení uživatelé</message>
 	<message key="manager.people.allSiteUsers">Přihlásit uživatele těchto stránek na tuto konferenci</message>

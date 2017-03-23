@@ -21,6 +21,7 @@
 	<message key="director.allTracks">Všechny sekce</message>
 	<message key="director.allDirectors">Všichni garanti</message>
 	<message key="director.me">Já</message>
+	<message key="director.manageTrackDirectors">Spravovat ko-editory</message>
 	<message key="director.submissionQueue.noSubmissions">Ve frontě nejsou žádné příspěvky.</message>
 	<message key="director.submissionQueue.saveChanges">Uložit změny příspěvků ve frontě?</message>
 	<message key="director.submissionArchive.noSubmissions">V archivu nejsou žádné příspěvky.</message>
@@ -114,4 +115,5 @@
 	<message key="director.submissions.lastCompleted">Poslední dokončená</message>
 	<message key="director.submissions.assignedTo">Přiděleno </message>
 	<message key="director.submissions.inTrack">V sekci</message>
+	<message key="manager.people">Lidé</message>
 </locale>

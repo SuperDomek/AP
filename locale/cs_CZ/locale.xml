@@ -142,11 +142,11 @@
 	<message key="common.queue.long.submissionsUnassigned">Nepřiřazeno</message>
 	<message key="common.queue.short.submissionsUnassigned">Nepřiřazeno</message>
 	<message key="common.queue.long.submissionsInReview">Oponované příspěvky</message>
-	<message key="common.queue.short.submissionsInReview">Oponované</message>
-	<message key="common.queue.long.submissionsAccepted">Prezentace</message>
-	<message key="common.queue.short.submissionsAccepted">Prezentace</message>
-	<message key="common.queue.long.submissionsArchives">Archivy</message>
-	<message key="common.queue.short.submissionsArchives">Archivy</message>
+	<message key="common.queue.short.submissionsInReview">Oponováno</message>
+	<message key="common.queue.long.submissionsAccepted">Přijato</message>
+	<message key="common.queue.short.submissionsAccepted">Přijato</message>
+	<message key="common.queue.long.submissionsArchives">Archivováno</message>
+	<message key="common.queue.short.submissionsArchives">Archivováno</message>
 	<message key="common.queue.long.active">Aktivní příspěvky</message>
 	<message key="common.queue.short.active">Aktivní</message>
 	<message key="common.queue.long.completed">Archiv</message>
@@ -236,7 +236,7 @@
 	<message key="submissions.track">Sekce</message>
 	<message key="submissions.queuedAbstractReview">Abstrakt oponování</message>
 	<message key="submissions.queuedPaperReview">Příspěvek oponován</message>
-	<message key="submissions.published">Odesláno</message>
+	<message key="submissions.published">Dokončeno</message>
 	<message key="submissions.accepted">Přijato</message>
 	<message key="submissions.reviewStage">Fáze</message>
 	<message key="submissions.reviewType">Typ oponentury</message>

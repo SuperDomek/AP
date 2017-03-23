@@ -20,6 +20,7 @@ import('trackDirector.TrackDirectorHandler');
 
 define('DIRECTOR_TRACK_HOME', 0);
 define('DIRECTOR_TRACK_SUBMISSIONS', 1);
+define('DIRECTOR_TRACK_MANAGEMENT', 2);
 
 // Filter director
 define('FILTER_DIRECTOR_ALL', 0);
@@ -449,7 +450,7 @@ class DirectorHandler extends TrackDirectorHandler {
 	 */
 	function notifyUsers($args) {
 		$this->validate();
-		$this->setupTemplate(DIRECTOR_TRACK_HOME);
+		$this->setupTemplate(DIRECTOR_TRACK_MANAGEMENT);
 
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$roleDao =& DAORegistry::getDAO('RoleDAO');
@@ -549,6 +550,80 @@ class DirectorHandler extends TrackDirectorHandler {
 	}
 
 	/**
+	 *	Shows list of trackDirectors
+	 */
+
+	function manageTrackDirectors($args){
+		$this->validate();
+		AppLocale::requireComponents(array(LOCALE_COMPONENT_PKP_MANAGER)); // manager.people.noneEnrolled
+
+		$schedConf =& Request::getSchedConf();
+		$paperId = Request::getUserVar('paperId');
+		$directorId = Request::getUserVar('directorId');
+		$roleDao =& DAORegistry::getDAO('RoleDAO');
+		$this->setupTemplate(DIRECTOR_TRACK_MANAGEMENT);
+
+		$searchType = null;
+		$searchMatch = null;
+		$search = Request::getUserVar('search');
+		$searchInitial = Request::getUserVar('searchInitial');
+		if (!empty($search)) {
+			$searchType = Request::getUserVar('searchField');
+			$searchMatch = Request::getUserVar('searchMatch');
+
+		} elseif (!empty($searchInitial)) {
+			$searchInitial = String::strtoupper($searchInitial);
+			$searchType = USER_FIELD_INITIAL;
+			$search = $searchInitial;
+		}
+
+		$rangeInfo =& Handler::getRangeInfo('directors', array($forDirectors, (string) $searchType, (string) $search, (string) $searchMatch));
+		$directorSubmissionDao =& DAORegistry::getDAO('DirectorSubmissionDAO');
+
+		$roleName = 'user.role.trackDirector';
+		$rolePath = 'trackDirector';
+		while (true) {
+			$directors =& $directorSubmissionDao->getUsersNotAssignedToPaper($schedConf->getId(), $paperId, RoleDAO::getRoleIdFromPath('trackDirector'), $searchType, $search, $searchMatch, $rangeInfo);
+			if ($directors->isInBounds()) break;
+			unset($rangeInfo);
+			$rangeInfo =& $directors->getLastPageRangeInfo();
+			unset($directors);
+		}
+
+		$templateMgr =& TemplateManager::getManager();
+
+		$templateMgr->assign_by_ref('directors', $directors);
+		$templateMgr->assign('roleName', $roleName);
+		$templateMgr->assign('rolePath', $rolePath);
+		$templateMgr->assign('paperId', $paperId);
+
+		$trackDao =& DAORegistry::getDAO('TrackDAO');
+		$trackDirectorTracks =& $trackDao->getDirectorTracks($schedConf->getId());
+
+		$editAssignmentDao =& DAORegistry::getDAO('EditAssignmentDAO');
+		$directorStatistics = $editAssignmentDao->getDirectorStatistics($schedConf->getId());
+
+		$templateMgr->assign_by_ref('directorTracks', $trackDirectorTracks);
+		$templateMgr->assign('directorStatistics', $directorStatistics);
+
+		$templateMgr->assign('searchField', $searchType);
+		$templateMgr->assign('searchMatch', $searchMatch);
+		$templateMgr->assign('search', $search);
+		$templateMgr->assign('searchInitial', Request::getUserVar('searchInitial'));
+
+		$templateMgr->assign('fieldOptions', Array(
+			USER_FIELD_FIRSTNAME => 'user.firstName',
+			USER_FIELD_LASTNAME => 'user.lastName',
+			USER_FIELD_USERNAME => 'user.username',
+			USER_FIELD_EMAIL => 'user.email'
+		));
+		$templateMgr->assign('alphaList', explode(' ', __('common.alphaList')));
+		$templateMgr->assign('helpTopicId', 'editorial.directorsRole.summaryPage.submissionManagement');
+
+		$templateMgr->display('director/manageTrackDirectors.tpl');
+	}
+
+	/**
 	 * Setup common template variables.
 	 * @param $level int set to 0 if caller is at the same level as this handler in the hierarchy; otherwise the number of levels below this handler
 	 */
@@ -570,6 +645,9 @@ class DirectorHandler extends TrackDirectorHandler {
 		if ($level==DIRECTOR_TRACK_SUBMISSIONS) {
 			$pageHierarchy[] = array(Request::url(null, null, 'director'), 'user.role.director');
 			$pageHierarchy[] = array(Request::url(null, null, 'director', 'submissions'), 'paper.submissions');
+		}
+		elseif($level==DIRECTOR_TRACK_MANAGEMENT){
+			$pageHierarchy[] = array(Request::url(null, null, 'director'), 'user.role.director');
 		}
 
 		import('submission.trackDirector.TrackDirectorAction');
