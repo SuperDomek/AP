@@ -943,7 +943,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	 */
 	function userProfile($args) {
 		parent::validate();
-		$this->setupTemplate(true);
+		$this->setupTemplate(0);
+		$schedConf =& Request::getSchedConf();
 
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('currentUrl', Request::url(null, null, null, Request::getRequestedPage()));
@@ -957,7 +958,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$user = $userDao->getUserByUsername($userId);
 		}
 
-
 		if ($user == null) {
 			// Non-existent user requested
 			$templateMgr->assign('pageTitle', 'manager.people');
@@ -966,6 +966,16 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		} else {
 			$site =& Request::getSite();
+			$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
+			$trackDirectorSubmissionsResult =& $trackDirectorSubmissionDao->_getUnfilteredTrackDirectorSubmissions($userId, $schedConf->getId(), 0, null, null, null, null, null, null, '', null, null);
+			$trackDirectorSubmissionsFac = new DAOResultFactory($trackDirectorSubmissionsResult, $trackDirectorSubmissionDao, '_returnTrackDirectorSubmissionFromRow');
+			$trackDirectorSubmissionsArr = $trackDirectorSubmissionsFac->toArray();
+
+			$trackDirectorSubmissions = array();
+			foreach ($trackDirectorSubmissionsArr as $TrackDirectorSubmissionTemp){
+				$trackDirectorSubmissions[$TrackDirectorSubmissionTemp->getPaperId()] = $TrackDirectorSubmissionTemp;
+			}
+			ksort($trackDirectorSubmissions);
 
 			$countryDao =& DAORegistry::getDAO('CountryDAO');
 			$country = null;
@@ -975,6 +985,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$templateMgr->assign('country', $country);
 
 			$templateMgr->assign_by_ref('user', $user);
+			$templateMgr->assign('isDirector', Validation::isDirector());
+			$templateMgr->assign('trackDirectorSubmissions', $trackDirectorSubmissions);
 			$templateMgr->assign('localeNames', AppLocale::getAllLocales());
 			$templateMgr->assign('helpTopicId', 'conference.roles.index');
 			$templateMgr->display('trackDirector/userProfile.tpl');

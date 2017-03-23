@@ -115,4 +115,5 @@
 	<message key="director.submissions.lastCompleted">Poslední dokončená</message>
 	<message key="director.submissions.assignedTo">Přiděleno </message>
 	<message key="director.submissions.inTrack">V sekci</message>
+	<message key="manager.people">Lidé</message>
 </locale>

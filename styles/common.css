@@ -75,6 +75,16 @@ a:hover {
 	margin: 0 auto;
 }
 
+#profile{
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+#assignments{
+  width: 50%;
+  margin-bottom: 10px;
+}
+
 
 /**
  * Navigation bar

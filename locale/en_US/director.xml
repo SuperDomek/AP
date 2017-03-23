@@ -112,4 +112,5 @@
 	<message key="director.submissions.lastCompleted">Last Complete</message>
 	<message key="director.submissions.assignedTo">Assigned To</message>
 	<message key="director.submissions.inTrack">In Track</message>
+	<message key="manager.people">People</message>
 </locale>

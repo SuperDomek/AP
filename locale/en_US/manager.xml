@@ -72,6 +72,7 @@
 	<message key="manager.payment.form.method">Conference Registration Payment Methods</message>
 	<message key="manager.payment.paymentPluginInvalid">You must choose a valid payment method.</message>
 	<message key="manager.payment.paymentSettings">Payment Methods</message>
+	<message key="manager.people">People</message>
 	<message key="manager.people.allConferences">All Conferences</message>
 	<message key="manager.people.allEnrolledUsers">All Enrolled Users</message>
 	<message key="manager.people.allSiteUsers">Enroll a User from this Site in this Conference</message>
