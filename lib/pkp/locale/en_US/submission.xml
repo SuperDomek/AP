@@ -93,6 +93,7 @@
 	<message key="submission.comments.sendDecisionToReviewers">Send Reviewers editorial decision</message>
 	<message key="submission.comments.subject">Subject</message>
 	<message key="submission.complete">Complete</message>
+	<message key="submission.decision">Decision</message>
 	<message key="submission.done">Done</message>
 	<message key="submission.dueDate">Due Date</message>
 	<message key="submission.due">Due</message>
