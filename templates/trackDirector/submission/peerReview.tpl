@@ -158,8 +158,14 @@
 	{assign var="reviewId" value=$reviewAssignment->getId()}
 
   {* Grey out text if the file is not checked *}
-  {if $reviewFile->getChecked() != 1 && $stage != REVIEW_STAGE_ABSTRACT}
-    {assign var="greyOut" value=1}
+  {if $stage != REVIEW_STAGE_ABSTRACT}
+    {if $reviewFile}
+      {if $reviewFile->getChecked() != 1}
+        {assign var="greyOut" value=1}
+      {/if}
+    {else}
+      {assign var="greyOut" value=1}
+    {/if}
   {/if}
 
 	{if not $reviewAssignment->getCancelled()}
