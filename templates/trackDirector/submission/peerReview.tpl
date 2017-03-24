@@ -121,7 +121,6 @@
             <input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
             <input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
             <input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
-            <!--<input type="hidden" name="checked" value="1"/>-->
             {translate key="editor.paper.confirmReviewFile"}<br />
             <button type="submit" name="checked" value="1" class="positive">{translate key="submission.fileOkay"}</button>
             &nbsp;
@@ -157,6 +156,11 @@
 	{assign var="start" value="A"|ord}
 	{foreach from=$reviewAssignments item=reviewAssignment key=reviewKey}
 	{assign var="reviewId" value=$reviewAssignment->getId()}
+
+  {* Grey out text if the file is not checked *}
+  {if $reviewFile->getChecked() != 1 && $stage != REVIEW_STAGE_ABSTRACT}
+    {assign var="greyOut" value=1}
+  {/if}
 
 	{if not $reviewAssignment->getCancelled()}
 		{assign var="reviewIndex" value=$reviewIndexes[$reviewId]}
@@ -243,9 +247,9 @@
     <tr>
   		<td colspan="2">&nbsp;</td>
   	</tr>
-
+    <tbody {if $greyOut}style="color:#a5a3a5 !important;"{/if}>
 		{if $reviewAssignment->getDateConfirmed() && !$reviewAssignment->getDeclined()}
-			<tr valign="top">
+			<tr valign="top" >
 				<td class="label" width="20%">{translate key="reviewer.paper.recommendation"}</td>
 				<td width="80%">
 					{if $reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== ''}
@@ -256,7 +260,11 @@
 						{translate key="common.none"}&nbsp;&nbsp;&nbsp;&nbsp;
             {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
               {if $user->getId() != $reviewAssignment->getReviewerId()}
-				        <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+                {if $greyOut}
+                  {translate key="reviewer.paper.sendReminder"}
+                {else}
+				          <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+                {/if}
               {/if}
             {/if}
 						{if $reviewAssignment->getDateReminded()}
@@ -286,12 +294,20 @@
           {if $reviewFormResponses[$reviewId]}
     				<td class="label">{translate key="submission.reviewFormResponse"}</td>
     				<td>
+              {if $greyOut}
+                {icon name="letter"}
+              {else}
                 <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
+              {/if}
     				</td>
           {else}
             <td class="label">{translate key="submission.yourReviewFormResponse"}</td>
             <td>
+              {if $greyOut}
+                {translate key="submission.reviewForm"} {icon name="comment"}
+              {else}
                 <a href="javascript:openComments('{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}');" class="icon">{translate key="submission.reviewForm"} {icon name="comment"}</a>
+              {/if}
             </td>
           {/if}
   			</tr>
@@ -299,7 +315,11 @@
       <tr valign="top">
         <td class="label">{translate key="submission.reviewFormResponse"}</td>
         <td>
-          <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
+          {if $greyOut}
+            {icon name="letter"}
+          {else}
+            <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
+          {/if}
         </td>
       </tr>
 			{/if}
@@ -310,7 +330,11 @@
 				<td class="label">{translate key="reviewer.paper.directorToEnter"}</td>
 				<td>
 					{if !$reviewAssignment->getDateConfirmed()}
-						<a href="{url op="confirmReviewForReviewer" path=$submission->getPaperId()|to_array:$reviewAssignment->getId() accept=1}" class="action">{translate key="reviewer.paper.canDoReview"}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="confirmReviewForReviewer" path=$submission->getPaperId()|to_array:$reviewAssignment->getId() accept=0}" class="action">{translate key="reviewer.paper.cannotDoReview"}</a><br />
+            {if $greyOut}
+              {translate key="reviewer.paper.canDoReview"}&nbsp;&nbsp;&nbsp;&nbsp;{translate key="reviewer.paper.cannotDoReview"}
+            {else}
+				      <a href="{url op="confirmReviewForReviewer" path=$submission->getPaperId()|to_array:$reviewAssignment->getId() accept=1}" class="action">{translate key="reviewer.paper.canDoReview"}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{url op="confirmReviewForReviewer" path=$submission->getPaperId()|to_array:$reviewAssignment->getId() accept=0}" class="action">{translate key="reviewer.paper.cannotDoReview"}</a><br />
+            {/if}
 					{/if}
 					{if $reviewAssignment->getDateConfirmed() && !$reviewAssignment->getDeclined()}
             <!-- This is the trackDirector's review -->
@@ -321,7 +345,11 @@
                 {translate key="reviewer.paper.recomendation.formFirst"}
               {/if}
             {else}
-              <a class="action" href="{url op="enterReviewerRecommendation" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}">{translate key="director.paper.recommendation"}</a>
+              {if $greyOut}
+                {translate key="director.paper.recommendation"}
+              {else}
+                <a class="action" href="{url op="enterReviewerRecommendation" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}">{translate key="director.paper.recommendation"}</a>
+              {/if}
             {/if}
 					{/if}
 				</td>
@@ -347,6 +375,7 @@
 				</td>
 			</tr>
 		{/if}
+  </tbody>
 	</table>
 	{/if}
 	{/foreach}
