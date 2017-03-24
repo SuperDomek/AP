@@ -255,8 +255,7 @@ class DirectorSubmissionDAO extends DAO {
 				LEFT JOIN track_settings tal ON (t.track_id = tal.track_id AND tal.setting_name = ? AND tal.locale = ?)
 				LEFT JOIN paper_settings pptl ON (p.paper_id = pptl.paper_id AND pptl.setting_name = ? AND pptl.locale = ?)
 				LEFT JOIN paper_settings ptl ON (p.paper_id = ptl.paper_id AND ptl.setting_name = ? AND ptl.locale = ?)
-				LEFT JOIN edit_assignments ea ON (p.paper_id = ea.paper_id)
-				LEFT JOIN edit_assignments ea2 ON (p.paper_id = ea2.paper_id AND ea.edit_id < ea2.edit_id)
+				LEFT JOIN edit_assignments ea2 ON (p.paper_id = ea2.paper_id AND e.edit_id < ea2.edit_id)
 				LEFT JOIN paper_settings sts ON (p.paper_id = sts.paper_id AND sts.setting_name = "sessionType")
 			WHERE	p.sched_conf_id = ?
 				AND ea2.edit_id IS NULL' .
@@ -326,7 +325,7 @@ class DirectorSubmissionDAO extends DAO {
 			$schedConfId, $trackId, $directorId,
 			$searchField, $searchMatch, $search,
 			$dateField, $dateFrom, $dateTo,
-			'p.status = ' . STATUS_QUEUED . ' AND ea.edit_id IS NULL',
+			'p.status = ' . STATUS_QUEUED . ' AND e.edit_id IS NULL',
 			$rangeInfo, $sortBy, $sortDirection
 		);
 		$returner = new DAOResultFactory($result, $this, '_returnDirectorSubmissionFromRow');
@@ -352,7 +351,7 @@ class DirectorSubmissionDAO extends DAO {
 			$schedConfId, $trackId, $directorId,
 			$searchField, $searchMatch, $search,
 			$dateField, $dateFrom, $dateTo,
-			'p.status = ' . STATUS_QUEUED . ' AND ea.edit_id IS NOT NULL',
+			'p.status = ' . STATUS_QUEUED . ' AND e.edit_id IS NOT NULL',
 			$rangeInfo, $sortBy, $sortDirection
 		);
 		$returner = new DAOResultFactory($result, $this, '_returnDirectorSubmissionFromRow');
@@ -480,9 +479,9 @@ class DirectorSubmissionDAO extends DAO {
 				LEFT JOIN edit_assignments e ON (p.paper_id = e.paper_id)
 				LEFT JOIN edit_assignments e2 ON (p.paper_id = e2.paper_id AND e.edit_id < e2.edit_id)
 			WHERE	p.sched_conf_id = ?
-				AND p.status = ' . STATUS_ARCHIVED . '
+				AND (p.status = ' . STATUS_ARCHIVED . '
+				OR (p.status <> ' . STATUS_QUEUED . ' AND p.status <> ' . STATUS_PUBLISHED . '))
 				AND e2.edit_id IS NULL
-				AND e.edit_id IS NOT NULL
 				AND (p.submission_progress = 0 OR (p.review_mode = ' . REVIEW_MODE_BOTH_SEQUENTIAL . ' AND p.submission_progress <> 1))',
 			array((int) $schedConfId)
 		);

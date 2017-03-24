@@ -141,6 +141,8 @@
   					{translate key="submissions.queuedEditing"}
           {elseif $status == STATUS_PUBLISHED}
             {translate key="submissions.published"}
+          {elseif $status == STATUS_ARCHIVED}
+            {translate key="submissions.archived"}
   				{/if}
         </td>
       </tr>
