@@ -187,8 +187,15 @@ class SubmitHandler extends AuthorHandler {
 					($step == 3 && $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE && !$schedConf->getSetting('acceptSupplementaryReviewMaterials')) ||
 					($step == 5 )) {
 
-
-
+				// Set up different notification for uploaded file
+				if($step == 5){
+					$message = 'notification.type.fileNeedsCheck';
+					$path = 'submissionReview';
+				}
+				else {
+					$message = 'notification.type.paperSubmitted';
+					$path = 'submission';
+				}
 
 				// Send a notification to associated users
 				import('notification.NotificationManager');
@@ -202,11 +209,12 @@ class SubmitHandler extends AuthorHandler {
 				foreach ($allUsers as $user) {
 					$notificationUsers[] = array('id' => $user->getId());
 				}
-
+				// deduplication of notifications for the same user
+				$notificationUsers = array_unique($notificationUsers, SORT_NUMERIC);
 				foreach ($notificationUsers as $userRole) {
-					$url = Request::url(null, null, 'director', 'submission', $paperId);
+					$url = Request::url(null, null, 'director', $path, $paperId);
 					$notificationManager->createNotification(
-						$userRole['id'], 'notification.type.paperSubmitted',
+						$userRole['id'], $message,
 						$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_PAPER_SUBMITTED
 					);
 				}
