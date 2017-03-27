@@ -20,14 +20,14 @@
 <input type="hidden" name="paperId" value="{$paperId|escape}" />
 {include file="common/formErrors.tpl"}
 
-{translate key="author.submit.uploadInstructions"}
-{if $currentSchedConf->getSetting('supportPhone')}
-	{assign var="howToKeyName" value="author.submit.howToSubmit"}
-{else}
-	{assign var="howToKeyName" value="author.submit.howToSubmitNoPhone"}
-{/if}
+{url|assign:"url" page="author" op="submissionReview" path=$paperId|to_array:1}
+{translate key="author.submit.uploadInformation" abstractURL=$url}
 
-<p>{translate key=$howToKeyName supportName=$currentSchedConf->getSetting('supportName') supportEmail=$currentSchedConf->getSetting('supportEmail') supportPhone=$currentSchedConf->getSetting('supportPhone')}</p>
+<a href="{$publicFilesDir}/ap2017-paper-template-final.docx">{translate key="author.submit.paperTemplate"}</a><br />
+
+<p>{translate key="author.submit.removeAuthorInfo"}<br />
+<a href="{$publicFilesDir}/Remove_author_info.pdf">{translate key="author.submit.removeAuthorInfoManual"}</a>
+</p>
 
 <div class="separator"></div>
 
@@ -82,4 +82,14 @@
 
 </form>
 
+<!--<div class="separator"></div>
+{translate key="author.submit.uploadInstructions"}
+{if $currentSchedConf->getSetting('supportPhone')}
+	{assign var="howToKeyName" value="author.submit.howToSubmit"}
+{else}
+	{assign var="howToKeyName" value="author.submit.howToSubmitNoPhone"}
+{/if}
+
+<p>{translate key=$howToKeyName supportName=$currentSchedConf->getSetting('supportName') supportEmail=$currentSchedConf->getSetting('supportEmail') supportPhone=$currentSchedConf->getSetting('supportPhone')}</p>
+-->
 {include file="common/footer.tpl"}

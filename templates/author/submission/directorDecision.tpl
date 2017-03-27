@@ -16,11 +16,11 @@
 
 <table width="100%" class="data">
 	<tr valign="top">
-		<td class="label">{translate key="director.paper.decision"}</td>
-		<td>
+		<td class="label" width="20%">{translate key="director.paper.decision"}</td>
+		<td class="value" width="80%">
 			{if $lastDirectorDecision}
 				{assign var="decision" value=$lastDirectorDecision.decision}
-				{translate key=$directorDecisionOptions.$decision} ({$lastDirectorDecision.dateDecided|date_format:$dateFormatShort})
+				<strong>{translate key=$directorDecisionOptions.$decision}</strong> ({$lastDirectorDecision.dateDecided|date_format:$dateFormatShort})
 			{else}
 				&mdash;
 			{/if}

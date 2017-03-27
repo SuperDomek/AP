@@ -51,6 +51,7 @@ class AuthorSubmitStep2Form extends AuthorSubmitForm {
 	 * Display the form.
 	 */
 	function display() {
+		$paper =& $this->paper;
 		$templateMgr =& TemplateManager::getManager();
 
 		// Get supplementary files for this paper
@@ -58,6 +59,7 @@ class AuthorSubmitStep2Form extends AuthorSubmitForm {
 		if ($this->paper->getSubmissionFileId() != null) {
 			$templateMgr->assign_by_ref('submissionFile', $paperFileDao->getPaperFile($this->paper->getSubmissionFileId()));
 		}
+		$templateMgr->assign('paperId', $paper->getPaperId());
 		parent::display();
 	}
 
