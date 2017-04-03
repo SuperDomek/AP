@@ -237,6 +237,7 @@
 	<message key="submission.fileOkay">Send to review</message>
 	<message key="submission.fileOkayed">Review file checked</message>
 	<message key="submission.fileNotOkay">Revise file</message>
+	<message key="submission.fileNotUploadedYet">Waiting for the author to upload the paper</message>
 	<message key="submission.noFile">No file</message>
 	<message key="submission.fileAccepted">Accepted</message>
 	<message key="submission.filePending">Pending</message>

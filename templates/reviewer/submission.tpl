@@ -211,14 +211,14 @@ function confirmSubmissionCheck() {
   					        <a href="{url op="downloadFile" path=$reviewId|to_array:$paperId:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>
                     &nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
                   {else}
-                    {translate key="submission.fileNotChecked"}
+                    <span class="warning">{translate key="submission.fileNotChecked"}</span>
                   {/if}
   							{else}
                   {$reviewFile->getFileName()|escape}
                   &nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
                 {/if} {* confirmed or not restricted *}
 							{else}
-				       {translate key="common.none"}
+				       <span class="warning">{translate key="submission.fileNotUploadedYet"}</span>
 							{/if} {* $reviewFile *}
 						</td>
 					</tr>
@@ -251,7 +251,20 @@ function confirmSubmissionCheck() {
 <tr>
 	<td colspan="2">&nbsp;</td>
 </tr>
-{if $reviewAssignment->getReviewFormId()}
+
+ {* Grey out text if the file is not checked or uploaded yet *}
+  {if $reviewAssignment->getStage() != REVIEW_STAGE_ABSTRACT}
+    {if $reviewFile}
+      {if $reviewFile->getChecked() != 1}
+        {assign var="greyOut" value=1}
+      {/if}
+    {else}
+      {assign var="greyOut" value=1}
+    {/if}
+  {/if}
+
+<tbody {if $greyOut}style="color:#a5a3a5 !important;"{/if}>
+{if $reviewAssignment->getReviewFormId()}	
 	<tr valign="top">
 		<td>{$currentStep|escape}.{assign var="currentStep" value=$currentStep+1}</td>
 		<td><span class="instruct">{translate key="reviewer.paper.enterReviewForm"}</span></td>
@@ -261,19 +274,13 @@ function confirmSubmissionCheck() {
 		<td>
       {if $confirmedStatus and not $declined}
         <div style="float:left;text-align:center;">
-          {if $reviewFile}
-            {if $reviewFile->getChecked() == 1}
-              <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
-                <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
-              </a>
-            {else}
-              <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
-            {/if} {* ReviewFile checked *}
-          {else}
-            <a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
-              <img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
-            </a>
-          {/if} {* ReviewFile *}
+					{if $greyOut}
+						<img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+					{else}
+						<a href="{url op="editReviewFormResponse" path=$reviewId|to_array:$reviewAssignment->getReviewFormId()}" class="icon">
+							<img src="{$baseUrl}/templates/images/icons/review_form.png" alt="Open the review form"/><br />{translate key="submission.reviewForm"}
+						</a>
+					{/if}
         </div>
 			{/if}
 		</td>
@@ -383,6 +390,7 @@ function confirmSubmissionCheck() {
 		</table>
 	</td>
 </tr>
+</tbody>
 </table>
 </div>
 {if $schedConf->getLocalizedSetting('reviewGuidelines') != ''}
