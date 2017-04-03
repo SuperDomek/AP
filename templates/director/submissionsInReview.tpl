@@ -18,18 +18,18 @@
 		<td width="7%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submitted" sort="submitDate"}</td>
 		<td width="15%">{sort_search key="paper.authors" sort="authors"}</td>
 		<td width="27%">{sort_search key="paper.title" sort="title"}</td>
-		<td width="30%">
+		<td width="32%">
 			<center style="border-bottom: 1px solid gray;margin-bottom: 3px;">{translate key="submission.peerReview"}</center>
 			<table width="100%" class="nested">
 				<tr valign="top">
 					<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">{translate key="submissions.reviewStage"}</td>
 					<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{translate key="submission.ask"}</td>
-					<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{translate key="submission.due"}</td>
-					<td width="20%" style="padding: 0 4px 0 0; font-size: 1.0em">{translate key="submission.done"}</td>
+					<td width="20%" style="padding: 0 4px 0 0; font-size: 1.0em">{translate key="submission.due"}</td>
+					<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{translate key="submission.done"}</td>
 				</tr>
 			</table>
 		</td>
-		<td width="7%">{translate key="submission.decision"}</td>
+		<td width="5%">{translate key="submission.decision"}</td>
     <td width="6%">{translate key="submission.fileOkayed"}</td>
 		<td width="10%">{sort_search key="user.role.trackDirectors" sort="trackDirectors"}</td>
 	</tr>
