@@ -104,7 +104,7 @@ class PaperReportDAO extends DAO {
 					papers p
 				WHERE	d.date_decided = ? AND
 					d.paper_id = p.paper_id AND
-					p.submission_progress = 0 AND
+					(p.submission_progress = 0 OR p.submission_progress = 2) AND
 					p.paper_id = ?',
 				array(
 					$row['date_decided'],

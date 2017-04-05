@@ -81,6 +81,8 @@ class PaperReportPlugin extends ReportPlugin {
 			SUBMISSION_DIRECTOR_DECISION_ACCEPT => __('director.paper.decision.accept'),
 			SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS => __('director.paper.decision.pendingRevisions'),
 			SUBMISSION_DIRECTOR_DECISION_DECLINE => __('director.paper.decision.decline'),
+			SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS => __('director.paper.decision.pendingMinorRevisions'),
+			SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS => __('director.paper.decision.pendingMajorRevisions'),
 			null => __('plugins.reports.papers.nodecision')
 		);
 
