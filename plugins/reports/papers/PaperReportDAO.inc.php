@@ -58,7 +58,7 @@ class PaperReportDAO extends DAO {
 				LEFT JOIN track_settings tpl ON (tpl.track_id=p.track_id AND tpl.setting_name = ? AND tpl.locale = ?)
 				LEFT JOIN track_settings tl ON (tl.track_id=p.track_id AND tl.setting_name = ? AND tl.locale = ?)
 			WHERE	p.sched_conf_id = ? AND
-				p.submission_progress = 0
+				(p.submission_progress = 0 OR p.submission_progress = 2)
 			ORDER BY p.paper_id',
 			array(
 				'title', $primaryLocale, // Paper title
@@ -134,7 +134,7 @@ class PaperReportDAO extends DAO {
 					LEFT JOIN paper_author_settings pas ON (pa.author_id=pas.author_id AND pas.setting_name = ? AND pas.locale = ?)
 					LEFT JOIN paper_author_settings pasl ON (pa.author_id=pasl.author_id AND pasl.setting_name = ? AND pasl.locale = ?)
 				WHERE	p.sched_conf_id = ? AND
-					p.submission_progress = 0 AND
+					(p.submission_progress = 0 OR p.submission_progress = 2) AND
 					p.paper_id = ?
 				ORDER BY pa.primary_contact DESC, pa.seq',
 				array(
