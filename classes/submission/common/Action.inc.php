@@ -163,7 +163,6 @@ class Action {
 						'submissionUrl' => Request::url(null, null, 'trackDirector', 'submissionReview', $paper->getPaperId())
 					);
 					$email->assignParams($paramArray);
-					error_log($email->getBody());
 					$email->send();
 				}
 
