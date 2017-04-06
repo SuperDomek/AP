@@ -1872,6 +1872,7 @@ import('file.PaperFileManager');
 					$email->addCc ($author->getEmail(), $author->getFullName());
 				}
 			}
+			$email->setFrom($schedConf->getSetting('contactEmail'), $schedConf->getSetting('contactName'));
 			$email->assignParams(array(
 				'conferenceDate' => strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate')),
 				'authorName' => $authorUser->getFullName(),
@@ -1956,8 +1957,8 @@ import('file.PaperFileManager');
 					$email->setBody($oldBody . $body);
 					break;
 				}
-			} // for*/
-			$email->getBody();
+			} // for
+			$email->getBody();*/
 			$email->send();
 			return true;
 		}

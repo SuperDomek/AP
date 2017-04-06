@@ -156,7 +156,7 @@ class Action {
 						$user = $userDao->getUser($userRole['id']);
 						$email->addRecipient($user->getEmail(), $user->getFullName());
 					}
-
+					$email->setFrom($schedConf->getSetting('contactEmail'), $schedConf->getSetting('contactName'));
 					$paramArray = array(
 						'paperTitle' => $paper->getLocalizedTitle(),
 						'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
