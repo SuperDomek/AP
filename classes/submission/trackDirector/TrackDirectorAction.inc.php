@@ -115,6 +115,9 @@ class TrackDirectorAction extends Action {
 					$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_REVIEWER_FORM_COMMENT
 				);
 			}
+
+			// Send e-mail to Author
+			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true);
 		}
 
 		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE) {
@@ -1818,8 +1821,9 @@ import('file.PaperFileManager');
 	 * Email director decision comment.
 	 * @param $trackDirectorSubmission object
 	 * @param $send boolean
+	 * @param $auto boolean automatically sends e-mail without the form
 	 */
-	function emailDirectorDecisionComment($trackDirectorSubmission, $send) {
+	function emailDirectorDecisionComment($trackDirectorSubmission, $send, $auto = false) {
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
 		$conference =& Request::getConference();
@@ -1857,8 +1861,107 @@ import('file.PaperFileManager');
 		$user =& Request::getUser();
 		import('mail.PaperMailTemplate');
 		$email = new PaperMailTemplate($trackDirectorSubmission, $templateName);
+		// Přidat auto
+		if ($send && $auto){
+			HookRegistry::call('TrackDirectorAction::emailDirectorDecisionComment', array(&$trackDirectorSubmission, &$send));
+			$authorUser =& $userDao->getUser($trackDirectorSubmission->getUserId());
+			$authorEmail = $authorUser->getEmail();
+			$email->addRecipient($authorEmail, $authorUser->getFullName());
+			if ($schedConf->getSetting('notifyAllAuthorsOnDecision')) foreach ($trackDirectorSubmission->getAuthors() as $author) {
+				if ($author->getEmail() != $authorEmail) {
+					$email->addCc ($author->getEmail(), $author->getFullName());
+				}
+			}
+			$email->assignParams(array(
+				'conferenceDate' => strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate')),
+				'authorName' => $authorUser->getFullName(),
+				'conferenceTitle' => $conference->getConferenceTitle(),
+				'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
+				'locationCity' => $schedConf->getSetting('locationCity'),
+				'paperTitle' => $trackDirectorSubmission->getLocalizedTitle()
+			));
 
-		if ($send && !$email->hasErrors()) {
+			// Add reviews to the e-mail (doesn't work - the translation doesn't translate and no reviews append)
+			// Can test locally with error_log of the email->getBody();
+
+			/*$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+			$hasBody = false;
+			for ($stage = $trackDirectorSubmission->getCurrentStage(); $stage == REVIEW_STAGE_ABSTRACT || $stage == REVIEW_STAGE_PRESENTATION; $stage--) {
+				$reviewAssignments =& $reviewAssignmentDao->getReviewAssignmentsByPaperId($trackDirectorSubmission->getPaperId(), $stage);
+				$reviewIndexes =& $reviewAssignmentDao->getReviewIndexesForStage($trackDirectorSubmission->getPaperId(), $stage);
+
+				$body = '';
+				foreach ($reviewAssignments as $reviewAssignment) {
+					// If the reviewer has completed the assignment, then import the review.
+					if ($reviewAssignment->getDateCompleted() != null && !$reviewAssignment->getCancelled()) {
+						// Get the comments associated with this review assignment
+						$paperComments =& $paperCommentDao->getPaperComments($trackDirectorSubmission->getPaperId(), COMMENT_TYPE_PEER_REVIEW, $reviewAssignment->getId());
+
+						if ($paperComments) {
+							$body .= "------------------------------------------------------\n";
+							$body .= __('submission.comments.importPeerReviews.reviewerLetter', array('reviewerLetter' => chr(ord('A') + $reviewIndexes[$reviewAssignment->getId()]))) . "\n";
+							if (is_array($paperComments)) {
+								foreach ($paperComments as $comment) {
+									// If the comment is viewable by the author, then add the comment.
+									if ($comment->getViewable()) {
+										$body .= String::html2utf(
+											strip_tags(
+												str_replace(array('<p>', '<br>', '<br/>'), array("\n", "\n", "\n"), $comment->getComments())
+											)
+										) . "\n\n";
+										$hasBody = true;
+									}
+								}
+							}
+							$body .= "------------------------------------------------------\n\n";
+						}
+						if ($reviewFormId = $reviewAssignment->getReviewFormId()){
+							$reviewId = $reviewAssignment->getId();
+
+							$reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
+							$reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
+							$reviewFormElements =& $reviewFormElementDao->getReviewFormElements($reviewFormId);
+							if (!$paperComments) {
+								$body .= "------------------------------------------------------\n";
+								$body .= __('submission.comments.importPeerReviews.reviewerLetter', array('reviewerLetter' => chr(ord('A') + $reviewIndexes[$reviewAssignment->getId()]))) . "\n\n";
+							}
+							foreach ($reviewFormElements as $reviewFormElement) if ($reviewFormElement->getIncluded()) {
+								$body .= strip_tags($reviewFormElement->getLocalizedQuestion()) . ": \n";
+								$reviewFormResponse = $reviewFormResponseDao->getReviewFormResponse($reviewId, $reviewFormElement->getId());
+
+								if ($reviewFormResponse) {
+									$possibleResponses = $reviewFormElement->getLocalizedPossibleResponses();
+									if (in_array($reviewFormElement->getElementType(), $reviewFormElement->getMultipleResponsesElementTypes())) {
+										if ($reviewFormElement->getElementType() == REVIEW_FORM_ELEMENT_TYPE_CHECKBOXES) {
+											foreach ($reviewFormResponse->getValue() as $value) {
+												$body .= "\t" . String::html2utf(strip_tags($possibleResponses[$value-1]['content'])) . "\n";
+											}
+										} else {
+											$body .= "\t" . String::html2utf(strip_tags($possibleResponses[$reviewFormResponse->getValue()-1]['content'])) . "\n";
+										}
+										$body .= "\n";
+									} else {
+										$body .= "\t" . String::html2utf(strip_tags($reviewFormResponse->getValue())) . "\n\n";
+									}
+								}
+							}
+							$body .= "------------------------------------------------------\n\n";
+							$hasBody = true;
+						}
+					} // if
+				} // foreach
+				if ($hasBody) {
+					$oldBody = $email->getBody();
+					if (!empty($oldBody)) $oldBody .= "\n";
+					$email->setBody($oldBody . $body);
+					break;
+				}
+			} // for*/
+			$email->getBody();
+			$email->send();
+			return true;
+		}
+		elseif ($send && !$email->hasErrors()) {
 			HookRegistry::call('TrackDirectorAction::emailDirectorDecisionComment', array(&$trackDirectorSubmission, &$send));
 			$email->send();
 
@@ -1966,7 +2069,7 @@ import('file.PaperFileManager');
 						$email->setBody($oldBody . $body);
 						break;
 					}
-				} // foreach
+				} // for
 			}
 
 			$email->displayEditForm(Request::url(null, null, null, 'emailDirectorDecisionComment', 'send'), array('paperId' => $trackDirectorSubmission->getPaperId()), 'submission/comment/directorDecisionEmail.tpl', array('isADirector' => true));
