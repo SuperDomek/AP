@@ -149,7 +149,7 @@ class Action {
 				// Send e-mail to the co-editors if any
 				if(!empty($notificationUsers)){
 					import('mail.PaperMailTemplate');
-					$email = new PaperMailTemplate($paper, 'SUBMISSION_ABSTRACT_CHANGED');
+					$email = new PaperMailTemplate($paper, 'SUBMISSION_ABSTRACT_CHANGED', 'en_US');
 					$userDao =& DAORegistry::getDAO('UserDAO');
 					
 					foreach($notificationUsers as $userRole) {

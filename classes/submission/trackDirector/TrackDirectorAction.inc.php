@@ -1860,7 +1860,7 @@ import('file.PaperFileManager');
 
 		$user =& Request::getUser();
 		import('mail.PaperMailTemplate');
-		$email = new PaperMailTemplate($trackDirectorSubmission, $templateName);
+		$email = new PaperMailTemplate($trackDirectorSubmission, $templateName, 'en_US');
 		// Přidat auto
 		if ($send && $auto){
 			HookRegistry::call('TrackDirectorAction::emailDirectorDecisionComment', array(&$trackDirectorSubmission, &$send));

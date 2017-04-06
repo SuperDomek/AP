@@ -48,7 +48,7 @@ class PaperMailTemplate extends MailTemplate {
 	 * @param $ignorePostedData boolean optional
 	 * @see MailTemplate::MailTemplate()
 	 */
-	function PaperMailTemplate($paper, $emailKey = null, $locale = null, $enableAttachments = null, $conference = null, $schedConf = null, $includeSignature = true, $ignorePostedData = false) {
+	function PaperMailTemplate($paper, $emailKey = null, $locale = 'en_US', $enableAttachments = null, $conference = null, $schedConf = null, $includeSignature = true, $ignorePostedData = false) {
 		parent::MailTemplate($emailKey, $locale, $enableAttachments, $conference, $schedConf, $includeSignature, $ignorePostedData);
 		$this->paper = $paper;
 	}
