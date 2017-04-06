@@ -51,6 +51,8 @@ class Action {
 	function saveMetadata($paper) {
 		if (!HookRegistry::call('Action::saveMetadata', array(&$paper))) {
 			import("submission.form.MetadataForm");
+			$schedConf =& Request::getSchedConf();
+			$conference =& Request::getConference();
 			$metadataForm = new MetadataForm($paper);
 			$metadataForm->readInputData();
 
@@ -120,12 +122,16 @@ class Action {
 				if (!$metadataForm->validate()) {
 					return $metadataForm->display();
 				}
+				/*$newAbstract = $metadataForm->getData('abstract')['en_US']; // one language conference
+				$oldAbstract = $paper->getLocalizedAbstract();
+				error_log("Old Abstract: " . $oldAbstract);
+				error_log("New Abstract: " . $newAbstract);*/
 				$metadataForm->execute();
 
 				// Send a notification to associated users
 				import('notification.NotificationManager');
 				$notificationManager = new NotificationManager();
-				$notificationUsers = $paper->getAssociatedUserIds(false, false);
+				$notificationUsers = $paper->getAssociatedUserIds(false, false, true);
 				foreach ($notificationUsers as $userRole) {
 					$url = Request::url(null, null, $userRole['role'], 'submission', $paper->getId(), null, 'metadata');
 					$notificationManager->createNotification(
@@ -134,12 +140,32 @@ class Action {
 					);
 				}
 
-
 				// Add log entry
 				$user =& Request::getUser();
 				import('paper.log.PaperLog');
 				import('paper.log.PaperEventLogEntry');
 				PaperLog::logEvent($paper->getId(), PAPER_LOG_METADATA_UPDATE, LOG_TYPE_DEFAULT, 0, 'log.director.metadataModified', array('directorName' => $user->getFullName()));
+
+				// Send e-mail to the co-editors if any
+				if(!empty($notificationUsers)){
+					import('mail.PaperMailTemplate');
+					$email = new PaperMailTemplate($paper, 'SUBMISSION_ABSTRACT_CHANGED');
+					$userDao =& DAORegistry::getDAO('UserDAO');
+					
+					foreach($notificationUsers as $userRole) {
+						$user = $userDao->getUser($userRole['id']);
+						$email->addRecipient($user->getEmail(), $user->getFullName());
+					}
+
+					$paramArray = array(
+						'paperTitle' => $paper->getLocalizedTitle(),
+						'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
+						'submissionUrl' => Request::url(null, null, 'trackDirector', 'submissionReview', $paper->getPaperId())
+					);
+					$email->assignParams($paramArray);
+					error_log($email->getBody());
+					$email->send();
+				}
 
 				return true;
 			}

@@ -113,7 +113,8 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$publishedPaper =& $publishedPaperDao->getPublishedPaperByPaperId($submission->getPaperId());
 
 		$templateMgr =& TemplateManager::getManager();
-		$templateMgr->assign('mayEditPaper', AuthorAction::mayEditPaper($submission));
+		$mayEditPaper = AuthorAction::mayEditPaper($submission) && $submission->getCurrentStage() == REVIEW_STAGE_ABSTRACT;
+		$templateMgr->assign('mayEditPaper', $mayEditPaper);
 
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
 		$track =& $trackDao->getTrack($submission->getTrackId());

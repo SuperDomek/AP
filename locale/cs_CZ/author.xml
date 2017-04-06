@@ -44,6 +44,7 @@
 	<message key="author.submit.submissionDeadlinePassed">Uzávěrka příspěvků na tuto konferenci uplynula {$closedDate}.</message>
 	<message key="author.submit.authorRegistrationClosed">Registrace autorů příspěvků pro tuto konferenci již skončila.</message>
 	<message key="author.submissions.queuedAbstractReviewRevisions">Oponovaný abstrakt: Jsou vyžadovány úpravy</message>
+	<message key="author.submissions.editAbstract">Upravit abstrakt</message>
 	<message key="author.submissions.queuedPaperReviewRevisions">Oponovaný příspěvek: Jsou vyžadovány úpravy</message>
 	<message key="author.submissions.confirmDelete">Skutečně si přejete vymazat tento nekompletní příspěvek?</message>
 	<message key="author.submissions.viewStatus">Prohlédnout stav</message>

@@ -36,29 +36,30 @@
     <td class="label">{translate key="common.status"}</td>
     <td>
       {if $submissionProgress == 0}
-      {if $status == STATUS_QUEUED_UNASSIGNED}{translate key="submissions.queuedUnassigned"}
+      {if $status == STATUS_QUEUED_UNASSIGNED}
+        <span class="warning">{translate key="submissions.queuedUnassigned"}</span>
       {elseif $status == STATUS_QUEUED_REVIEW}
         {assign var=decision value=$submission->getMostRecentDecision()}
         {if $currentStage>=REVIEW_STAGE_PRESENTATION}
-          <a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
             {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
-              {translate key="author.submissions.queuedPaperReviewRevisions"}
+              <span class="warning">{translate key="author.submissions.queuedPaperReviewRevisions"}</span>
             {else}
-              {translate key="submissions.queuedPaperReview"}
+              <span class="warning">{translate key="submissions.queuedPaperReview"}</span>
             {/if}
-          </a>
-        {else}
-          <a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">
+        {else}  
             {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
-              {translate key="author.submissions.queuedAbstractReviewRevisions"}
+              <span class="warning">{translate key="author.submissions.queuedAbstractReviewRevisions"}</span>
+              <a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">
+                <button type="button">{translate key="author.submissions.editAbstract"}</button>
+              </a>
             {else}
-              {translate key="submissions.queuedAbstractReview"}
+              <span class="warning">{translate key="submissions.queuedAbstractReview"}</span>
             {/if}
-          </a>
+          
         {/if}
       {elseif $status == STATUS_QUEUED_EDITING}
         <a href="{url op="submissionReview" path=$paperId|to_array}" class="action">{translate key="submissions.queuedEditing"}</a>

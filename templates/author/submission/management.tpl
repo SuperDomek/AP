@@ -85,11 +85,11 @@
 		<td width="80%" colspan="2" class="data">{$submission->getCommentsToDirector()|strip_unsafe_html|nl2br}</td>
 	</tr>
 	{/if}
-	{if $publishedPaper}
+	<!--{if $publishedPaper}
 	<tr>
 		<td class="label">{translate key="submission.abstractViews"}</td>
 		<td colspan="2">{$publishedPaper->getViews()}</td>
 	</tr>
-	{/if}
+	{/if}-->
 </table>
 </div>
