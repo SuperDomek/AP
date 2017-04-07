@@ -38,6 +38,7 @@ class PaperReportDAO extends DAO {
 				p.end_time AS end_time,
 				pp.room_id AS room_id,
 				p.paper_id AS paper_id,
+				p.user_id AS user_id,
 				p.comments_to_dr as comments,
 				COALESCE(psl1.setting_value, pspl1.setting_value) AS title,
 				COALESCE(psl2.setting_value, pspl2.setting_value) AS abstract,
