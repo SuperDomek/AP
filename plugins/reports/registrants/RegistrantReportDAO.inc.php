@@ -46,22 +46,19 @@ class RegistrantReportDAO extends DAO {
 				u.mailing_address AS address,
 				u.billing_address AS billing_address,
 				u.country AS country,
-				COALESCE(rtsl.setting_value, rtspl.setting_value) AS type,
+				rtsl.setting_value AS type,
 				r.date_registered AS regdate,
 				r.date_paid AS paiddate,
 				r.special_requests AS specialreq
 			FROM
 				registrations r
-					LEFT JOIN users u ON r.user_id=u.user_id
+					JOIN users u ON r.user_id=u.user_id
 					LEFT JOIN registration_type_settings rtsl ON (r.type_id=rtsl.type_id AND rtsl.locale=? AND rtsl.setting_name=?)
-					LEFT JOIN registration_type_settings rtspl ON (r.type_id=rtspl.type_id AND rtsl.locale=? AND rtspl.setting_name=?)
 			WHERE
 				r.sched_conf_id = ?
 			ORDER BY
 				lname',
 			array(
-				$locale,
-				'name',
 				$primaryLocale,
 				'name',
 				(int) $schedConfId

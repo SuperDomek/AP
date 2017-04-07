@@ -112,9 +112,12 @@ class RegistrantReportPlugin extends ReportPlugin {
 			
 			foreach ($columns as $index => $junk) {
 				if (isset($row[$index])) {
-					$columns[$index] = $index == 'affiliation'?
-						html_entity_decode(strip_tags($row[$index]), ENT_QUOTES, 'UTF-8'):
-						$row[$index];
+					if ($index == 'affiliation')
+						$columns[$index] = html_entity_decode(strip_tags($row[$index]), ENT_QUOTES, 'UTF-8');
+					else if ($index == 'regdate' || $index == 'paiddate')
+						$columns[$index] = $registrantReportDao->dateFromDB($row[$index]);
+					else 
+						$columns[$index] = $row[$index];
 				} else if (isset($options[$index])) {
 					$columns[$index] = $options[$index];
 				} else $columns[$index] = '';
