@@ -44,6 +44,7 @@ class RegistrantReportDAO extends DAO {
 				u.phone AS phone,
 				u.fax AS fax,
 				u.mailing_address AS address,
+				u.billing_address AS billing_address,
 				u.country AS country,
 				COALESCE(rtsl.setting_value, rtspl.setting_value) AS type,
 				r.date_registered AS regdate,
