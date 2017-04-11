@@ -211,18 +211,18 @@ class AuthorDAO extends DAO {
 				' . ($includeEmail?'aa.email AS email,':'CAST(\'\' AS CHAR) AS email,') . '
 				0 AS primary_contact,
 				0 AS seq,
+				0 as attends,
 				aa.first_name AS first_name,
 				aa.middle_name AS middle_name,
 				aa.last_name AS last_name,
 				aa.affiliation_select AS affiliation_select,
 				aa.affiliation AS affiliation,
 				aa.country
-				FROM paper_authors aa,
+				FROM users aa,
 				papers a,
 				sched_confs e,
 				edit_decisions ed
-			WHERE aa.paper_id = a.paper_id
-				AND aa.primary_contact = 1
+			WHERE aa.user_id = a.user_id
 				' . (isset($schedConfId)?'AND a.sched_conf_id = ? ':'') . '
 				AND a.paper_id = ed.paper_id ' . $statusSql . '
 				AND (aa.last_name IS NOT NULL
