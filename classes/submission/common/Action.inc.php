@@ -165,8 +165,10 @@ class Action {
 						$email->assignParams($paramArray);
 
 						//add old abstract to the e-mail
-						$body .= "\n------------------------------------------------------\n\n";
+						$body .= "\n------------------------------------------------------\n\nOld Abstract\n\n";
 						$body .= str_replace("<br>", "\n", $oldAbstract);
+						$body = str_replace("<strong>", "", $body);
+						$body = str_replace("</strong>", "", $body);
 						$oldBody = $email->getBody();
 						if (!empty($oldBody)) $oldBody .= "\n";
 						$email->setBody($oldBody . $body);
