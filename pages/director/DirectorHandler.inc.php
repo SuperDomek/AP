@@ -478,6 +478,12 @@ class DirectorHandler extends TrackDirectorHandler {
 				case 'allRegistrants':
 					$recipients =& $registrationDao->getRegisteredUsers($schedConfId, false);
 					break;
+				case 'allAuthorsAbstractAccepted':
+					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_INVITE, true);
+					break;
+				case 'allAuthorsAbstractRevisions':
+					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
+					break;
 				case 'allAuthors':
 					$recipients =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId, null, null, true);
 					break;
@@ -498,7 +504,6 @@ class DirectorHandler extends TrackDirectorHandler {
 				$email->addRecipient($recipient->getEmail(), $recipient->getFullName());
 				unset($recipient);
 			}
-
 			if (Request::getUserVar('includeToc')=='1') {
 				$publishedPaperDao =& DAORegistry::getDAO('PublishedPaperDAO');
 				$publishedPapers =& $publishedPaperDao->getPublishedPapersInTracks($schedConfId);
@@ -531,8 +536,14 @@ class DirectorHandler extends TrackDirectorHandler {
 			}
 
 			// FIXME: There should be a better way of doing this.
-			$authors =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId);
-			$authorCount = $authors->getCount();
+			$allAuthors =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId);
+			$allAuthorsCount = $allAuthors->getCount();
+
+			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_INVITE);
+			$authorsAbstractAcceptedCount = $authorsAbstractAccepted->getCount();
+
+			$authorsAbstractRevisions =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
+			$authorsAbstractRevisionsCount = $authorsAbstractRevisions->getCount();
 
 			$email->displayEditForm(
 				Request::url(null, null, null, 'notifyUsers'),
@@ -540,7 +551,9 @@ class DirectorHandler extends TrackDirectorHandler {
 				'director/notifyUsers.tpl',
 				array(
 					'allReadersCount' => $roleDao->getSchedConfUsersCount($schedConfId, ROLE_ID_READER),
-					'allAuthorsCount' => $authorCount,
+					'allAuthorsCount' => $allAuthorsCount,
+					'allAuthorsAbstractAcceptedCount' => $authorsAbstractAcceptedCount,
+					'allAuthorsAbstractRevisionsCount' => $authorsAbstractRevisionsCount,
 					'allPaidRegistrantsCount' => $registrationDao->getRegisteredUserCount($schedConfId),
 					'allRegistrantsCount' => $registrationDao->getRegisteredUserCount($schedConfId, false),
 					'allUsersCount' => $roleDao->getSchedConfUsersCount($schedConfId)

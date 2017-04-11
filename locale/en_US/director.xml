@@ -35,6 +35,8 @@
 	<message key="director.notifyUsers.includeToc">Include the presentations for this conference</message>
 	<message key="director.notifyUsers.allReaders">All readers ({$count} users)</message>
 	<message key="director.notifyUsers.allAuthors">All published presenters ({$count} users)</message>
+	<message key="director.notifyUsers.allAuthorsAbstractAccepted">All authors with accepted abstract({$count} users)</message>
+	<message key="director.notifyUsers.allAuthorsAbstractRevisions">All authors with abstract needing revision({$count} users)</message>
 	<message key="director.notifyUsers.allPaidRegistrants">All paid registrants ({$count} users)</message>
 	<message key="director.notifyUsers.allRegistrants">All registrants ({$count} users)</message>
 	<message key="director.navigation.management">Management</message>

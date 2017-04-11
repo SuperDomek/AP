@@ -37,6 +37,8 @@
 	<message key="director.notifyUsers.includeToc">Zahrnout prezentace na konferenci</message>
 	<message key="director.notifyUsers.allReaders">Všichni čtenáři ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allAuthors">Všichni publikovaní prezentující ({$count} uživatelů)</message>
+	<message key="director.notifyUsers.allAuthorsAbstractAccepted">Všichni autoři se schváleným abstraktem({$count} uživatelů)</message>
+	<message key="director.notifyUsers.allAuthorsAbstractRevisions">Všichni autoři s abstraktem s nutností revizí({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allPaidRegistrants">Všichni se zaplaceným vložným ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allRegistrants">Všichni registrovaní ({$count} uživatelů)</message>
 	<message key="director.navigation.management">Management</message>

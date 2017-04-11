@@ -163,6 +163,79 @@ class AuthorDAO extends DAO {
 	}
 
 	/**
+	 * Retrieve all authors with given decision in given stage for papers still in review a scheduled conference.
+	 * Note that if schedConfId is null, alphabetized authors for all
+	 * scheduled conferences are returned.
+	 * @param $schedConfId int
+	 * @param $status status of the wanted papers; if null then both Published and Queued
+	 * @param $stage stage where the autors must have paper; if null then all stages at once
+	 * @param $decision decision from the stage; if stage null then not sure which decisions to choose if collision
+	 * @param $includeEmail Whether or not to include the email in the select distinct
+	 * @return object ItemIterator Authors ordered by sequence
+	 */
+	function &getAuthorsAlphabetizedByStageAndDecision($schedConfId = null, $status = null, $stage = null, $decision = null, $includeEmail = false) {
+		$params = array();
+		$rangeInfo = null;
+
+		if (isset($schedConfId)) $params[] = $schedConfId;
+
+		if (isset($status)) {
+			$params[] = $status;
+			$statusSql = ' AND a.status = ?';
+		} else {
+			$statusSql = 'AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
+		}
+
+		if (isset($stage)) {
+			$params[] = $stage;
+			$stageSql = ' AND (ed.paper_id, ed.date_decided) IN (
+											SELECT ed2.paper_id, MAX(ed2.date_decided)
+											FROM edit_decisions AS ed2
+											WHERE ed2.stage = ?
+											GROUP BY ed2.paper_id)';
+		} else {
+			$stageSql = '';
+		}
+
+		if (isset($decision)) {
+			$params[] = $decision;
+			$decisionSql = ' AND ed.decision = ?';
+		} else {
+			$decisionSql = '';
+		}
+
+		$result =& $this->retrieveRange(
+			'SELECT	DISTINCT CAST(\'\' AS CHAR) AS url,
+				0 AS author_id,
+				0 AS paper_id,
+				' . ($includeEmail?'aa.email AS email,':'CAST(\'\' AS CHAR) AS email,') . '
+				0 AS primary_contact,
+				0 AS seq,
+				aa.first_name AS first_name,
+				aa.middle_name AS middle_name,
+				aa.last_name AS last_name,
+				aa.affiliation_select AS affiliation_select,
+				aa.affiliation AS affiliation,
+				aa.country
+				FROM paper_authors aa,
+				papers a,
+				sched_confs e,
+				edit_decisions ed
+			WHERE aa.paper_id = a.paper_id
+				AND aa.primary_contact = 1
+				' . (isset($schedConfId)?'AND a.sched_conf_id = ? ':'') . '
+				AND a.paper_id = ed.paper_id ' . $statusSql . '
+				AND (aa.last_name IS NOT NULL
+				AND aa.last_name <> \'\')' . $stageSql . $decisionSql . ' ORDER BY aa.last_name, aa.first_name',
+			empty($params)?false:$params,
+			$rangeInfo
+		);
+		
+		$returner = new DAOResultFactory($result, $this, '_returnAuthorFromRow');
+		return $returner;
+	}
+
+	/**
 	 * Retrieve the IDs of all authors for a paper.
 	 * @param $paperId int
 	 * @return array int ordered by sequence
