@@ -57,14 +57,19 @@ function showAffilBox(sel, authorIndex, originalText) {
 var objectives = '<strong>Paper’s objective(s):</strong>';
 var methods = '<strong>Data/Methods:</strong>';
 var results = '<strong>Results/Conclusions:</strong>';
+var tempAbstract = '{/literal}{$abstract[$formLocale]|escape:javascript}{literal}';
 
-$('textarea#abstract').hide();
-
-$('#abstract').on('input',function() {
-	alert('zadan text!');
+$('#abstract').live('input',function() {
     if (String($(this).val()).indexOf(objectives) == -1) {
-        alert("smazals to!");
+        $(this).val(tempAbstract);
     }
+		else if (String($(this).val()).indexOf(methods) == -1) {
+        $(this).val(tempAbstract);
+		}
+    else if (String($(this).val()).indexOf(results) == -1) {
+        $(this).val(tempAbstract);
+		}
+		tempAbstract = $(this).val();
 });
 
 // Global variable for the count of select boxes
