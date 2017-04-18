@@ -53,6 +53,20 @@ function showAffilBox(sel, authorIndex, originalText) {
   }
 }
 
+// Check for the section text in abstract
+var objectives = '<strong>Paper’s objective(s):</strong>';
+var methods = '<strong>Data/Methods:</strong>';
+var results = '<strong>Results/Conclusions:</strong>';
+
+$('textarea#abstract').hide();
+
+$('#abstract').on('input',function() {
+	alert('zadan text!');
+    if (String($(this).val()).indexOf(objectives) == -1) {
+        alert("smazals to!");
+    }
+});
+
 // Global variable for the count of select boxes
 var JELCount = {/literal}{$subjectClass|@count}{literal};
 
@@ -73,6 +87,7 @@ function delDiv(sel){
   var parent = sel.parentNode;
   parent.parentNode.removeChild(parent);
 }
+
 
 // -->
 </script>
