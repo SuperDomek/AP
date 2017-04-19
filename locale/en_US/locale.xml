@@ -215,6 +215,7 @@
 	<message key="submission.page.abstractReview">#{$id} Abstract Review</message>
 	<message key="submission.page.paperReview">#{$id} Paper Review</message>
 	<message key="submission.uploadFile">Upload paper</message>
+	<message key="submission.fileChanges">Specify changes made in the revised version</message>
 	<message key="submission.changeTrack">Change to</message>
 	<message key="submission.acceptance">Agreed to Review</message>
 	<message key="submission.complete.description">Add the submission to the list of accepted Presentations.</message>

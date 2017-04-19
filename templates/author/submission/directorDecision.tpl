@@ -45,6 +45,21 @@
 		</td>
 	</tr>
 -->
+
+	<tr valign="top">
+		<td class="label" width="20%">
+			{translate key="submission.fileChanges"}
+		</td>
+		<td class="value" width="80%">
+			{if $revisionChanges}
+				<form>
+					<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+					<textarea id="fileChanges" name="fileChanges" class="textArea" rows="15" cols="60" ></textarea>
+					<input type="submit" name="submit" value="{translate key=}"
+				</form>
+		</td>
+	</tr>
+
   {if $stage >= REVIEW_STAGE_PRESENTATION}
     {if $authorFiles}
     	<tr valign="top">

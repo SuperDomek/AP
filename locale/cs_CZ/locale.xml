@@ -218,6 +218,7 @@
 	<message key="submission.page.abstractReview">Posudek abstraktu č. {$id}</message>
 	<message key="submission.page.paperReview">Posudek příspěvku č. {$id}</message>
 	<message key="submission.uploadFile">Nahrát příspěvek</message>
+	<message key="submission.fileChanges">Popište změny provedené v revidované verzi</message>
 	<message key="submission.changeTrack">Změnit na</message>
 	<message key="submission.acceptance">Souhlas s posouzením</message>
 	<message key="submission.complete.description">Přidat příspěvek na seznam přijatých prezentací.</message>

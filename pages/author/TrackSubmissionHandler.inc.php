@@ -350,6 +350,17 @@ class TrackSubmissionHandler extends AuthorHandler {
 	}
 
 	/**
+	 * Saves the changes textbox
+	 */
+	function savePaperChanges() {
+		$paperId = (int) Request::getUserVar('paperId');
+		$this->validate($paperId, true);
+		$submission =& $this->submission;
+
+		///// Dodelat
+	}
+
+	/**
 	 * Upload the author's revised version of a paper.
 	 */
 	function uploadRevisedVersion() {
