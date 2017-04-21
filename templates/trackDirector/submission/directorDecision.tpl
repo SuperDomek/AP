@@ -8,23 +8,64 @@
  *
  * $Id$
  *}
+
+{literal}
+<script type="text/javascript">
+<!--
+// shows affiliation box if required; sets up address if affiliation set up
+function showCommentBox(sel) {
+	var abstractRevision = "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}{literal}";
+	var minorRevision = "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS}{literal}";
+	var majorRevision = "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}{literal}";
+	var selected = sel.options[sel.selectedIndex];
+	var commentBox = document.getElementById("decision_comment");
+	if(selected.value == abstractRevision || selected.value == minorRevision || selected.value == majorRevision){ //custom affil
+    commentBox.style.display = "table-row";
+		document.getElementById("decision_submit").disabled = "disabled"; // turn off the submit button
+		// turn on submit after at least 10 chars submitted to the comment box
+		$('#comment_text').live('input',function() {
+			if (String($(this).val()).length >= 10) {
+				document.getElementById("decision_submit").disabled = "";
+			}
+			else {
+				document.getElementById("decision_submit").disabled = "disabled";
+			}
+		});
+		// pridat mechanizmus prenosu obsahu textoveho pole do mailu	
+	}
+  else {
+		document.getElementById("decision_submit").disabled = "";
+    commentBox.style.display = "none";
+  }
+}
+// -->
+</script>
+{/literal}
+
 <div id="directorDecision">
 <h3>{translate key="submission.directorDecision"}</h3>
+
+<form method="post" action="{url op="recordDecision" path=$stage}">
 
 <table width="100%" class="data">
 <tr valign="top">
 	<td class="label" width="20%">{translate key="director.paper.selectDecision"}</td>
 	<td width="80%" class="value" colspan="2">
-		<form method="post" action="{url op="recordDecision" path=$stage}">
 			<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-			<select name="decision" size="1" class="selectMenu"{if not $allowRecommendation} disabled="disabled"{/if}>
+			<select name="decision" size="1" class="selectMenu"{if not $allowRecommendation} disabled="disabled"{/if} onchange="showCommentBox(this);">
 				{assign var=availableDirectorDecisionOptions value=$submission->getDirectorDecisionOptions($currentSchedConf,$stage)}
-				{html_options_translate options=$availableDirectorDecisionOptions selected=$lastDecision}
+				{html_options_translate options=$availableDirectorDecisionOptions}
 			</select>
-			<input type="submit" onclick="return confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmDecision"}')" name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
-			{if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord}{/if}
-		</form>
+			<input type="submit" id="decision_submit" onclick="return confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmDecision"}')" name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
+			{if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord"}{/if}
 	</td>
+</tr>
+<tr valign="top" id="decision_comment" class="hidden">
+  <td class="label"><label for="comment_text" class="error">{translate key="director.paper.decisionComment"}</label>
+  </td>
+  <td class="value">
+    <textarea name="comment_text" id="comment_text" rows="5" cols="40" class="textArea"></textarea>
+  </td>
 </tr>
 <tr valign="top">
 	<td class="label">{translate key="director.paper.decision"}</td>
@@ -70,6 +111,8 @@
 </tr>
 {/if}
 </table>
+
+</form>
 
 
 {assign var=authorFiles value=$submission->getAuthorFileRevisions($stage)}

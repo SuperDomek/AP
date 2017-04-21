@@ -424,6 +424,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	function recordDecision($args) {
 		$paperId = (int) Request::getUserVar('paperId');
 		$decision = (int) Request::getUserVar('decision');
+		$comment = Request::getUserVar('comment_text');
 		$stage = (int) array_shift($args);
 
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
@@ -441,7 +442,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 					TrackDirectorAction::clearReview($submission, $reviewAssignment->getId());
 				}
 			}
-			TrackDirectorAction::recordDecision($submission, $decision, $stage);
+			TrackDirectorAction::recordDecision($submission, $decision, $stage, $comment);
 		} else {
 			/* no need for switching
 			switch ($decision) {
@@ -452,7 +453,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 					TrackDirectorAction::recordDecision($submission, $decision, $stage);
 					break;
 			}*/
-			TrackDirectorAction::recordDecision($submission, $decision, $stage);
+			TrackDirectorAction::recordDecision($submission, $decision, $stage, $comment);
 		}
 
 		Request::redirect(null, null, null, 'submissionReview', array($paperId, $stage));
