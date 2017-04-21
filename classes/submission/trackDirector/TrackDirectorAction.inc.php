@@ -122,24 +122,26 @@ class TrackDirectorAction extends Action {
 			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true, $comment);
 
 			// Insert comment into the DB 
-			//
-			//	Needs to replace by the functioning comment exchange mechanism
-			//
-			$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
+			if(isset($comment)){
+				//
+				//	Needs to replace by the functioning comment exchange mechanism
+				//
+				$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
-			// Insert new comment		
-			$newComment = new PaperComment();
-			$newComment->setCommentType(COMMENT_TYPE_DIRECTOR_DECISION);
-			$newComment->setRoleId(ROLE_ID_TRACK_DIRECTOR);
-			$newComment->setPaperId($paperId);
-			$newComment->setAssocId($decision);
-			$newComment->setAuthorId($user->getId());
-			$newComment->setCommentTitle("Decision comment");
-			$newComment->setComments($comment);
-			$newComment->setDatePosted(Core::getCurrentDate());
-			$newComment->setViewable(true);
+				// Insert new comment		
+				$newComment = new PaperComment();
+				$newComment->setCommentType(COMMENT_TYPE_DIRECTOR_DECISION);
+				$newComment->setRoleId(ROLE_ID_TRACK_DIRECTOR);
+				$newComment->setPaperId($paperId);
+				$newComment->setAssocId($decision);
+				$newComment->setAuthorId($user->getId());
+				$newComment->setCommentTitle("Decision comment");
+				$newComment->setComments($comment);
+				$newComment->setDatePosted(Core::getCurrentDate());
+				$newComment->setViewable(true);
 
-			$commentDao->insertPaperComment($newComment);
+				$commentDao->insertPaperComment($newComment);
+			}
 		}
 
 		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE) {

@@ -424,13 +424,21 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	function recordDecision($args) {
 		$paperId = (int) Request::getUserVar('paperId');
 		$decision = (int) Request::getUserVar('decision');
-		$comment = Request::getUserVar('comment_text');
+		
 		$stage = (int) array_shift($args);
 
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
+
+		// Use comment field only when Revision decision
+		if($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS)
+			$comment = Request::getUserVar('comment_text');
+		else
+			$comment = null;
 
 		// If the director changes the decision on the first round,
 		// roll back to the abstract review stage.
