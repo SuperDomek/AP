@@ -84,7 +84,7 @@ function showCommentBox(sel) {
 		{/foreach}
 	</td>
 </tr>
-{if !$isTrackDirector}
+{if $isDirector}
 <tr valign="top">
 	<td class="label">{translate key="submission.notifyAuthor"}</td>
 	<td class="value" colspan="2">

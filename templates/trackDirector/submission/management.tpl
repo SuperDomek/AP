@@ -15,7 +15,7 @@
 {assign var="suppFiles" value=$submission->getSuppFiles()}
 
 <table width="100%" class="data">
-  {if !$isTrackDirector}{*track director could be a reviewer as well*}
+  {if $isDirector}{*track director could be a reviewer as well*}
 
 	<tr>
 		<td width="20%" class="label">{translate key="paper.authors"}</td>
@@ -35,7 +35,7 @@
 		<td class="label">{translate key="paper.title"}</td>
 		<td colspan="2" class="value">{$submission->getLocalizedTitle()|strip_unsafe_html}</td>
 	</tr>
-{if !$isTrackDirector}
+{if $isDirector}
   {if $submissionFile || $submission->getReviewMode() != REVIEW_MODE_ABSTRACTS_ALONE}
   	<tr>
   		<td class="label">{translate key="submission.originalFile"}</td>

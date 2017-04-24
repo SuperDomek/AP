@@ -11,10 +11,10 @@
 <div id="metadata">
 <h3>{translate key="submission.metadata"}</h3>
 
-{if $mayEditPaper && !$isTrackDirector}
+{if $mayEditPaper || $isDirector}
 	<p><a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">{translate key="submission.editMetadata"}</a></p>
 {/if}
-{if !$isTrackDirector}
+{if $isDirector}
 <div id="authors">
 <h4>{translate key="paper.authors"}</h4>
 

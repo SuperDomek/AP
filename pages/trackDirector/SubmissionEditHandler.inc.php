@@ -64,8 +64,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('userId', $user->getId());
 		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign('enableComments', $enableComments);
-		$templateMgr->assign('isReviewer', $this->isReviewer());
-		$templateMgr->assign('isTrackDirector', $this->isTrackDirector($submission));
+		$templateMgr->assign('isReviewer', $this->isReviewer());		
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
 		// testing JEL codes class
@@ -94,8 +93,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$controlledVocabDao =& DAORegistry::getDAO('ControlledVocabDAO');
 		$templateMgr->assign('sessionTypes', $controlledVocabDao->enumerateBySymbolic('paperType', ASSOC_TYPE_SCHED_CONF, $schedConf->getId()));
-
-		$templateMgr->assign('mayEditPaper', true);
 
 		$templateMgr->display('trackDirector/submission.tpl');
 	}
@@ -299,8 +296,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
-		$templateMgr->assign('isTrackDirector', $this->isTrackDirector($submission));
-		$templateMgr->assign('isDirector', Validation::isDirector());
+		$templateMgr->assign('isDirector', Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()));
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 
@@ -337,8 +333,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
 
-		// trackDirector may not see history
-		if ($this->isTrackDirector($submission)) {
+		// Only Director may see history
+		if (!Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId())) {
 			Request::redirect(null, null, null, 'submission', $paperId);
 		}
 

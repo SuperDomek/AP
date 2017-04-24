@@ -196,6 +196,7 @@
 	<message key="paper.abstract1">Cíle</message>
 	<message key="paper.abstract2">Data/Metody</message>
 	<message key="paper.abstract3">Výsledky/Shrnutí</message>
+	<message key="paper.abstract.editWarning"><![CDATA[Snažíte se odmazat povinná pole z abstraktu. Abstrakt musí obsahovat položky:\n<strong>Paper’s objective(s):</strong>\n<strong>Data/Methods:</strong>\n<strong>Results/Conclusions:</strong>]]></message>
 	<message key="paper.details">Podrobnosti</message>
 	<message key="paper.location">Místo</message>
 	<message key="paper.time">Čas</message>
