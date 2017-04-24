@@ -193,7 +193,6 @@ class TrackSubmissionHandler extends AuthorHandler {
 			default:
 				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION);
 		}
-		error_log($lastDecisionComment->getComments());
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
 		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());
