@@ -36,7 +36,7 @@
 	{else}
 		<li class="current"><a href="{url op="submissionReview" path=$submission->getPaperId()}">{translate key="submission.review"}</a></li>
 	{/if}
-  {if !$isTrackDirector}
+  {if $isDirector}
 	 <li><a href="{url op="submissionHistory" path=$submission->getPaperId()}">{translate key="submission.history"}</a></li>
   {/if}
 </ul>

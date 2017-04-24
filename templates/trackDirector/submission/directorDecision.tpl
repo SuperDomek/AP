@@ -22,7 +22,7 @@
 				{html_options_translate options=$availableDirectorDecisionOptions selected=$lastDecision}
 			</select>
 			<input type="submit" onclick="return confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmDecision"}')" name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
-			{if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord}{/if}
+			{if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord"}{/if}
 		</form>
 	</td>
 </tr>
@@ -43,7 +43,7 @@
 		{/foreach}
 	</td>
 </tr>
-{if !$isTrackDirector}
+{if $isDirector}
 <tr valign="top">
 	<td class="label">{translate key="submission.notifyAuthor"}</td>
 	<td class="value" colspan="2">
