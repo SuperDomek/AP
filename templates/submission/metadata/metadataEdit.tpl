@@ -70,7 +70,7 @@ $('#abstract').live('input',function() {
 		}
     else if (String($(this).val()).indexOf(results) == -1) {
         $(this).val(tempAbstract);
-				alert("{/literal}{translate key="paper.abstract.editWarning" |escape:javascript}{literal}");
+				alert("{/literal}{translate key="paper.abstract.editWarning"}{literal}");
 		}
 		tempAbstract = $(this).val();
 });
