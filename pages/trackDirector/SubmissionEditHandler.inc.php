@@ -420,12 +420,21 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	function recordDecision($args) {
 		$paperId = (int) Request::getUserVar('paperId');
 		$decision = (int) Request::getUserVar('decision');
+		
 		$stage = (int) array_shift($args);
 
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
+
+		// Use comment field only when Revision decision
+		if($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS)
+			$comment = Request::getUserVar('comment_text');
+		else
+			$comment = null;
 
 		// If the director changes the decision on the first round,
 		// roll back to the abstract review stage.
@@ -437,7 +446,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 					TrackDirectorAction::clearReview($submission, $reviewAssignment->getId());
 				}
 			}
-			TrackDirectorAction::recordDecision($submission, $decision, $stage);
+			TrackDirectorAction::recordDecision($submission, $decision, $stage, $comment);
 		} else {
 			/* no need for switching
 			switch ($decision) {
@@ -448,7 +457,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 					TrackDirectorAction::recordDecision($submission, $decision, $stage);
 					break;
 			}*/
-			TrackDirectorAction::recordDecision($submission, $decision, $stage);
+			TrackDirectorAction::recordDecision($submission, $decision, $stage, $comment);
 		}
 
 		Request::redirect(null, null, null, 'submissionReview', array($paperId, $stage));

@@ -220,6 +220,7 @@
 	<message key="submission.acceptance">Agreed to Review</message>
 	<message key="submission.complete.description">Add the submission to the list of accepted Presentations.</message>
 	<message key="submission.directorDecision">Editor Decision</message>
+	<message key="submission.directorDecisionComment">Editor's comment to the decision</message>
 	<message key="submission.stage">Stage&amp;nbsp;{$stage}</message>
 	<message key="submission.previousStage">Previous review stages</message>
 	<message key="submission.directorReview">Director Review</message>
@@ -796,7 +797,7 @@ Your server currently supports mbstring: <strong>{$supportsMBString}</strong>]]>
 	<message key="log.review.reviewAcceptedByProxy">{$userName} has accepted the stage {$stage} review for submission {$paperId} on behalf of {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">The Director, {$userName}, has uploaded a review file for stage {$stage} of submission {$paperId} on behalf of the reviewer, {$reviewerName}.</message>
 	<message key="log.review.reviewerFile">A file for review has been uploaded.</message>
-	<message key="log.director.decision">An editor decision ({$decision}) for paper {$paperId} was recorded by {$directorName}.</message>
+	<message key="log.director.decision">An editor decision ({$decision}) for paper {$paperId} was recorded by {$directorName} with comment: {$comment}.</message>
 	<message key="log.director.publish">The paper was published.</message>
 	<message key="log.director.unpublish">The paper was moved back into the queue.</message>
 	<message key="log.director.checked">The paper file was checked for author informations and cleared for review.</message>
