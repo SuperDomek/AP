@@ -14,12 +14,11 @@
 <!--
 // shows affiliation box if required; sets up address if affiliation set up
 function showCommentBox(sel) {
-	var abstractRevision = "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}{literal}";
-	var minorRevision = "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS}{literal}";
-	var majorRevision = "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}{literal}";
 	var selected = sel.options[sel.selectedIndex];
 	var commentBox = document.getElementById("decision_comment");
-	if(selected.value == abstractRevision || selected.value == minorRevision || selected.value == majorRevision){ //custom affil
+	if(selected.value == "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}{literal}" ||
+	selected.value == "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS}{literal}" ||
+	selected.value == "{/literal}{$smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}{literal}"){
     commentBox.style.display = "table-row";
 		document.getElementById("decision_submit").disabled = "disabled"; // turn off the submit button
 		// turn on submit after at least 10 chars submitted to the comment box

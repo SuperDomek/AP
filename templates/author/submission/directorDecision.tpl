@@ -26,6 +26,14 @@
 			{/if}
 		</td>
 	</tr>
+	{if $lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS && $lastDecisionComment}
+		<tr valign="top">
+			<td class="label" width="20%">{translate key="submission.directorDecisionComment"}</td>
+			<td class="value" width="80%">
+				<textarea readonly="true" class="textArea" rows="5" cols="40">{$lastDecisionComment->getComments()}</textarea>
+			</td>
+		</tr>
+	{/if}
   <!--
 	<tr valign="top">
 		<td class="label" width="20%">

@@ -147,6 +147,8 @@ class TrackDirectorAction extends Action {
 		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE) {
 			// completeReview will take care of updating the
 			// submission with the new decision.
+			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+			$trackDirectorSubmission->stampStatusModified();
 			TrackDirectorAction::completeReview($trackDirectorSubmission);
 		} else {
 			// Insert the new decision.
@@ -165,6 +167,7 @@ class TrackDirectorAction extends Action {
 	function completeReview($trackDirectorSubmission) {
 		$schedConf =& Request::getSchedConf();
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+		$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
 
 		if($trackDirectorSubmission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL) {
 			// two-stage submission; paper required
@@ -180,6 +183,10 @@ class TrackDirectorAction extends Action {
 				// The paper itself needs to be collected. Flag it so the author
 				// may complete it.
 				$trackDirectorSubmission->setSubmissionProgress(2);
+
+				// Save changes to the submission
+				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+				$trackDirectorSubmission->stampStatusModified();
 
 				// TODO: notify the author the submission must be completed.
 				// Q: should the director be given this option explicitly?
@@ -206,7 +213,6 @@ class TrackDirectorAction extends Action {
 				}
 			}
 			else{
-				$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 				$trackDirectorSubmission->stampStatusModified();}
 			}
