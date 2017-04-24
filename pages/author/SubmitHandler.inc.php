@@ -391,7 +391,7 @@ class SubmitHandler extends AuthorHandler {
 			// director or track director.
 			import('schedConf.SchedConfAction');
 			$schedConf =& Request::getSchedConf();
-			if (!$schedConf || (!SchedConfAction::submissionsOpen($schedConf) && !Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) && !Validation::isTrackDirector($schedConf->getConferenceId()))) {
+			if (!$schedConf || (!SchedConfAction::submissionsOpen($schedConf) && !Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()))) {
 				Request::redirect(null, null, 'author', 'index');
 			}
 		}
