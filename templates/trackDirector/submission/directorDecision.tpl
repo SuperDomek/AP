@@ -30,7 +30,6 @@ function showCommentBox(sel) {
 				document.getElementById("decision_submit").disabled = "disabled";
 			}
 		});
-		// pridat mechanizmus prenosu obsahu textoveho pole do mailu	
 	}
   else {
 		document.getElementById("decision_submit").disabled = "";

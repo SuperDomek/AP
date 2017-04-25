@@ -219,9 +219,6 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		// Determine whether or not certain features should be disabled (i.e. past deadline)
 		$templateMgr->assign('mayEditPaper', AuthorAction::mayEditPaper($authorSubmission));
-		$templateMgr->assign('mayUploadRevision', ($lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
-			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS));
 
 		$templateMgr->assign('helpTopicId', 'editorial.authorsRole.review');
 		$templateMgr->display('author/submissionReview.tpl');

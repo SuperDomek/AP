@@ -18,6 +18,7 @@
 /** Comment associative types. All types must be defined here. */
 define('COMMENT_TYPE_PEER_REVIEW', 0x01);
 define('COMMENT_TYPE_DIRECTOR_DECISION', 0x02);
+define('COMMENT_TYPE_AUTHOR_REVISION_CHANGES', 0x03);
 
 class PaperComment extends DataObject {
 

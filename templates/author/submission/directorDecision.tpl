@@ -8,12 +8,31 @@
  *
  * $Id$
  *}
+
+{literal}
+<script type="text/javascript">
+<!--
+// turn on submit and upload after at least 10 chars submitted to the adjustments box
+$('#file_changes').live('input',function() {
+	if (String($(this).val()).length >= 10) {
+		document.getElementById("revision_submit").disabled = "";
+		document.getElementById("revision_upload").disabled = "";
+	}
+	else {
+		document.getElementById("revision_upload").disabled = "disabled";
+		document.getElementById("revision_submit").disabled = "disabled";
+	}
+});
+// -->
+</script>
+{/literal}
+
 <div id="directorDecision">
 <h3>{translate key="submission.directorDecision"}</h3>
 
 {assign var=authorFiles value=$submission->getAuthorFileRevisions($submission->getCurrentStage())}
 {assign var=directorFiles value=$submission->getDirectorFileRevisions($submission->getCurrentStage())}
-
+<form method="post" action="{url op="uploadRevisedVersion"}" enctype="multipart/form-data">
 <table width="100%" class="data">
 	<tr valign="top">
 		<td class="label" width="20%">{translate key="director.paper.decision"}</td>
@@ -33,11 +52,13 @@
 			<tr valign="top">
 				<td class="label" width="20%">{translate key="submission.directorDecisionComment"}</td>
 				<td class="value" width="80%">
-					<textarea readonly="true" class="textArea" rows="5" cols="40">{$lastDecisionComment->getComments()}</textarea>
+					<p>{$lastDecisionComment->getComments()|escape}</p>
+					<!--<textarea disabled="disabled" class="textArea" rows="5" cols="40">{$lastDecisionComment->getComments()}</textarea>-->
 				</td>
 			</tr>
 		{/if}
 	{/if}
+
   <!--
 	<tr valign="top">
 		<td class="label" width="20%">
@@ -58,21 +79,27 @@
 	</tr>
 -->
 
-	<tr valign="top">
-		<td class="label" width="20%">
-			{translate key="submission.fileChanges"}
-		</td>
-		<td class="value" width="80%">
-			{if $revisionChanges}
-				<form>
-					<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-					<textarea id="fileChanges" name="fileChanges" class="textArea" rows="15" cols="60" ></textarea>
-					<input type="submit" name="submit" value="{translate key=}"
-				</form>
-		</td>
-	</tr>
+	
 
-  {if $stage >= REVIEW_STAGE_PRESENTATION}
+  {if $lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+		<tr>
+			<td colspan="2" class="separator">&nbsp;</td>
+		</tr>
+		<tr valign="top">
+			<td colspan="2">
+				<h4>{translate key="author.paper.uploadAuthorVersion"}</h4>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td class="label" width="20%">
+				<label for="file_changes">{translate key="submission.fileChanges"}*</label>
+			</td>
+			<td class="value" width="80%">
+				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+				<textarea id="file_changes" name="file_changes" class="textArea" rows="15" cols="60"></textarea>
+			</td>
+		</tr>
     {if $authorFiles}
     	<tr valign="top">
     		<td class="label" width="20%">
@@ -97,14 +124,11 @@
 			{translate key="author.paper.uploadAuthorVersion"}
 		</td>
 		<td class="value" width="80%">
-			<form method="post" action="{url op="uploadRevisedVersion"}" enctype="multipart/form-data">
-				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-				<input type="file" {if !$mayUploadRevision}disabled="disabled" {/if}name="upload" class="uploadField" />
-				<input type="submit" {if !$mayUploadRevision}disabled="disabled" {/if}name="submit" value="{translate key="common.upload"}" class="button" />
-			</form>
-
+				<input type="file" name="upload" id="revision_upload" class="uploadField" disabled="disabled" />
+				<input type="submit" name="submit" id="revision_submit" value="{translate key="common.upload"}" class="button" disabled="disabled" />
 		</td>
 	</tr>
   {/if}
 </table>
+</form>
 </div>
