@@ -88,7 +88,7 @@ class AuthorHandler extends Handler {
 		$submissionsOpenDate = $schedConf->getSetting('submissionsOpenDate');
 		$submissionsCloseDate = $schedConf->getSetting('submissionsCloseDate');
 
-		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) || Validation::isTrackDirector($schedConf->getConferenceId(), $schedConf->getId())) {
+		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId())) {
 			// Directors or track directors may always submit
 			$acceptingSubmissions = true;
 		} elseif (!$submissionsOpenDate || !$submissionsCloseDate || time() < $submissionsOpenDate) {

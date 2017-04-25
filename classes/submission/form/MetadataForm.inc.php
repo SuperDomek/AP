@@ -65,7 +65,7 @@ class MetadataForm extends Form {
 			
 			if (isset($abstractCharCount) && $abstractCharCount > 0) {
 				// adding the length of mandatory fields in abstract
-				$abstractCharCount = $abstractCharCount + 57;
+				$abstractCharCount = $abstractCharCount + 70;
 				$this->addCheck(new FormValidatorCustom($this, 'abstract', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $charCount', 'foreach ($abstract as $localizedAbstract) {return strlen(strip_tags($localizedAbstract)) <= $charCount; }'), array($abstractCharCount)));
 			}
 

@@ -333,7 +333,7 @@ class AuthorAction extends Action {
 			$schedConf =& $schedConfDao->getSchedConf($paper->getSchedConfId());
 		}
 		// Directors acting as Authors can always edit.
-		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()) || Validation::isTrackDirector($schedConf->getConferenceId(), $schedConf->getId())) return true;
+		if (Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId())) return true;
 
 		// Incomplete submissions can always be edited.
 		if ($authorSubmission->getSubmissionProgress() != 0) return true;

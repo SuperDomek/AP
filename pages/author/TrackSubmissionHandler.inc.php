@@ -184,6 +184,15 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$directorDecisions = $authorSubmission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
 
+		// get last decision comment
+		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
+		switch ($stage) {
+			case REVIEW_STAGE_ABSTRACT:
+				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
+				break;
+			default:
+				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION);
+		}
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
 		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());
@@ -197,6 +206,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('revisedFile', $authorSubmission->getRevisedFile());
 		$templateMgr->assign_by_ref('suppFiles', $authorSubmission->getSuppFiles());
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
+		$templateMgr->assign('lastDecisionComment', $lastDecisionComment);
 
 
 		import('submission.reviewAssignment.ReviewAssignment');

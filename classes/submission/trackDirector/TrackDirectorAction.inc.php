@@ -59,8 +59,9 @@ class TrackDirectorAction extends Action {
 	 * @param $trackDirectorSubmission object
 	 * @param $decision int
 	 * @param $stage int
+	 * @param $comment optional string trackDirector comment for the decision
 	 */
-	function recordDecision($trackDirectorSubmission, $decision, $stage) {
+	function recordDecision($trackDirectorSubmission, $decision, $stage, $comment = null) {
 		$editAssignments =& $trackDirectorSubmission->getEditAssignments();
 		if (empty($editAssignments)) return;
 
@@ -97,7 +98,8 @@ class TrackDirectorAction extends Action {
 					'directorName' => $user->getFullName(),
 					'paperId' => $trackDirectorSubmission->getPaperId(),
 					'decision' => __($decisions[$decision]),
-					'round' => ($stage == REVIEW_STAGE_ABSTRACT?'submission.abstractReview':'submission.paperReview')
+					'round' => ($stage == REVIEW_STAGE_ABSTRACT?'submission.abstractReview':'submission.paperReview'),
+					'comment' => $comment
 				)
 			);
 
@@ -117,12 +119,36 @@ class TrackDirectorAction extends Action {
 			}
 
 			// Send e-mail to Author
-			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true);
+			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true, $comment);
+
+			// Insert comment into the DB 
+			if(isset($comment)){
+				//
+				//	Needs to replace by the functioning comment exchange mechanism
+				//
+				$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
+
+				// Insert new comment		
+				$newComment = new PaperComment();
+				$newComment->setCommentType(COMMENT_TYPE_DIRECTOR_DECISION);
+				$newComment->setRoleId(ROLE_ID_TRACK_DIRECTOR);
+				$newComment->setPaperId($paperId);
+				$newComment->setAssocId($decision);
+				$newComment->setAuthorId($user->getId());
+				$newComment->setCommentTitle("Decision comment");
+				$newComment->setComments($comment);
+				$newComment->setDatePosted(Core::getCurrentDate());
+				$newComment->setViewable(true);
+
+				$commentDao->insertPaperComment($newComment);
+			}
 		}
 
 		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE) {
 			// completeReview will take care of updating the
 			// submission with the new decision.
+			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+			$trackDirectorSubmission->stampStatusModified();
 			TrackDirectorAction::completeReview($trackDirectorSubmission);
 		} else {
 			// Insert the new decision.
@@ -141,6 +167,7 @@ class TrackDirectorAction extends Action {
 	function completeReview($trackDirectorSubmission) {
 		$schedConf =& Request::getSchedConf();
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+		$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
 
 		if($trackDirectorSubmission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL) {
 			// two-stage submission; paper required
@@ -156,6 +183,10 @@ class TrackDirectorAction extends Action {
 				// The paper itself needs to be collected. Flag it so the author
 				// may complete it.
 				$trackDirectorSubmission->setSubmissionProgress(2);
+
+				// Save changes to the submission
+				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
+				$trackDirectorSubmission->stampStatusModified();
 
 				// TODO: notify the author the submission must be completed.
 				// Q: should the director be given this option explicitly?
@@ -182,7 +213,6 @@ class TrackDirectorAction extends Action {
 				}
 			}
 			else{
-				$trackDirectorSubmissionDao =& DAORegistry::getDao('TrackDirectorSubmissionDAO');
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 				$trackDirectorSubmission->stampStatusModified();}
 			}
@@ -1822,8 +1852,9 @@ import('file.PaperFileManager');
 	 * @param $trackDirectorSubmission object
 	 * @param $send boolean
 	 * @param $auto boolean automatically sends e-mail without the form
+	 * @param $comment optional trackDirector comment to the decision
 	 */
-	function emailDirectorDecisionComment($trackDirectorSubmission, $send, $auto = false) {
+	function emailDirectorDecisionComment($trackDirectorSubmission, $send, $auto = false, $comment = null) {
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
 		$conference =& Request::getConference();
@@ -1879,7 +1910,8 @@ import('file.PaperFileManager');
 				'conferenceTitle' => $conference->getConferenceTitle(),
 				'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
 				'locationCity' => $schedConf->getSetting('locationCity'),
-				'paperTitle' => $trackDirectorSubmission->getLocalizedTitle()
+				'paperTitle' => $trackDirectorSubmission->getLocalizedTitle(),
+				'comment' => $comment
 			));
 
 			// Add reviews to the e-mail (doesn't work - the translation doesn't translate and no reviews append)

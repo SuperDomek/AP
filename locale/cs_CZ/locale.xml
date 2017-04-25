@@ -196,6 +196,7 @@
 	<message key="paper.abstract1">Cíle</message>
 	<message key="paper.abstract2">Data/Metody</message>
 	<message key="paper.abstract3">Výsledky/Shrnutí</message>
+	<message key="paper.abstract.editWarning"><![CDATA[Snažíte se odmazat povinná pole z abstraktu. Abstrakt musí obsahovat položky:\n<strong>Paper’s objective(s):</strong>\n<strong>Data/Methods:</strong>\n<strong>Results/Conclusions:</strong>]]></message>
 	<message key="paper.details">Podrobnosti</message>
 	<message key="paper.location">Místo</message>
 	<message key="paper.time">Čas</message>
@@ -223,6 +224,7 @@
 	<message key="submission.acceptance">Souhlas s posouzením</message>
 	<message key="submission.complete.description">Přidat příspěvek na seznam přijatých prezentací.</message>
 	<message key="submission.directorDecision">Rozhodnutí</message>
+	<message key="submission.directorDecisionComment">Komentář editora k rozhodnutí</message>
 	<message key="submission.stage">Fáze&amp;nbsp;{$stage}</message>
 	<message key="submission.previousStage">Předchozí fáze recenze</message>
 	<message key="submission.directorReview">Posudek předsedy</message>
@@ -805,7 +807,7 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="log.review.reviewAcceptedByProxy">{$userName} přijal oponenturu příspěvku ($paperId) do sekce {$stage} v zastoupení oponenta {$reviewerName}.</message>
 	<message key="log.review.reviewFileByProxy">Garant {$userName} vložil soubor posudku do sekce {$stage} pro příspěvek {$paperId} v zastoupení oponenta {$reviewerName}.</message>
 	<message key="log.review.reviewerFile">Byl vložen soubor k oponentuře.</message>
-	<message key="log.director.decision">Rozhodnutí editora ({$decision}) pro příspěvek {$paperId} bylo uloženo editorem {$directorName}.</message>
+	<message key="log.director.decision">Rozhodnutí editora ({$decision}) pro příspěvek {$paperId} bylo uloženo editorem {$directorName} s komentářem: {$comment}.</message>
 	<message key="log.director.publish">Příspěvek byl publikován.</message>
 	<message key="log.director.unpublish">Příspěvek byl přesunut zpět do fronty.</message>
 	<message key="log.director.checked">Soubor příspěvku byl zkontrolován na autorské údaje a uvolněn k recenzování.</message>
