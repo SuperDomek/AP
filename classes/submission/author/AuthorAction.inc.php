@@ -100,17 +100,47 @@ class AuthorAction extends Action {
 		import('file.PaperFileManager');
 		$paperFileManager = new PaperFileManager($authorSubmission->getPaperId());
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
+		$session =& Request::getSession();
+		
+		$changes = (String) Request::getUserVar('file_changes');
+
+		// Check that the changes box is not empty and has at least 10 characters
+		if(strlen($changes) <= 10) {
+			$errors["file_changes"] = __("common.uploadChangesEmpty");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
 
 		$fileName = 'upload';
-		if ($paperFileManager->uploadError($fileName)) return false;
-		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
+		if ($paperFileManager->uploadError($fileName)) {
+			$errors["revision_upload"] = __("common.uploadFailed");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
+		if (!$paperFileManager->uploadedFileExists($fileName)) {
+			$errors["revision_upload"] = __("common.uploadFailed");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
 			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId(), true);
 		} else {
 			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null, true);
 		}
-		if (!$fileId) return false;
+		if (!$fileId) {
+			$errors["revision_upload"] = __("common.uploadFailed");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
 
 		$authorSubmission->setRevisedFileId($fileId);
 		$authorSubmissionDao->updateAuthorSubmission($authorSubmission);

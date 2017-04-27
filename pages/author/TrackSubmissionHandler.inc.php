@@ -155,6 +155,15 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$user =& Request::getUser();
 		$paperId = (int) array_shift($args);
 		$stage = (int) array_shift($args);
+		$session =& Request::getSession();
+
+		// implementation of error state when submitting
+		$isError = $session->getSessionVar('isError');
+		$errors = $session->getSessionVar('errors');
+		$changes = $session->getSessionVar('changes');
+		$session->unsetSessionVar('isError');
+		$session->unsetSessionVar('errors');
+		$session->unsetSessionVar('changes');
 
 		$this->validate($paperId);
 		$authorSubmission =& $this->submission;
@@ -207,7 +216,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('suppFiles', $authorSubmission->getSuppFiles());
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
 		$templateMgr->assign('lastDecisionComment', $lastDecisionComment);
-
+		$templateMgr->assign('changes', $changes);
+		$templateMgr->assign('isError', $isError);
+		$templateMgr->assign('errors', $errors);
 
 		import('submission.reviewAssignment.ReviewAssignment');
 		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));

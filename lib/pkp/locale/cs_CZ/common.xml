@@ -178,7 +178,8 @@
 	<message key="common.updated">Aktualizováno</message>
 	<message key="common.uploadedFile">Nahraný soubor</message>
 	<message key="common.upload">Nahrát</message>
-	<message key="common.uploadFailed">Soubor nemohl být nahrán. Zkuste to prosím znovu nebo se obraťte na správce, pokud problém přetrvává.</message>
+	<message key="common.uploadFailed">Soubor nemohl být nahrán. Zkuste to prosíme znovu nebo se obraťte na správce, pokud problém přetrvává.</message>
+	<message key="common.uploadChangesEmpty">Seznam provedených úprav musí mít více než 10 znaků.</message>
 	<message key="common.up">Nahoru</message>
 	<message key="common.url">URL</message>
 	<message key="common.user">Uživatel</message>

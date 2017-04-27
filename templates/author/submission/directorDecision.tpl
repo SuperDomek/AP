@@ -14,7 +14,7 @@
 <!--
 // turn on submit and upload after at least 10 chars submitted to the adjustments box
 $('#file_changes').live('input',function() {
-	if (String($(this).val()).length >= 10) {
+	if (String($(this).val()).length > 10) {
 		document.getElementById("revision_submit").disabled = "";
 		document.getElementById("revision_upload").disabled = "";
 	}
@@ -97,7 +97,7 @@ $('#file_changes').live('input',function() {
 			</td>
 			<td class="value" width="80%">
 				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-				<textarea id="file_changes" name="file_changes" class="textArea" rows="15" cols="60"></textarea>
+				<textarea id="file_changes" name="file_changes" class="textArea" rows="15" cols="60">{$changes}</textarea>
 			</td>
 		</tr>
     {if $authorFiles}
@@ -121,11 +121,11 @@ $('#file_changes').live('input',function() {
     {/if}
 	<tr valign="top">
 		<td class="label" width="20%">
-			{translate key="author.paper.uploadAuthorVersion"}
+			<label for="revision_upload">{translate key="author.paper.uploadAuthorVersion"}</label>
 		</td>
 		<td class="value" width="80%">
-				<input type="file" name="upload" id="revision_upload" class="uploadField" disabled="disabled" />
-				<input type="submit" name="submit" id="revision_submit" value="{translate key="common.upload"}" class="button" disabled="disabled" />
+				<input type="file" name="revision_upload" id="revision_upload" class="uploadField" disabled="disabled" />
+				<input type="submit" name="revision_submit" id="revision_submit" value="{translate key="common.upload"}" class="button" disabled="disabled" />
 		</td>
 	</tr>
   {/if}

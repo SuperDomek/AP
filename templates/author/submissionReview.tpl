@@ -36,6 +36,7 @@
 	{/if}
 </ul>
 
+{include file="common/formErrors.tpl"}
 
 {include file="author/submission/summary.tpl"}
 
