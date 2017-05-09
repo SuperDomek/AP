@@ -113,7 +113,14 @@ class AuthorAction extends Action {
 			return false;
 		}
 
-		$fileName = 'upload';
+		$fileName = 'revision_upload';
+		if($paperFileManager->uploadErrorNoFile($fileName)){
+			$errors["revision_upload"] = __("common.uploadFailed.noFile");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
 		if ($paperFileManager->uploadError($fileName)) {
 			$errors["revision_upload"] = __("common.uploadFailed");
 			$session->setSessionVar('isError', true);
@@ -141,7 +148,6 @@ class AuthorAction extends Action {
 			$session->setSessionVar('changes', $changes);
 			return false;
 		}
-
 		$authorSubmission->setRevisedFileId($fileId);
 		$authorSubmissionDao->updateAuthorSubmission($authorSubmission);
 
@@ -159,6 +165,22 @@ class AuthorAction extends Action {
 				null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
 			);
 		}
+
+		// Input the changes as paper comment with own comment type
+		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
+		// remove previous change comments connected with this revision file (only one active author revision file allowed)
+		$paperCommentDao->deletePaperComments($paperId, $fileId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+		$paperComment = new PaperComment();
+		$paperComment->setCommentType(COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+		$paperComment->setRoleId(ROLE_ID_AUTHOR);
+		$paperComment->setPaperId($paperId);
+		$paperComment->setAuthorId($authorSubmission->getUserId());
+		$paperComment->setCommentTitle("Checklist of adjustments");
+		$paperComment->setComments($changes);
+		$paperComment->setDatePosted(Core::getCurrentDate());
+		$paperComment->setViewable(true);
+		$paperComment->setAssocId($fileId);
+		$paperCommentDao->insertPaperComment($paperComment);
 
 		// Add log entry
 		$user =& Request::getUser();

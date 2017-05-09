@@ -13,6 +13,16 @@
 <script type="text/javascript">
 <!--
 // turn on submit and upload after at least 10 chars submitted to the adjustments box
+$('#file_changes').ready(function(){
+	if (String($('#file_changes').val()).length > 10) {
+		document.getElementById("revision_submit").disabled = "";
+		document.getElementById("revision_upload").disabled = "";
+	}
+	else {
+		document.getElementById("revision_upload").disabled = "disabled";
+		document.getElementById("revision_submit").disabled = "disabled";
+	}
+});
 $('#file_changes').live('input',function() {
 	if (String($(this).val()).length > 10) {
 		document.getElementById("revision_submit").disabled = "";
@@ -97,7 +107,7 @@ $('#file_changes').live('input',function() {
 			</td>
 			<td class="value" width="80%">
 				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-				<textarea id="file_changes" name="file_changes" class="textArea" rows="15" cols="60">{$changes}</textarea>
+				<textarea id="file_changes" name="file_changes" class="textArea" rows="15" cols="60">{$changes|escape}</textarea>
 			</td>
 		</tr>
     {if $authorFiles}

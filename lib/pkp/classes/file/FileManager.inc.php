@@ -42,12 +42,21 @@ class FileManager {
 	}
 
 	/**
-	 * Return true iff an error occurred when trying to upload a file.
+	 * Return true if an error occurred when trying to upload a file.
 	 * @param $fileName string the name of the file used in the POST form
 	 * @return boolean
 	 */
 	function uploadError($fileName) {
 		return (isset($_FILES[$fileName]) && $_FILES[$fileName]['error'] != 0);
+	}
+
+	/**
+	 * Return true if no file was selected
+	 * @param $fileName string the name of the file used in the POST form
+	 * @return boolean
+	 */
+	function uploadErrorNoFile($fileName) {
+		return ($_FILES[$fileName]['name'] == "");
 	}
 
 	/**

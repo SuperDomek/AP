@@ -156,14 +156,21 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$paperId = (int) array_shift($args);
 		$stage = (int) array_shift($args);
 		$session =& Request::getSession();
+		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
 		// implementation of error state when submitting
 		$isError = $session->getSessionVar('isError');
-		$errors = $session->getSessionVar('errors');
-		$changes = $session->getSessionVar('changes');
-		$session->unsetSessionVar('isError');
-		$session->unsetSessionVar('errors');
-		$session->unsetSessionVar('changes');
+		if($isError){
+			$errors = $session->getSessionVar('errors');
+			$changes = $session->getSessionVar('changes');
+			$session->unsetSessionVar('isError');
+			$session->unsetSessionVar('errors');
+			$session->unsetSessionVar('changes');
+		}
+		else{
+			$changes = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES)->getComments();			
+			error_log($changes);
+		}
 
 		$this->validate($paperId);
 		$authorSubmission =& $this->submission;
@@ -194,7 +201,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
 
 		// get last decision comment
-		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
+		
 		switch ($stage) {
 			case REVIEW_STAGE_ABSTRACT:
 				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
