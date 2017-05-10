@@ -126,19 +126,25 @@ function showCommentBox(sel) {
     <form method="post" action="{url op="directorReview" path=$stage}" enctype="multipart/form-data">
     	<table class="data" width="100%">
         <input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-    		{foreach from=$authorFiles item=authorFile key=key}
+    		{foreach name=authorFilesCounter from=$authorFiles item=authorFile key=key}
     			<tr valign="top">
     				{if !$authorRevisionExists}
     					{assign var="authorRevisionExists" value=true}
-    					<td width="20%" rowspan="{$authorFiles|@count}" class="label">{translate key="submission.authorsRevisedVersion"}</td>
+    					<td width="20%" rowspan="{$smarty.foreach.authorFilesCounter.total+2}" class="label">{translate key="submission.authorsRevisedVersion"}</td>
     				{/if}
     				<td width="80%" class="value" colspan="2">
-    					<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" />
+    					<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" {if $smarty.foreach.authorFilesCounter.first}checked="true"{/if} />
     					{* <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp; *}
                 {$authorFile->getFileName()|escape}&nbsp;&nbsp;
     						{$authorFile->getDateModified()|date_format:$dateFormatShort}
     				</td>
     			</tr>
+					<tr valign="top">
+						<td> </td>
+						<td colspan="2">
+							<textarea class="textarea" readonly="true" cols="60">{$changes|escape}</textarea>
+						</td>
+					</tr>
     		{foreachelse}
     			<tr valign="top">
     				<td width="20%" class="label">{translate key="submission.authorsRevisedVersion"}</td>
@@ -158,7 +164,7 @@ function showCommentBox(sel) {
       </table>
     </form>
 
-    {if not $isStageDisabled}
+    {if not $isStageDisabled && $isDirector}
       <form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
         <table class="data" width="100%">
       		<tr valign="top">

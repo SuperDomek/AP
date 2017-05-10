@@ -152,6 +152,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
+		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
 		$stage = (isset($args[1]) ? (int) $args[1] : null);
 		$reviewMode = $submission->getReviewMode();
@@ -187,6 +188,13 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			!empty($editAssignments) && $this->reviewsCompleteAndSet($stage);
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
+
+		// Set up checklist of adjustments
+		$changesComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+		if($changesComment)
+			$changes = $changesComment->getComments();
+		else
+			$changes = null;
 
 		/* EDIT Add track directors as reviewers
 		//if(!$submission->getReviewAssignments($stage)){ // no reviewers yet
@@ -299,6 +307,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('isDirector', Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()));
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
+		$templateMgr->assign('changes', $changes);
 
 		/*if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage >= REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);
