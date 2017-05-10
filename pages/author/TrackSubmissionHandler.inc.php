@@ -168,8 +168,10 @@ class TrackSubmissionHandler extends AuthorHandler {
 			$session->unsetSessionVar('changes');
 		}
 		else{
-			$changes = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES)->getComments();			
-			error_log($changes);
+			if($commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES))
+				$changes = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES)->getComments();
+			else
+				$changes = "";			
 		}
 
 		$this->validate($paperId);

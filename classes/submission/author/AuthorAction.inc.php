@@ -73,6 +73,7 @@ class AuthorAction extends Action {
 		$paperFileManager = new PaperFileManager($paper->getId());
 		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
+		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
 		$paperFile =& $paperFileDao->getPaperFile($fileId, $revisionId, $paper->getId());
 		$authorSubmission = $authorSubmissionDao->getAuthorSubmission($paper->getId());
@@ -85,7 +86,8 @@ class AuthorAction extends Action {
 				foreach ($stage as $revision) {
 					if ($revision->getFileId() == $paperFile->getFileId() &&
 						$revision->getRevision() == $paperFile->getRevision()) {
-						$paperFileManager->deleteFile($paperFile->getFileId(), $paperFile->getRevision());
+							$paperCommentDao->deletePaperComments($paper->getId(), $fileId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+							$paperFileManager->deleteFile($paperFile->getFileId(), $paperFile->getRevision());
 					}
 				}
 			}
