@@ -158,22 +158,6 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$session =& Request::getSession();
 		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
-		// implementation of error state when submitting
-		$isError = $session->getSessionVar('isError');
-		if($isError){
-			$errors = $session->getSessionVar('errors');
-			$changes = $session->getSessionVar('changes');
-			$session->unsetSessionVar('isError');
-			$session->unsetSessionVar('errors');
-			$session->unsetSessionVar('changes');
-		}
-		else{
-			if($commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES))
-				$changes = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES)->getComments();
-			else
-				$changes = "";			
-		}
-
 		$this->validate($paperId);
 		$authorSubmission =& $this->submission;
 		$this->setupTemplate(true, $paperId);
@@ -191,6 +175,23 @@ class TrackSubmissionHandler extends AuthorHandler {
 			case REVIEW_MODE_BOTH_SEQUENTIAL:
 				if ($stage != REVIEW_STAGE_ABSTRACT && $stage != REVIEW_STAGE_PRESENTATION) $stage = $authorSubmission->getCurrentStage();
 				break;
+		}
+
+		// implementation of error state when submitting
+		$isError = $session->getSessionVar('isError');
+		if($isError){
+			$errors = $session->getSessionVar('errors');
+			$changes = $session->getSessionVar('changes');
+			$session->unsetSessionVar('isError');
+			$session->unsetSessionVar('errors');
+			$session->unsetSessionVar('changes');
+		}
+		else{
+			$changesComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES, $stage);
+			if($changesComment)
+				$changes = $changesComment->getComments();
+			else
+				$changes = null;			
 		}
 
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');

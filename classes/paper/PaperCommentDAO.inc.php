@@ -217,17 +217,19 @@ class PaperCommentDAO extends DAO {
 	/**
 	 * Delete all comments for a paper.
 	 * @param $paperId int
+	 * @param $stage int
+	 * @param $type int Type of comment
 	 */
-	function deletePaperComments($paperId, $fileId = null, $type = null) {
-		if (isset($fileId)){
+	function deletePaperComments($paperId, $stage = null, $type = null) {
+		if (isset($stage)){
 			if(isset($type)){
 				return $this->update(
-					'DELETE FROM paper_comments WHERE paper_id = ? AND assoc_id = ? AND comment_type = ?', array($paperId, $fileId, $type)
+					'DELETE FROM paper_comments WHERE paper_id = ? AND assoc_id = ? AND comment_type = ?', array($paperId, $stage, $type)
 				);
 			}
 			else{
 				return $this->update(
-					'DELETE FROM paper_comments WHERE paper_id = ? AND assoc_id = ?', array($paperId, $fileId)
+					'DELETE FROM paper_comments WHERE paper_id = ? AND assoc_id = ?', array($paperId, $stage)
 				);
 			}
 		}

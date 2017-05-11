@@ -181,59 +181,6 @@ function showCommentBox(sel) {
     {/if}
   {/if}
 {/if}
-    <!--
-		{foreach from=$directorFiles item=directorFile key=key}
-			<tr valign="top">
-				{if !$directorRevisionExists}
-					{assign var="directorRevisionExists" value=true}
-					<td width="20%" rowspan="{$directorFiles|@count}" class="label">{translate key="submission.directorVersion"}</td>
-				{/if}
-				<td width="50%" class="value">
-					{if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_ACCEPT}
-						<input type="radio" name="directorDecisionFile" value="{$directorFile->getFileId()},{$directorFile->getRevision()}" />
-						{assign var="sendableVersionExists" value=true}
-					{/if}
-					<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$directorFile->getFileId():$directorFile->getRevision()}" class="file">{$directorFile->getFileName()|escape}</a>&nbsp;&nbsp;
-					{$directorFile->getDateModified()|date_format:$dateFormatShort}
-				</td>
-				<td width="30%" class="value"><a href="{url op="deletePaperFile" path=$submission->getPaperId()|to_array:$directorFile->getFileId():$directorFile->getRevision()}" class="action">{translate key="common.delete"}</a></td>
-			</tr>
-		{foreachelse}
-			<tr valign="top">
-				<td width="20%" class="label">{translate key="submission.directorVersion"}</td>
-				<td width="80%" colspan="3" class="nodata">{translate key="common.none"}</td>
-			</tr>
-		{/foreach}-->
-
-  <!--
-  {if $isCurrent}
-	<div>
-		{translate key="director.paper.uploadDirectorVersion"}
-		<input type="file" name="upload" class="uploadField" />
-		<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
-	</div>
-	{/if}
-
-	{if $sendableVersionExists}
-		<table class="data" width="100%">
-			<tr valign="top">
-				<td width="20%">&nbsp;</td>
-				<td width="80%">
-					{translate key="director.paper.moveToLayout"}
-					<input type="submit" name="setEditingFile" onclick="return window.confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmToLayout"}')" value="{translate key="form.send"}" class="button" />
-					{if $submission->getDateToPresentations()}{$submission->getDateToPresentations()|date_format:$dateFormatShort}{/if}
-					{if !$submission->getGalleys()}
-						<br />
-						<input type="checkbox" checked="checked" name="createGalley" value="1" />
-						{translate key="director.paper.createGalley"}
-					{/if}
-				</td>
-			</tr>
-		</table>
-
-	{/if}
-  -->
-
 
 </div>
 {if $isFinalReview}

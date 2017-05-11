@@ -86,7 +86,7 @@ class AuthorAction extends Action {
 				foreach ($stage as $revision) {
 					if ($revision->getFileId() == $paperFile->getFileId() &&
 						$revision->getRevision() == $paperFile->getRevision()) {
-							$paperCommentDao->deletePaperComments($paper->getId(), $fileId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+							$paperCommentDao->deletePaperComments($paper->getId(), $authorSubmission->getCurrentStage(), COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
 							$paperFileManager->deleteFile($paperFile->getFileId(), $paperFile->getRevision());
 					}
 				}
@@ -139,9 +139,9 @@ class AuthorAction extends Action {
 		}
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId(), true);
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId());
 		} else {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null, true);
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null);
 		}
 		if (!$fileId) {
 			$errors["revision_upload"] = __("common.uploadFailed");
@@ -170,8 +170,8 @@ class AuthorAction extends Action {
 
 		// Input the changes as paper comment with own comment type
 		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
-		// remove previous change comments connected with this revision file (only one active author revision file allowed)
-		$paperCommentDao->deletePaperComments($paperId, $fileId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+		// remove previous change comments connected with this revision file in the current stage (only one active author revision file allowed)
+		$paperCommentDao->deletePaperComments($paperId, $authorSubmission->getCurrentStage(), COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
 		$paperComment = new PaperComment();
 		$paperComment->setCommentType(COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
 		$paperComment->setRoleId(ROLE_ID_AUTHOR);
@@ -181,7 +181,7 @@ class AuthorAction extends Action {
 		$paperComment->setComments($changes);
 		$paperComment->setDatePosted(Core::getCurrentDate());
 		$paperComment->setViewable(true);
-		$paperComment->setAssocId($fileId);
+		$paperComment->setAssocId($authorSubmission->getCurrentStage());
 		$paperCommentDao->insertPaperComment($paperComment);
 
 		// Add log entry
