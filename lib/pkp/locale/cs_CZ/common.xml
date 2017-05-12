@@ -69,6 +69,7 @@
 		Tato práce je licencována pod <a rel="license" href="http://creativecommons.org/licenses/by/3.0/" target="_new">Creative Commons Attribution 3.0 Licencí</a>.
 	</div>]]></message>
 	<message key="common.changesSaved">Vaše změny byly uloženy.</message>
+	<message key="common.checklistOfAdjustments">Seznam provedených úprav</message>
 	<message key="common.chooseOne">Vyberte jeden</message>
 	<message key="common.close">Zavřít</message>
 	<message key="common.closeWindow">Zavřít okno</message>

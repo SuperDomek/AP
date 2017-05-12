@@ -104,12 +104,18 @@
     {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
       {if $reviewFile}
       <tr valign="top">
-    		<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
+    		<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
         {if $reviewFile->getChecked() == 1 || $isDirector}
         <td width="80%" class="value">
           <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>
         </td>
       </tr>
+			<tr valign="top">
+			<td width="20%" class="label">{translate key="common.checklistOfAdjustments"}</td>
+			<td width="80%" class="value">
+				<span>{$changes|escape}</span>
+			</td>
+			</tr>
         {else}
         <td class="warning value">{translate key="submission.fileNotChecked"}</td>
       </tr>

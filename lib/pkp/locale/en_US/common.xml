@@ -71,6 +71,7 @@
 	</div>
 	]]></message>
 	<message key="common.changesSaved">Your changes have been saved.</message>
+	<message key="common.checklistOfAdjustments">Checklist of adjustments</message>
 	<message key="common.chooseOne">Choose One</message>
 	<message key="common.close">Close</message>
 	<message key="common.closeWindow">Close Window</message>
