@@ -15,7 +15,7 @@
 
 // $Id$
 
-
+import('pages.trackDirector.TrackDirectorHandler');
 import('submission.common.Action');
 
 class AuthorAction extends Action {
@@ -103,6 +103,7 @@ class AuthorAction extends Action {
 		$paperFileManager = new PaperFileManager($authorSubmission->getPaperId());
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
 		$session =& Request::getSession();
+		$paperId = $authorSubmission->getPaperId();
 		
 		$changes = (String) Request::getUserVar('file_changes');
 
@@ -153,10 +154,21 @@ class AuthorAction extends Action {
 		$authorSubmission->setRevisedFileId($fileId);
 		$authorSubmissionDao->updateAuthorSubmission($authorSubmission);
 
+		// Refresh authorSubmission
+		$authorSubmission =& $authorSubmissionDao->getAuthorSubmission($paperId);
+
+		// Set file as new review file
+		// FIX: using trackDirector functions
+		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
+		$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
+		$revisionPaper =& $authorSubmission->getRevisedFile();
+		error_log("FileId: " . $fileId . "; RevisionId: " . $revisionPaper->getRevision());
+		TrackDirectorAction::setReviewFile($submission, $fileId, $revisionPaper->getRevision());
+
 		// Send a notification to associated users
 		import('notification.NotificationManager');
 		$notificationManager = new NotificationManager();
-		$paperId = $authorSubmission->getPaperId();
+		
 		$paperDao =& DAORegistry::getDAO('PaperDAO');
 		$paper =& $paperDao->getPaper($paperId);
 		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, true);
