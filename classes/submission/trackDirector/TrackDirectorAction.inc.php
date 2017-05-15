@@ -1324,11 +1324,12 @@ class TrackDirectorAction extends Action {
 	 * Moves the paper to the next review stage and sets up next stage in the reviewFile
 	 * @param $trackDirectorSubmission object
 	 * @param $reviewFileId int optional Id of the file to be moved to the next stage
+	 * @param $reviewRevision int optional revision of the file to be moved to the next stage
 	 */
-	function nextStage(&$trackDirectorSubmission, $reviewFileId = false, $reviewRevision = false) {
+	function nextStage(&$trackDirectorSubmission, $reviewFileId = null, $reviewRevision = null) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 
-		if ($reviewFileId != false && $reviewRevision != false){
+		if ($reviewFileId != null && $reviewRevision != null){
 			$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 			$paperFile =& $paperFileDao->getPaperFile($reviewFileId, $reviewRevision, $trackDirectorSubmission->getPaperId());
 			$paperFile->setStage($trackDirectorSubmission->getCurrentStage() + 1);

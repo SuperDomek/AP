@@ -162,7 +162,6 @@ class AuthorAction extends Action {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
 		$revisionPaper =& $authorSubmission->getRevisedFile();
-		error_log("FileId: " . $fileId . "; RevisionId: " . $revisionPaper->getRevision());
 		TrackDirectorAction::setReviewFile($submission, $fileId, $revisionPaper->getRevision());
 
 		// Send a notification to associated users

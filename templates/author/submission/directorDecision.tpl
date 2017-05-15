@@ -101,10 +101,10 @@ $('#file_changes').live('input',function() {
     		<td class="value" width="80%">
     			{foreach from=$authorFiles item=authorFile key=key}
     				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp;{$authorFile->getDateModified()|date_format:$dateFormatShort}
-    				{if $mayEditPaper}
+    				{*{if $mayEditPaper}
     					&nbsp;&nbsp;&nbsp;&nbsp;
-    					<a href="{url op="deletePaperFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="action">{translate key="common.delete"}</a>
-    				{/if}
+    					<a href="{url op="<d></d>eletePaperFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="action">{translate key="common.delete"}</a>
+    				{/if}*}
     				<br />
     			{foreachelse}
     				{translate key="common.none"}

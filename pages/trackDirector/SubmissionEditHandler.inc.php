@@ -165,7 +165,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 				$stage = REVIEW_STAGE_PRESENTATION;
 				break;
 			case REVIEW_MODE_BOTH_SEQUENTIAL:
-				if ($stage != REVIEW_STAGE_ABSTRACT && $stage != REVIEW_STAGE_PRESENTATION) $stage = $submission->getCurrentStage();
+				if ($stage != REVIEW_STAGE_ABSTRACT) $stage = $submission->getCurrentStage();
 				break;
 		}
 
@@ -848,12 +848,27 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
+		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
+		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 
 		$fileId = Request::getUserVar('fileId');
 		$revision = Request::getUserVar('revision');
 		$checked = Request::getUserVar('checked');
 
+		// allow the file for review
 		TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked);
+		// refresh the submission
+		$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
+		// move to the next stage if necessary
+		$file = $paperFileDao->getPaperFile($fileId, $revision, $paperId);
+		$stage = $submission->getCurrentStage();
+		$directorDecisions = $submission->getDecisions($stage);
+		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1]['decision'] : null;
+		// Last decision in this stage is revisions we wanna do next round of review
+		if($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) {
+			TrackDirectorAction::nextStage($submission, $fileId, $revision);
+		}
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}
