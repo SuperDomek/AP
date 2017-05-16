@@ -133,7 +133,7 @@ class TrackDirectorAction extends Action {
 				$newComment->setCommentType(COMMENT_TYPE_DIRECTOR_DECISION);
 				$newComment->setRoleId(ROLE_ID_TRACK_DIRECTOR);
 				$newComment->setPaperId($paperId);
-				$newComment->setAssocId($decision);
+				$newComment->setAssocId($stage);
 				$newComment->setAuthorId($user->getId());
 				$newComment->setCommentTitle("Decision comment");
 				$newComment->setComments($comment);
@@ -810,7 +810,7 @@ class TrackDirectorAction extends Action {
 	}
 
 	/**
-	 * Makes a review file available to the reviewers. (first needs to be checked for author info)
+	 * Makes a review file available to the reviewers. (checked for author info)
 	 * @param $paperId int
 	 * @param $fileId int
 	 * @param $revision int
@@ -1266,11 +1266,9 @@ class TrackDirectorAction extends Action {
 				//$trackDirectorSubmission->setDirectorFileId($directorFileId);
 				$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 			}
+			TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getReviewFileId(), $trackDirectorSubmission->getReviewRevision(), true);
 			if ($newStage == true){
 				TrackDirectorAction::nextStage($trackDirectorSubmission, $reviewFileId, $trackDirectorSubmission->getReviewRevision());
-			}
-			else{
-				TrackDirectorAction::makeFileChecked($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getReviewFileId(), $trackDirectorSubmission->getReviewRevision() + 1, true);
 			}
 
 		} else {
@@ -1293,7 +1291,7 @@ class TrackDirectorAction extends Action {
 
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
 		}*/
-		if($newStage == true){
+		/* if($newStage == true){
 			// Send a notification to director that the file needs to be checked
 			import('notification.NotificationManager');
 			$roleDao =& DAORegistry::getDAO('RoleDAO');
@@ -1312,6 +1310,7 @@ class TrackDirectorAction extends Action {
 				);
 			}
 		}
+		*/
 		// Add log
 		import('paper.log.PaperLog');
 		import('paper.log.PaperEventLogEntry');

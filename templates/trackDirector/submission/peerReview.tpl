@@ -103,7 +103,7 @@
 		</tr>
     {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
       {if $reviewFile}
-        {if $reviewFile->getChecked() == 1 || $isDirector}
+        {if $reviewFile->getChecked() == 1}
 		<tr valign="top">
 			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
 			<td width="80%" class="value">
@@ -112,12 +112,19 @@
 		</tr>
 					{if $stage > $smarty.const.REVIEW_STAGE_PRESENTATION}
 		<tr valign="top">
-		<td width="20%" class="label">{translate key="common.checklistOfAdjustments"}</td>
-		<td width="80%" class="value">
-			<span>{$changes|escape}</span>
-		</td>
+			<td width="20%" class="label">{translate key="common.checklistOfAdjustments"}</td>
+			<td width="80%" class="value">
+				<span>{$changes|escape}</span>
+			</td>
 		</tr>
 					{/if} {* $stage > $smarty.const.REVIEW_STAGE_PRESENTATION *}
+				{elseif $isDirector} 
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
+			<td width="80%" class="value">
+				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>
+			</td>
+		</tr>
         {else} {* $reviewFile->getChecked() == 0 || !$isDirector *}
 		<tr valign="top">
 			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
@@ -144,7 +151,6 @@
 			<td width="80%" class="nodata">
 				<form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
 					<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-					<input type="hidden" name="newStage" value="0" />
 					<input type="file" name="upload" class="uploadField" />
 					<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
 				</form>

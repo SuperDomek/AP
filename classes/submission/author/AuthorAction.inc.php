@@ -170,14 +170,31 @@ class AuthorAction extends Action {
 		
 		$paperDao =& DAORegistry::getDAO('PaperDAO');
 		$paper =& $paperDao->getPaper($paperId);
-		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, true);
+		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, false);
 		foreach ($notificationUsers as $userRole) {
-			$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null);
+			$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paperId, null);
 			$notificationManager->createNotification(
 				$userRole['id'], 'notification.type.revisionUploaded',
 				null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
 			);
 		}
+
+		// Send a notification to conference managers that a file needs to be checked
+		$roleDao =& DAORegistry::getDAO('RoleDAO');
+		$conferenceManagersTemp = $roleDao->getUsersByRoleId(ROLE_ID_CONFERENCE_MANAGER, $conference->getId());
+		$conferenceManagers = $conferenceManagersTemp->toArray();
+		$notificationManagers = array();
+		foreach ($conferenceManagers as $user) {
+			$notificationManagers[] = array('id' => $user->getId());
+		}
+		foreach ($notificationManagers as $manager) {
+			$url = Request::url(null, null, 'director', 'submissionReview', $paperId);
+			$notificationManager->createNotification(
+				$manager['id'], 'notification.type.fileNeedsCheck',
+				$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_PAPER_SUBMITTED
+			);
+		}
+
 
 		// Input the changes as paper comment with own comment type
 		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');

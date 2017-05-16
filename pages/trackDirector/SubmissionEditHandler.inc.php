@@ -195,6 +195,13 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$changes = $changesComment->getComments();
 		else
 			$changes = null;
+		
+		// Set up decision comment
+		$decisionCommentTemp = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, $stage);
+		if($decisionCommentTemp)
+			$decisionComment = $decisionCommentTemp->getComments();
+		else
+			$decisionComment = null;
 
 		/* EDIT Add track directors as reviewers
 		//if(!$submission->getReviewAssignments($stage)){ // no reviewers yet
@@ -308,6 +315,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 		$templateMgr->assign('changes', $changes);
+		$templateMgr->assign('decisionComment', $decisionComment);
 
 		/*if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage >= REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);
@@ -865,9 +873,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$directorDecisions = $submission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1]['decision'] : null;
 		// Last decision in this stage is revisions we wanna do next round of review
-		if($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) {
-			TrackDirectorAction::nextStage($submission, $fileId, $revision);
+		if($checked == true){
+			if($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+			$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) {
+				TrackDirectorAction::nextStage($submission, $fileId, $revision);
+			}
 		}
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
@@ -1226,11 +1236,17 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 	function uploadReviewVersion() {
 		$paperId = Request::getUserVar('paperId');
-		$newStage = Request::getUserVar('newStage');
 		$this->validate($paperId, TRACK_DIRECTOR_ACCESS_REVIEW);
 		$submission =& $this->submission;
+		$directorDecisions = $submission->getDecisions($submission->getCurrentStage());
 
-		TrackDirectorAction::uploadReviewVersion($submission, $newStage);
+		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1]['decision'] : null;
+		// If last decision is revisions then we want to go to next stage with this review version
+		if ($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+		$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS)
+			TrackDirectorAction::uploadReviewVersion($submission, true);
+		else
+			TrackDirectorAction::uploadReviewVersion($submission, false);
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}

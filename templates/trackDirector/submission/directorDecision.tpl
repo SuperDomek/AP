@@ -83,21 +83,6 @@ function showCommentBox(sel) {
 	</td>
 </tr>
 {if $isDirector}
-<tr valign="top">
-	<td class="label">{translate key="submission.notifyAuthor"}</td>
-	<td class="value" colspan="2">
-		{url|assign:"notifyAuthorUrl" op="emailDirectorDecisionComment" paperId=$submission->getPaperId()}
-		{icon name="mail" url=$notifyAuthorUrl}
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		{translate key="submission.directorAuthorRecord"}
-		{if $submission->getMostRecentDirectorDecisionComment()}
-			{assign var="comment" value=$submission->getMostRecentDirectorDecisionComment()}
-			<a href="javascript:openComments('{url op="viewDirectorDecisionComments" path=$submission->getPaperId() anchor=$comment->getId()}');" class="icon">{icon name="comment"}</a>&nbsp;&nbsp;{$comment->getDatePosted()|date_format:$dateFormatShort}
-		{else}
-			<a href="javascript:openComments('{url op="viewDirectorDecisionComments" path=$submission->getPaperId()}');" class="icon">{icon name="comment"}</a>{translate key="common.noComments"}
-		{/if}
-	</td>
-</tr>
 <tr>
 <td colspan="2">
   {if $lastDecision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
@@ -123,62 +108,26 @@ function showCommentBox(sel) {
 {if not $reviewingAbstractOnly}
   {if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
       $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
-    <form method="post" action="{url op="directorReview" path=$stage}" enctype="multipart/form-data">
-    	<table class="data" width="100%">
-        <input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-    		{foreach name=authorFilesCounter from=$authorFiles item=authorFile key=key}
-    			<tr valign="top">
-    				{if !$authorRevisionExists}
-    					{assign var="authorRevisionExists" value=true}
-    					<td width="20%" rowspan="{$smarty.foreach.authorFilesCounter.total+2}" class="label">{translate key="submission.authorsRevisedVersion"}</td>
-    				{/if}
-    				<td width="80%" class="value" colspan="2">
-    					<input type="radio" name="directorDecisionFile" value="{$authorFile->getFileId()},{$authorFile->getRevision()}" {if $smarty.foreach.authorFilesCounter.first}checked="true"{/if} />
-    					{* <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$authorFile->getFileId():$authorFile->getRevision()}" class="file">{$authorFile->getFileName()|escape}</a>&nbsp;&nbsp; *}
-                {$authorFile->getFileName()|escape}&nbsp;&nbsp;
-    						{$authorFile->getDateModified()|date_format:$dateFormatShort}
-    				</td>
-    			</tr>
-					<tr valign="top">
-						<td> </td>
-						<td colspan="2">
-							<textarea class="textarea" readonly="true" cols="60">{$changes|escape}</textarea>
-						</td>
-					</tr>
-    		{foreachelse}
-    			<tr valign="top">
-    				<td width="20%" class="label">{translate key="submission.authorsRevisedVersion"}</td>
-    				<td width="80%" colspan="2" class="nodata">{translate key="common.none"}</td>
-    			</tr>
-    		{/foreach}
-      {if $authorFiles}
-        <tr>
-          <td>
-          </td>
-          <td>
-            {* Add a javascript check for selected file *}
-            <input type="submit" name="setReviewFile" value="{translate key="form.sendReviewFile"}" class="button" />
-          </td>
-        </tr>
-      {/if}
-      </table>
-    </form>
-
-    {if not $isStageDisabled && $isDirector}
-      <form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
-        <table class="data" width="100%">
-      		<tr valign="top">
-            <td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
-      			<td width="80%" class="nodata">
-      				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-              <input type="hidden" name="newStage" value="1" />
-      				<input type="file" name="upload" class="uploadField" />
-      				<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
-      			</td>
-      		</tr>
-        </table>
-      </form>
+	<table class="data" width="100%">
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="submission.directorDecisionComment"}</td>
+			<td width="80%" class="nodata">
+				<span>{$decisionComment|escape}</span>
+			</td>
+		</tr>
+    {if not $isStageDisabled && $isDirector}    
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
+			<td width="80%" class="nodata">
+			<form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
+				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+				<input type="file" name="upload" class="uploadField" />
+				<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
+			</form>
+			</td>
+		</tr>
     {/if}
+	</table>
   {/if}
 {/if}
 
