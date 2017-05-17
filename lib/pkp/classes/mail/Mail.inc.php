@@ -435,7 +435,11 @@ class Mail extends DataObject {
 		} else {
 			$sent = String::mail($recipients, $subject, $mailBody, $headers, $additionalParameters);
 		}
-
+		// testing sequence
+		///////////////////
+		 error_log("Sending e-mail to: " . print_r($recipients, TRUE));
+		 error_log("The body of the e-mail: " . $mailBody);
+		///////////////////
 		if (!$sent) {
 			if (Config::getVar('debug', 'display_errors')) {
 				if (Config::getVar('email', 'smtp')) {

@@ -104,6 +104,7 @@ class AuthorAction extends Action {
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
 		$session =& Request::getSession();
 		$paperId = $authorSubmission->getPaperId();
+		$conference =& Request::getConference();
 		
 		$changes = (String) Request::getUserVar('file_changes');
 
@@ -181,13 +182,13 @@ class AuthorAction extends Action {
 
 		// Send a notification to conference managers that a file needs to be checked
 		$roleDao =& DAORegistry::getDAO('RoleDAO');
-		$conferenceManagersTemp = $roleDao->getUsersByRoleId(ROLE_ID_CONFERENCE_MANAGER, $conference->getId());
-		$conferenceManagers = $conferenceManagersTemp->toArray();
-		$notificationManagers = array();
-		foreach ($conferenceManagers as $user) {
-			$notificationManagers[] = array('id' => $user->getId());
+		$directorsTemp = $roleDao->getUsersByRoleId(ROLE_ID_DIRECTOR, $conference->getId());
+		$directors = $directorsTemp->toArray();
+		$notificationDirectors = array();
+		foreach ($directors as $user) {
+			$notificationDirectors[] = array('id' => $user->getId());
 		}
-		foreach ($notificationManagers as $manager) {
+		foreach ($notificationDirectors as $manager) {
 			$url = Request::url(null, null, 'director', 'submissionReview', $paperId);
 			$notificationManager->createNotification(
 				$manager['id'], 'notification.type.fileNeedsCheck',

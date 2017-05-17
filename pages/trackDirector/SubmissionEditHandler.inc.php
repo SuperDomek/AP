@@ -859,26 +859,33 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 
+		$stage = $submission->getCurrentStage();
+		$directorDecisions = $submission->getDecisions($stage);
+		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1]['decision'] : null;
+
 		$fileId = Request::getUserVar('fileId');
 		$revision = Request::getUserVar('revision');
 		$checked = Request::getUserVar('checked');
 
+		$revising = false;
+		// the decision is revisions
+		if($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
+			$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS)
+			$revising = true;
+		
 		// allow the file for review
-		TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked);
+		if($revising)
+			TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked);
+		else // not revising we want to inform the reviewer by e-mail
+			TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked, true);
 		// refresh the submission
 		$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
 		// move to the next stage if necessary
 		$file = $paperFileDao->getPaperFile($fileId, $revision, $paperId);
-		$stage = $submission->getCurrentStage();
-		$directorDecisions = $submission->getDecisions($stage);
-		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1]['decision'] : null;
+		
 		// Last decision in this stage is revisions we wanna do next round of review
-		if($checked == true){
-			if($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-			$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS) {
+		if($checked == true && $revising == true)
 				TrackDirectorAction::nextStage($submission, $fileId, $revision);
-			}
-		}
 
 		Request::redirect(null, null, null, 'submissionReview', $paperId);
 	}

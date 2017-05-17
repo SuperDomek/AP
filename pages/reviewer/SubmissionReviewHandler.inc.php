@@ -123,7 +123,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$this->setupTemplate(true);
 
 		if (!$reviewerSubmission->getCancelled()) {
-			if (ReviewerAction::recordRecommendation($reviewerSubmission, $recommendation, Request::getUserVar('send'))) {
+			if (ReviewerAction::recordRecommendation($reviewerSubmission, $recommendation, Request::getUserVar('send'), true)) {
 				Request::redirect(null, null, null, 'submission', $reviewId);
 			}
 		} else {

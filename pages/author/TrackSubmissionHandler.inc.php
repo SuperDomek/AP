@@ -188,6 +188,7 @@ class TrackSubmissionHandler extends AuthorHandler {
 		}
 		else{
 			$changesComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES, $stage);
+			$errors = null;
 			if($changesComment)
 				$changes = $changesComment->getComments();
 			else
