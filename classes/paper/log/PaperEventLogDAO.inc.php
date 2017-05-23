@@ -85,6 +85,27 @@ class PaperEventLogDAO extends DAO {
 	}
 
 	/**
+	 * Retrieve all log entries for a paper matching the specified event_type.
+	 * @param $paperId int
+	 * @param $eventType int
+	 * @return DAOResultFactory containing matching PaperEventLogEntry ordered by sequence
+	 */
+	function &getPaperLogEntriesByEvent($paperId, $eventType = null, $rangeInfo = null) {
+		$params = array($paperId);
+		if (isset($eventType)) {
+			array_push($params, $eventType);
+		}
+
+		$result =& $this->retrieveRange(
+			'SELECT * FROM paper_event_log WHERE paper_id = ?' . (isset($eventType) ? ' AND event_type = ?' : '') . ' ORDER BY log_id DESC',
+			$params, $rangeInfo
+		);
+
+		$returner = new DAOResultFactory($result, $this, '_returnLogEntryFromRow');
+		return $returner;
+	}
+
+	/**
 	 * Internal function to return an PaperEventLogEntry object from a row.
 	 * @param $row array
 	 * @return PaperEventLogEntry

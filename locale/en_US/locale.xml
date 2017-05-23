@@ -245,6 +245,7 @@
 	<message key="submissions.directorRuling">Editor Ruling</message>
 	<message key="trackDirector.galley.replaceGalley">Replace File</message>
 	<message key="submission.abstract">Abstract</message>
+	<message key="submission.abstractChangedDate">Abstract last modified on</message>
 	<message key="submission.paper">Paper</message>
 
 	<!-- Common Conference Terms -->
@@ -803,6 +804,7 @@ Your server currently supports mbstring: <strong>{$supportsMBString}</strong>]]>
 	<message key="log.director.checked">The paper file was checked for author informations and cleared for review.</message>
 
 	<message key="log.director.metadataModified">The metadata for this paper was modified by {$directorName}.</message>
+	<message key="log.director.abstractModified">The abstract for this paper was modified by {$directorName}.</message>
 	<message key="log.director.directorFile">A director version of the submission file has been uploaded.</message>
 	<message key="log.director.archived">The submission {$paperId} has been archived.</message>
 	<message key="log.director.restored">The submission {$paperId} has been restored to the queue.</message>
@@ -871,6 +873,7 @@ Validation may fail on search URLs that require posted form data.]]></message>
 	<message key="notification.type.directorDecisionComment">A comment has been left on the editor decision for "{$param}".</message>
 	<message key="notification.type.galleyModified">A galley has been modified for "{$param}".</message>
 	<message key="notification.type.metadataModified">"{$param}'s" metadata has been modified.</message>
+	<message key="notification.type.abstractModified">"{$param}'s" abstract has been modified.</message>
 	<message key="notification.type.newAnnouncement">A new announcement has been created.</message>
 	<message key="notification.type.fileNeedsCheck">A review file needs to be checked for author information.</message>
 	<message key="notification.type.revisionUploaded">Author uploaded a submission revision.</message>

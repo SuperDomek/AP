@@ -1991,6 +1991,7 @@ import('file.PaperFileManager');
 				}
 			} // for
 			$email->getBody();*/
+			$email->log();
 			$email->send();
 			return true;
 		}

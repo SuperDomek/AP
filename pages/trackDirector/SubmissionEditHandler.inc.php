@@ -172,6 +172,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewFormDao =& DAORegistry::getDAO('ReviewFormDAO');
+		$paperEventLogDao =& DAORegistry::getDAO('PaperEventLogDAO');
 
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
 		$tracks =& $trackDao->getSchedConfTracks($schedConf->getId());
@@ -187,42 +188,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			!empty($editAssignments) && $this->reviewsCompleteAndSet($stage);
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
-
-		/* EDIT Add track directors as reviewers
-		//if(!$submission->getReviewAssignments($stage)){ // no reviewers yet
-		if ($stage == $submission->getCurrentStage()){ //stage not disabled
-			// Get track directors assigned to this track
-			$trackDirectorsDao =& DAORegistry::getDAO('TrackDirectorsDAO');
-			$assignedDirectors =& $trackDirectorsDao->getDirectorsByTrackId($schedConf->getId(), $submission->getTrackID());
-			$directorsToAdd = array(); // IDs of track directors for paper's track
-			foreach($assignedDirectors as $assignedDirector){
-				$directorsToAdd[] = $assignedDirector->getID();
-			}
-			foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
-				// for each reviewAssignment
-				foreach($assignedDirectors as $assignedDirector){
-					// check whether it is track director's review
-					if($reviewAssignment->getReviewerId() == $assignedDirector->getID()){
-						// and if it is active
-						if(!$reviewAssignment->getCancelled()){
-							// delete track director from the list of directors to add as rev.
-							if(($key = array_search($assignedDirector->getID(), $directorsToAdd)) !== false) {
-    						unset($directorsToAdd[$key]);
-							}
-						}
-					}
-				}
-			}
-			// Assign track directors to paper as reviewers
-			if(!empty($directorsToAdd)){
-				foreach($directorsToAdd as $directorId){
-					TrackDirectorAction::addReviewer($submission, $directorId, $stage, true);
-				}
-				header("Refresh:0"); // reload page
-				exit();	// stop executing code so page reloads instanteously
-			}
-		}
-		 END EDIT */
 
 		// Prepare an array to store the 'Notify Reviewer' email logs
 		$notifyReviewerLogs = array();
@@ -275,6 +240,18 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			}
 		}
 
+		// load abstract changes events
+		$paperId = $submission->getPaperId();
+		$abstractChangesTemp =& $paperEventLogDao->getPaperLogEntriesByEvent($paperId, PAPER_LOG_ABSTRACT_CHANGE);
+		if($abstractChangesTemp->wasEmpty())
+			$abstractChangesLast = null;
+		else {
+			$abstractChanges = $abstractChangesTemp->toArray();
+			$abstractChangesLast = array_shift($abstractChanges); // first element is the most recent event
+		}
+		
+
+
 		$templateMgr =& TemplateManager::getManager();
 
 		$templateMgr->assign_by_ref('submission', $submission);
@@ -299,6 +276,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('isDirector', Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()));
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
+		$templateMgr->assign('abstractChangesLast', $abstractChangesLast);
 
 		/*if ($reviewMode != REVIEW_MODE_BOTH_SEQUENTIAL || $stage >= REVIEW_STAGE_PRESENTATION) {
 			$templateMgr->assign('isFinalReview', true);
