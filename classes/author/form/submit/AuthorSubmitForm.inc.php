@@ -113,12 +113,17 @@ class AuthorSubmitForm extends Form {
 				if (!empty($copyAddress)) $mail->addBcc($copyAddress);
 			}
 
-			$editAssignmentDao =& DAORegistry::getDAO('EditAssignmentDAO');
+			//This part is causing the mail to be sent to the director as well
+			/*$editAssignmentDao =& DAORegistry::getDAO('EditAssignmentDAO');
 			$editAssignments =& $editAssignmentDao->getEditAssignmentsByPaperId($paper->getId());
 			while ($editAssignment =& $editAssignments->next()) {
 				$mail->addBcc($editAssignment->getDirectorEmail(), $editAssignment->getDirectorFullName());
 				unset($editAssignment);
 			}
+			// Test for the mail being sent
+		error_log("Odesílám mail na adresy: " . $mail->getRecipientString());
+		error_log("Předmět mailu je: " . $mail->getSubject());
+		error_log("Tělo mailu: " . $mail->getBody());*/
 
 			$mail->assignParams(array(
 				'authorName' => $user->getFullName(),
