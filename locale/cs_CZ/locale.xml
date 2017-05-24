@@ -249,6 +249,7 @@
 	<message key="submissions.directorRuling">Výkonný hlavní editor</message>
 	<message key="trackDirector.galley.replaceGalley">Nahradit šablonu</message>
 	<message key="submission.abstract">Abstrakt</message>
+	<message key="submission.abstractChangedDate">Datum poslední změny abstraktu</message>
 	<message key="submission.paper">Příspěvek</message>
 
 	<!-- Common Conference Terms -->
@@ -812,7 +813,8 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="log.director.unpublish">Příspěvek byl přesunut zpět do fronty.</message>
 	<message key="log.director.checked">Soubor příspěvku byl zkontrolován na autorské údaje a uvolněn k recenzování.</message>
 
-	<message key="log.director.metadataModified">Metadata pro tento příspěvek byla modifikována garantem {$directorName}.</message>
+	<message key="log.director.metadataModified">Metadata pro tento příspěvek byla modifikována {$directorName}.</message>
+	<message key="log.director.abstractModified">Abstrakt příspěvku byl modifikován {$directorName}.</message>
 	<message key="log.director.directorFile">Verze příspěvku pro garanta byla uložena.</message>
 	<message key="log.director.archived">Příspěvek {$paperId} byl archivován.</message>
 	<message key="log.director.restored">Příspěvek {$paperId} byl vrácen do fronty.</message>
@@ -881,6 +883,7 @@ Validace může selhat u vyhledávacích URL, která vyžadují odesílání dat
 	<message key="notification.type.directorDecisionComment">Bylo vložen komentář k rozhodnutí editora ohledně: "{$param}".</message>
 	<message key="notification.type.galleyModified">Šablona ohledně: "{$param}" byla modifikována.</message>
 	<message key="notification.type.metadataModified">Metadata ohledně: "{$param}'s" byly modifikovány.</message>
+	<message key="notification.type.abstractModified">Abstrakt příspěvku: "{$param}'s" byl modifikován.</message>
 	<message key="notification.type.newAnnouncement">Bylo vytvořeno nové oznámení.</message>
 	<message key="notification.type.fileNeedsCheck">Byl nahrán nový soubor k recenzi. Nutné zkontrolovat.</message>
 	<message key="notification.type.revisionUploaded">Autor nahrál revizi příspěvku.</message>

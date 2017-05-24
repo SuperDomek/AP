@@ -200,7 +200,7 @@
 	<message key="submission.restrictions">Restrictions</message>
 	<message key="submission.reviewMetadata">Review Metadata</message>
 	<message key="submission.review">Review</message>
-	<message key="submission.reviewVersion">Review Version</message>
+	<message key="submission.reviewVersion">Review File</message>
 	<message key="submissions.active">Active</message>
 	<message key="submissions.archived">Archived</message>
 	<message key="submission.saveMetadata">Save Metadata</message>

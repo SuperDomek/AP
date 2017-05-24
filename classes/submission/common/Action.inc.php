@@ -126,14 +126,15 @@ class Action {
 				$oldAbstract = $paper->getLocalizedAbstract();
 				$metadataForm->execute();
 
-				// Add log entry
-				$user =& Request::getUser();
-				import('paper.log.PaperLog');
-				import('paper.log.PaperEventLogEntry');
-				PaperLog::logEvent($paper->getId(), PAPER_LOG_METADATA_UPDATE, LOG_TYPE_DEFAULT, 0, 'log.director.metadataModified', array('directorName' => $user->getFullName()));
-
 				// Notify the ko-editor only if the abstract changed
 				if($newAbstract !== $oldAbstract){
+
+					// log that the abstract has been changed
+					$user =& Request::getUser();
+					import('paper.log.PaperLog');
+					import('paper.log.PaperEventLogEntry');
+					PaperLog::logEvent($paper->getId(), PAPER_LOG_ABSTRACT_CHANGE, LOG_TYPE_DEFAULT, 0, 'log.director.abstractModified', array('directorName' => $user->getFullName()));
+
 					// Send a notification to associated users
 					import('notification.NotificationManager');
 					$notificationManager = new NotificationManager();
@@ -141,7 +142,7 @@ class Action {
 					foreach ($notificationUsers as $userRole) {
 						$url = Request::url(null, null, $userRole['role'], 'submission', $paper->getId(), null, 'metadata');
 						$notificationManager->createNotification(
-							$userRole['id'], 'notification.type.metadataModified',
+							$userRole['id'], 'notification.type.abstractModified',
 							$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_METADATA_MODIFIED
 						);
 					}
@@ -173,6 +174,25 @@ class Action {
 						if (!empty($oldBody)) $oldBody .= "\n";
 						$email->setBody($oldBody . $body);
 						$email->send();
+					}
+				}
+				else {
+					// Add log entry only
+					$user =& Request::getUser();
+					import('paper.log.PaperLog');
+					import('paper.log.PaperEventLogEntry');
+					PaperLog::logEvent($paper->getId(), PAPER_LOG_METADATA_UPDATE, LOG_TYPE_DEFAULT, 0, 'log.director.metadataModified', array('directorName' => $user->getFullName()));
+
+					// Send a notification to associated users
+					import('notification.NotificationManager');
+					$notificationManager = new NotificationManager();
+					$notificationUsers = $paper->getAssociatedUserIds(false, false, true);
+					foreach ($notificationUsers as $userRole) {
+						$url = Request::url(null, null, $userRole['role'], 'submission', $paper->getId(), null, 'metadata');
+						$notificationManager->createNotification(
+							$userRole['id'], 'notification.type.metadataModified',
+							$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_METADATA_MODIFIED
+						);
 					}
 				}
 				return true;

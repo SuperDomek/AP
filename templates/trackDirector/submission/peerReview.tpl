@@ -58,6 +58,14 @@
 			{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}
 			</td>
 		</tr>
+		{if $abstractChangesLast}
+		<tr valign="top">
+			<td class="label" width="20%">{translate key="submission.abstractChangedDate"}</td>
+			<td width="80%" class="value">
+			{$abstractChangesLast->getDateLogged()|date_format:$dateFormatShort}
+			</td>
+		</tr>
+		{/if}
 	{/if}
 </table>
 
@@ -103,11 +111,12 @@
 		</tr>
     {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
       {if $reviewFile}
+<<<<<<< HEAD
         {if $reviewFile->getChecked() == 1}
 		<tr valign="top">
 			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
 			<td width="80%" class="value">
-				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>
+				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;({$reviewFile->getDateModified()|date_format:$dateFormatShort})
 			</td>
 		</tr>
 					{if $stage > $smarty.const.REVIEW_STAGE_PRESENTATION}

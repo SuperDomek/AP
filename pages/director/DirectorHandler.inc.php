@@ -186,7 +186,11 @@ class DirectorHandler extends TrackDirectorHandler {
 		foreach($tempSubmissions as $submission){
 			if($submission->getCurrentStage() >= 2){ //PRESENTATION STAGE
 				// FIX warnings when no reviewAssignments in the stage
-				$reviewAssignments = $submission->getReviewAssignments()[$submission->getCurrentStage()];
+				$reviewAssignmentsStages = $submission->getReviewAssignments();
+				if (array_key_exists($submission->getCurrentStage(), $reviewAssignmentsStages))
+					$reviewAssignments = $submission->getReviewAssignments()[$submission->getCurrentStage()];
+				else
+					$reviewAssignments = null;
 				if($reviewAssignments){
 					foreach($reviewAssignments as $reviewAssignment){
 						if($submission->getReviewFileId() == $reviewAssignment->getReviewFileId()){
