@@ -111,7 +111,6 @@
 		</tr>
     {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
       {if $reviewFile}
-<<<<<<< HEAD
         {if $reviewFile->getChecked() == 1}
 		<tr valign="top">
 			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>

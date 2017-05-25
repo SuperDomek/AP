@@ -204,15 +204,13 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$directorDecisions = $authorSubmission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
 
-		// get last decision comment
-		
-		switch ($stage) {
-			case REVIEW_STAGE_ABSTRACT:
-				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
-				break;
-			default:
-				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION);
-		}
+		// Set up decision comment
+		$decisionCommentTemp = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, $stage);
+		if($decisionCommentTemp)
+			$lastDecisionComment = $decisionCommentTemp->getComments();
+		else
+			$lastDecisionComment = null;
+
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
 		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());

@@ -105,9 +105,10 @@ function showCommentBox(sel) {
 {assign var="directorRevisionExists" value=false}
 {assign var="sendableVersionExists" value=false}
 
-{if not $reviewingAbstractOnly}
+
   {if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-      $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+      $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS ||
+			$lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}
 	<table class="data" width="100%">
 		<tr valign="top">
 			<td width="20%" class="label">{translate key="submission.directorDecisionComment"}</td>
@@ -115,7 +116,8 @@ function showCommentBox(sel) {
 				<span>{$decisionComment|escape}</span>
 			</td>
 		</tr>
-    {if not $isStageDisabled && $isDirector}    
+		{if not $reviewingAbstractOnly}
+    	{if not $isStageDisabled && $isDirector}    
 		<tr valign="top">
 			<td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
 			<td width="80%" class="nodata">
@@ -126,10 +128,11 @@ function showCommentBox(sel) {
 			</form>
 			</td>
 		</tr>
-    {/if}
+    	{/if}
+		{/if}
 	</table>
   {/if}
-{/if}
+
 
 </div>
 {if $isFinalReview}
