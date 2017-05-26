@@ -111,52 +111,68 @@
 		</tr>
     {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
       {if $reviewFile}
-      <tr valign="top">
-    		<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
-        {if $reviewFile->getChecked() == 1 || $isDirector}
-        <td width="80%" class="value">
-          <a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="">{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;({$reviewFile->getDateModified()|date_format:$dateFormatShort})
-        </td>
-      </tr>
-        {else}
-        <td class="warning value">{translate key="submission.fileNotChecked"}</td>
-      </tr>
+        {if $reviewFile->getChecked() == 1}
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
+			<td width="80%" class="value">
+				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;({$reviewFile->getDateModified()|date_format:$dateFormatShort})
+			</td>
+		</tr>
+					{if $stage > $smarty.const.REVIEW_STAGE_PRESENTATION}
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="common.checklistOfAdjustments"}</td>
+			<td width="80%" class="value">
+				<span>{$changes|escape}</span>
+			</td>
+		</tr>
+					{/if} {* $stage > $smarty.const.REVIEW_STAGE_PRESENTATION *}
+				{elseif $isDirector} 
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
+			<td width="80%" class="value">
+				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>
+			</td>
+		</tr>
+        {else} {* $reviewFile->getChecked() == 0 || !$isDirector *}
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
+			<td class="warning value">{translate key="submission.fileNotChecked"}</td>
+		</tr>
         {/if}
         {if $reviewFile->getChecked() == null && $isDirector}
-      <tr valign="top">
-        <td colspan="2">
-          <form method="post" action="{url op="makeFileChecked"}">
-            <input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
-            <input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
-            <input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
-            {translate key="editor.paper.confirmReviewFile"}<br />
-            <button type="submit" name="checked" value="1" class="positive">{translate key="submission.fileOkay"}</button>
-            &nbsp;
-            <button type="submit" name="checked" value="0" class="negative">{translate key="submission.fileNotOkay"}</button>
-          </form>
-        </td>
-      </tr>
+		<tr valign="top">
+			<td colspan="2">
+				<form method="post" action="{url op="makeFileChecked"}">
+					<input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
+					<input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
+					<input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
+					{translate key="editor.paper.confirmReviewFile"}<br />
+					<button type="submit" name="checked" value="1" class="positive">{translate key="submission.fileOkay"}</button>
+					&nbsp;
+					<button type="submit" name="checked" value="0" class="negative">{translate key="submission.fileNotOkay"}</button>
+				</form>
+			</td>
+		</tr>
         {elseif $reviewFile->getChecked() == 0 && $isDirector}
-      <tr valign="top">
-        <td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
-        <td width="80%" class="nodata">
-          <form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
-            <input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-            <input type="hidden" name="newStage" value="0" />
-            <input type="file" name="upload" class="uploadField" />
-            <input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
-          </form>
-        </td>
-      </tr>
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
+			<td width="80%" class="nodata">
+				<form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
+					<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+					<input type="file" name="upload" class="uploadField" />
+					<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
+				</form>
+			</td>
+		</tr>
         {/if} {* $reviewFile->getChecked() *}
     				<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
-  		{else}
-      <tr valign="top">
-    		<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
-        <td width="80%" class="value">
-          {translate key="common.none"}
-        </td>
-      </tr>
+  		{else} {* !$reviewFile *}
+		<tr valign="top">
+			<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
+			<td width="80%" class="value">
+				{translate key="common.none"}
+			</td>
+		</tr>
   		{/if} {* $reviewFile *}
     {/if} {* $stage *}
 	</table>

@@ -37,6 +37,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$reviewerSubmission =& $this->submission;
 		$user =& $this->user;
 		$schedConf =& Request::getSchedConf();
+		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewAssignment = $reviewAssignmentDao->getReviewAssignmentById($reviewId);
@@ -48,6 +49,12 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		} else {
 			$confirmedStatus = 1;
 		}
+
+		$changesComment = $commentDao->getMostRecentPaperComment($reviewerSubmission->getPaperId(), COMMENT_TYPE_AUTHOR_REVISION_CHANGES, $reviewAssignment->getStage() - 1);
+		if($changesComment)
+			$changes = $changesComment->getComments();
+		else
+			$changes = null;		
 
 		$this->setupTemplate(true, $reviewerSubmission->getPaperId(), $reviewId);
 
@@ -64,6 +71,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$templateMgr->assign_by_ref('suppFiles', $reviewerSubmission->getSuppFiles());
 		$templateMgr->assign_by_ref('schedConf', $schedConf);
 		$templateMgr->assign_by_ref('reviewGuidelines', $schedConf->getLocalizedSetting('reviewGuidelines'));
+		$templateMgr->assign('changes', $changes);
 
 		if($reviewFormResponseDao->reviewFormResponseExists($reviewId) && !$reviewerSubmission->getRecommendation()){
 			$templateMgr->assign('askLeaving', true);
@@ -115,7 +123,7 @@ class SubmissionReviewHandler extends ReviewerHandler {
 		$this->setupTemplate(true);
 
 		if (!$reviewerSubmission->getCancelled()) {
-			if (ReviewerAction::recordRecommendation($reviewerSubmission, $recommendation, Request::getUserVar('send'))) {
+			if (ReviewerAction::recordRecommendation($reviewerSubmission, $recommendation, Request::getUserVar('send'), true)) {
 				Request::redirect(null, null, null, 'submission', $reviewId);
 			}
 		} else {

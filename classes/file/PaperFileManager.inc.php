@@ -114,7 +114,7 @@ class PaperFileManager extends FileManager {
 	 */
 	function uploadDirectorDecisionFile($fileName, $fileId = null, $author = false) {
 		if ($author)
-			return $this->handleUpload($fileName, PAPER_FILE_AUTHOR, $fileId);
+			return $this->handleUpload($fileName, PAPER_FILE_AUTHOR, $fileId, true);
 		else
 			return $this->handleUpload($fileName, PAPER_FILE_DIRECTOR, $fileId);
 	}

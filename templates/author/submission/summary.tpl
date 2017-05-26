@@ -45,6 +45,9 @@
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
             $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
               <span class="warning">{translate key="author.submissions.queuedPaperReviewRevisions"}</span>
+              <a href="#file_changes" class="action">
+                <button type="button">{translate key="author.paper.uploadAuthorVersion"}</button>
+              </a>
             {else}
               <span class="warning">{translate key="submissions.queuedPaperReview"}</span>
             {/if}

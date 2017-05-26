@@ -71,6 +71,7 @@
 	</div>
 	]]></message>
 	<message key="common.changesSaved">Your changes have been saved.</message>
+	<message key="common.checklistOfAdjustments">Checklist of adjustments</message>
 	<message key="common.chooseOne">Choose One</message>
 	<message key="common.close">Close</message>
 	<message key="common.closeWindow">Close Window</message>
@@ -181,6 +182,8 @@
 	<message key="common.uploadedFile">Uploaded file</message>
 	<message key="common.upload">Upload</message>
 	<message key="common.uploadFailed">The file could not be uploaded. Please try again or contact the administrator if the problem persists.</message>
+	<message key="common.uploadFailed.noFile">No file selected for upload.</message>
+	<message key="common.uploadChangesEmpty">The Checklist of adjustments has to contain more than 10 characters</message>
 	<message key="common.up">Up</message>
 	<message key="common.url">URL</message>
 	<message key="common.user">User</message>

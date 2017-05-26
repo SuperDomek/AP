@@ -65,10 +65,6 @@ function confirmSubmissionCheck() {
 	</tr>
 {/if}{* isset($sessionTypes[$submissionType]) *}
 
-<!--<tr valign="top">
-	<td class="label">{translate key="paper.conferenceTrack"}</td>
-	<td class="value">{$submission->getTrackTitle()|escape}</td>
-</tr>-->
 <tr valign="top">
 	<td class="label">{translate key="paper.abstract"}</td>
 	<td class="value">{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br}</td>
@@ -200,50 +196,61 @@ function confirmSubmissionCheck() {
 						</td>
 					</tr>
 				{else}
-					<tr valign="top">
-						<td width="30%" class="label">
-							{translate key="submission.submissionManuscript"}
-						</td>
-						<td class="value" width="70%">
-							{if $reviewFile}
-  							{if $submission->getDateConfirmed() or not $schedConf->getSetting('restrictReviewerAccessToFile')}
-                  {if $reviewFile->getChecked() == 1}
-  					        <a href="{url op="downloadFile" path=$reviewId|to_array:$paperId:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>
-                    &nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
-                  {else}
-                    <span class="warning">{translate key="submission.fileNotChecked"}</span>
-                  {/if}
-  							{else}
-                  {$reviewFile->getFileName()|escape}
-                  &nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
-                {/if} {* confirmed or not restricted *}
-							{else}
-				       <span class="warning">{translate key="submission.fileNotUploadedYet"}</span>
-							{/if} {* $reviewFile *}
-						</td>
-					</tr>
-				{/if}
-				<!--<tr valign="top">
-					<td class="label">
-						{translate key="paper.suppFiles"}
-					</td>
-					<td class="value">
-						{assign var=sawSuppFile value=0}
-						{foreach from=$suppFiles item=suppFile}
-							{if $suppFile->getShowReviewers() }
-								{assign var=sawSuppFile value=1}
-								<a href="{url op="downloadFile" path=$reviewId|to_array:$paperId:$suppFile->getFileId()}" class="file">{$suppFile->getFileName()|escape}</a><br />
-							{/if}
-						{/foreach}
-
-						{if !$sawSuppFile}
-							{translate key="common.none"}
-						{/if}
-					</td>
-				</tr>
-			{else}
-			<tr><td class="nodata">{translate key="reviewer.paper.restrictedFileAccess"}</td></tr>
-			{/if}-->
+					{if $reviewFile}
+						{if $submission->getDateConfirmed() or not $schedConf->getSetting('restrictReviewerAccessToFile')}
+							{if $reviewFile->getChecked() == 1}
+								<tr valign="top">
+									<td width="30%" class="label">
+										{translate key="submission.submissionManuscript"}
+									</td>
+									<td class="value" width="70%">
+										<a href="{url op="downloadFile" path=$reviewId|to_array:$paperId:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file">{$reviewFile->getFileName()|escape}</a>
+										&nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
+									</td>
+								</tr>
+								{if $changes}
+									<tr valign="top">
+										<td width="30%" class="label">
+											{translate key="common.checklistOfAdjustments"}
+										</td>
+										<td class="value" width="70%">
+											<span>{$changes|escape}</span>
+										</td>
+									</tr>
+								{/if} {* $changes *}
+							{else} {* $reviewFile->getChecked() != 1 *}
+									<tr valign="top">
+										<td width="30%" class="label">
+											{translate key="submission.submissionManuscript"}
+										</td>
+										<td class="value" width="70%">
+											<span class="warning">{translate key="submission.fileNotChecked"}</span>
+										</td>
+									</tr>
+							{/if} {* $reviewFile->getChecked() *}
+						{else}
+							<tr valign="top">
+								<td width="30%" class="label">
+									{translate key="submission.submissionManuscript"}
+								</td>
+								<td class="value" width="70%">
+									{$reviewFile->getFileName()|escape}
+									&nbsp;&nbsp;{$reviewFile->getDateModified()|date_format:$dateFormatShort}
+								</td>
+							</tr>
+						{/if} {* confirmed or not restricted *}
+					{else}
+						<tr valign="top">
+							<td width="30%" class="label">
+								{translate key="submission.submissionManuscript"}
+							</td>
+							<td class="value" width="70%">
+								<span class="warning">{translate key="submission.fileNotUploadedYet"}</span>
+							</td>
+						</tr>
+					{/if} {* $reviewFile *}
+				{/if} {* $reviewAssignment->getStage() *}
+			{/if} {* $confirmedStatus and not $declined *}
 		</table>
 	</td>
 </tr>

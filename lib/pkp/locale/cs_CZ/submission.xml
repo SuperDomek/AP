@@ -225,7 +225,7 @@
 	<message key="submission.currentAgencies">Současné agentury</message>
 	<message key="submission.indexingInformation">Informace o indexování</message>
 	<message key="submission.titleAndAbstract">Název a abstrakt</message>
-	<message key="submission.underway">Zpracovává se</message>
+	<message key="submission.underway">Přijato</message>
 	<message key="submission.uploadFileTo">Nahrát soubor k</message>
 	<message key="submission.viewMetadata">Zobrazit metadata</message>
 	<message key="submission.views">Zobrazení</message>

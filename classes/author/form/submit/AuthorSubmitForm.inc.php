@@ -89,6 +89,9 @@ class AuthorSubmitForm extends Form {
 		parent::display();
 	}
 
+		/**
+	 * Send confirmation e-mail to the author
+	 */
 	function confirmSubmission(&$paper, &$user, &$schedConf, &$conference, $mailTemplate = 'SUBMISSION_ACK') {
 		// Update search index
 		import('search.PaperSearchIndex');
@@ -130,6 +133,44 @@ class AuthorSubmitForm extends Form {
 				'authorUsername' => $user->getUsername(),
 				'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
 				'submissionUrl' => Request::url(null, null, 'author', 'submission', $paper->getId())
+			));
+			$mail->send();
+		}
+	}
+
+		/**
+	 * Send informative e-mail to the main director that submitted file needs to be checked
+	 */
+	function fileNeedsCheck(&$paper, $mailTemplate = 'UPLOADED_FILE_CHECK') {
+		// Send author notification email
+		$schedConf =& Request::getSchedConf();
+		import('mail.PaperMailTemplate');
+		$mail = new PaperMailTemplate($paper, $mailTemplate, null, null, null, null, false, true);
+		$mail->setFrom($schedConf->getSetting('contactEmail'), $schedConf->getSetting('contactName'));
+		if ($mail->isEnabled()) {
+			// If necessary, BCC the acknowledgement to someone.
+			if($schedConf->getSetting('copySubmissionAckPrimaryContact')) {
+				$mail->addBcc(
+					$schedConf->getSetting('contactEmail'),
+					$schedConf->getSetting('contactName')
+				);
+			}
+			if($schedConf->getSetting('copySubmissionAckSpecified')) {
+				$copyAddress = $schedConf->getSetting('copySubmissionAckAddress');
+				if (!empty($copyAddress)) $mail->addBcc($copyAddress);
+			}
+
+			// need to get main directors
+			$editAssignmentDao =& DAORegistry::getDAO('EditAssignmentDAO');
+			$editAssignments =& $editAssignmentDao->getEditAssignmentsByPaperId($paper->getId());
+			while ($editAssignment =& $editAssignments->next()) {
+				$mail->addBcc($editAssignment->getDirectorEmail(), $editAssignment->getDirectorFullName());
+				unset($editAssignment);
+			}
+
+			$mail->assignParams(array(
+				'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
+				'submissionUrl' => Request::url(null, null, 'director', 'submissionReview', $paper->getId())
 			));
 			$mail->send();
 		}

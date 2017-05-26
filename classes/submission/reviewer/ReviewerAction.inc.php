@@ -120,10 +120,11 @@ class ReviewerAction extends Action {
 	 * @param $recommendation int
 	 * @param $send boolean
 	 */
-	function recordRecommendation(&$reviewerSubmission, $recommendation, $send) {
+	function recordRecommendation(&$reviewerSubmission, $recommendation, $send, $auto = false) {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$userDao =& DAORegistry::getDAO('UserDAO');
 		$reviewAssignment =& $reviewAssignmentDao->getReviewAssignmentById($reviewerSubmission->getReviewId());
+		$schedConf =& Request::getSchedConf();
 
 		// Check validity of selected recommendation
 		$reviewerRecommendationOptions =& ReviewAssignment::getReviewerRecommendationOptions($reviewAssignment->getStage());
@@ -141,8 +142,53 @@ class ReviewerAction extends Action {
 			// Must explicitly set sender because we may be here on an access
 			// key, in which case the user is not technically logged in
 			$email->setFrom($reviewer->getEmail(), $reviewer->getFullName());
+			if ($auto){ // do not show the mail template page, send it automatically
+				HookRegistry::call('ReviewerAction::recordRecommendation', array(&$reviewerSubmission, &$email, $recommendation));
+				$assignedDirectors = $email->toAssignedDirectors($reviewerSubmission->getPaperId());
+				$reviewingTrackDirectors = $email->toAssignedTrackDirectors($reviewerSubmission->getPaperId());
+				if (empty($assignedDirectors) && empty($reviewingTrackDirectors)) {
+					$email->addRecipient($schedConf->getSetting('contactEmail'), $schedConf->getSetting('contactName'));
+					$editorialContactName = $schedConf->getSetting('contactName');
+				} else {
+					if (!empty($reviewingTrackDirectors)) $editorialContact = array_shift($reviewingTrackDirectors);
+					else $editorialContact = array_shift($assignedDirectors);
+					$editorialContactName = $editorialContact->getDirectorFullName();
+				}
 
-			if (!$email->isEnabled() || ($send && !$email->hasErrors())) {
+				$reviewerRecommendationOptions =& ReviewAssignment::getReviewerRecommendationOptions();
+
+				$email->assignParams(array(
+					'editorialContactName' => $editorialContactName,
+					'reviewerName' => $reviewer->getFullName(),
+					'paperTitle' => strip_tags($reviewerSubmission->getLocalizedTitle()),
+					'recommendation' => __($reviewerRecommendationOptions[$recommendation])
+				));
+
+				if ($email->isEnabled()) {
+					$email->setAssoc(PAPER_EMAIL_REVIEW_COMPLETE, PAPER_EMAIL_TYPE_REVIEW, $reviewerSubmission->getReviewId());
+					$email->send();
+				}
+				$reviewAssignment->setRecommendation($recommendation);
+				$reviewAssignment->setDateCompleted(Core::getCurrentDate());
+				$reviewAssignment->stampModified();
+				$reviewAssignmentDao->updateReviewAssignment($reviewAssignment);
+
+				// Add log
+				import('paper.log.PaperLog');
+				import('paper.log.PaperEventLogEntry');
+
+				$entry = new PaperEventLogEntry();
+				$entry->setPaperId($reviewAssignment->getPaperId());
+				$entry->setUserId($reviewer->getId());
+				$entry->setDateLogged(Core::getCurrentDate());
+				$entry->setEventType(PAPER_LOG_REVIEW_RECOMMENDATION);
+				$entry->setLogMessage('log.review.reviewRecommendationSet', array('reviewerName' => $reviewer->getFullName(), 'paperId' => $reviewAssignment->getPaperId(), 'stage' => $reviewAssignment->getStage()));
+				$entry->setAssocType(LOG_TYPE_REVIEW);
+				$entry->setAssocId($reviewAssignment->getId());
+
+				PaperLog::logEventEntry($reviewAssignment->getPaperId(), $entry);
+			}
+			else if (!$email->isEnabled() || ($send && !$email->hasErrors())) {
 				HookRegistry::call('ReviewerAction::recordRecommendation', array(&$reviewerSubmission, &$email, $recommendation));
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_COMPLETE, PAPER_EMAIL_TYPE_REVIEW, $reviewerSubmission->getReviewId());

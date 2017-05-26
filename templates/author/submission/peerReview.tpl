@@ -127,7 +127,7 @@
           {/if}
         </td>
       </tr>
-
+      
       <tr valign="top">
         <td class="label" width="20%">
           {translate key="submission.reviewVersion"}

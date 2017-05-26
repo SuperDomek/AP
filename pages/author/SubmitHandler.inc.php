@@ -202,15 +202,13 @@ class SubmitHandler extends AuthorHandler {
 				$notificationManager = new NotificationManager();
 				$roleDao =& DAORegistry::getDAO('RoleDAO');
 				$notificationUsers = array();
-				$conferenceManagers = $roleDao->getUsersByRoleId(ROLE_ID_CONFERENCE_MANAGER, $conference->getId());
-				$allUsers = $conferenceManagers->toArray();
 				$directors = $roleDao->getUsersByRoleId(ROLE_ID_DIRECTOR, $conference->getId(), $schedConf->getId());
-				array_merge($allUsers, $directors->toArray());
+				$allUsers = $directors->toArray();
 				foreach ($allUsers as $user) {
 					$notificationUsers[] = array('id' => $user->getId());
 				}
 				// deduplication of notifications for the same user
-				$notificationUsers = array_unique($notificationUsers, SORT_NUMERIC);
+				// $notificationUsers = array_unique($notificationUsers, SORT_NUMERIC);
 				foreach ($notificationUsers as $userRole) {
 					$url = Request::url(null, null, 'director', $path, $paperId);
 					$notificationManager->createNotification(

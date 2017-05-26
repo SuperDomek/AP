@@ -155,6 +155,8 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$user =& Request::getUser();
 		$paperId = (int) array_shift($args);
 		$stage = (int) array_shift($args);
+		$session =& Request::getSession();
+		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
 		$this->validate($paperId);
 		$authorSubmission =& $this->submission;
@@ -175,6 +177,24 @@ class TrackSubmissionHandler extends AuthorHandler {
 				break;
 		}
 
+		// implementation of error state when submitting
+		$isError = $session->getSessionVar('isError');
+		if($isError){
+			$errors = $session->getSessionVar('errors');
+			$changes = $session->getSessionVar('changes');
+			$session->unsetSessionVar('isError');
+			$session->unsetSessionVar('errors');
+			$session->unsetSessionVar('changes');
+		}
+		else{
+			$changesComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_AUTHOR_REVISION_CHANGES, $stage);
+			$errors = null;
+			if($changesComment)
+				$changes = $changesComment->getComments();
+			else
+				$changes = null;			
+		}
+
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 		$reviewModifiedByStage = $reviewAssignmentDao->getLastModifiedByStage($paperId);
 		$reviewEarliestNotificationByStage = $reviewAssignmentDao->getEarliestNotificationByStage($paperId);
@@ -184,15 +204,13 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$directorDecisions = $authorSubmission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1] : null;
 
-		// get last decision comment
-		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
-		switch ($stage) {
-			case REVIEW_STAGE_ABSTRACT:
-				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
-				break;
-			default:
-				$lastDecisionComment = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION);
-		}
+		// Set up decision comment
+		$decisionCommentTemp = $commentDao->getMostRecentPaperComment($paperId, COMMENT_TYPE_DIRECTOR_DECISION, $stage);
+		if($decisionCommentTemp)
+			$lastDecisionComment = $decisionCommentTemp->getComments();
+		else
+			$lastDecisionComment = null;
+
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign_by_ref('submission', $authorSubmission);
 		$templateMgr->assign_by_ref('reviewAssignments', $authorSubmission->getReviewAssignments());
@@ -207,7 +225,9 @@ class TrackSubmissionHandler extends AuthorHandler {
 		$templateMgr->assign_by_ref('suppFiles', $authorSubmission->getSuppFiles());
 		$templateMgr->assign('lastDirectorDecision', $lastDecision);
 		$templateMgr->assign('lastDecisionComment', $lastDecisionComment);
-
+		$templateMgr->assign('changes', $changes);
+		$templateMgr->assign('isError', $isError);
+		$templateMgr->assign('errors', $errors);
 
 		import('submission.reviewAssignment.ReviewAssignment');
 		$templateMgr->assign_by_ref('reviewerRecommendationOptions', ReviewAssignment::getReviewerRecommendationOptions($stage));
@@ -219,9 +239,6 @@ class TrackSubmissionHandler extends AuthorHandler {
 
 		// Determine whether or not certain features should be disabled (i.e. past deadline)
 		$templateMgr->assign('mayEditPaper', AuthorAction::mayEditPaper($authorSubmission));
-		$templateMgr->assign('mayUploadRevision', ($lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
-			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-			$lastDecision['decision'] == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS));
 
 		$templateMgr->assign('helpTopicId', 'editorial.authorsRole.review');
 		$templateMgr->display('author/submissionReview.tpl');
@@ -357,6 +374,17 @@ class TrackSubmissionHandler extends AuthorHandler {
 		} else {
 			$submitForm->display();
 		}
+	}
+
+	/**
+	 * Saves the changes textbox
+	 */
+	function savePaperChanges() {
+		$paperId = (int) Request::getUserVar('paperId');
+		$this->validate($paperId, true);
+		$submission =& $this->submission;
+
+		///// Dodelat
 	}
 
 	/**

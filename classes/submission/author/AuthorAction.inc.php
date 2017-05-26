@@ -15,7 +15,7 @@
 
 // $Id$
 
-
+import('pages.trackDirector.TrackDirectorHandler');
 import('submission.common.Action');
 
 class AuthorAction extends Action {
@@ -73,6 +73,7 @@ class AuthorAction extends Action {
 		$paperFileManager = new PaperFileManager($paper->getId());
 		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
+		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
 		$paperFile =& $paperFileDao->getPaperFile($fileId, $revisionId, $paper->getId());
 		$authorSubmission = $authorSubmissionDao->getAuthorSubmission($paper->getId());
@@ -85,7 +86,8 @@ class AuthorAction extends Action {
 				foreach ($stage as $revision) {
 					if ($revision->getFileId() == $paperFile->getFileId() &&
 						$revision->getRevision() == $paperFile->getRevision()) {
-						$paperFileManager->deleteFile($paperFile->getFileId(), $paperFile->getRevision());
+							$paperCommentDao->deletePaperComments($paper->getId(), $authorSubmission->getCurrentStage(), COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+							$paperFileManager->deleteFile($paperFile->getFileId(), $paperFile->getRevision());
 					}
 				}
 			}
@@ -100,35 +102,118 @@ class AuthorAction extends Action {
 		import('file.PaperFileManager');
 		$paperFileManager = new PaperFileManager($authorSubmission->getPaperId());
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
+		$session =& Request::getSession();
+		$paperId = $authorSubmission->getPaperId();
+		$conference =& Request::getConference();
+		
+		$changes = (String) Request::getUserVar('file_changes');
 
-		$fileName = 'upload';
-		if ($paperFileManager->uploadError($fileName)) return false;
-		if (!$paperFileManager->uploadedFileExists($fileName)) return false;
+		// Check that the changes box is not empty and has at least 10 characters
+		if(strlen($changes) <= 10) {
+			$errors["file_changes"] = __("common.uploadChangesEmpty");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
+
+		$fileName = 'revision_upload';
+		if($paperFileManager->uploadErrorNoFile($fileName)){
+			$errors["revision_upload"] = __("common.uploadFailed.noFile");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
+		if ($paperFileManager->uploadError($fileName)) {
+			$errors["revision_upload"] = __("common.uploadFailed");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
+		if (!$paperFileManager->uploadedFileExists($fileName)) {
+			$errors["revision_upload"] = __("common.uploadFailed");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
 		HookRegistry::call('AuthorAction::uploadRevisedVersion', array(&$authorSubmission));
 		if ($authorSubmission->getRevisedFileId() != null) {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId(), true);
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, $authorSubmission->getRevisedFileId());
 		} else {
-			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null, true);
+			$fileId = $paperFileManager->uploadDirectorDecisionFile($fileName, null);
 		}
-		if (!$fileId) return false;
-
+		if (!$fileId) {
+			$errors["revision_upload"] = __("common.uploadFailed");
+			$session->setSessionVar('isError', true);
+			$session->setSessionVar('errors', $errors);
+			$session->setSessionVar('changes', $changes);
+			return false;
+		}
 		$authorSubmission->setRevisedFileId($fileId);
 		$authorSubmissionDao->updateAuthorSubmission($authorSubmission);
 
+		// Refresh authorSubmission
+		$authorSubmission =& $authorSubmissionDao->getAuthorSubmission($paperId);
+
+		// Set file as new review file
+		// FIX: using trackDirector functions
+		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
+		$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
+		$revisionPaper =& $authorSubmission->getRevisedFile();
+		TrackDirectorAction::setReviewFile($submission, $fileId, $revisionPaper->getRevision());
+
+		/* At this point the notification comes from the TrackDirectorAction::setReviewFile function
+		*
 		// Send a notification to associated users
 		import('notification.NotificationManager');
 		$notificationManager = new NotificationManager();
-		$paperId = $authorSubmission->getPaperId();
+		
 		$paperDao =& DAORegistry::getDAO('PaperDAO');
 		$paper =& $paperDao->getPaper($paperId);
-		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, true);
+		$notificationUsers = $paper->getAssociatedUserIds(false, false, true, false);
 		foreach ($notificationUsers as $userRole) {
-			$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null);
+			$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paperId, null);
 			$notificationManager->createNotification(
 				$userRole['id'], 'notification.type.revisionUploaded',
 				null, $url, 1, NOTIFICATION_TYPE_GALLEY_MODIFIED
 			);
 		}
+
+		// Send a notification to conference managers that a file needs to be checked
+		$roleDao =& DAORegistry::getDAO('RoleDAO');
+		$directorsTemp = $roleDao->getUsersByRoleId(ROLE_ID_DIRECTOR, $conference->getId());
+		$directors = $directorsTemp->toArray();
+		$notificationDirectors = array();
+		foreach ($directors as $user) {
+			$notificationDirectors[] = array('id' => $user->getId());
+		}
+		foreach ($notificationDirectors as $manager) {
+			$url = Request::url(null, null, 'director', 'submissionReview', $paperId);
+			$notificationManager->createNotification(
+				$manager['id'], 'notification.type.fileNeedsCheck',
+				$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_PAPER_SUBMITTED
+			);
+		}*/
+
+
+		// Input the changes as paper comment with own comment type
+		$paperCommentDao =& DAORegistry::getDAO('PaperCommentDAO');
+		// remove previous change comments connected with this revision file in the current stage (only one active author revision file allowed)
+		$paperCommentDao->deletePaperComments($paperId, $authorSubmission->getCurrentStage(), COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+		$paperComment = new PaperComment();
+		$paperComment->setCommentType(COMMENT_TYPE_AUTHOR_REVISION_CHANGES);
+		$paperComment->setRoleId(ROLE_ID_AUTHOR);
+		$paperComment->setPaperId($paperId);
+		$paperComment->setAuthorId($authorSubmission->getUserId());
+		$paperComment->setCommentTitle("Checklist of adjustments");
+		$paperComment->setComments($changes);
+		$paperComment->setDatePosted(Core::getCurrentDate());
+		$paperComment->setViewable(true);
+		$paperComment->setAssocId($authorSubmission->getCurrentStage());
+		$paperCommentDao->insertPaperComment($paperComment);
 
 		// Add log entry
 		$user =& Request::getUser();

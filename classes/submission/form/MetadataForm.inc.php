@@ -62,6 +62,7 @@ class MetadataForm extends Form {
 			$track = $trackDao->getTrack($paper->getTrackId());
 			/** using old methods and fields from word count; now char count **/
 			$abstractCharCount = $track->getAbstractWordCount();
+			
 			if (isset($abstractCharCount) && $abstractCharCount > 0) {
 				// adding the length of mandatory fields in abstract
 				$abstractCharCount = $abstractCharCount + 70;
