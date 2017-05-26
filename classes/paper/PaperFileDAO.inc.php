@@ -174,15 +174,25 @@ class PaperFileDAO extends DAO {
 	/**
 	 * Retrieve all paper files for a paper.
 	 * @param $paperId int
+	 * @param $stage int returns checked paper files for given stage
 	 * @return array PaperFiles
 	 */
-	function &getPaperFilesByPaper($paperId) {
+	function &getPaperFilesByPaper($paperId, $stage = null) {
 		$paperFiles = array();
-
-		$result =& $this->retrieve(
-			'SELECT * FROM paper_files WHERE paper_id = ?',
-			$paperId
-		);
+		if($stage == null){
+			$result =& $this->retrieve(
+				'SELECT * FROM paper_files WHERE paper_id = ?',
+				$paperId
+			);
+		}
+		else{
+			
+			// I know this is wrong but this is supposed to return one file; sue me
+			$result =& $this->retrieve(
+				'SELECT * FROM paper_files WHERE paper_id = ? AND stage = ? AND checked = 1',
+				array($paperId, $stage)
+			);
+		}
 
 		while (!$result->EOF) {
 			$paperFiles[] =& $this->_returnPaperFileFromRow($result->GetRowAssoc(false));

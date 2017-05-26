@@ -197,6 +197,9 @@ class TrackDirectorSubmissionDAO extends DAO {
 			}
 		}
 		if ($this->reviewStageExists($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getCurrentStage())) {
+			error_log(debug_backtrace()[2]['function'] . " / " . debug_backtrace()[1]['function'] . " / " . debug_backtrace()[0]['function']);
+			error_log("Upravuji stage / review_revision: " . $trackDirectorSubmission->getCurrentStage() . " / " . $trackDirectorSubmission->getReviewRevision());
+			
 			$this->update(
 				'UPDATE	review_stages
 				SET	review_revision = ?
@@ -209,6 +212,8 @@ class TrackDirectorSubmissionDAO extends DAO {
 				)
 			);
 		} elseif ($trackDirectorSubmission->getReviewRevision()!=null) {
+			error_log(debug_backtrace()[2]['function'] . " / " . debug_backtrace()[1]['function'] . " / " . debug_backtrace()[0]['function']);
+			error_log("Vytvářím stage / review_revision: " . $trackDirectorSubmission->getCurrentStage() === null ? 1 : $trackDirectorSubmission->getCurrentStage() . " / " . $trackDirectorSubmission->getReviewRevision());
 			$this->createReviewStage(
 				$trackDirectorSubmission->getPaperId(),
 				$trackDirectorSubmission->getCurrentStage() === null ? 1 : $trackDirectorSubmission->getCurrentStage(),
@@ -266,6 +271,21 @@ class TrackDirectorSubmissionDAO extends DAO {
 				(?, ?, ?)',
 			array($paperId, $stage, $reviewRevision)
 		);
+	}
+
+	// hot fix function to set up right reviewRevision for a stage
+	function fixReviewStage($paperId, $stage, $newReviewRevision){
+		$this->update(
+				'UPDATE	review_stages
+				SET	review_revision = ?
+				WHERE	paper_id = ? AND
+					stage = ?',
+				array(
+					$newReviewRevision,
+					$paperId,
+					$stage
+				)
+			);
 	}
 
 	/**

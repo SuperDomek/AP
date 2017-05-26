@@ -1351,12 +1351,25 @@ class TrackDirectorAction extends Action {
 	 */
 	function nextStage(&$trackDirectorSubmission, $reviewFileId = null, $reviewRevision = null) {
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
+		import("file.PaperFileManager");
 
-		if ($reviewFileId != null && $reviewRevision != null){
+		// move the file in the next stage & fix the actual stage
+		if ($reviewFileId != null && $reviewRevision != null){ //uploading new file
 			$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 			$paperFile =& $paperFileDao->getPaperFile($reviewFileId, $reviewRevision, $trackDirectorSubmission->getPaperId());
 			$paperFile->setStage($trackDirectorSubmission->getCurrentStage() + 1);
 			$paperFileDao->updatePaperFile($paperFile);
+			// FIX for the revision file from author leaving a new file in current stage and setting up
+			// a wrong review_stage revision number
+			//delete file with this id from the previous stage
+			$paperFileLeftovers =& $paperFileDao->getPaperFileRevisions($reviewFileId, $trackDirectorSubmission->getCurrentStage());
+			foreach($paperFileLeftovers as $paperFileTemp){
+				$paperFileDao->deletePaperFile($paperFileTemp);
+			}
+			//restore review_stage
+			$originalReviewFiles =& $paperFileDao->getPaperFilesByPaper($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getCurrentStage());
+			$originalReviewFile = $originalReviewFiles[0];
+			$trackDirectorSubmissionDao->fixReviewStage($trackDirectorSubmission->getPaperId(), $trackDirectorSubmission->getCurrentStage(), $originalReviewFile->getRevision());
 		}
 
 		// Increment the stage
