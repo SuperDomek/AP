@@ -437,9 +437,11 @@ class Mail extends DataObject {
 		}
 		// testing sequence
 		///////////////////
+		/*
 		 error_log("Sending e-mail to: " . $recipients . " a " . $ccs . " a " . $bccs);
 		 error_log("The subject of the e-mail: " . $subject);
 		 error_log("The body of the e-mail: " . $mailBody);
+		*/
 		///////////////////
 		if (!$sent) {
 			if (Config::getVar('debug', 'display_errors')) {

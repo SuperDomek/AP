@@ -1217,6 +1217,7 @@ class TrackDirectorAction extends Action {
 
 	/**
 	 * Set the file to use as the current review file.
+	 * Used only by the author at the moment
 	 * @param $trackDirectorSubmission object
 	 * @param $fileId int
 	 * @param $revision int
@@ -1255,6 +1256,8 @@ class TrackDirectorAction extends Action {
 				);
 			}
 
+			// Send an e-mail to the directors that the file needs to be checked
+			
 			// Add log
 			import('paper.log.PaperLog');
 			import('paper.log.PaperEventLogEntry');

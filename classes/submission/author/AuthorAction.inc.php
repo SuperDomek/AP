@@ -165,6 +165,8 @@ class AuthorAction extends Action {
 		$revisionPaper =& $authorSubmission->getRevisedFile();
 		TrackDirectorAction::setReviewFile($submission, $fileId, $revisionPaper->getRevision());
 
+		/* At this point the notification comes from the TrackDirectorAction::setReviewFile function
+		*
 		// Send a notification to associated users
 		import('notification.NotificationManager');
 		$notificationManager = new NotificationManager();
@@ -194,7 +196,7 @@ class AuthorAction extends Action {
 				$manager['id'], 'notification.type.fileNeedsCheck',
 				$paper->getLocalizedTitle(), $url, 1, NOTIFICATION_TYPE_PAPER_SUBMITTED
 			);
-		}
+		}*/
 
 
 		// Input the changes as paper comment with own comment type
