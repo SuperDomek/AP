@@ -116,6 +116,7 @@ function showCommentBox(sel) {
 				<span>{$decisionComment|escape}</span>
 			</td>
 		</tr>
+		{*
 		{if not $reviewingAbstractOnly}
     	{if not $isStageDisabled && $isDirector}    
 		<tr valign="top">
@@ -129,7 +130,7 @@ function showCommentBox(sel) {
 			</td>
 		</tr>
     	{/if}
-		{/if}
+		{/if} *}
 	</table>
   {/if}
 
