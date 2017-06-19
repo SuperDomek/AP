@@ -177,9 +177,10 @@ class PaperReportPlugin extends ReportPlugin {
 				} elseif($index == 'stage'){
 					if($row['stage'] == 1)
 						$columns[$index] = __('paper.abstract');
-					else
+					else{
 						$stage = (int) $row['stage'] - 1;
 						$columns[$index] = __('submission.paper') . ": " . $stage;
+					}
 				}
 				elseif ($index == 'status') {
 					$columns[$index] = __($statusMap[$row[$index]]);
