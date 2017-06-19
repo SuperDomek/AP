@@ -107,6 +107,7 @@
 	<message key="director.paper.createGalley">Tento soubor je připraven k publikaci.</message>
 	<message key="director.paper.completeReview">Označit oponenturu jako hotovou</message>
 	<message key="director.paper.scheduleSubmission">Odeslat</message>
+	<message key="director.statistics"><![CDATA[Statistiky &amp; Výkazy]]></message>
 	<message key="director.submissions.showBy">Vypsat dle</message>
 	<message key="director.submissions.submitMMDD">data dodání</message>
 	<message key="director.submissions.activeAssignments">aktivních úkolů</message>
