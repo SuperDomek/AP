@@ -34,6 +34,7 @@
 {/if}
 
 <div id="registrationType">
+
   <table class="listing" width="100%">
     <tr valign="top">
     	<td class="label">{fieldLabel name="typeId" key="manager.registration.form.typeId"}</td>
@@ -43,6 +44,10 @@
     		{/iterate}
     	</select></td>
     </tr>
+		<tr valign="top">
+			<td>&nbsp;</td>
+			<td><input type="submit" value="{translate key="schedConf.registration.registerEdit"}" class="button defaultButton" /></td>
+		</tr>
     <tr>
   		<td colspan="2" class="endseparator">&nbsp;</td>
   	</tr>
