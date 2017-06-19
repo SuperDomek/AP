@@ -44,7 +44,8 @@ class PaperReportDAO extends DAO {
 				COALESCE(psl2.setting_value, pspl2.setting_value) AS abstract,
 				COALESCE(tl.setting_value, tpl.setting_value) AS track_title,
 				COALESCE(cvesl.setting_value, cvesp.setting_value) AS paper_type,
-				p.language AS language
+				p.language AS language,
+				p.current_stage AS stage
 			FROM	papers p
 				LEFT JOIN published_papers pp ON (p.paper_id = pp.paper_id)
 				LEFT JOIN paper_settings pspl1 ON (pspl1.paper_id=p.paper_id AND pspl1.setting_name = ? AND pspl1.locale = ?)
@@ -85,7 +86,7 @@ class PaperReportDAO extends DAO {
 		$result =& $this->retrieve(
 			'SELECT	MAX(ed.date_decided) AS date_decided,
 				ed.paper_id AS paper_id
-			FROM	edit_decisions ed,
+			FROM edit_decisions ed,
 				papers p
 			WHERE	p.sched_conf_id = ? AND
 				p.submission_progress = 0 AND
@@ -98,6 +99,7 @@ class PaperReportDAO extends DAO {
 
 		$decisionsReturner = array();
 		while ($row =& $decisionDatesIterator->next()) {
+			// EDIT pair stage of the decision and current decision so the query returns only current decisions
 			$result =& $this->retrieve(
 				'SELECT	d.decision AS decision,
 					d.paper_id AS paper_id
@@ -105,6 +107,7 @@ class PaperReportDAO extends DAO {
 					papers p
 				WHERE	d.date_decided = ? AND
 					d.paper_id = p.paper_id AND
+					d.stage = p.current_stage AND 
 					(p.submission_progress = 0 OR p.submission_progress = 2) AND
 					p.paper_id = ?',
 				array(

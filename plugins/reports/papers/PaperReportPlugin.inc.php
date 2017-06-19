@@ -57,7 +57,7 @@ class PaperReportPlugin extends ReportPlugin {
 		$schedConf =& Request::getSchedConf();
 		AppLocale::requireComponents(array(LOCALE_COMPONENT_APPLICATION_COMMON, LOCALE_COMPONENT_PKP_SUBMISSION, LOCALE_COMPONENT_PKP_USER, LOCALE_COMPONENT_OCS_MANAGER));
 
-		header('content-type: text/comma-separated-values; charset=utf-8');
+		header('content-type: text/csv; charset=utf-8');
 		header('content-disposition: attachment; filename=report.csv');
 
 		$paperReportDao =& DAORegistry::getDAO('PaperReportDAO');
@@ -96,31 +96,39 @@ class PaperReportPlugin extends ReportPlugin {
 		for ($a = 1; $a <= $maxAuthors; $a++) {
 			$columns = array_merge($columns, array(
 				'fname' . $a => __('user.firstName') . " (" . __('user.role.author') . " $a)",
-				'mname' . $a => __('user.middleName') . " (" . __('user.role.author') . " $a)",
+				// EDIT shorten the export
+				//'mname' . $a => __('user.middleName') . " (" . __('user.role.author') . " $a)",
 				'lname' . $a => __('user.lastName') . " (" . __('user.role.author') . " $a)",
 				'country' . $a => __('common.country') . " (" . __('user.role.author') . " $a)",
 				'affiliation' . $a => __('user.affiliation') . " (" . __('user.role.author') . " $a)",
-				'email' . $a => __('user.email') . " (" . __('user.role.author') . " $a)",
-				'url' . $a => __('user.url') . " (" . __('user.role.author') . " $a)",
-				'biography' . $a => __('user.biography') . " (" . __('user.role.author') . " $a)"
+				'email' . $a => __('user.email') . " (" . __('user.role.author') . " $a)"
+				// EDIT shorten the export
+				//'url' . $a => __('user.url') . " (" . __('user.role.author') . " $a)",
+				//'biography' . $a => __('user.biography') . " (" . __('user.role.author') . " $a)"
 			));
 		}
 		
 		$columns = array_merge($columns, array(
-			'track_title' => __('track.title'),
-			'language' => __('common.language'),
+			// EDIT shorten the export
+			//'track_title' => __('track.title'),
+			//'language' => __('common.language'),
+			'stage' => __('submissions.reviewStage'),
 			'director_decision' => __('submission.directorDecision'),
-			'start_time' => __('manager.scheduler.startTime'),
-			'end_time' => __('manager.scheduler.endTime'),
-			'building' => __('manager.scheduler.building'),
-			'room' => __('manager.scheduler.room'),
+			//'start_time' => __('manager.scheduler.startTime'),
+			//'end_time' => __('manager.scheduler.endTime'),
+			//'building' => __('manager.scheduler.building'),
+			//'room' => __('manager.scheduler.room'),
 			'status' => __('common.status'),
-			'paper_type' => __('paper.sessionType'),
+			//'paper_type' => __('paper.sessionType'),
 			'comments' => __('paper.commentsToDirector')
 		));
 
+		//EDIT Add BOM
+		$BOM = "\xEF\xBB\xBF";
 		$fp = fopen('php://output', 'wt');
-		String::fputcsv($fp, array_values($columns));
+		fwrite($fp, $BOM);
+		// EDIT Change delimiter to ;
+		String::fputcsv($fp, array_values($columns), ";");
 
 		import('paper.Paper'); // Bring in getStatusMap function
 		$statusMap =& Paper::getStatusMap();
@@ -128,6 +136,7 @@ class PaperReportPlugin extends ReportPlugin {
 		$controlledVocabDao =& DAORegistry::getDAO('ControlledVocabDAO');
 		$sessionTypes = $controlledVocabDao->enumerateBySymbolic('paperType', ASSOC_TYPE_SCHED_CONF, $schedConf->getId());
 
+		/*
 		// Load building and room data
 		$buildingDao =& DAORegistry::getDAO('BuildingDAO');
 		$roomDao =& DAORegistry::getDAO('RoomDAO');
@@ -147,7 +156,7 @@ class PaperReportPlugin extends ReportPlugin {
 			unset($roomsIterator);
 		}
 		unset($buildingsIterator);
-
+		*/
 		$authorIndex = 0;
 		while ($row =& $papersIterator->next()) {
 			if (isset($authorsIterator[$row['paper_id']])) {
@@ -165,11 +174,24 @@ class PaperReportPlugin extends ReportPlugin {
 					} else {
 						$columns[$index] = $decisionMessages[null];
 					}
-				} elseif ($index == 'status') {
+				} elseif($index == 'stage'){
+					if($row['stage'] == 1)
+						$columns[$index] = __('paper.abstract');
+					else
+						$stage = (int) $row['stage'] - 1;
+						$columns[$index] = __('submission.paper') . ": " . $stage;
+				}
+				elseif ($index == 'status') {
 					$columns[$index] = __($statusMap[$row[$index]]);
-				} elseif ($index == 'abstract' || $index == 'title' || $index == 'affiliation') {
+				}	elseif ($index == 'abstract') {
+					// EDIT Change CRLF to LF
+					$withoutCRLF = str_replace(array("\r\n", "\n\r", "\n", "\r"), "\n", $row[$index]);
+					$stripped = html_entity_decode(strip_tags($withoutCRLF), ENT_QUOTES, 'UTF-8');
+					$columns[$index] = $stripped;
+				} elseif ($index == 'title' || $index == 'affiliation'){
 					$columns[$index] = html_entity_decode(strip_tags($row[$index]), ENT_QUOTES, 'UTF-8');
-				} elseif ($index == 'start_time' || $index == 'end_time') {
+				} /* EDIT Not using building and room functionality
+					elseif ($index == 'start_time' || $index == 'end_time') {
 					$columns[$index] = $row[$index];
 				} elseif ($index == 'building') {
 					$columns['building'] = '';
@@ -187,7 +209,7 @@ class PaperReportPlugin extends ReportPlugin {
 				} elseif (strstr($index, 'biography') !== false) {
 					// "Convert" HTML to text for export
 					$columns[$index] = isset($authors[$index])?html_entity_decode(strip_tags($authors[$index]), ENT_QUOTES, 'UTF-8'):'';
-				} else {
+				}*/ else {
 					if (isset($row[$index])) {
 						$columns[$index] = $row[$index];
 					} else if (isset($authors[$index])) {
@@ -195,7 +217,8 @@ class PaperReportPlugin extends ReportPlugin {
 					} else $columns[$index] = '';
 				}
 			}
-			String::fputcsv($fp, $columns);
+			// EDIT Change delimiter to ;
+			String::fputcsv($fp, $columns, ";");
 			$authorIndex++;
 			unset($row);
 		}
@@ -228,13 +251,15 @@ class PaperReportPlugin extends ReportPlugin {
 			$seq++;
 			
 			$returner['fname' . $seq] = isset($author['fname']) ? $author['fname'] : '';
-			$returner['mname' . $seq] = isset($author['mname']) ? $author['mname'] : '';
+			// EDIT Shorten the export
+			//$returner['mname' . $seq] = isset($author['mname']) ? $author['mname'] : '';
 			$returner['lname' . $seq] = isset($author['lname']) ? $author['lname'] : '';
 			$returner['email' . $seq] = isset($author['email']) ? $author['email'] : '';
 			$returner['affiliation' . $seq] = isset($author['affiliation']) ? $author['affiliation'] : '';
 			$returner['country' . $seq] = isset($author['country']) ? $author['country'] : '';
+			/* EDIT Shorten the export
 			$returner['url' . $seq] = isset($author['url']) ? $author['url'] : '';
-			$returner['biography' . $seq] = isset($author['biography']) ? $author['biography'] : '';
+			$returner['biography' . $seq] = isset($author['biography']) ? $author['biography'] : '';*/
 		}
 		return $returner;
 	}
