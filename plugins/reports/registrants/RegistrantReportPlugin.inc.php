@@ -57,7 +57,7 @@ class RegistrantReportPlugin extends ReportPlugin {
 		$schedConf =& Request::getSchedConf();
 		AppLocale::requireComponents(array(LOCALE_COMPONENT_APPLICATION_COMMON, LOCALE_COMPONENT_PKP_USER, LOCALE_COMPONENT_OCS_MANAGER));
 
-		header('content-type: text/comma-separated-values; charset=utf-8');
+		header('content-type: text/csv; charset=utf-8');
 		header('content-disposition: attachment; filename=report.csv');
 
 		$registrantReportDao =& DAORegistry::getDAO('RegistrantReportDAO');
@@ -70,14 +70,17 @@ class RegistrantReportPlugin extends ReportPlugin {
 			'userid' => __('plugins.reports.registrants.userid'),
 			'uname' => __('user.username'),
 			'fname' => __('user.firstName'),
-			'mname' => __('user.middleName'),
+			// EDIT Shorten the report
+			//'mname' => __('user.middleName'),
 			'lname' => __('user.lastName'),
 			'affiliation' => __('user.affiliation'),
-			'url' => __('user.url'),
+			// EDIT Shorten the report
+			//'url' => __('user.url'),
 			'email' => __('user.email'),
 			'phone' => __('user.phone'),
-			'fax' => __('user.fax'),
-			'address' => __('common.mailingAddress'),
+			// EDIT Shorten the report
+			//'fax' => __('user.fax'),
+			//'address' => __('common.mailingAddress'),
 			'billing_address' => __('common.billingAddress'),
 			'country' => __('common.country'),
 			'type' => __('manager.registration.registrationType')
@@ -99,9 +102,11 @@ class RegistrantReportPlugin extends ReportPlugin {
 			'specialreq' => __('schedConf.registration.specialRequests')
 			));
 
-
+		//EDIT Add BOM
+		$BOM = "\xEF\xBB\xBF";
 		$fp = fopen('php://output', 'wt');
-		String::fputcsv($fp, array_values($columns));
+		fwrite($fp, $BOM);
+		String::fputcsv($fp, array_values($columns), ";");
 
 		while ($row =& $registrants->next()) {
 			if ( isset($registrantOptions[$row['registration_id']]) ) { 
@@ -122,8 +127,8 @@ class RegistrantReportPlugin extends ReportPlugin {
 					$columns[$index] = $options[$index];
 				} else $columns[$index] = '';
 			}
-			
-			String::fputcsv($fp, $columns);
+			// EDIT Change delimiter to ;
+			String::fputcsv($fp, $columns, ";");
 			unset($row);
 		}
 		fclose($fp);
