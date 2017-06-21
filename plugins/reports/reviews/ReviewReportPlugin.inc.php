@@ -57,7 +57,7 @@ class ReviewReportPlugin extends ReportPlugin {
 		$schedConf =& Request::getSchedConf();
 		AppLocale::requireComponents(array(LOCALE_COMPONENT_APPLICATION_COMMON, LOCALE_COMPONENT_PKP_USER, LOCALE_COMPONENT_PKP_SUBMISSION, LOCALE_COMPONENT_OCS_MANAGER));
 
-		header('content-type: text/comma-separated-values; charset=utf-8');
+		header('content-type: text/csv; charset=utf-8');
 		header('content-disposition: attachment; filename=report.csv');
 
 		$reviewReportDao =& DAORegistry::getDAO('ReviewReportDAO');
@@ -75,12 +75,12 @@ class ReviewReportPlugin extends ReportPlugin {
 		$yesnoMessages = array( 0 => __('common.no'), 1 => __('common.yes'));
 
 		import('classes.schedConf.SchedConf');
-		$reviewTypes = array(
+		/*$reviewTypes = array(
 			REVIEW_MODE_ABSTRACTS_ALONE => __('manager.schedConfSetup.submissions.abstractsAlone'),
 			REVIEW_MODE_BOTH_SEQUENTIAL => __('manager.schedConfSetup.submissions.bothSequential'),
 			REVIEW_MODE_PRESENTATIONS_ALONE => __('manager.schedConfSetup.submissions.presentationsAlone'),
 			REVIEW_MODE_BOTH_SIMULTANEOUS => __('manager.schedConfSetup.submissions.bothTogether')
-		);
+		);*/
 
 		import('submission.reviewAssignment.ReviewAssignment');
 		$recommendations = ReviewAssignment::getReviewerRecommendationOptions();
@@ -107,19 +107,27 @@ class ReviewReportPlugin extends ReportPlugin {
 		$yesNoArray = array('declined', 'cancelled');
 
 		$fp = fopen('php://output', 'wt');
-		String::fputcsv($fp, array_values($columns));
+		//EDIT Add BOM
+		$BOM = "\xEF\xBB\xBF";
+		fwrite($fp, $BOM);
+		// EDIT ; as separator
+		String::fputcsv($fp, array_values($columns), ";");
 
 		while ($row =& $reviewsIterator->next()) {
 			foreach ($columns as $index => $junk) {
 				if (in_array($index, array('declined', 'cancelled'))) {
 					$yesNoIndex = $row[$index];
 					if (is_string($yesNoIndex)) {
-						// Accomodate Postgres boolean casting
-						$yesNoIndex = $yesNoIndex == "f" ? 0 : 1;
+						// expecting only 0 and 1 as the value
+						$yesNoIndex = intval($yesNoIndex);
 					}
 					$columns[$index] = $yesnoMessages[$yesNoIndex];
 				} elseif ($index == "reviewstage") {
-					$columns[$index] = $reviewTypes[$row[$index]];
+					if($row[$index] == REVIEW_STAGE_ABSTRACT)
+						$reviewType = __('submission.abstract');
+					else
+						$reviewType = __('submission.paper');
+					$columns[$index] = $reviewType;
 				} elseif ($index == "recommendation") {
 					$columns[$index] = (!isset($row[$index])) ? __('common.none') : __($recommendations[$row[$index]]);
 				} elseif ($index == "comments") {
@@ -132,7 +140,8 @@ class ReviewReportPlugin extends ReportPlugin {
 					$columns[$index] = $row[$index];
 				}
 			}
-			String::fputcsv($fp, $columns);
+			// EDIT ; as separator
+			String::fputcsv($fp, $columns, ";");
 			unset($row);
 		}
 		fclose($fp);

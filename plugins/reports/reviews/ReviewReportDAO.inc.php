@@ -57,8 +57,8 @@ class ReviewReportDAO extends DAO {
 				r.date_confirmed AS dateConfirmed,
 				r.date_completed AS dateCompleted,
 				r.date_reminded AS dateReminded,
-				(r.declined=1) AS declined,
-				(r.cancelled=1) AS cancelled,
+				r.declined AS declined,
+				r.cancelled AS cancelled,
 				r.recommendation AS recommendation
 			FROM	review_assignments r
 				LEFT JOIN papers p ON r.paper_id=p.paper_id
