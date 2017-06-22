@@ -838,6 +838,7 @@ Váš server v tomto momentě podporuje mbstring: <strong>{$supportsMBString}</s
 	<message key="log.timeline.showCFPDateChanged">Datum zobrazení výzvy k podávání příspěvků bylo změněno z {$oldShowCFPDate} na {$newShowCFPDate}.</message>
 	<message key="log.timeline.submissionsOpenDateChanged">Datum otevření podávání příspěvků bylo změněno z {$oldSubmissionsOpenDate} na {$newSubmissionsOpenDate}</message>
 	<message key="log.timeline.submissionsCloseDateChanged">Datum ukončení podávání příspěvků bylo změněno z {$oldSubmissionsCloseDate} na {$newSubmissionsCloseDate}</message>
+	<message key="log.timeline.paperSubmissionDeadlineChanged">Datum ukončení nahrávání příspěvků bylo změněno z {$oldPaperSubmissionDeadline} na {$newPaperSubmissionDeadline}</message>
 	<message key="log.timeline.postAbstractsDateChanged">Datum odeslání abstraktu bylo změněno z {$oldPostAbstractsDate} na {$newPostAbstractsDate}.</message>
 	<message key="log.timeline.postAbstractsChanged">Nastavení "odeslat abstrakty" bylo změněno z {$oldPostAbstracts} na {$newPostAbstracts}.</message>
 	<message key="log.timeline.postScheduleDateChanged">Datum odeslání programu bylo změněno z {$oldPostScheduleDate} na {$newPostScheduleDate}.</message>

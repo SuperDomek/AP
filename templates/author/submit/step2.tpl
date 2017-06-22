@@ -16,8 +16,6 @@
 {/if}
 {include file="author/submit/submitHeader.tpl"}
 
-<form method="post" action="{url op="saveSubmit" path=$submitStep}" enctype="multipart/form-data">
-<input type="hidden" name="paperId" value="{$paperId|escape}" />
 {include file="common/formErrors.tpl"}
 
 {url|assign:"url" page="author" op="submissionReview" path=$paperId|to_array:1}
@@ -30,6 +28,10 @@
 </p>
 
 <div class="separator"></div>
+{if $uploadOpen}
+
+<form method="post" action="{url op="saveSubmit" path=$submitStep}" enctype="multipart/form-data">
+<input type="hidden" name="paperId" value="{$paperId|escape}" />
 
 <div id="submissionFileInfo">
 <h3>{translate key="author.submit.submissionFile"}</h3>
@@ -81,7 +83,11 @@
 <p><input type="submit"{if !$submissionFile} onclick="return confirm('{translate|escape:"jsparam" key="author.submit.noSubmissionConfirm"}')"{/if} value="{translate key="common.saveAndContinue"}" class="button defaultButton" /> <input type="button" value="{translate key="common.cancel"}" class="button" onclick="confirmAction('{url page="author"}', '{translate|escape:"jsparam" key="author.submit.cancelSubmission"}')" /></p>
 
 </form>
-
+{else}
+<p class="warning">
+{translate key="common.uploadDeadlinePassed"}
+</p>
+{/if}
 <!--<div class="separator"></div>
 {translate key="author.submit.uploadInstructions"}
 {if $currentSchedConf->getSetting('supportPhone')}

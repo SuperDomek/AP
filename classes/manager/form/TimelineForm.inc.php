@@ -56,6 +56,12 @@ class TimelineForm extends Form {
 				'return ($startDate >= $form->getData(\'submissionsCloseDate\'));'),
 				array(&$this)));
 
+			// Conference start must happen after submission of papers close
+			$this->addCheck(new FormValidatorCustom($this, 'startDate', 'required', 'manager.timeline.form.conferenceStartDateBeforeSubmissionsDeadline',
+				create_function('$startDate,$form',
+				'return ($startDate >= $form->getData(\'paperSubmissionDeadline\'));'),
+				array(&$this)));
+
 			// Conference site start must happen before site end
 			$this->addCheck(new FormValidatorCustom($this, 'siteStartDate', 'required', 'manager.timeline.form.siteEndDateBeforeSiteStart',
 				create_function('$siteStartDate,$form',
@@ -166,6 +172,7 @@ class TimelineForm extends Form {
 			'regReviewerOpenDate' => $schedConf->getSetting('regReviewerOpenDate'),
 			'regReviewerCloseDate' => $schedConf->getSetting('regReviewerCloseDate'),
 			'closeReviewProcessDate' => $schedConf->getSetting('closeReviewProcessDate'),
+			'paperSubmissionDeadline' => $schedConf->getSetting('paperSubmissionDeadline'),
 			'postAbstracts' => $schedConf->getSetting('postAbstracts'),
 			'postAbstractsDate' => $schedConf->getSetting('postAbstractsDate'),
 			'postSchedule' => $schedConf->getSetting('postSchedule'),
@@ -198,6 +205,12 @@ class TimelineForm extends Form {
 
 			//  submissions close before the conference starts
 			array('submissionsCloseDate', 'startDate'),
+
+			//  submission of papers close before the conference starts
+			array('paperSubmissionDeadline', 'startDate'),
+
+			//  submissions close before the submission of papers close
+			array('submissionsCloseDate', 'paperSubmissionDeadline'),
 
 			// conference begins before it ends
 			array('startDate', 'endDate'),
@@ -245,7 +258,7 @@ class TimelineForm extends Form {
 			'startDate', 'endDate',
 			'regAuthorOpenDate', 'regAuthorCloseDate',
 			'showCFPDate',
-			'submissionsOpenDate', 'submissionsCloseDate',
+			'submissionsOpenDate', 'submissionsCloseDate', 'paperSubmissionDeadline',
 			'regReviewerOpenDate', 'regReviewerCloseDate', 'closeReviewProcessDate',
 			'postAbstractsDate', 'postPapersDate', 'postScheduleDate',
 			'delayOpenAccessDate',
@@ -396,6 +409,18 @@ class TimelineForm extends Form {
 				array('oldSubmissionsCloseDate' => strftime($dateFormatShort, $schedConf->getSetting('submissionsCloseDate')),
 					'newSubmissionsCloseDate' => strftime($dateFormatShort, $this->_data['submissionsCloseDate'])));
 			$schedConf->updateSetting('submissionsCloseDate', $this->_data['submissionsCloseDate'], 'date');
+		}
+		
+		if ($schedConf->getSetting('paperSubmissionDeadline') != $this->_data['paperSubmissionDeadline']) {
+			ConferenceLog::logEvent(
+				$schedConf->getConferenceId(),
+				$schedConf->getId(),
+				CONFERENCE_LOG_CONFIGURATION,
+				LOG_TYPE_DEFAULT,
+				0, 'log.timeline.paperSubmissionDeadlineChanged',
+				array('oldPaperSubmissionDeadline' => strftime($dateFormatShort, $schedConf->getSetting('paperSubmissionDeadline')),
+					'newPaperSubmissionDeadline' => strftime($dateFormatShort, $this->_data['paperSubmissionDeadline'])));
+			$schedConf->updateSetting('paperSubmissionDeadline', $this->_data['paperSubmissionDeadline'], 'date');
 		}
 		if ($schedConf->getSetting('regReviewerOpenDate') != $this->_data['regReviewerOpenDate']) {
 			ConferenceLog::logEvent(

@@ -28,7 +28,7 @@
 <ul class="plain">
 	<li>&#187; <a href="{url op="notifyUsers"}">{translate key="director.notifyUsers"}</a></li>
   <li>&#187; <a href="{url op="manageTrackDirectors"}">{translate key="director.manageTrackDirectors"}</a></li>
-	<li>&#187; <a href="{url page="manager" op="statistics"}">{translate key="manager.statistics"}</a></li>
+	<li>&#187; <a href="{url page="manager" op="statistics"}">{translate key="director.statistics"}</a></li>
 </ul>
 </div>
 {include file="common/footer.tpl"}

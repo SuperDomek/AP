@@ -634,6 +634,7 @@
 	<message key="manager.timeline.form.conferenceEndDateBeforeConferenceStart">The conference end date must come after the conference start date.</message>
 	<message key="manager.timeline.form.conferenceStartBeforeSiteStart">The website "Go Live" date must come before the conference start date.</message>
 	<message key="manager.timeline.form.conferenceStartDateBeforeSubmissionsClose">The conference cannot start before submissions are closed.</message>
+	<message key="manager.timeline.form.conferenceStartDateBeforeSubmissionsDeadline">The conference cannot start before submissions upload is closed.</message>
 	<message key="manager.timeline.form.regAuthorCloseDateBeforeRegAuthorOpenDate">The author registration open date must come before the author registration close date.</message>
 	<message key="manager.timeline.form.regReviewerCloseDateBeforeRegReviewerOpenDate">The reviewer registration open date must come before the reviewer registration close date.</message>
 	<message key="manager.timeline.form.siteEndBeforeLastDay">The "Move to Conference Archive" date must come after the last day of the conference.</message>
@@ -644,6 +645,7 @@
 	<message key="manager.timeline.openRegAuthor">Author registration opened</message>
 	<message key="manager.timeline.openRegReviewer">Reviewer registration opened</message>
 	<message key="manager.timeline.overrideDates">Override error message(s)</message>
+	<message key="manager.timeline.paperSubmissionDeadline">Paper submission upload deadline</message>
 	<message key="manager.timeline.postDate">Post Date</message>
 	<message key="manager.timeline.postAccommodation">Include Accommodation in Conference Information listing</message>
 	<message key="manager.timeline.postAbstracts">Accepted abstracts</message>

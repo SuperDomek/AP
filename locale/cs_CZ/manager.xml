@@ -636,6 +636,7 @@
 	<message key="manager.timeline.form.conferenceEndDateBeforeConferenceStart">Datum ukončení konference musí následovat až po jejím zahájení.</message>
 	<message key="manager.timeline.form.conferenceStartBeforeSiteStart">Datum na webu "Go Live" musí předcházet datu počátku konference.</message>
 	<message key="manager.timeline.form.conferenceStartDateBeforeSubmissionsClose">Konference nemůže začít před ukončením podávání příspěvků.</message>
+	<message key="manager.timeline.form.conferenceStartDateBeforeSubmissionsDeadline">Konference nemůže začít před ukončením nahrávání příspěvků.</message>
 	<message key="manager.timeline.form.regAuthorCloseDateBeforeRegAuthorOpenDate">Otevření registrace autorů musí předcházet uzávěrce registrace autorů.</message>
 	<message key="manager.timeline.form.regReviewerCloseDateBeforeRegReviewerOpenDate">Otevření registrace oponentů musí předcházet datu uzávěrky registrace oponentů.</message>
 	<message key="manager.timeline.form.siteEndBeforeLastDay">Datum přesunu konference do archivu musí následovat zž za posledním dnem konference.</message>
@@ -646,6 +647,7 @@
 	<message key="manager.timeline.openRegAuthor">Otevření registrace autorů</message>
 	<message key="manager.timeline.openRegReviewer">Otevření registrace oponentů</message>
 	<message key="manager.timeline.overrideDates">Přeskočit chybové zprávy</message>
+	<message key="manager.timeline.paperSubmissionDeadline">Uzávěrka pro nahrávání příspěvků</message>
 	<message key="manager.timeline.postDate">Termín</message>
 	<message key="manager.timeline.postAccommodation">Přidat položku "Ubytování" do menu "Informace o konferenci"</message>
 	<message key="manager.timeline.postAbstracts">Přijaté abstrakty</message>

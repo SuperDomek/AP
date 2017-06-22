@@ -829,6 +829,7 @@ Your server currently supports mbstring: <strong>{$supportsMBString}</strong>]]>
 	<message key="log.timeline.showCFPDateChanged">The CFP display date changed from {$oldShowCFPDate} to {$newShowCFPDate}.</message>
 	<message key="log.timeline.submissionsOpenDateChanged">The submission open date changed from {$oldSubmissionsOpenDate} to {$newSubmissionsOpenDate}</message>
 	<message key="log.timeline.submissionsCloseDateChanged">The submission close date changed from {$oldSubmissionsCloseDate} to {$newSubmissionsCloseDate}</message>
+	<message key="log.timeline.paperSubmissionDeadlineChanged">The submission upload close date changed from {$oldPaperSubmissionDeadline} to {$newPaperSubmissionDeadline}</message>
 	<message key="log.timeline.postAbstractsDateChanged">The abstract post date changed from {$oldPostAbstractsDate} to {$newPostAbstractsDate}.</message>
 	<message key="log.timeline.postAbstractsChanged">The "post abstracts" setting was changed from {$oldPostAbstracts} to {$newPostAbstracts}.</message>
 	<message key="log.timeline.postScheduleDateChanged">The post schedule date changed from {$oldPostScheduleDate} to {$newPostScheduleDate}.</message>

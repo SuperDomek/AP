@@ -181,6 +181,7 @@
 	<message key="common.updated">Updated</message>
 	<message key="common.uploadedFile">Uploaded file</message>
 	<message key="common.upload">Upload</message>
+	<message key="common.uploadDeadlinePassed">The upload of submissions is closed. The deadline for uploading submission has passed.</message>
 	<message key="common.uploadFailed">The file could not be uploaded. Please try again or contact the administrator if the problem persists.</message>
 	<message key="common.uploadFailed.noFile">No file selected for upload.</message>
 	<message key="common.uploadChangesEmpty">The Checklist of adjustments has to contain more than 10 characters</message>

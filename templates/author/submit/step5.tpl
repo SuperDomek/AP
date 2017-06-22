@@ -19,6 +19,7 @@
 
 <p>{translate key="author.submit.confirmationDescription" conferenceTitle=$conference->getConferenceTitle()}</p>
 
+{if $uploadOpen}
 <form method="post" action="{url op="saveSubmit" path=$submitStep}">
 <input type="hidden" name="paperId" value="{$paperId|escape}" />
 
@@ -57,5 +58,12 @@
 <p><input type="submit" value="{translate key="author.submit.finishSubmission"}" class="button defaultButton" /> <input type="button" value="{translate key="common.cancel"}" class="button" onclick="confirmAction('{url page="author"}', '{translate|escape:"jsparam" key="author.submit.cancelSubmission"}')" /></p>
 
 </form>
+
+{else}
+<div class="separator"></div>
+<p class="warning">
+{translate key="common.uploadDeadlinePassed"}
+</p>
+{/if}
 
 {include file="common/footer.tpl"}

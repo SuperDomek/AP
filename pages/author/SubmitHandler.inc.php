@@ -79,6 +79,7 @@ class SubmitHandler extends AuthorHandler {
 	function saveSubmit($args) {
 		$step = isset($args[0]) ? (int) $args[0] : 0;
 		$paperId = (int) Request::getUserVar('paperId');
+		$schedConf =& Request::getSchedConf();
 
 		$this->validate($paperId, $step);
 		$this->setupTemplate(true);
@@ -96,6 +97,12 @@ class SubmitHandler extends AuthorHandler {
 			// Check for any special cases before trying to save
 			switch ($step) {
 				case 2:
+					if($schedConf->getSetting('paperSubmissionDeadline') !== null){
+						if (time() > $schedConf->getSetting('paperSubmissionDeadline')){
+							$submitForm->addError('uploadSubmissionFile', __('common.uploadDeadlinePassed'));
+							break;
+						}
+					}
 					if (Request::getUserVar('uploadSubmissionFile')) {
 						if (!$submitForm->uploadSubmissionFile('submissionFile')) {
 							$submitForm->addError('uploadSubmissionFile', __('common.uploadFailed'));
@@ -169,6 +176,15 @@ class SubmitHandler extends AuthorHandler {
 							Request::redirect(null, null, null, 'submitSuppFile', $suppFileId, array('paperId' => $paperId));
 						} else {
 							$submitForm->addError('uploadSubmissionFile', __('common.uploadFailed'));
+						}
+					}
+					break;
+				case 5:
+					if($schedConf->getSetting('paperSubmissionDeadline') !== null){
+						if (time() > $schedConf->getSetting('paperSubmissionDeadline')){
+							$submitForm->addError('uploadSubmissionFile', __('common.uploadDeadlinePassed'));
+							$submitForm->display();
+							return false;
 						}
 					}
 					break;

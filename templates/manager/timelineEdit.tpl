@@ -140,6 +140,18 @@
 			<input type="hidden" name="submissionsCloseDateSecond" value="59" />
 		</td>
 	</tr>
+	<tr valign="top">
+		<td width="50%" class="label">
+			<a name="paperSubmissionDeadline"></a>
+			{translate key="manager.timeline.paperSubmissionDeadline"}
+		</td>
+		<td width="50%" class="value">
+			{html_select_date prefix="paperSubmissionDeadline" time=$paperSubmissionDeadline all_extra="class=\"selectMenu\"" start_year=$firstYear end_year=$lastYear}
+			<input type="hidden" name="paperSubmissionDeadlineHour" value="23" />
+			<input type="hidden" name="paperSubmissionDeadlineMinute" value="59" />
+			<input type="hidden" name="paperSubmissionDeadlineSecond" value="59" />
+		</td>
+	</tr>
 </table>
 </div>
 <br/>

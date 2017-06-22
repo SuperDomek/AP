@@ -52,6 +52,7 @@ class AuthorSubmitStep2Form extends AuthorSubmitForm {
 	 */
 	function display() {
 		$paper =& $this->paper;
+		$schedConf =& Request::getSchedConf();
 		$templateMgr =& TemplateManager::getManager();
 
 		// Get supplementary files for this paper
@@ -59,7 +60,8 @@ class AuthorSubmitStep2Form extends AuthorSubmitForm {
 		if ($this->paper->getSubmissionFileId() != null) {
 			$templateMgr->assign_by_ref('submissionFile', $paperFileDao->getPaperFile($this->paper->getSubmissionFileId()));
 		}
-		$templateMgr->assign('paperId', $paper->getPaperId());
+		$templateMgr->assign('paperId', $paper->getPaperId());	
+		$templateMgr->assign('uploadOpen', $schedConf->getSetting('paperSubmissionDeadline') !== null ? time() <= $schedConf->getSetting('paperSubmissionDeadline') : true);
 		parent::display();
 	}
 

@@ -29,6 +29,7 @@ class AuthorSubmitStep5Form extends AuthorSubmitForm {
 	 * Display the form.
 	 */
 	function display() {
+		$schedConf =& Request::getSchedConf();
 		$templateMgr =& TemplateManager::getManager();
 
 		// Get paper file for this paper
@@ -37,6 +38,7 @@ class AuthorSubmitStep5Form extends AuthorSubmitForm {
 
 		$templateMgr->assign_by_ref('files', $paperFiles);
 		$templateMgr->assign_by_ref('conference', Request::getConference());
+		$templateMgr->assign('uploadOpen', $schedConf->getSetting('paperSubmissionDeadline') !== null ? time() <= $schedConf->getSetting('paperSubmissionDeadline') : true);
 
 		parent::display();
 	}

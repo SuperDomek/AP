@@ -104,7 +104,7 @@
 	<message key="director.paper.createGalley">This file is ready for publication.</message>
 	<message key="director.paper.completeReview">Mark review as completed</message>
 	<message key="director.paper.scheduleSubmission">Send</message>
-	<message key="manager.statistics"><![CDATA[Stats &amp; Reports]]></message>
+	<message key="director.statistics"><![CDATA[Stats &amp; Reports]]></message>
 	<message key="director.submissions.showBy">Show By</message>
 	<message key="director.submissions.submitMMDD">Submit MM-DD</message>
 	<message key="director.submissions.activeAssignments">Active Assignments</message>

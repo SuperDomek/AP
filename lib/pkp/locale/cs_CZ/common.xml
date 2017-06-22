@@ -179,6 +179,7 @@
 	<message key="common.updated">Aktualizováno</message>
 	<message key="common.uploadedFile">Nahraný soubor</message>
 	<message key="common.upload">Nahrát</message>
+	<message key="common.uploadDeadlinePassed">Již nelze nahrát příspěvek. Je po termínu pro uzávěrku nahrání příspěvku.</message>
 	<message key="common.uploadFailed">Soubor nemohl být nahrán. Zkuste to prosíme znovu nebo se obraťte na správce, pokud problém přetrvává.</message>
 	<message key="common.uploadFailed.noFile">Nebyl vybrán žádný soubor pro nahrání.</message>
 	<message key="common.uploadChangesEmpty">Seznam provedených úprav musí mít více než 10 znaků.</message>
