@@ -185,8 +185,11 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$isCurrent = ($stage == $submission->getCurrentStage());
 		$showPeerReviewOptions = $isCurrent && $submission->getReviewFile() != null ? true : false;
 
+		// EDIT don't check for complete reviews
 		$allowRecommendation = ($isCurrent  || ($stage == REVIEW_STAGE_ABSTRACT && $reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL)) &&
-			!empty($editAssignments) && $this->reviewsCompleteAndSet($stage);
+			!empty($editAssignments); //&& $this->reviewsCompleteAndSet($stage);
+
+		$completeReviews = $this->reviewsCompleteAndSet($stage);
 
 		$reviewingAbstractOnly = ($reviewMode == REVIEW_MODE_BOTH_SEQUENTIAL && $stage == REVIEW_STAGE_ABSTRACT) || $reviewMode == REVIEW_MODE_ABSTRACTS_ALONE;
 
@@ -308,6 +311,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$templateMgr->assign('isCurrent', $isCurrent);
 		$templateMgr->assign('allowRecommendation', $allowRecommendation);
+		$templateMgr->assign('completeReviews', $completeReviews);
 		$templateMgr->assign('reviewingAbstractOnly', $reviewingAbstractOnly);
 
 		$templateMgr->assign('helpTopicId', 'editorial.trackDirectorsRole.review');

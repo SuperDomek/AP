@@ -28,6 +28,7 @@
 	<message key="director.submissionArchive.saveChanges">Uložit změny příspěvků v archivu? Příspěvky označené k odstranění budou nevratně smazány ze systému.</message>
 	<message key="director.submissionArchive.confirmDelete">Skutečně chcete nevratně vymazat tento příspěvek?</message>
 	<message key="director.submissionReview.confirmDecision">Skutečně chcete uložit toto rozhodnutí?</message>
+	<message key="director.submissionReview.confirmDecisionReviewsOpen">Příspěvek ještě neobdržel recenze od všech recenzentů. Přejete si i přesto uložit toto rozhodnutí?</message>
 	<message key="director.submissionReview.confirmToLayout">Byl autor informován o tomto rozhodnutí? Pokud ne, klikněte na Zrušit a použijte nástroj pro oznámení autorovi, než tento příspěvek přesunete do tiskového rozvržení.</message>
 	<message key="director.submissionReview.confirmToArchive">Byl autor informován o tomto rozhodnutí? Pokud ne, klikněte na Zrušit a použijte nástroj pro oznámení autorovi, než tento příspěvek přesunete do archivu.</message>
 	<message key="director.submissionReview.notes">Termín označuje počet týdnů zbývajících do uzávěrky oponentury nebo (-) týdnů, které od uzávěrky uplynuly. Pole je vyplněné v momentě, kdy oponent přijme žádost o oponenturu.</message>

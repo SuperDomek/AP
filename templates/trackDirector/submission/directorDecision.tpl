@@ -12,7 +12,7 @@
 {literal}
 <script type="text/javascript">
 <!--
-// shows affiliation box if required; sets up address if affiliation set up
+// shows decision comment box if decision is revisions
 function showCommentBox(sel) {
 	var selected = sel.options[sel.selectedIndex];
 	var commentBox = document.getElementById("decision_comment");
@@ -36,6 +36,17 @@ function showCommentBox(sel) {
     commentBox.style.display = "none";
   }
 }
+
+function confirmDecision(sel){
+	var reviewsComplete = "{/literal}{$completeReviews}{literal}";
+	reviewsComplete = (reviewsComplete == 'true');
+	if (reviewsComplete) {
+		return confirm('{/literal}{translate|escape:"jsparam" key="director.submissionReview.confirmDecision"}{literal}');
+	}
+	else {
+		return confirm('{/literal}{translate|escape:"jsparam" key="director.submissionReview.confirmDecisionReviewsOpen"}{literal}');
+	}
+}
 // -->
 </script>
 {/literal}
@@ -54,7 +65,7 @@ function showCommentBox(sel) {
 				{assign var=availableDirectorDecisionOptions value=$submission->getDirectorDecisionOptions($currentSchedConf,$stage)}
 				{html_options_translate options=$availableDirectorDecisionOptions}
 			</select>
-			<input type="submit" id="decision_submit" onclick="return confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmDecision"}')" name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
+			<input type="submit" id="decision_submit" onclick="return confirmDecision(this);" name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
 			{if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord"}{/if}
 	</td>
 </tr>
