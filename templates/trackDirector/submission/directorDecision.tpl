@@ -39,7 +39,6 @@ function showCommentBox(sel) {
 
 function confirmDecision(sel){
 	var reviewsComplete = "{/literal}{$completeReviews}{literal}";
-	reviewsComplete = (reviewsComplete == 'true');
 	if (reviewsComplete) {
 		return confirm('{/literal}{translate|escape:"jsparam" key="director.submissionReview.confirmDecision"}{literal}');
 	}
