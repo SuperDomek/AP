@@ -90,6 +90,7 @@ class PaperReportPlugin extends ReportPlugin {
 			'paper_id' => __('paper.submissionId'),
 			'title' => __('paper.title'),
 			'abstract' => __('paper.abstract'),
+			'jel_codes' => __('paper.subjectClassification'),
 			'user_id' => __('paper.submitterId')
 		);
 		

@@ -40,6 +40,7 @@ class PaperReportDAO extends DAO {
 				p.paper_id AS paper_id,
 				p.user_id AS user_id,
 				p.comments_to_dr as comments,
+				GROUP_CONCAT(jel.code ORDER BY jel.code ASC SEPARATOR ", ") as jel_codes,
 				COALESCE(psl1.setting_value, pspl1.setting_value) AS title,
 				COALESCE(psl2.setting_value, pspl2.setting_value) AS abstract,
 				COALESCE(tl.setting_value, tpl.setting_value) AS track_title,
@@ -53,6 +54,7 @@ class PaperReportDAO extends DAO {
 				LEFT JOIN paper_settings pspl2 ON (pspl2.paper_id=p.paper_id AND pspl2.setting_name = ? AND pspl2.locale = ?)
 				LEFT JOIN paper_settings psl2 ON (psl2.paper_id=p.paper_id AND psl2.setting_name = ? AND psl2.locale = ?)
 				LEFT JOIN paper_settings pti ON (pti.paper_id=p.paper_id AND pti.setting_name = ?)
+				INNER JOIN paper_jel_codes jel ON (p.paper_id = jel.paper_id)
 				LEFT JOIN controlled_vocabs cv ON (cv.symbolic = ? AND cv.assoc_type = ? AND cv.assoc_id = ?)
 				LEFT JOIN controlled_vocab_entries cve ON (cve.controlled_vocab_id = cv.controlled_vocab_id AND pti.setting_value = cve.controlled_vocab_entry_id)
 				LEFT JOIN controlled_vocab_entry_settings cvesp ON (cve.controlled_vocab_entry_id = cvesp.controlled_vocab_entry_id AND cvesp.setting_name = ? AND cvesp.locale = ?)
@@ -61,6 +63,7 @@ class PaperReportDAO extends DAO {
 				LEFT JOIN track_settings tl ON (tl.track_id=p.track_id AND tl.setting_name = ? AND tl.locale = ?)
 			WHERE	p.sched_conf_id = ? AND
 				(p.submission_progress = 0 OR p.submission_progress = 2)
+			GROUP BY p.paper_id
 			ORDER BY p.paper_id',
 			array(
 				'title', $primaryLocale, // Paper title
@@ -83,6 +86,7 @@ class PaperReportDAO extends DAO {
 		$papersReturner = new DBRowIterator($result);
 		unset($result);
 
+		// Fetching decisions
 		$result =& $this->retrieve(
 			'SELECT	MAX(ed.date_decided) AS date_decided,
 				ed.paper_id AS paper_id
@@ -119,6 +123,7 @@ class PaperReportDAO extends DAO {
 			unset($result);
 		}
 
+		// Fetching authors
 		$paperDao =& DAORegistry::getDAO('PaperDAO');
 		$papers =& $paperDao->getPapersBySchedConfId($schedConfId);
 		$authorsReturner = array();
