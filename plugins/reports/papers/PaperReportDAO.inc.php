@@ -134,10 +134,9 @@ class PaperReportDAO extends DAO {
 		$authorsReturner = array();
 		$index = 1;
 		while ($paper =& $papers->next()) {
+			// EDIT Concatenated name into one field instead of three
 			$result =& $this->retrieve(
-				'SELECT	pa.first_name AS fname,
-					pa.middle_name AS mname,
-					pa.last_name AS lname,
+				'SELECT	CONCAT(pa.first_name, IF(pa.middle_name, " " + pa.middle_name + " ", " "), pa.last_name) AS name,
 					pa.email AS email,
 					pa.affiliation AS affiliation,
 					pa.country AS country,
