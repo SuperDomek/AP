@@ -43,6 +43,7 @@ class PaperReportDAO extends DAO {
 				GROUP_CONCAT(jel.code ORDER BY jel.code ASC SEPARATOR ", ") as jel_codes,
 				COALESCE(psl1.setting_value, pspl1.setting_value) AS title,
 				COALESCE(psl2.setting_value, pspl2.setting_value) AS abstract,
+				COALESCE(psl3.setting_value, pspl3.setting_value) AS sponsor,
 				COALESCE(tl.setting_value, tpl.setting_value) AS track_title,
 				COALESCE(cvesl.setting_value, cvesp.setting_value) AS paper_type,
 				p.language AS language,
@@ -53,6 +54,8 @@ class PaperReportDAO extends DAO {
 				LEFT JOIN paper_settings psl1 ON (psl1.paper_id=p.paper_id AND psl1.setting_name = ? AND psl1.locale = ?)
 				LEFT JOIN paper_settings pspl2 ON (pspl2.paper_id=p.paper_id AND pspl2.setting_name = ? AND pspl2.locale = ?)
 				LEFT JOIN paper_settings psl2 ON (psl2.paper_id=p.paper_id AND psl2.setting_name = ? AND psl2.locale = ?)
+				LEFT JOIN paper_settings pspl3 ON (pspl3.paper_id=p.paper_id AND pspl3.setting_name = ? AND pspl3.locale = ?)
+				LEFT JOIN paper_settings psl3 ON (psl3.paper_id=p.paper_id AND psl3.setting_name = ? AND psl3.locale = ?)
 				LEFT JOIN paper_settings pti ON (pti.paper_id=p.paper_id AND pti.setting_name = ?)
 				INNER JOIN paper_jel_codes jel ON (p.paper_id = jel.paper_id)
 				LEFT JOIN controlled_vocabs cv ON (cv.symbolic = ? AND cv.assoc_type = ? AND cv.assoc_id = ?)
@@ -70,6 +73,8 @@ class PaperReportDAO extends DAO {
 				'title', $locale,
 				'abstract', $primaryLocale, // Paper abstract
 				'abstract', $locale,
+				'sponsor', $primaryLocale, // Paper sponsors
+				'sponsor', $locale,
 				'sessionType', // Paper type (controlled vocab)
 				PAPER_TYPE_SYMBOLIC,
 				ASSOC_TYPE_SCHED_CONF,
