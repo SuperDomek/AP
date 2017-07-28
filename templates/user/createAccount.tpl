@@ -19,9 +19,13 @@
 // Global variable for addresses
 var addresses = null;
 // Global variable for Company Reg Numbers
-var companyIds = null;
+var companyIds = {/literal}{$companyIds|@json_encode}{literal};
 // GLobal variable for VAT Reg. Numbers
-var vatRegNos = null;
+var vatRegNos = {/literal}{$VATRegNos|@json_encode}{literal};
+// Global variable for affiliation suffixes
+var suffixes = {/literal}{$suffixes|@json_encode}{literal};
+// Global variable for english affiliations
+var affiliationsEn = {/literal}{$affiliationsEn|@json_encode}{literal};
 
 // Processes addresses from smarty into a javascript variable
 function initVars() {
@@ -31,25 +35,13 @@ function initVars() {
     {if !$smarty.foreach.addressloop.last},{/if}
     {/foreach}{literal}
   };
-  companyIds = {{/literal}
-    {foreach from=$companyIds item=ID key=key name=IDloop}
-          "{$key}":"{$ID}"
-    {if !$smarty.foreach.IDloop.last},{/if}
-    {/foreach}{literal}
-  };
-  vatRegNos = {{/literal}
-    {foreach from=$VATRegNos item=number key=key name=numbersloop}
-          "{$key}":"{$number}"
-    {if !$smarty.foreach.numbersloop.last},{/if}
-    {/foreach}{literal}
-  };
 }
 
 // Sets up address, affiliation, CompanyId and VATRegNo
 // @key string Abbreviation for faculty to set up; if null then erase
 // @key string Affiliation text to set up
 function setInfo(selected){
-  if (selected === null) {
+	if (selected === null) {
     document.getElementById("mailingAddress").value = "";
     document.getElementById("affil_text").value = "";
     document.getElementById("companyId").value = "";
@@ -57,13 +49,14 @@ function setInfo(selected){
     //tinyMCE.get('mailingAddress').setContent("");
   }
   else{
-    var facultyKey = selected.parentNode.label;
+    var facultyKey = selected.parentNode.label; //PEF
+		var departmentKey = selected.value; //KII
     //var faculty = (selected.label).concat("\n");
+		//alert(affiliationsEn[facultyKey][departmentKey] + suffixes[departmentKey]);
     var affil_text = selected.text;
-
     //document.getElementById("mailingAddress").value = faculty.concat(addresses[facultyKey]);
     document.getElementById("mailingAddress").value = addresses[facultyKey];
-    document.getElementById("affil_text").value = affil_text;
+    document.getElementById("affil_text").value = affiliationsEn[facultyKey][departmentKey] + suffixes[departmentKey];
     document.getElementById("companyId").value = companyIds["CULS"];
     document.getElementById("VATRegNo").value = vatRegNos["CULS"];
     //tinyMCE.get('mailingAddress').setContent(addresses[key]);
