@@ -38,8 +38,7 @@ function initVars() {
 }
 
 // Sets up address, affiliation, CompanyId and VATRegNo
-// @key string Abbreviation for faculty to set up; if null then erase
-// @key string Affiliation text to set up
+// @selected Object Object with the selected option
 function setInfo(selected){
 	if (selected === null) {
     document.getElementById("mailingAddress").value = "";

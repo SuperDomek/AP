@@ -109,9 +109,11 @@ class ProfileForm extends Form {
 		import('user.form.Affiliations');
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('affiliationsEn', $affil->getAffiliations('en_US'));
 		$templateMgr->assign('addresses', $affil->getAddresses());
 		$templateMgr->assign('companyIds', $affil->getCompanyIds());
 		$templateMgr->assign('VATRegNos', $affil->getVatRegNos());
+		$templateMgr->assign('suffixes', $affil->getSuffixes());
 
 		$site =& Request::getSite();
 		$templateMgr->assign('availableLocales', $site->getSupportedLocaleNames());

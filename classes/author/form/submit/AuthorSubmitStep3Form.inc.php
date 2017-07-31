@@ -215,6 +215,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		import('user.form.Affiliations');
 		$affil = new Affiliations();
 		$templateMgr->assign('affiliations', $affil->getAffiliations());
+		$templateMgr->assign('affiliationsEn', $affil->getAffiliations('en_US'));
+		$templateMgr->assign('suffixes', $affil->getSuffixes());
 
 		// Initialization of the JEL codes class
 		$JEL = new JELCodes();

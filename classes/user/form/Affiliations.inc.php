@@ -54,7 +54,7 @@ class Affiliations {
   }
 
   /**
-   * Returns the array with affiliations
+   * Returns the array with localized affiliations or the in the locale given
    * @param $locale String locale for which to return affiliations
    * @return array String
    */

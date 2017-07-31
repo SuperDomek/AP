@@ -24,6 +24,10 @@
 {literal}
 <script type="text/javascript">
 <!--
+// Global variable for affiliation suffixes
+var suffixes = {/literal}{$suffixes|@json_encode}{literal};
+// Global variable for english affiliations
+var affiliationsEn = {/literal}{$affiliationsEn|@json_encode}{literal};
 
 // Move author up/down
 function moveAuthor(dir, authorIndex) {
@@ -34,8 +38,10 @@ function moveAuthor(dir, authorIndex) {
 	form.submit();
 }
 
-// shows affiliation box if required; sets up address if affiliation set up
-function showAffilBox(sel, authorIndex, originalText) {
+// shows affiliation box if required; sets up affiliation for university deps
+// @sel Object with the selected option
+// @authorIndex int index of the current author block
+function showAffilBox(sel, authorIndex) {
   //find the [authorIndex] and delete []
   var selected = sel.options[sel.selectedIndex];
   var affil_box = "authors-".concat(authorIndex).concat("-affil_box");
@@ -47,8 +53,10 @@ function showAffilBox(sel, authorIndex, originalText) {
     //tinyMCE.get(affil_text).setContent("");
   }
   else if (selected.value != ""){ //selected affil
+		var facultyKey = selected.parentNode.label; //PEF
+		var departmentKey = selected.value; //KII
     document.getElementById(affil_box).style.display = "none";
-    document.getElementById(affil_text).value = selected.text;
+    document.getElementById(affil_text).value = affiliationsEn[facultyKey][departmentKey] + suffixes[departmentKey];
     //tinyMCE.get(affil_text).setContent(selected.text);
   }
   else { // blank affil
@@ -147,7 +155,7 @@ function delDiv(sel){
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-affiliation" required="true" key="user.affiliation"}
   </td>
 	<td width="80%" class="value">
-    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this, {$authorIndex|escape}, '{$author.affiliation|escape}');">
+    <select name="authors[{$authorIndex|escape}][affiliation_select]" id="authors[{$authorIndex|escape}][affiliation_select]" class="selectForm selectMenu" onchange="showAffilBox(this, {$authorIndex|escape});">
       {html_options options=$affiliations selected=$author.affiliation_select|escape}
     </select>
 	</td>
@@ -175,12 +183,7 @@ function delDiv(sel){
 		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if $smarty.foreach.authors.total <= 1} checked="checked" {/if}/>
 	</td>
 </tr>
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
-	<td width="80%" class="value"><textarea name="authors[{$authorIndex|escape}][biography][{$formLocale|escape}]" class="textArea" id="authors-{$authorIndex|escape}-biography" rows="5" cols="40">{$author.biography[$formLocale]|escape}</textarea></td>
-</tr>
--->
+
 {if $smarty.foreach.authors.total > 1}
 <tr valign="top">
 	<td colspan="2">
@@ -234,16 +237,6 @@ function delDiv(sel){
 	<td width="20%" class="label">{fieldLabel name="authors-0-email" required="true" key="user.email"}</td>
 	<td width="80%" class="value"><input type="text" class="textField" name="authors[0][email]" id="authors-0-email" size="30" maxlength="90" /></td>
 </tr>
-<!-- EDIT Slim registration
-<tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-0-url" required="true" key="user.url"}</td>
-	<td width="80%" class="value"><input type="text" class="textField" name="authors[0][url]" id="authors-0-url" size="30" maxlength="90" /></td>
-</tr>
-<tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-0-biography" key="user.biography"}<br />{translate key="user.biography.description"}</td>
-	<td width="80%" class="value"><textarea name="authors[0][biography]" class="textArea" id="authors-0-biography[{$formLocale|escape}]" rows="5" cols="40"></textarea></td>
-</tr>
--->
 </table>
 {/foreach}
 
