@@ -82,6 +82,8 @@ class RegistrantReportPlugin extends ReportPlugin {
 			//'fax' => __('user.fax'),
 			//'address' => __('common.mailingAddress'),
 			'billing_address' => __('common.billingAddress'),
+			'companyid' => __('common.companyId'),
+			'vatregno' => __('common.VATRegNo'),
 			'country' => __('common.country'),
 			'type' => __('manager.registration.registrationType')
 		);
@@ -98,8 +100,9 @@ class RegistrantReportPlugin extends ReportPlugin {
 		
 		$columns = array_merge($columns, array(
 			'regdate' => __('manager.registration.dateRegistered'),
-			'paiddate' => __('manager.registration.datePaid'),
-			'specialreq' => __('schedConf.registration.specialRequests')
+			'paiddate' => __('manager.registration.datePaid')
+			// EDIT Shorten the report
+			// 'specialreq' => __('schedConf.registration.specialRequests')
 			));
 
 		//EDIT Add BOM
@@ -109,23 +112,23 @@ class RegistrantReportPlugin extends ReportPlugin {
 		String::fputcsv($fp, array_values($columns), ";");
 
 		while ($row =& $registrants->next()) {
-			if ( isset($registrantOptions[$row['registration_id']]) ) { 
+			if ( isset($registrantOptions[$row['registration_id']]) ) {
 				$options = $this->mergeRegistrantOptions($registrationOptionIds, $registrantOptions[$row['registration_id']]);
 			} else {
 				$options = $this->mergeRegistrantOptions($registrationOptionIds);
 			}
-			
 			foreach ($columns as $index => $junk) {
 				if (isset($row[$index])) {
 					if ($index == 'affiliation')
 						$columns[$index] = html_entity_decode(strip_tags($row[$index]), ENT_QUOTES, 'UTF-8');
 					else if ($index == 'regdate' || $index == 'paiddate')
 						$columns[$index] = $registrantReportDao->dateFromDB($row[$index]);
-					else 
+					else
 						$columns[$index] = $row[$index];
 				} else if (isset($options[$index])) {
 					$columns[$index] = $options[$index];
-				} else $columns[$index] = '';
+				} else {
+					$columns[$index] = '';}
 			}
 			// EDIT Change delimiter to ;
 			String::fputcsv($fp, $columns, ";");
@@ -143,8 +146,10 @@ class RegistrantReportPlugin extends ReportPlugin {
 	 */
 	function mergeRegistrantOptions($registrationOptionIds, $registrantOptions = array()) {
 		$returner = array();
-		foreach ( $registrationOptionIds as $id ) { 
-			$returner['option'. $id] = ( in_array($id, $registrantOptions) )?__('common.yes'):__('common.no');
+		if(isset($registrationOptionIds)){
+			foreach ( $registrationOptionIds as $id ) { 
+				$returner['option'. $id] = ( in_array($id, $registrantOptions) )?__('common.yes'):__('common.no');
+			}
 		}
 		return $returner;
 	}

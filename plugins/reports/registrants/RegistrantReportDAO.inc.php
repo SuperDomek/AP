@@ -45,6 +45,8 @@ class RegistrantReportDAO extends DAO {
 				u.fax AS fax,
 				u.mailing_address AS address,
 				u.billing_address AS billing_address,
+				u.company_id AS companyid,
+				u.vat_reg_no AS vatregno,
 				u.country AS country,
 				rtsl.setting_value AS type,
 				r.date_registered AS regdate,
@@ -64,7 +66,6 @@ class RegistrantReportDAO extends DAO {
 				(int) $schedConfId
 			)
 		);
-
 		// prepare an iterator of all the registration information
 		$registrationReturner = new DBRowIterator($result);
 
