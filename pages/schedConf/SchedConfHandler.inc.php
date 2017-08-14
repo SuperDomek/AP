@@ -215,6 +215,7 @@ class SchedConfHandler extends Handler {
 
 			import('payment.ocs.OCSPaymentManager');
 			$paymentManager =& OCSPaymentManager::getManager();
+			$typeId = $registration->getTypeId();
 
 			if (!$paymentManager->isConfigured() || !$registration || $registration->getDatePaid()) {
 				// If the system isn't fully configured or the registration is already paid,
@@ -225,9 +226,10 @@ class SchedConfHandler extends Handler {
 				return $templateMgr->display('common/message.tpl');
 			}
 		}
-		$registrationId = $registrationDao->getRegistrationIdByUser($user->getId(), $schedConf->getId());
-		$registration =& $registrationDao->getRegistration($registrationId);
-		$typeId = $registration->getTypeId();
+		else {
+			error_log("uživatel není registrován");
+			$typeId = 0;
+		}
 		//$typeId = (int) Request::getUserVar('registrationTypeId');
 		//if ($typeId) { // Registration type already chosen from user registration
 			// A registration type has been chosen
