@@ -39,7 +39,7 @@ class UserRegistrationForm extends Form {
 
 		parent::Form('registration/userRegistrationForm.tpl');
 
-		// check that the user is registered
+		// check that the user is registered; meaningless
 		//$this->addCheck(new FormValidatorCustom($this, 'registrationTypeId', 'required', 'manager.registration.form.typeIdValid', create_function('$registrationTypeId, $schedConfId', '$registrationTypeDao =& DAORegistry::getDAO(\'RegistrationTypeDAO\'); $confRegTypes =& $registrationTypeDao->getRegistrationTypesBySchedConfId($schedConfId); error_log(print_r($confRegTypes->toArray())); return $registrationTypeDao->openRegistrationTypeExistsByTypeId($registrationTypeId, $schedConfId);'), array($schedConf->getId())));
 
 		import('captcha.CaptchaManager');

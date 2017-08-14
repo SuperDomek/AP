@@ -227,7 +227,6 @@ class SchedConfHandler extends Handler {
 			}
 		}
 		else {
-			error_log("uživatel není registrován");
 			$typeId = 0;
 		}
 		//$typeId = (int) Request::getUserVar('registrationTypeId');
