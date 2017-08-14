@@ -58,7 +58,6 @@ class FacturationReportDAO extends DAO {
 			WHERE
 				r.sched_conf_id = ?
 				AND p.status = 3
-				AND r.type_id <> 0
 			GROUP BY userid
 			UNION
 			SELECT
