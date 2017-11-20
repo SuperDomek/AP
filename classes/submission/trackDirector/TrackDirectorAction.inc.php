@@ -63,7 +63,8 @@ class TrackDirectorAction extends Action {
 	 */
 	function recordDecision($trackDirectorSubmission, $decision, $stage, $comment = null) {
 		$editAssignments =& $trackDirectorSubmission->getEditAssignments();
-		if (empty($editAssignments)) return;
+		//EDIT do not check for editAssignments
+		//if (empty($editAssignments)) return;
 
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$user =& Request::getUser();
