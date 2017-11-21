@@ -14,14 +14,14 @@
 
 <p>{translate key="submission.layout.description"}</p>
 
-<p>
+<!--<p>
 	{translate key="common.file"}:&nbsp;&nbsp;&nbsp;&nbsp;
 	{if $layoutFile}
 		<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$layoutFile->getFileId()}" class="file">{$layoutFile->getFileName()|escape}</a>&nbsp;&nbsp;{$layoutFile->getDateModified()|date_format:$dateFormatShort}
 		{else}
 		{translate key="common.none"}
 	{/if}
-</p>
+</p>-->
 
 <table width="100%" class="info">
 	<tr>
@@ -50,7 +50,7 @@
 		<td colspan="6" class="nodata">{translate key="common.none"}</td>
 	</tr>
 	{/foreach}
-	<tr>
+	<!-- <tr>
 		<td colspan="6" class="separator">&nbsp;</td>
 	</tr>
 	<tr>
@@ -73,7 +73,7 @@
 	<tr>
 		<td colspan="6" class="nodata">{translate key="common.none"}</td>
 	</tr>
-	{/foreach}
+	{/foreach}-->
 	<tr>
 		<td colspan="6" class="separator">&nbsp;</td>
 	</tr>
@@ -83,11 +83,12 @@
 	<input type="hidden" name="from" value="submissionReview" />
 	<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
 	<input type="hidden" name="stage" value="{$stage|escape}" />
+	<input type="hidden" name="layoutFileType" value="galley" />
 	{translate key="submission.uploadFileTo"}
-		<input type="radio" checked="checked" name="layoutFileType" id="layoutFileTypeGalley" value="galley" />
+		<!--<input type="radio" checked="checked" name="layoutFileType" id="layoutFileTypeGalley" value="galley" />
 		<label for="layoutFileTypeGalley">{translate key="submission.galley"}</label>,
 		<input type="radio" name="layoutFileType" id="layoutFileTypeSupp" value="supp" />
-		<label for="layoutFileTypeSupp">{translate key="paper.suppFilesAbbrev"}</label>
+		<label for="layoutFileTypeSupp">{translate key="paper.suppFilesAbbrev"}</label>-->
 	<input type="file" name="layoutFile" size="10" class="uploadField" />
 	<input type="submit" value="{translate key="common.upload"}" class="button" />
 </form>

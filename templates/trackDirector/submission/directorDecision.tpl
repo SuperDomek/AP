@@ -152,7 +152,7 @@ function confirmDecision(sel){
 
 	{include file="trackDirector/submission/complete.tpl"}
 
-<!--	<div class="separator"></div>
+	<div class="separator"></div>
 
-	{include file="trackDirector/submission/layout.tpl"}-->
+	{include file="trackDirector/submission/layout.tpl"}
 {/if}
