@@ -59,6 +59,7 @@ input.defaultButton {
 
 #main h2 {
 	font-family: 'Arial Black', Monaco, Chicago;
+	font-size: 30px;
 }
 
 #main h3 {
@@ -76,6 +77,49 @@ input.defaultButton {
 #breadcrumb {
 	padding-bottom: 10px;
 	border-bottom: 1px dotted red;
+}
+
+#submission {
+	float: right;
+	position: relative;
+	width: 30%;
+	background-color: #c3262a;
+	color: white;
+	padding: 10px;
+	
+}
+
+#submission ul{
+	list-style: none;
+	margin: 0.25em 0 0.25em 0
+}
+
+#submission header, #directorDecision header{
+	font-size: 17px;
+	font-weight: bold;
+	margin: 5px 0 5px 0;
+}
+
+#submission a{
+	color: inherit;
+}
+
+#submission a:hover {
+	color: white;
+	background: #c3262a;
+	opacity: 0.7;
+}
+
+#abstract {
+	margin: 0 0 10px 0;
+}
+
+#directorDecision {
+	margin: 0 10px 10px 0;
+}
+#directorDecision ul{
+	list-style: none;
+	padding: 0;
 }
 
 #content {

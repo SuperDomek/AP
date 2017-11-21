@@ -55,56 +55,48 @@ function confirmDecision(sel){
 
 <form method="post" action="{url op="recordDecision" path=$stage}">
 
-<table width="100%" class="data">
-<tr valign="top">
-	<td class="label" width="20%">{translate key="director.paper.selectDecision"}</td>
-	<td width="80%" class="value" colspan="2">
+<ul>
+	<li><label for="decision">{translate key="director.paper.selectDecision"}</label>
 			<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-			<select name="decision" size="1" class="selectMenu"{if not $allowRecommendation} disabled="disabled"{/if} onchange="showCommentBox(this);">
+			<select name="decision" id="decision" size="1" class="selectMenu"{if not $allowRecommendation} disabled="disabled"{/if} onchange="showCommentBox(this);">
 				{assign var=availableDirectorDecisionOptions value=$submission->getDirectorDecisionOptions($currentSchedConf,$stage)}
 				{html_options_translate options=$availableDirectorDecisionOptions}
 			</select>
-			<input type="submit" id="decision_submit" onclick="return confirmDecision(this);" name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
+			<input type="submit" id="decision_submit" {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}onclick="return confirmDecision(this);"{/if} name="submit" value="{translate key="director.paper.recordDecision"}" {if not $allowRecommendation}disabled="disabled"{/if} class="button" />
 			{if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord"}{/if}
-	</td>
-</tr>
-<tr valign="top" id="decision_comment" class="hidden">
-  <td class="label"><label for="comment_text" class="error">{translate key="director.paper.decisionComment"}</label>
-  </td>
-  <td class="value">
+	</li>
+	<li > <!--class="hidden"-->
+		<label for="comment_text" class="error">{translate key="director.paper.decisionComment"}</label>
     <textarea name="comment_text" id="comment_text" rows="5" cols="40" class="textArea"></textarea>
-  </td>
-</tr>
-<tr valign="top">
-	<td class="label">{translate key="director.paper.decision"}</td>
-	<td class="value" colspan="2">
+  </li>
+	<li>
     {assign var=directorDecisionsCount value=$directorDecisions|@count}
 		{foreach from=$directorDecisions item=directorDecision key=decisionKey}
-			{if $decisionKey neq 0} | {/if}
+			{if $decisionKey neq 0} <br /> {/if}
 			{assign var="decision" value=$directorDecision.decision}
-      {if $decisionKey == $directorDecisionsCount - 1}
-        <strong>{translate key=$directorDecisionOptions.$decision}</strong>&nbsp;&nbsp;{$directorDecision.dateDecided|date_format:$dateFormatShort}
+      {if $decisionKey == 0} {* First *}
+				<strong><header>{$directorDecision.dateDecided|date_format:$dateFormatShort}</header>
+        {translate key=$directorDecisionOptions.$decision}</strong>&nbsp;&nbsp;
       {else}
-			   {translate key=$directorDecisionOptions.$decision}&nbsp;&nbsp;{$directorDecision.dateDecided|date_format:$dateFormatShort}
+				<header>{$directorDecision.dateDecided|date_format:$dateFormatShort}</header>
+				{translate key=$directorDecisionOptions.$decision}&nbsp;&nbsp;
       {/if}
 		{foreachelse}
 			{translate key="common.none"}
 		{/foreach}
-	</td>
-</tr>
+	</li>
+
 {if $isDirector}
-<tr>
-<td colspan="2">
+
+	<li>
   {if $lastDecision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
     <br />
     {if $submission->getStatus() == STATUS_ARCHIVED}{translate key="submissions.archived"}{else}<a href="{url op="archiveSubmission" path=$submission->getPaperId()}" onclick="return window.confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmToArchive"}')" class="action">{translate key="director.paper.sendToArchive"}</a>{/if}
     {if $submission->getDateToArchive()}{$submission->getDateToArchive()|date_format:$dateFormatShort}{/if}
   {/if}
-</td>
-</tr>
+	</li>
 {/if}
-</table>
-
+</ul>
 </form>
 
 
@@ -119,13 +111,10 @@ function confirmDecision(sel){
   {if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
       $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS ||
 			$lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}
-	<table class="data" width="100%">
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="submission.directorDecisionComment"}</td>
-			<td width="80%" class="nodata">
+	<ul>
+			<li>{translate key="submission.directorDecisionComment"}
 				<span>{$decisionComment|escape}</span>
-			</td>
-		</tr>
+		</li>
 		{*
 		{if not $reviewingAbstractOnly}
     	{if not $isStageDisabled && $isDirector}    
@@ -141,7 +130,7 @@ function confirmDecision(sel){
 		</tr>
     	{/if}
 		{/if} *}
-	</table>
+</ul>
   {/if}
 
 

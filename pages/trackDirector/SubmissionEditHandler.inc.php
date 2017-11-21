@@ -288,7 +288,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('tracks', $tracks->toArray());
 		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions(null, $stage));
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
-		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
+		$templateMgr->assign_by_ref('directorDecisions', array_reverse($directorDecisions));
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
 		$templateMgr->assign('isDirector', Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()));
 		$templateMgr->assign_by_ref('user', $user);

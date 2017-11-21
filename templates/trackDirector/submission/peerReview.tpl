@@ -9,35 +9,21 @@
  * $Id$
  *}
 <div id="submission">
-<h3>{translate key="paper.submission"}</h3>
 
-<table width="100%" class="data">
+<ul>
   {if $isDirector}
-	<tr>
-		<td width="20%" class="label">{translate key="paper.authors"}</td>
-		<td width="80%">
+	<li><header>{translate key="paper.authors"}</header>
 			{url|assign:"url" page="user" op="email" redirectUrl=$currentUrl to=$submission->getAuthorEmails() subject=$submission->getLocalizedTitle() paperId=$submission->getPaperId()}
-			{$submission->getAuthorString()|escape} {icon name="mail" url=$url}
-		</td>
-	</tr>
+			<a href="{$url}" alt="Mail the author" title="Mail the author">{$submission->getAuthorString()|escape}</a>{*icon name="mail" url=$url*}
+</li>
   {/if}
-  <tr>
-    <td width="20%" class="label">{translate key="paper.submitterId"}</td>
-    <td width="80%">
-      {$submitterId}
-    </td>
-  </tr>
-	<tr>
-		<td class="label">{translate key="paper.title"}</td>
-		<td>{$submission->getLocalizedTitle()|strip_unsafe_html}</td>
-	</tr>
-	<tr>
-		<td class="label">{translate key="track.track"}</td>
-		<td>{$submission->getTrackTitle()|escape}</td>
-	</tr>
-	<tr>
-		<td class="label">{translate key="user.role.trackDirector"}</td>
-		<td>
+<li><header>{translate key="paper.submitterId"}</header>
+      {$submitterId}</li>
+<li><header>{translate key="paper.title"}</header>
+		{$submission->getLocalizedTitle()|strip_unsafe_html}</li>
+<li><header>{translate key="track.track"}</header>
+{$submission->getTrackTitle()|escape}</li>
+<li><header>{translate key="user.role.trackDirector"}</header>
 			{assign var=editAssignments value=$submission->getEditAssignments()}
 			{foreach from=$editAssignments item=editAssignment}
 				{assign var=emailString value=$editAssignment->getDirectorFullName()|concat:" <":$editAssignment->getDirectorEmail():">"}
@@ -47,38 +33,33 @@
 			{foreachelse}
 				{translate key="common.noneAssigned"}
 			{/foreach}
-		</td>
-	</tr>
-
-	{if $reviewingAbstractOnly}
-		{* If this review level is for the abstract only, show the abstract. *}
-		<tr valign="top">
-			<td class="label" width="20%">{translate key="submission.abstract"}</td>
-			<td width="80%" class="value">
-			{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}
-			</td>
-		</tr>
-		{if $abstractChangesLast}
-		<tr valign="top">
-			<td class="label" width="20%">{translate key="submission.abstractChangedDate"}</td>
-			<td width="80%" class="value">
-			{$abstractChangesLast->getDateLogged()|date_format:$dateFormatShort}
-			</td>
-		</tr>
-		{/if}
-	{/if}
-</table>
-
-<div class="separator"></div>
+			</li>
 </div>
 
-<div id="peerReview">
+	{if $reviewingAbstractOnly}
+	<div id="abstract">
+	<h3>>{translate key="submission.abstract"}</h3>
+		{* If this review level is for the abstract only, show the abstract. *}
+
+			{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}
+
+		{if $abstractChangesLast}
+
+{translate key="submission.abstractChangedDate"}
+
+			{$abstractChangesLast->getDateLogged()|date_format:$dateFormatShort}
+
+
+		{/if}
+	</div>
+	{/if}
 
 {if ($stage == REVIEW_STAGE_PRESENTATION && $submission->getCurrentStage() < $smarty.const.REVIEW_STAGE_PRESENTATION)}
 	{assign var="isStageDisabled" value=true}
 {/if}
 
 {if $isStageDisabled}
+<div class="separator"></div>
 	<table class="data" width="100%">
 		<tr valign="middle">
 			<td><h3>{translate key="submission.peerReview"}</h3></td>
@@ -87,23 +68,25 @@
 			<td><span class="instruct">{translate key="director.paper.stageDisabled"}</span></td>
 		</tr>
 	</table>
+{elseif $stage == $smarty.const.REVIEW_STAGE_ABSTRACT && $submission->getReviewMode() != $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
+{* No reviewers in abstract stage*}
 {else}
+<div class="separator"></div>
+</div>
+
+<div id="peerReview">
 	<table class="data" width="100%">
 		<tr valign="middle">
 			<td width="20%">
 				{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
 					<h3>{translate key="submission.review"}</h3>
-				{elseif $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
-					<h3>{translate key="submission.abstractReview"}</h3>
-				{else}{* REVIEW_STAGE_PRESENTATION *}
+				{elseif $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION}
 					<h3>{translate key="submission.paperReview"}</h3>
           <strong>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</strong><br />
 				{/if}
 			</td>
-      {if $isReviewer && $stage == $smarty.const.REVIEW_STAGE_ABSTRACT}
-      {* The conference doesn't want the add reviewers button in abstract review *}
-      {else}
-			<td width="80%" class="nowrap">
+      {if $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION}
+      <td width="80%" class="nowrap">
 				<a href="{url op="selectReviewer" path=$submission->getPaperId()}" class="action">{translate key="director.paper.selectReviewer"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="{url op="submissionRegrets" path=$submission->getPaperId()}" class="action">{translate|escape key="trackDirector.regrets.link"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</td>
@@ -409,5 +392,6 @@
 	</table>
 	{/if}
 	{/foreach}
-{/if}
 </div>
+{/if}
+
