@@ -18,15 +18,15 @@
 
 <ul class="menu">
 	<li><a href="{url op="submission" path=$submission->getPaperId()}">{translate key="submission.summary"}</a></li>
-	{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL}
+	{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL && $isDirector}
 		<li><a href="{url op="submissionReview" path=$submission->getPaperId()}">
 			{translate key="submission.abstractReview"}</a>
 		</li>
-		<li><a href="{url op="submissionReview" path=$submission->getPaperId()}">
+		<li><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}">
 			{translate key="submission.paperReview"}</a>
 		</li>
 	{else}
-		<li><a href="{url op="submissionReview" path=$submission->getPaperId()}">{translate key="submission.review"}</a></li>
+		<li><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}">{translate key="submission.review"}</a></li>
 	{/if}
 	<li class="current"><a href="{url op="submissionHistory" path=$submission->getPaperId()}">{translate key="submission.history"}</a></li>
 </ul>

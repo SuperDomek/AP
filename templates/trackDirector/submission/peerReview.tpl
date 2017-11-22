@@ -26,28 +26,31 @@
 <li><header>{translate key="user.role.trackDirector"}</header>
 			{assign var=editAssignments value=$submission->getEditAssignments()}
 			{foreach from=$editAssignments item=editAssignment}
-				{assign var=emailString value=$editAssignment->getDirectorFullName()|concat:" <":$editAssignment->getDirectorEmail():">"}
-				{url|assign:"url" page="user" op="email" redirectUrl=$currentUrl to=$emailString|to_array subject=$submission->getLocalizedTitle()|strip_tags paperId=$submission->getPaperId()}
-				{$editAssignment->getDirectorFullName()|escape} {icon name="mail" url=$url}
+				{url|assign:"url" page="trackdirector" op="userProfile" path=$editAssignment->getDirectorId()}
+				<a href="{$url}" alt="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}" title="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}">{$editAssignment->getDirectorFullName()|escape}</a> {*icon name="mail" url=$url*}
 				<br/>
 			{foreachelse}
-				{translate key="common.noneAssigned"}
+				{if $isDirector}
+				<a href="{url page="director" op="assignDirector" path="trackDirector" paperId=$submission->getPaperId()}">
+					<button class="button">{translate key="director.paper.assignTrackDirector"}</button></a>
+				{else}
+					{translate key="common.noneAssigned"}
+				{/if}
 			{/foreach}
 			</li>
 </div>
 
 	{if $reviewingAbstractOnly}
 	<div id="abstract">
-	<h3>>{translate key="submission.abstract"}</h3>
+	<h3>{translate key="submission.abstract"}</h3>
 		{* If this review level is for the abstract only, show the abstract. *}
 
 			{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}
 
 		{if $abstractChangesLast}
 
-{translate key="submission.abstractChangedDate"}
-
-			{$abstractChangesLast->getDateLogged()|date_format:$dateFormatShort}
+	<p>{translate key="submission.abstractChangedDate"}: 
+			{$abstractChangesLast->getDateLogged()|date_format:$dateFormatShort}</p>
 
 
 		{/if}
@@ -71,95 +74,105 @@
 {elseif $stage == $smarty.const.REVIEW_STAGE_ABSTRACT && $submission->getReviewMode() != $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
 {* No reviewers in abstract stage*}
 {else}
-<div class="separator"></div>
-</div>
-
 <div id="peerReview">
-	<table class="data" width="100%">
-		<tr valign="middle">
-			<td width="20%">
-				{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
-					<h3>{translate key="submission.review"}</h3>
-				{elseif $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION}
-					<h3>{translate key="submission.paperReview"}</h3>
-          <strong>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</strong><br />
-				{/if}
-			</td>
-      {if $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION}
-      <td width="80%" class="nowrap">
-				<a href="{url op="selectReviewer" path=$submission->getPaperId()}" class="action">{translate key="director.paper.selectReviewer"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="{url op="submissionRegrets" path=$submission->getPaperId()}" class="action">{translate|escape key="trackDirector.regrets.link"}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-			</td>
-      {/if}
-		</tr>
-    {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
-      {if $reviewFile}
-        {if $reviewFile->getChecked() == 1}
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
-			<td width="80%" class="value">
-				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>&nbsp;&nbsp;({$reviewFile->getDateModified()|date_format:$dateFormatShort})
-			</td>
-		</tr>
-					{if $stage > $smarty.const.REVIEW_STAGE_PRESENTATION}
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="common.checklistOfAdjustments"}</td>
-			<td width="80%" class="value">
-				<span>{$changes|escape}</span>
-			</td>
-		</tr>
-					{/if} {* $stage > $smarty.const.REVIEW_STAGE_PRESENTATION *}
-				{elseif $isDirector} 
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
-			<td width="80%" class="value">
-				<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" title="{$reviewFile->getDateModified()|date_format:$dateFormatShort}">{$reviewFile->getFileName()|escape}</a>
-			</td>
-		</tr>
-        {else} {* $reviewFile->getChecked() == 0 || !$isDirector *}
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="submission.reviewVersion"}</td>
-			<td class="warning value">{translate key="submission.fileNotChecked"}</td>
-		</tr>
-        {/if}
-        {if $reviewFile->getChecked() == null && $isDirector}
-		<tr valign="top">
-			<td colspan="2">
-				<form method="post" action="{url op="makeFileChecked"}">
-					<input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
-					<input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
-					<input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
-					{translate key="editor.paper.confirmReviewFile"}<br />
-					<button type="submit" name="checked" value="1" class="positive">{translate key="submission.fileOkay"}</button>
-					&nbsp;
-					<button type="submit" name="checked" value="0" class="negative">{translate key="submission.fileNotOkay"}</button>
-				</form>
-			</td>
-		</tr>
-        {elseif $reviewFile->getChecked() == 0 && $isDirector}
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="director.paper.uploadReviewVersion"}</td>
-			<td width="80%" class="nodata">
-				<form method="post" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
-					<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-					<input type="file" name="upload" class="uploadField" />
-					<input type="submit" name="submit" value="{translate key="common.upload"}" class="button" />
-				</form>
-			</td>
-		</tr>
-        {/if} {* $reviewFile->getChecked() *}
-    				<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
-  		{else} {* !$reviewFile *}
-		<tr valign="top">
-			<td width="20%" class="label">{translate key="submission.reviewVersion"}:</td>
-			<td width="80%" class="value">
-				{translate key="common.none"}
-			</td>
-		</tr>
-  		{/if} {* $reviewFile *}
-    {/if} {* $stage *}
-	</table>
+	{if $submission->getReviewMode() == $smarty.const.REVIEW_MODE_BOTH_SIMULTANEOUS}
+		<h3>{translate key="submission.review"}</h3>
+	{elseif $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION}
+		<h3>{translate key="submission.stage" stage=$submission->getCurrentStage()-1}</h3>
+	{/if}
+	{if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
+		<h4>{translate key="submission.reviewVersion"}</h4>
+		{if $reviewFile}
+			{if $reviewFile->getChecked() == 1}
+				<div class="tbl-container">
+					<table class="files">
+					<tbody>
+						<tr>
+							<td width="3%">
+								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >
+									{icon name="page_text"}
+								</a>
+							</td>
+							<td width="35%">
+								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>
+							</td>
+							<td><span style="color: #0b9e3f;">{translate key="submission.fileAccepted"}</span></td>
+							<td>{$reviewFile->getNiceFileSize()}</td>
+							<td>{$reviewFile->getFileType()}</td>
+							<td>{$reviewFile->getDateModified()|date_format:$dateFormatShort}</td>
+						</tr>
+					</tbody>
+					</table>
+				</div>
+				{if $stage > $smarty.const.REVIEW_STAGE_PRESENTATION}
+					<header>{translate key="common.checklistOfAdjustments"}</header>
+					<p>{$changes|escape}</p>
+				{/if} {* $stage > $smarty.const.REVIEW_STAGE_PRESENTATION *}
+			{elseif $isDirector}
+				<div class="tbl-container">
+					<table class="files">
+					<tbody>
+						<tr>
+							<td width="3%">
+								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >
+									{icon name="page_text"}
+								</a>
+							</td>
+							<td width="35%">
+								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>
+							</td>
+							<td><span style="color: #e85a09;">{translate key="submission.filePending"}</span></td>
+							<td>{$reviewFile->getNiceFileSize()}</td>
+							<td>{$reviewFile->getFileType()}</td>
+							<td>{$reviewFile->getDateModified()|date_format:$dateFormatShort}</td>
+						</tr>
+					</tbody>
+					</table>
+				</div>
+			{else} {* $reviewFile->getChecked() == 0 || !$isDirector *}
+				<div class="tbl-container">
+					<table class="files">
+					<tbody>
+						<tr>
+							<td>
+								<span class="warning">{translate key="submission.fileNotChecked"}</span>
+							</td>
+						</tr>
+					</tbody>
+					</table>
+			{/if}
+			{if $reviewFile->getChecked() == null && $isDirector}
+			<form method="post" id="formCheck" action="{url op="makeFileChecked"}">
+				<input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
+				<input type="hidden" name="fileId" value="{$reviewFile->getFileId()}"/>
+				<input type="hidden" name="revision" value="{$reviewFile->getRevision()}"/>
+				<header>{translate key="editor.paper.confirmReviewFile"}</header>
+				<button type="submit" form="formCheck" name="checked" value="1" class="positive button">{translate key="submission.fileOkay"}</button>
+				&nbsp;
+				<button type="submit" form="formCheck" name="checked" value="0" class="negative button">{translate key="submission.fileNotOkay"}</button>
+			</form>
+			{elseif $reviewFile->getChecked() == 0 && $isDirector}
+				<header>{translate key="director.paper.uploadReviewVersion"}</header>
+			<form method="post" id="formUpload" action="{url op="uploadReviewVersion"}" enctype="multipart/form-data">
+				<input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
+				<input type="file" name="upload" class="uploadField" />
+				<button type="submit" name="submit" form="formUpload" value="Submit" class="button">{translate key="common.upload"}</button>
+			</form>
+			{/if} {* $reviewFile->getChecked() *}
+					<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
+		{else} {* !$reviewFile *}
+			{translate key="common.none"}
+		{/if} {* $reviewFile *}
+	{/if} {* $stage *}
 
+<div class="separator"></div>
+
+	<div id="reviewers">
+		<div class="revMenu"> 
+			<h4>{translate key="user.role.reviewers"}</h4>
+			<a href="{url op="selectReviewer" path=$submission->getPaperId()}"><button class="button">{translate key="director.paper.selectReviewer"}</button></a>
+			<a href="{url op="submissionRegrets" path=$submission->getPaperId()}"><button class="button">{translate|escape key="trackDirector.regrets.link"}</button></a>
+		</div>
 	{assign var="start" value="A"|ord}
 	{foreach from=$reviewAssignments item=reviewAssignment key=reviewKey}
 	{assign var="reviewId" value=$reviewAssignment->getId()}
@@ -177,20 +190,18 @@
 
 	{if not $reviewAssignment->getCancelled()}
 		{assign var="reviewIndex" value=$reviewIndexes[$reviewId]}
-		<div class="separator"></div>
+		
 
-		<table class="data" width="100%">
-		<tr>
-			<td width="20%"><h4>{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</h4></td>
+		<table class="reviewers" width="100%">
+		<tr class="name">
+			<td width="20%">{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</td>
 			<td width="80%">
         <strong>{$reviewAssignment->getReviewerFullName()|escape}</strong>
-        &nbsp;
-        &nbsp;
         {*if $stage != REVIEW_STAGE_ABSTRACT*}
   					{if not $reviewAssignment->getDateNotified()}
-  						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action">{translate key="director.paper.clearReview"}</a>
+  						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action"><button class="negative button">{translate key="director.paper.clearReview"}</button></a>
   					{elseif $reviewAssignment->getDeclined() or not $reviewAssignment->getDateCompleted()}
-  						<a href="{url op="cancelReview" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="director.paper.cancelReview"}</a>
+  						<a href="{url op="cancelReview" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action"><button class="negative button">{translate key="director.paper.cancelReview"}</button></a>
   					{/if}
         {*/if*}
       </td>
@@ -392,6 +403,7 @@
 	</table>
 	{/if}
 	{/foreach}
+	</div>
 </div>
 {/if}
 

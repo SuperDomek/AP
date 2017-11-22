@@ -82,7 +82,7 @@
 	<message key="user.profile.newPassword">Nové heslo</message>
 	<message key="user.profile.oldPassword">Současné heslo</message>
 	<message key="user.profile">Profil</message>
-	<message key="user.profile.publicProfile">Profil uživatele</message>
+	<message key="user.profile.publicProfile">Profil uživatele {$user}</message>
 	<message key="user.profile.repeatNewPassword">Nové heslo znovu</message>
 	<message key="user.register.form.emailExists">Zvolenou emailovou adresu již používá jiný uživatel.</message>
 	<message key="user.register.form.passwordsDoNotMatch">Hesla nejsou totožná.</message>

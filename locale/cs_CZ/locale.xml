@@ -217,7 +217,7 @@
 	<message key="submission.paperReview">Posudek příspěvku</message>
 	<message key="submission.paperReviews">Posudky příspěvku</message>
 	<message key="submission.page.abstractReview">Posudek abstraktu č. {$id}</message>
-	<message key="submission.page.paperReview">Posudek příspěvku č. {$id}</message>
+	<message key="submission.page.paperReview">Recenze příspěvku č. {$id}</message>
 	<message key="submission.uploadFile">Nahrát příspěvek</message>
 	<message key="submission.fileChanges">Seznam provedených úprav (více než 10 znaků)</message>
 	<message key="submission.changeTrack">Změnit na</message>

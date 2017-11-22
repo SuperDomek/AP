@@ -86,18 +86,19 @@ input.defaultButton {
 	background-color: #c3262a;
 	color: white;
 	padding: 10px;
-	
+	text-align: left;
 }
 
 #submission ul{
 	list-style: none;
-	margin: 0.25em 0 0.25em 0
+	margin: 7px;
+	padding-left: 20px;
 }
 
-#submission header, #directorDecision header{
+#submission header{
 	font-size: 17px;
 	font-weight: bold;
-	margin: 5px 0 5px 0;
+	margin: 0.3em 0 0.3em -20px;
 }
 
 #submission a{
@@ -117,9 +118,59 @@ input.defaultButton {
 #directorDecision {
 	margin: 0 10px 10px 0;
 }
+
+#directorDecision header{
+	font-size: 17px;
+	font-weight: bold;
+	margin: 0.3em 0 0.3em -10px;
+}
+
 #directorDecision ul{
 	list-style: none;
-	padding: 0;
+	padding-left: 20px;
+	margin: 10px 0 10px 0;
+}
+
+#directorDecision label {
+	display: block;
+}
+
+#peerReview header{
+	font-size: 17px;
+	font-weight: bold;
+	margin: 0.3em 0 0.3em 0;
+}
+
+#reviewers h4{
+	display: inline;
+}
+#reviewers .revMenu{
+	margin: 10px 0 10px 0;
+}
+
+#reviewers .revMenu button{
+	position: relative;
+	top: -0.5em;
+}
+
+table.files{
+	width: 100%;
+	table-layout: fixed;
+	border-collapse:collapse;
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	margin: 10px 0 10px 0;
+}
+
+table.files td{
+	padding: 10px;
+}
+
+table.reviewers tr.name{
+	background-color: #cfcfcf;
+}
+.tbl-container {
+	overflow: hidden;
 }
 
 #content {
@@ -140,13 +191,13 @@ input.defaultButton {
 	color: white;
 }
 
-form .positive {
+.positive {
 	background-color: #0b9e3f;
 	font-weight: bold;
 }
 
-form .negative {
-	background-color: #e85a09;
+.negative {
+	background-color: #c3262a;
 	font-weight: bold;
 }
 

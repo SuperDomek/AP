@@ -154,6 +154,9 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$submission =& $this->submission;
 		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
+		$roleDao =& DAORegistry::getDAO('RoleDAO');
+		$isDirector = $roleDao->roleExists($conference->getId(), $schedConf->getId(), $user->getId(), ROLE_ID_DIRECTOR);
+
 		$stage = (isset($args[1]) ? (int) $args[1] : null);
 		$reviewMode = $submission->getReviewMode();
 		switch ($reviewMode) {
@@ -290,7 +293,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
 		$templateMgr->assign_by_ref('directorDecisions', array_reverse($directorDecisions));
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
-		$templateMgr->assign('isDirector', Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()));
+		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 		$templateMgr->assign('changes', $changes);

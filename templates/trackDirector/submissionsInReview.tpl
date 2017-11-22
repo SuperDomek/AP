@@ -98,7 +98,7 @@
       {assign var=reviewFile value=$submission->getReviewFile()}
       {if $reviewFile}
         {if $reviewFile->getChecked() == 1}
-          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted""}</span>
+          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted"}</span>
         {else}
           <span style="color:#e85a09;">{translate key="submission.filePending"}</span>
         {/if}

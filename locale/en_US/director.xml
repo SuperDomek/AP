@@ -60,7 +60,7 @@
 	<message key="director.paper.enterRecommendation">Enter Recommendation</message>
 	<message key="director.paper.enterReviewerRecommendation">Enter Reviewer Recommendation</message>
 	<message key="director.paper.recommendation">Recommendation</message>
-	<message key="director.paper.selectReviewer">Select Reviewer</message>
+	<message key="director.paper.selectReviewer">Add Reviewer</message>
 	<message key="director.paper.replaceReviewer">Replace Reviewer</message>
 	<message key="director.paper.directorToEnter">Director to enter recommendation/comments for reviewer</message>
 	<message key="director.paper.uploadReviewForReviewer">Upload review</message>
@@ -93,7 +93,7 @@
 	<message key="director.paper.assignDirector">Add main editor</message>
 	<message key="director.paper.selectDirector">Select {$roleName}</message>
 	<message key="director.paper.selectDecision">Select decision</message>
-	<message key="director.abstract.decision.invitePresentation">Accept abstract without change</message>
+	<message key="director.abstract.decision.invitePresentation">Accept abstract</message>
 	<message key="director.abstract.decision.pendingRevisions">Accept abstract with suggestions</message>
 	<message key="director.abstract.decision.decline">Reject abstract</message>
 	<message key="director.paper.decision.accept">Accept paper without changes</message>
