@@ -194,17 +194,23 @@
 
 		<table class="reviewers" width="100%">
 		<tr class="name">
-			<td width="20%">{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</td>
-			<td width="80%">
+			<td>{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</td>
+			<td>
         <strong>{$reviewAssignment->getReviewerFullName()|escape}</strong>
-        {*if $stage != REVIEW_STAGE_ABSTRACT*}
+      </td>
+			<td>
+			{assign var="reviewStatusIndex" value=$reviewAssignment->getReviewStatus()}
+			{translate key=$reviewStatusOptions[$reviewStatusIndex]}
+			</td>
+			<td>
+				{*if $stage != REVIEW_STAGE_ABSTRACT*}
   					{if not $reviewAssignment->getDateNotified()}
   						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action"><button class="negative button">{translate key="director.paper.clearReview"}</button></a>
   					{elseif $reviewAssignment->getDeclined() or not $reviewAssignment->getDateCompleted()}
   						<a href="{url op="cancelReview" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action"><button class="negative button">{translate key="director.paper.cancelReview"}</button></a>
   					{/if}
         {*/if*}
-      </td>
+			</td>
 		</tr>
 
 

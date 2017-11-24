@@ -236,9 +236,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$reviewFormDao =& DAORegistry::getDAO('ReviewFormDAO');
 		$reviewFormTitles = array();
+		$reviewStatusOptions = array();
 
 		if ($submission->getReviewAssignments($stage)) {
 			foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
+				if(empty($reviewStatusOptions))
+					$reviewStatusOptions = $reviewAssignment->getReviewStatusOptions();
 				$reviewForm =& $reviewFormDao->getReviewForm($reviewAssignment->getReviewFormId());
 				if ($reviewForm) {
 					$reviewFormTitles[$reviewForm->getId()] = $reviewForm->getLocalizedTitle();
@@ -278,6 +281,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexesForStage($paperId, $stage));
 		$templateMgr->assign('stage', $stage);
 		$templateMgr->assign_by_ref('reviewAssignments', $submission->getReviewAssignments($stage));
+		$templateMgr->assign('reviewStatusOptions', $reviewStatusOptions);
 		$templateMgr->assign('reviewFormResponses', $reviewFormResponses);
 		$templateMgr->assign('reviewFormTitles', $reviewFormTitles);
 		$templateMgr->assign_by_ref('notifyReviewerLogs', $notifyReviewerLogs);

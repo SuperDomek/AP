@@ -538,6 +538,12 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.decision.decline">Odmítnout příspěvek</message>
 	<message key="reviewer.paper.decision.seeComments">Prohlížet komentáře</message>
 	<message key="reviewer.paper.schedule">Program</message>
+	<message key="reviewer.paper.status.cancelled">Zrušeno</message>
+	<message key="reviewer.paper.status.finished">Dokončeno</message>
+	<message key="reviewer.paper.status.overdue">Po termínu</message>
+	<message key="reviewer.paper.status.declined">Odmítnuto</message>
+	<message key="reviewer.paper.status.active">Recenzuje</message>
+	<message key="reviewer.paper.status.unknown">Neznámo</message>
 	<message key="reviewer.paper.submissionToBeReviewed">Příspěvek k oponentuře</message>
 	<message key="reviewer.paper.reviewSchedule">Rozvrh oponentur</message>
 	<message key="reviewer.paper.reviewSteps">Kroky oponentury</message>
