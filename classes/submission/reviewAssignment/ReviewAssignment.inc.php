@@ -168,8 +168,11 @@ class ReviewAssignment extends DataObject {
 		else if($this->getDeclined()){
 			return REVIEW_STATUS_DECLINED;
 		}
-		else if($this->getDateAssigned()){
+		else if($this->getDateConfirmed()){
 			return REVIEW_STATUS_ACTIVE;
+		}
+		else if($this->getDateAssigned()){
+			return REVIEW_STATUS_ASSIGNED;
 		}
 		else{
 			return REVIEW_STATUS_UNKNOWN;
@@ -190,6 +193,7 @@ class ReviewAssignment extends DataObject {
 				REVIEW_STATUS_OVERDUE => 'reviewer.paper.status.overdue',
 				REVIEW_STATUS_DECLINED => 'reviewer.paper.status.declined',
 				REVIEW_STATUS_ACTIVE => 'reviewer.paper.status.active',
+				REVIEW_STATUS_ASSIGNED => 'reviewer.paper.status.assigned',
 				REVIEW_STATUS_UNKNOWN => 'reviewer.paper.status.unknown'
 			);
 		}

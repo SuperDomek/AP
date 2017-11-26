@@ -540,6 +540,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.status.overdue">Overdue</message>
 	<message key="reviewer.paper.status.declined">Declined</message>
 	<message key="reviewer.paper.status.active">Reviewing</message>
+	<message key="reviewer.paper.status.assigned">Assigned</message>
 	<message key="reviewer.paper.status.unknown">Unknown</message>
 	<message key="reviewer.paper.submissionToBeReviewed">Submission To Be Reviewed</message>
 	<message key="reviewer.paper.reviewSchedule">Review Schedule</message>

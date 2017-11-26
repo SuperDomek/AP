@@ -203,6 +203,13 @@
 			{translate key=$reviewStatusOptions[$reviewStatusIndex]}
 			</td>
 			<td>
+				{if $reviewAssignment->getDeclined()}
+					{translate key="trackDirector.regrets"}
+				{else}
+					<a href="{url op="setDueDate" path=$reviewAssignment->getPaperId()|to_array:$reviewAssignment->getId()}">{if $reviewAssignment->getDateDue()}{$reviewAssignment->getDateDue()|date_format:$dateFormatShort}{else}&mdash;{/if}</a>
+				{/if}
+			</td>
+			<td>
 				{*if $stage != REVIEW_STAGE_ABSTRACT*}
   					{if not $reviewAssignment->getDateNotified()}
   						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action"><button class="negative button">{translate key="director.paper.clearReview"}</button></a>
@@ -229,54 +236,7 @@
   		</td>
 	  </tr>
    -->
-		<tr valign="top">
-			<td colspan="2">
-				<table width="100%" class="info">
-					<tr>
-						<td class="heading" width="25%">{translate key="submission.request"}</td>
-						<td class="heading" width="25%">{translate key="submission.underway"}</td>
-						<td class="heading" width="25%">{translate key="submission.due"}</td>
-						<td class="heading" width="25%">{translate key="submission.acknowledge"}</td>
-					</tr>
-					<tr valign="top">
-						<td>
-							{url|assign:"reviewUrl" op="notifyReviewer" reviewId=$reviewAssignment->getId() paperId=$submission->getPaperId()}
-							{if !$allowRecommendation}
-								{icon name="mail" url=$reviewUrl disabled="true"}
-							{elseif $reviewAssignment->getDateNotified()}
-								{$reviewAssignment->getDateNotified()|date_format:$dateFormatShort}
-							{else}
-								{icon name="mail" url=$reviewUrl}
-							{/if}
-						</td>
-						<td>
-							{$reviewAssignment->getDateConfirmed()|date_format:$dateFormatShort|default:"&mdash;"}
-						</td>
-						<td>
-							{if $reviewAssignment->getDeclined()}
-								{translate key="trackDirector.regrets"}
-							{else}
-								<a href="{url op="setDueDate" path=$reviewAssignment->getPaperId()|to_array:$reviewAssignment->getId()}">{if $reviewAssignment->getDateDue()}{$reviewAssignment->getDateDue()|date_format:$dateFormatShort}{else}&mdash;{/if}</a>
-							{/if}
-						</td>
-						<td>
-							{url|assign:"thankUrl" op="thankReviewer" reviewId=$reviewAssignment->getId() paperId=$submission->getPaperId()}
-							{if $reviewAssignment->getDateAcknowledged()}
-								{$reviewAssignment->getDateAcknowledged()|date_format:$dateFormatShort}
-							{elseif $reviewAssignment->getDateCompleted()}
-								{icon name="mail" url=$thankUrl}
-							{else}
-								{icon name="mail" disabled="disabled" url=$thankUrl}
-							{/if}
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
 
-    <tr>
-  		<td colspan="2">&nbsp;</td>
-  	</tr>
     <tbody {if $greyOut}style="color:#a5a3a5 !important;"{/if}>
 		{if $reviewAssignment->getDateConfirmed() && !$reviewAssignment->getDeclined()}
 			<tr valign="top" >
