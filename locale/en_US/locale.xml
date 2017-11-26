@@ -518,6 +518,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.submitReview">Submit Review To Director</message>
 	<message key="reviewer.paper.reviewerComments">Comments</message>
 	<message key="reviewer.paper.uploadedFile">Uploaded files</message>
+	<message key="reviewer.paper.table.order">Order</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersion">Version uploaded by reviewer</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersionDescription">(If you want to annotate the file, for the director, save on your hard drive and use Browse/Upload.)</message>
 	<message key="reviewer.paper.schedule.request">Editor's Request</message>

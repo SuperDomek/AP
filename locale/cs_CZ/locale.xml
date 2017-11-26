@@ -521,6 +521,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.submitReview">Předat oponenturu garantovi</message>
 	<message key="reviewer.paper.reviewerComments">Komentáře</message>
 	<message key="reviewer.paper.uploadedFile">Nahrané soubory</message>
+	<message key="reviewer.paper.table.order">Pořadí</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersion">Verze nahraná oponentem</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersionDescription">(Chcete-li psát poznámky pro garanta přímo do souboru, uložte soubor na pevný disk a poté použijte Najít/načíst.)</message>
 	<message key="reviewer.paper.schedule.request">Požadavek garanta</message>

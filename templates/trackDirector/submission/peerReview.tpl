@@ -161,7 +161,17 @@
 			{/if} {* $reviewFile->getChecked() *}
 					<!--&nbsp;&nbsp;&nbsp;&nbsp;<a class="action" href="javascript:openHelp('{get_help_id key="editorial.trackDirectorsRole.review.blindPeerReview" url="true"}')">{translate key="reviewer.paper.ensuringBlindReview"}</a> -->
 		{else} {* !$reviewFile *}
-			{translate key="common.none"}
+			<div class="tbl-container">
+				<table class="files">
+				<tbody>
+					<tr>
+						<td>
+							{translate key="common.none"}
+						</td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
 		{/if} {* $reviewFile *}
 	{/if} {* $stage *}
 
@@ -193,23 +203,66 @@
 		
 
 		<table class="reviewers" width="100%">
+		<thead>
+			<tr>
+				<td width="5%">
+					{translate key="reviewer.paper.table.order"}
+				</td>
+				<td width="45%">
+					{translate key="user.role.reviewer"}
+				</td>
+				<td width="10%">
+				</td>
+				<td width="20%">
+				</td>
+				<td width="10%">
+				</td>
+				<td width="10%">
+				</td>
+			</tr>
+		</thead>
+		<tbody {if $greyOut}style="color:#a5a3a5 !important;"{/if}>
 		<tr class="name">
-			<td>{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</td>
-			<td>
+			<td width="10%">{$reviewIndex+$start|chr}</td>
+			<td width="60%">
         <strong>{$reviewAssignment->getReviewerFullName()|escape}</strong>
       </td>
-			<td>
-			{assign var="reviewStatusIndex" value=$reviewAssignment->getReviewStatus()}
-			{translate key=$reviewStatusOptions[$reviewStatusIndex]}
-			</td>
-			<td>
+			<td width="5%">
 				{if $reviewAssignment->getDeclined()}
 					{translate key="trackDirector.regrets"}
 				{else}
 					<a href="{url op="setDueDate" path=$reviewAssignment->getPaperId()|to_array:$reviewAssignment->getId()}">{if $reviewAssignment->getDateDue()}{$reviewAssignment->getDateDue()|date_format:$dateFormatShort}{else}&mdash;{/if}</a>
 				{/if}
 			</td>
-			<td>
+			<td width="10%">
+				{if $reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== ''}
+						{assign var="recommendation" value=$reviewAssignment->getRecommendation()}
+						{translate key=$reviewerRecommendationOptions.$recommendation}
+						&nbsp;&nbsp;{$reviewAssignment->getDateCompleted()|date_format:$dateFormatShort}
+					{else}
+						{translate key="common.none"}&nbsp;&nbsp;&nbsp;&nbsp;
+            {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
+              {if $user->getId() != $reviewAssignment->getReviewerId()}
+                {if $greyOut}
+                  {translate key="reviewer.paper.sendReminder"}
+                {else}
+				          <a href="{url op="remindReviewer" paperId=$submission->getPaperId() reviewId=$reviewAssignment->getId()}" class="action">{translate key="reviewer.paper.sendReminder"}</a>
+                {/if}
+              {/if}
+            {/if}
+						{if $reviewAssignment->getDateReminded()}
+							&nbsp;&nbsp;{$reviewAssignment->getDateReminded()|date_format:$dateFormatShort}
+							{if $reviewAssignment->getReminderWasAutomatic()}
+								&nbsp;&nbsp;{translate key="reviewer.paper.automatic"}
+							{/if}
+						{/if}
+					{/if}
+			</td>
+			<td width="10%">
+			{assign var="reviewStatusIndex" value=$reviewAssignment->getReviewStatus()}
+			{translate key=$reviewStatusOptions[$reviewStatusIndex]}
+			</td>
+			<td width="5%">
 				{*if $stage != REVIEW_STAGE_ABSTRACT*}
   					{if not $reviewAssignment->getDateNotified()}
   						<a href="{url op="clearReview" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}" class="action"><button class="negative button">{translate key="director.paper.clearReview"}</button></a>
@@ -237,7 +290,6 @@
 	  </tr>
    -->
 
-    <tbody {if $greyOut}style="color:#a5a3a5 !important;"{/if}>
 		{if $reviewAssignment->getDateConfirmed() && !$reviewAssignment->getDeclined()}
 			<tr valign="top" >
 				<td class="label" width="20%">{translate key="reviewer.paper.recommendation"}</td>
