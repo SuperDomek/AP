@@ -81,8 +81,8 @@
 
 	<!--  peer review -->
 	<message key="submission.reviewForm">Formulář posudku</message>
-	<message key="submission.reviewFormResponse">Zobrazit posudek</message>
-	<message key="submission.yourReviewFormResponse">Vyplnit posudek</message>
+	<message key="submission.reviewFormResponse">Zobrazit</message>
+	<message key="submission.yourReviewFormResponse">Vyplnit</message>
 	<message key="submission.confirmSubmit">Po odeslání již nepůjde posudek upravit.\nKlikněte na OK pro odeslání recenzního formuláře nebo Zrušit pro návrat na recenzní formulář.</message>
 
 	<message key="editor.paper.reviewForms">Formuláře posudků</message>
@@ -539,6 +539,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.decision.decline">Odmítnout příspěvek</message>
 	<message key="reviewer.paper.decision.seeComments">Prohlížet komentáře</message>
 	<message key="reviewer.paper.schedule">Program</message>
+	<message key="reviewer.paper.status">Stav recenze</message>
 	<message key="reviewer.paper.status.cancelled">Zrušeno</message>
 	<message key="reviewer.paper.status.finished">Dokončeno</message>
 	<message key="reviewer.paper.status.overdue">Po termínu</message>

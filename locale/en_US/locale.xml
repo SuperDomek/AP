@@ -78,8 +78,8 @@
 
 	<!--  peer review -->
 	<message key="submission.reviewForm">Review Form</message>
-	<message key="submission.reviewFormResponse">View Review Form</message>
-	<message key="submission.yourReviewFormResponse">Fill in the Review Form</message>
+	<message key="submission.reviewFormResponse">View</message>
+	<message key="submission.yourReviewFormResponse">Fill in</message>
 	<message key="submission.confirmSubmit">After submitting the Review Form it can no longer be edited.\nClick OK to submit the Review Form or Cancel to get back.</message>
 
 	<message key="editor.paper.reviewForms">Review Forms</message>
@@ -536,6 +536,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.decision.decline">Reject the paper</message>
 	<message key="reviewer.paper.decision.seeComments">See Comments</message>
 	<message key="reviewer.paper.schedule">Schedule</message>
+	<message key="reviewer.paper.status">Review status</message>
 	<message key="reviewer.paper.status.cancelled">Cancelled</message>
 	<message key="reviewer.paper.status.finished">Finished</message>
 	<message key="reviewer.paper.status.overdue">Overdue</message>

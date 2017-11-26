@@ -148,6 +148,32 @@ input.defaultButton {
 	margin: 10px 0 10px 0;
 }
 
+#reviewers .revTable{
+	margin: 0.3em 0 0.3em 0;
+	width: 100%;
+	vertical-align: middle;
+}
+
+#reviewers .revTable .button{
+	height: 3em;
+}
+
+#reviewers .revTable thead{
+	background-color: #cfcfcf;
+	font-weight: bold;
+}
+
+#reviewers .revTable thead td{
+	padding: 10px;
+
+#reviewers .revTable tr{
+	border-bottom: 1px solid gray;
+}
+
+#reviewers .revTable td{
+	padding: 0 5px 0 5px;
+}
+
 #reviewers .revMenu button{
 	position: relative;
 	top: -0.5em;
@@ -166,9 +192,6 @@ table.files td{
 	padding: 10px;
 }
 
-table.reviewers tr.name{
-	background-color: #cfcfcf;
-}
 .tbl-container {
 	overflow: hidden;
 }

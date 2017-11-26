@@ -57,8 +57,8 @@
 	<message key="director.paper.toReviewer">Předat oponentovi</message>
 	<message key="director.paper.notifyReviewer">Informovat oponenta</message>
 	<message key="director.paper.initiateReview">Zahájit oponenturu</message>
-	<message key="director.paper.cancelReview">Zrušit žádost o oponenturu</message>
-	<message key="director.paper.clearReview">Vymazat oponenta</message>
+	<message key="director.paper.cancelReview">Zrušit recenzování</message>
+	<message key="director.paper.clearReview">Vymazat recenzi</message>
 	<message key="director.paper.enterRecommendation">Vložit doporučení</message>
 	<message key="director.paper.enterReviewerRecommendation">Vložit doporučení recenzenta</message>
 	<message key="director.paper.recommendation">Doporučení</message>
