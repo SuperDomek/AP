@@ -154,6 +154,13 @@ input.defaultButton {
 	vertical-align: middle;
 }
 
+#reviewers .revTable tr.owns{
+	background-color: ivory;
+}
+#reviewers .revTable td.colRevForm button{
+	width: 5em;
+}
+
 #reviewers .revTable .button{
 	height: 3em;
 }
@@ -164,28 +171,28 @@ input.defaultButton {
 }
 
 #reviewers .revTable thead td{
-	padding: 10px;
-
-#reviewers .revTable tr{
-	border-bottom: 1px solid gray;
+	padding: 5px;
 }
 
-#reviewers .revTable td{
-	padding: 0 5px 0 5px;
+#reviewers .revTable tbody td{
+	border-bottom: 1px solid gray;
+	padding: 5px;
 }
 
 #reviewers .revMenu button{
 	position: relative;
-	top: -0.5em;
+	top: -0.3em;
 }
 
-table.files{
+#peerReview table.files{
 	width: 100%;
 	table-layout: fixed;
 	border-collapse:collapse;
 	border-top: 1px solid gray;
 	border-bottom: 1px solid gray;
 	margin: 10px 0 10px 0;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
 
 table.files td{
@@ -221,6 +228,11 @@ table.files td{
 
 .negative {
 	background-color: #c3262a;
+	font-weight: bold;
+}
+
+.information {
+	background-color: deepskyblue;
 	font-weight: bold;
 }
 

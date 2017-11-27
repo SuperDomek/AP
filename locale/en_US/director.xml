@@ -57,7 +57,7 @@
 	<message key="director.paper.initiateReview">Initiate Review</message>
 	<message key="director.paper.cancelReview">Cancel Review</message>
 	<message key="director.paper.clearReview">Delete Review</message>
-	<message key="director.paper.enterRecommendation">Enter Recommendation</message>
+	<message key="director.paper.enterRecommendation">Fill in</message>
 	<message key="director.paper.enterReviewerRecommendation">Enter Reviewer Recommendation</message>
 	<message key="director.paper.recommendation">Recommendation</message>
 	<message key="director.paper.selectReviewer">Add Reviewer</message>

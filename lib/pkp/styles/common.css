@@ -92,11 +92,17 @@ select.selectForm {
 }
 
 .button {
-	padding: 1em
-	/*padding-left: 0.5em;
-	padding-right: 0.5em;*/
-	/*background-color: #E8E8E1;*/
+	padding: 0.2em;
+	background-color: #E8E8E1;
 	font-size: 1.0em;
+}
+
+.button:hover{
+	background-color: Highlight;
+}
+
+.button:disabled{
+	background-color: #E8E8E1;
 }
 
 input.defaultButton {
