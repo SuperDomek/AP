@@ -17,6 +17,8 @@ $(function(){
 	if(reviewFile != 1){
 		$('div.blockable').block({
 			message: '<h4>{/literal}{translate key="submission.fileNotChecked.block"}{literal}</h4>',
+			css: {cursor: 'default'},
+			overlayCSS: {cursor: 'default'}
 			});
 	}
 });

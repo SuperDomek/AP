@@ -195,7 +195,7 @@
 	<message key="submission.peerReview"><![CDATA[Recenzní&nbsp;řízení]]></message>
 	<message key="submission.recommendation">Doporučení</message>
 	<message key="submission.rejected">Zamítnut</message>
-	<message key="submission.request">Požádáno</message>
+	<message key="submission.request">Přiřazen/a</message>
 	<message key="submission.response">Odpověď</message>
 	<message key="submission.restrictions">Omezení</message>
 	<message key="submission.reviewMetadata">Zkontrolovat metadata</message>

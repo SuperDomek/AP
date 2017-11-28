@@ -98,6 +98,7 @@
 	<message key="user.role.reviewers">Reviewers</message>
 	<message key="user.role.siteAdmin">Site Administrator</message>
 	<message key="user.role.siteAdmins">Site Administrators</message>
+	<message key="user.role">Role</message>
 	<message key="user.roles">Roles</message>
 	<message key="user.salutation">Salutation</message>
 	<message key="user.sendPassword">Confirmation</message>

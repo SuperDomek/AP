@@ -195,7 +195,7 @@
 	<message key="submission.peerReview">Peer&amp;nbsp;Review</message>
 	<message key="submission.recommendation">Recommendation</message>
 	<message key="submission.rejected">Rejected</message>
-	<message key="submission.request">Requested</message>
+	<message key="submission.request">Assigned</message>
 	<message key="submission.response">Response</message>
 	<message key="submission.restrictions">Restrictions</message>
 	<message key="submission.reviewMetadata">Review Metadata</message>

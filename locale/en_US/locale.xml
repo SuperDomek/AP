@@ -170,6 +170,7 @@
 	<message key="paper.title">Title</message>
 	<message key="paper.manage">Management</message>
 	<message key="paper.authors">Authors</message>
+	<message key="paper.authors.mail">Mail the authors</message>
 	<message key="paper.conferenceTrack">Conference Track</message>
 	<message key="paper.file">File</message>
 	<message key="paper.suppFile">Supplementary File</message>

@@ -173,6 +173,7 @@
 	<message key="paper.title">Název</message>
 	<message key="paper.manage">Správa</message>
 	<message key="paper.authors">Autoři</message>
+	<message key="paper.authors.mail">Kontaktovat autory</message>
 	<message key="paper.conferenceTrack">Sekce konference</message>
 	<message key="paper.file">Soubor</message>
 	<message key="paper.suppFile">Doplňkový soubor</message>

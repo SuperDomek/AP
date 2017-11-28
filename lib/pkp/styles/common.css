@@ -121,6 +121,7 @@ input.defaultButton {
 	min-width: 730px !important;
 	max-width: 1140px !important;
 	margin: 0px auto;
+	padding: 5px;
 	text-align: center;
 }
 
@@ -153,6 +154,9 @@ input.defaultButton {
 	position: static;
 	clear: both;
 	text-align: left;
+}
+#footer p{
+	padding-left: 5px;
 }
 
 #footerContent {
@@ -301,13 +305,24 @@ table.info td {
 	padding-right: 0.5em;
 }
 
+table.listing{
+	width: 100%;
+}
+
 table.listing td {
-	padding: 0.25em 1.5em 0.25em 0.5em;
+	padding: 5px;
+}
+
+table.listing thead{
+	background-color: #cfcfcf;
+	font-weight: bold;
 }
 
 table.listing tr.heading td, table.listing td.heading, table.info td.heading {
-	font-size: 0.85em;
+	/*font-size: 0.85em;font-size: 0.85em;*/
 	padding: 0.75em 1.5em 1em 0.5em;
+	background-color: #cfcfcf;
+	font-weight: bold;
 }
 
 table.info td.heading {
