@@ -50,7 +50,7 @@ function confirmDecision(sel){
 </script>
 {/literal}
 
-<div id="directorDecision">
+<div id="directorDecision" class="blockable">
 <h3>{translate key="submission.directorDecision"}</h3>
 
 <form method="post" action="{url op="recordDecision" path=$stage}" id="form1">

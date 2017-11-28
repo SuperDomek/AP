@@ -8,6 +8,23 @@
  *
  * $Id$
  *}
+
+{if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
+{literal}
+<script type="text/javascript">
+$(function(){
+	var reviewFile = {/literal}{$reviewFile->getChecked()}{literal};
+	if(reviewFile != 1){
+		$('div.blockable').block({
+			message: '<h4>{/literal}{translate key="submission.fileNotChecked.block"}{literal}</h4>',
+			});
+	}
+});
+</script>
+{/literal}
+{/if}
+
+
 <div id="submission">
 
 <ul>
@@ -119,18 +136,17 @@
 					<table class="files">
 					<tbody>
 						<tr>
-							<td width="3%">
+							<td width="5%">
 								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >
 									{icon name="page_text"}
 								</a>
 							</td>
-							<td width="35%">
+							<td width="50%">
 								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>
 							</td>
 							<td><span style="color: #e85a09;">{translate key="submission.filePending"}</span></td>
-							<td>{$reviewFile->getNiceFileSize()}</td>
-							<td>{$reviewFile->getFileType()}</td>
-							<td>{$reviewFile->getDateModified()|date_format:$dateFormatShort}</td>
+							<td width="10%">{$reviewFile->getNiceFileSize()}</td>
+							<td width="15%">{$reviewFile->getDateModified()|date_format:$dateFormatShort}</td>
 						</tr>
 					</tbody>
 					</table>
@@ -184,7 +200,7 @@
 
 <div class="separator"></div>
 
-	<div id="reviewers">
+	<div id="reviewers" class="blockable">
 		<div class="revMenu"> 
 			<h4>{translate key="user.role.reviewers"}</h4>
 			<a href="{url op="selectReviewer" path=$submission->getPaperId()}"><button class="button">{translate key="director.paper.selectReviewer"}</button></a>
@@ -362,4 +378,3 @@
 	</div>
 </div>
 {/if}
-

@@ -141,17 +141,23 @@ input.defaultButton {
 	margin: 0.3em 0 0.3em 0;
 }
 
+#reviewers {
+	margin: 20px 0 20px 0;
+}
+
 #reviewers h4{
 	display: inline;
 }
+
 #reviewers .revMenu{
-	margin: 10px 0 10px 0;
+	margin-bottom:10px;
 }
 
 #reviewers .revTable{
 	margin: 0.3em 0 0.3em 0;
 	width: 100%;
 	vertical-align: middle;
+	border-collapse: collapse;
 }
 
 #reviewers .revTable tr.owns{
@@ -175,13 +181,23 @@ input.defaultButton {
 }
 
 #reviewers .revTable tbody td{
+	/*border-bottom: 1px solid gray;*/
+	padding: 5px;
+}
+
+#reviewers .revTable tbody tr{
 	border-bottom: 1px solid gray;
+	padding: 5px;
+}
+
+#reviewers .revTable tbody tr:last-child{
+	border-bottom: none;
 	padding: 5px;
 }
 
 #reviewers .revMenu button{
 	position: relative;
-	top: -0.3em;
+	top: -0.2em;
 }
 
 #peerReview table.files{
