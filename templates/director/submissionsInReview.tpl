@@ -9,15 +9,13 @@
  * $Id$
  *}
 <div id="submissions">
-<table width="100%" class="listing">
+<table width="100%" class="listing sortable">
+	<thead>
 	<tr>
-		<td colspan="9" class="headseparator">&nbsp;</td>
-	</tr>
-	<tr class="heading" valign="bottom">
-		<td width="4%">{sort_search key="common.id" sort="id"}</td>
-		<td width="7%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submitted" sort="submitDate"}</td>
-		<td width="15%">{sort_search key="paper.authors" sort="authors"}</td>
-		<td width="27%">{sort_search key="paper.title" sort="title"}</td>
+		<td width="4%">{translate key="common.id"}</td>
+		<td width="7%"><span class="disabled">MM-DD</span><br />{translate key="submissions.submitted"}</td>
+		<td width="15%">{translate key="paper.authors"}</td>
+		<td width="27%">{translate key="paper.title"}</td>
 		<td width="32%">
 			<center style="border-bottom: 1px solid gray;margin-bottom: 3px;">{translate key="submission.peerReview"}</center>
 			<table width="100%" class="nested">
@@ -31,15 +29,13 @@
 		</td>
 		<td width="5%">{translate key="submission.decision"}</td>
     <td width="6%">{translate key="submission.fileOkayed"}</td>
-		<td width="10%">{sort_search key="user.role.trackDirectors" sort="trackDirectors"}</td>
+		<td width="10%">{translate key="user.role.trackDirectors"}</td>
 	</tr>
-	<tr>
-		<td colspan="9" class="headseparator">&nbsp;</td>
-	</tr>
-
+	</thead>
+	<tbody>
 	{iterate from=submissions item=submission}
   {assign var=paperId value=$submission->getPaperId()}
-	<tr valign="top">
+	<tr>
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
 		<!--<td>
@@ -110,7 +106,7 @@
     <td style="vertical-align: middle;">
       {if $paperId|array_key_exists:$reviewFiles}
         {if $reviewFiles[$paperId] == 1}
-          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted""}</span>
+          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted"}</span>
         {else}
           <span style="color:#e85a09;">{translate key="submission.filePending"}</span>
         {/if}
@@ -120,9 +116,6 @@
     </td>
 		<td>{$submission->getTrackDirectorString(true)|truncate:30:"..."|escape}</td>
 	</tr>
-	<tr>
-		<td colspan="8" class="{if $submissions->eof()}end{/if}separator">&nbsp;</td>
-	</tr>
 {/iterate}
 {if $submissions->wasEmpty()}
 	<tr>
@@ -131,11 +124,10 @@
 	<tr>
 		<td colspan="8" class="endseparator">&nbsp;</td>
 	</tr>
-{else}
-	<tr>
-		<td colspan="6" align="left">{page_info iterator=$submissions}</td>
-		<td colspan="2" align="right">{page_links anchor="submissions" name="submissions" iterator=$submissions searchField=$searchField searchMatch=$searchMatch search=$search track=$track sort=$sort sortDirection=$sortDirection}</td>
-	</tr>
 {/if}
+	</tbody>
 </table>
+{page_info iterator=$submissions}
+{page_links anchor="submissions" name="submissions" iterator=$submissions searchField=$searchField searchMatch=$searchMatch search=$search track=$track sort=$sort sortDirection=$sortDirection}
+	</tr>
 </div>

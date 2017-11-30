@@ -104,14 +104,16 @@ class TrackDirectorSubmission extends Paper {
 	function updateReviewAssignment($reviewAssignment) {
 		$reviewAssignments = array();
 		$stageReviewAssignments = $this->reviewAssignments[$reviewAssignment->getStage()];
-		for ($i=0, $count=count($stageReviewAssignments); $i < $count; $i++) {
-			if ($stageReviewAssignments[$i]->getReviewId() == $reviewAssignment->getId()) {
-				array_push($reviewAssignments, $reviewAssignment);
-			} else {
-				array_push($reviewAssignments, $stageReviewAssignments[$i]);
+		if(!empty($stageReviewAssignments)){
+			for ($i=0, $count=count($stageReviewAssignments); $i < $count; $i++) {
+				if ($stageReviewAssignments[$i]->getReviewId() == $reviewAssignment->getId()) {
+					array_push($reviewAssignments, $reviewAssignment);
+				} else {
+					array_push($reviewAssignments, $stageReviewAssignments[$i]);
+				}
 			}
+			$this->reviewAssignments[$reviewAssignment->getStage()] = $reviewAssignments;
 		}
-		$this->reviewAssignments[$reviewAssignment->getStage()] = $reviewAssignments;
 	}
 
 	/**

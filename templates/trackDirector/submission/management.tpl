@@ -13,7 +13,7 @@
 {assign var="submissionFile" value=$submission->getSubmissionFile()}
 {assign var="suppFiles" value=$submission->getSuppFiles()}
 
-<ul>
+<ul class="no-list">
 {if $isDirector}{*track director could be a reviewer as well*}
 	<li>
 		<header>{translate key="paper.authors"}</header>
@@ -87,11 +87,11 @@
 	{$submission->getCommentsToDirector()|strip_unsafe_html|nl2br}
 </li>
 {/if}
-{if $publishedPaper}
+{*{if $publishedPaper}
 <li>
 	<header>{translate key="submission.abstractViews"}</header>
 	{$publishedPaper->getViews()}
 </li>
-{/if}
+{/if}*}
 </ul>
 </div>

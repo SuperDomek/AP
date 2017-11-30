@@ -89,13 +89,11 @@ input.defaultButton {
 	text-align: left;
 }
 
-#submission ul{
+.no-list{
 	list-style: none;
-	margin: 7px;
-	padding-left: 20px;
+	margin: 10px 0 10px 0;
 }
-
-#submission header{
+ul header {
 	font-size: 17px;
 	font-weight: bold;
 	margin: 0.3em 0 0.3em -20px;
@@ -115,20 +113,12 @@ input.defaultButton {
 	margin: 0 0 10px 0;
 }
 
+#directors{
+	margin: 20px 0 20px 0;
+}
+
 #directorDecision {
 	margin: 0 10px 10px 0;
-}
-
-#directorDecision header{
-	font-size: 17px;
-	font-weight: bold;
-	margin: 0.3em 0 0.3em -10px;
-}
-
-#directorDecision ul{
-	list-style: none;
-	padding-left: 20px;
-	margin: 10px 0 10px 0;
 }
 
 #directorDecision label {
@@ -143,14 +133,19 @@ input.defaultButton {
 
 #reviewers {
 	margin: 20px 0 20px 0;
+	clear: both;
 }
 
 #reviewers h4{
 	display: inline;
 }
 
-#reviewers .revMenu{
-	margin-bottom:10px;
+.revMenu{
+	margin-bottom: 20px;
+}
+
+.revMenu h3 {
+	display: inline;
 }
 
 #reviewers .revTable{
@@ -192,10 +187,9 @@ input.defaultButton {
 
 #reviewers .revTable tbody tr:last-child{
 	border-bottom: none;
-	padding: 5px;
 }
 
-#reviewers .revMenu button{
+.revMenu button{
 	position: relative;
 	top: -0.2em;
 }
@@ -238,13 +232,17 @@ table.files td{
 }
 
 .positive {
-	background-color: #0b9e3f;
+	background-color: #0b9e3f !important;
 	font-weight: bold;
 }
 
 .negative {
 	background-color: #c3262a;
 	font-weight: bold;
+}
+
+select.lastDecision option:checked{
+	background-color: deepskyblue !important;
 }
 
 .information {

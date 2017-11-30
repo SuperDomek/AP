@@ -307,10 +307,21 @@ table.info td {
 
 table.listing{
 	width: 100%;
+	border-collapse: collapse;
 }
 
 table.listing td {
 	padding: 5px;
+	vertical-align: middle;
+}
+
+table.listing tbody tr{
+	border-bottom: 1px solid gray;
+	padding: 5px;
+}
+
+table.listing tbody tr:last-child{
+	border-bottom: none;
 }
 
 table.listing thead{

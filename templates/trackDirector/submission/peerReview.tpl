@@ -10,26 +10,40 @@
  *}
 
 {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}
-{literal}
-<script type="text/javascript">
-$(function(){
-	var reviewFile = {/literal}{$reviewFile->getChecked()}{literal};
-	if(reviewFile != 1){
+	{if $reviewFile}
+	{literal}
+	<script type="text/javascript">
+	$(function(){
+		var reviewFile = {/literal}{$reviewFile->getChecked()}{literal};
+		if(reviewFile != 1){
+			$('div.blockable').block({
+				message: '<h4>{/literal}{translate key="submission.fileNotChecked.block"}{literal}</h4>',
+				css: {cursor: 'default'},
+				overlayCSS: {cursor: 'default'}
+				});
+		}
+	});
+	</script>
+	{/literal}
+	{else}
+	{literal}
+	<script type="text/javascript">
+	$(function(){
 		$('div.blockable').block({
-			message: '<h4>{/literal}{translate key="submission.fileNotChecked.block"}{literal}</h4>',
+			message: '<h4>{/literal}{translate key="submission.fileNotUploadedYet"}{literal}</h4>',
 			css: {cursor: 'default'},
 			overlayCSS: {cursor: 'default'}
 			});
-	}
-});
-</script>
-{/literal}
+	});
+	</script>
+	{/literal}
+	{/if}
 {/if}
 
 
 <div id="submission">
 
-<ul>
+<ul class="no-list">
   {if $isDirector}
 	<li><header>{translate key="paper.authors"}</header>
 			{url|assign:"url" page="user" op="email" redirectUrl=$currentUrl to=$submission->getAuthorEmails() subject=$submission->getLocalizedTitle() paperId=$submission->getPaperId()}

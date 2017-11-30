@@ -70,6 +70,7 @@
 	<message key="director.paper.decision">Rozhodnutí</message>
 	<message key="director.paper.decisionComment">Prosíme popište autorovi, co by měl změnit. (alespoň 10 znaků)</message>
 	<message key="director.paper.recordDecision">Uložit rozhodnutí</message>
+	<message key="director.paper.changeDecision">Změnit rozhodnutí</message>
 	<message key="director.paper.cannotRecord">Není možné uložit rozhodnutí. Nejdříve musí být dokončeny všechny zadané recenze.</message>
 	<message key="director.paper.cannotRecordYet">Před uložením rozhodnutí musí být příspěvek přiřazen garantovi sekce. Verze k oponentuře se automaticky stane verzí pro garanta.</message>
 	<message key="director.paper.cannotRecordTooLate">Příspěvek již prošel touto fází oponentury. Toto rozhodnutí už nelze změnit.</message>

@@ -57,23 +57,43 @@ function confirmDecision(sel){
 
 <span>
 <input type="hidden" name="paperId" value="{$submission->getPaperId()}" />
-<select name="decision" id="decision" size="1" class="selectMenu"{if not $allowRecommendation} disabled="disabled"{/if} onchange="showCommentBox(this);">
-	{assign var=availableDirectorDecisionOptions value=$submission->getDirectorDecisionOptions($currentSchedConf,$stage)}
-	{assign var=lastDecision value=$directorDecisions[0].decision}
-	{html_options_translate options=$availableDirectorDecisionOptions selected=$lastDecision strict=1}
-</select>
-<button type="submit" form="form1" id="decision_submit" {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}onclick="return confirmDecision(this);"{/if} name="submit" value="Submit" {if not $allowRecommendation}disabled="disabled"{/if} class="button">{translate key="director.paper.recordDecision"}</button>
+{assign var=availableDirectorDecisionOptions value=$submission->getDirectorDecisionOptions($currentSchedConf,$stage)}
+{assign var=lastDecision value=$directorDecisions[0].decision}
+{if $lastDecision} {* Different text and look for user when decision entered *}
+	<select name="decision" id="decision" size="1" class="selectMenu lastDecision"{if not $allowRecommendation} disabled="disabled"{/if} onchange="showCommentBox(this);">
+		{html_options_translate options=$availableDirectorDecisionOptions selected=$lastDecision strict=1}
+	</select>
+	<button type="submit" form="form1" id="decision_submit" {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}onclick="return confirmDecision(this);"{/if} name="submit" value="Submit" {if not $allowRecommendation}disabled="disabled"{/if} class="button">{translate key="director.paper.changeDecision"}</button>
+{else}
+	<select name="decision" id="decision" size="1" class="selectMenu"{if not $allowRecommendation} disabled="disabled"{/if} onchange="showCommentBox(this);">
+		{html_options_translate options=$availableDirectorDecisionOptions selected=$lastDecision strict=1}
+	</select>
+	<button type="submit" form="form1" id="decision_submit" {if $stage != $smarty.const.REVIEW_STAGE_ABSTRACT}onclick="return confirmDecision(this);"{/if} name="submit" value="Submit" {if not $allowRecommendation}disabled="disabled"{/if} class="button">{translate key="director.paper.recordDecision"}</button>
+{/if}
+{if $isDirector}
+	{if $lastDecision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
+    {if $submission->getStatus() == STATUS_ARCHIVED}
+			{translate key="submissions.archived"}
+		{else}
+			<a href="{url op="archiveSubmission" path=$submission->getPaperId()}" onclick="return window.confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmToArchive"}')">
+			<button class="button">{translate key="director.paper.sendToArchive"}</button></a>
+		{/if}
+    {if $submission->getDateToArchive()}
+			{$submission->getDateToArchive()|date_format:$dateFormatShort}
+		{/if}
+	{/if}
+{/if}
 {if not $allowRecommendation and $isCurrent}<br />{translate key="director.paper.cannotRecord"}{/if}
 </span>
 
-<ul>
+<ul class="no-list">
 	<li id="decision_comment" class="hidden"> <!--class="hidden"-->
 		<label for="comment_text" class="error">{translate key="director.paper.decisionComment"}</label>
     <textarea name="comment_text" id="comment_text" rows="5" cols="40" class="textArea"></textarea>
 		
   </li>
 	{assign var=decisionsCount value=$directorDecisions|@count}
-	{if $decisionsCount > 1}
+	{if $decisionsCount >= 1}
 		<li>
 			{foreach from=$directorDecisions item=directorDecision key=decisionKey}
 				{if $decisionKey neq 0} <br /> {/if}
@@ -91,17 +111,6 @@ function confirmDecision(sel){
 		</li>
 	{/if}
 
-{if $isDirector}
-	{if $lastDecision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
-	<li>
-  
-    <br />
-    {if $submission->getStatus() == STATUS_ARCHIVED}{translate key="submissions.archived"}{else}<a href="{url op="archiveSubmission" path=$submission->getPaperId()}" onclick="return window.confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmToArchive"}')" class="action"><button type="button">{translate key="director.paper.sendToArchive"}</button></a>{/if}
-    {if $submission->getDateToArchive()}{$submission->getDateToArchive()|date_format:$dateFormatShort}{/if}
-  
-	</li>
-	{/if}
-{/if}
 </ul>
 </form>
 
