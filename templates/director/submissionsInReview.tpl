@@ -49,35 +49,24 @@
 		<td><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}" class="action">{$submission->getLocalizedTitle()|strip_tags|truncate:40:"..."|default:"&mdash;"}</a></td>
 		<td>
 		<table width="100%">
-			{foreach from=$submission->getReviewAssignments() item=reviewAssignments}
-				{foreach from=$reviewAssignments item=assignment name=assignmentList}
-					{if not $assignment->getCancelled() and not $assignment->getDeclined()}
-					<tr valign="top">
-						<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getStage() == REVIEW_STAGE_ABSTRACT}{translate key="submission.abstract"}{else}{translate key="submission.paper"} {$assignment->getStage()-1}{/if}</td>
-						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateNotified()}{$assignment->getDateNotified()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
-						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted() || !$assignment->getDateConfirmed()}&mdash;{else}{$assignment->getWeeksDue()|default:"&mdash;"}{/if}</td>
-						<td width="20%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted()}{$assignment->getDateCompleted()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
-					</tr>
-					{/if}
-				{foreachelse}
-					<tr valign="top">
-						<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-						<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-						<td width="20%" style="padding: 0 0 0 0; font-size: 1.0em">&mdash;</td>
-					</tr>
-				{/foreach}
-			{foreachelse}
-				<tr valign="top">
-					<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-					<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-					<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-					<td width="20%" style="padding: 0 4px 0 0; font-size: 1.0em">&mdash;</td>
-				</tr>
+			{foreach from=$submission->getReviewAssignments() item=reviewAssignments key=assStage}
+				{if $assStage != REVIEW_STAGE_ABSTRACT}
+					{foreach from=$reviewAssignments item=assignment name=assignmentList}
+						{if not $assignment->getCancelled() and not $assignment->getDeclined()}
+						<tr valign="top">
+							<td width="30%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getStage() == REVIEW_STAGE_ABSTRACT}{translate key="submission.abstract"}{else}{translate key="submission.paper"} {$assignment->getStage()-1}{/if}</td>
+							<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateNotified()}{$assignment->getDateNotified()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
+							<td width="25%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted() || !$assignment->getDateConfirmed()}&mdash;{else}{$assignment->getWeeksDue()|default:"&mdash;"}{/if}</td>
+							<td width="20%" style="padding: 0 4px 0 0; font-size: 1.0em">{if $assignment->getDateCompleted()}{$assignment->getDateCompleted()|date_format:$dateFormatTrunc}{else}&mdash;{/if}</td>
+						</tr>
+						{/if}
+					{/foreach}
+				{/if}
 			{/foreach}
 			</table>
 		</td>
 		<td >
+			{* don't show abstract decision
       {assign var="decisionsAbstract" value=$submission->getDecisions()|@reset}
       {assign var="decisionAbstract" value=$decisionsAbstract|@end}
       {if $decisionAbstract.decision == SUBMISSION_DIRECTOR_DECISION_INVITE}
@@ -90,6 +79,7 @@
         <span style="color:#a5a3a5;">&mdash;</span>
       {/if}
       <br />
+			*}
       {assign var="decisions" value=$submission->getDecisions()|@end}
       {assign var="decision" value=$decisions|@end}
       {if $decision.decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT}
@@ -100,7 +90,7 @@
       {elseif $decisionAbstract.decision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
         <span style="color:#e85a09;">DEC</span>
       {else}
-        <span style="color:#a5a3a5;">&mdash;</span>
+        <span style="color:#a5a3a5;"></span>
       {/if}
 		</td>
     <td style="vertical-align: middle;">
