@@ -596,6 +596,7 @@
 		<field name="last_name" type="C2" size="90">
 			<NOTNULL/>
 		</field>
+		<field name="affiliation_select" type="C2" size="6"/>
 		<field name="affiliation" type="C2" size="255"/>
 		<field name="country" type="C2" size="90"/>
 		<field name="email" type="C2" size="90">
@@ -671,6 +672,7 @@
 			<NOTNULL/>
 		</field>
 		<field name="stage" type="I1"/>
+		<field name="checked" type="I1"/>
 		<field name="viewable" type="I1" />
 		<field name="date_uploaded" type="T">
 			<NOTNULL/>

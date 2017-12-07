@@ -145,6 +145,7 @@
 		<field name="signature" type="X"/>
 		<field name="gender" type="C" size="1"/>
 		<field name="initials" type="C2" size="5"/>
+		<field name="affiliation_select" type="C2" size="6"/>
 		<field name="affiliation" type="C2" size="255"/>
 		<field name="email" type="C2" size="90">
 			<NOTNULL/>
@@ -153,6 +154,9 @@
 		<field name="phone" type="C2" size="24"/>
 		<field name="fax" type="C2" size="24"/>
 		<field name="mailing_address" type="C2" size="255"/>
+		<field name="billing_address" type="C2" size="255"/>
+		<field name="company_id" type="C2" size="24"/>
+		<field name="vat_reg_no" type="C2" size="24"/>
 		<field name="country" type="C2" size="90"/>
 		<field name="time_zone" type="C2" size="20"/>
 		<field name="biography" type="X"/>
