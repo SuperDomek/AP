@@ -74,6 +74,7 @@ class DirectorHandler extends TrackDirectorHandler {
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 
 		$page = isset($args[0]) ? $args[0] : '';
+		$export = isset($args[1]) ? $args[1] : '';
 		$tracks =& $trackDao->getTrackTitles($schedConfId);
 
 		$filterDirectorOptions = array(
@@ -225,49 +226,95 @@ class DirectorHandler extends TrackDirectorHandler {
 			unset($submissions);
 		}
 		// END Workaround
+		// so far the only export format is PDF so in future you'll need to distinguish what is inside $export
+		if ($export){
+			try {
+				$p = new PDFlib();
+				/*  open new PDF file; insert a file name to create the PDF on disk */
+				if ($p->begin_document("", "") == 0) {
+						die("Error: " . $p->get_errmsg());
+				}
+				// set up the encoding for strings
+				$p->set_option("stringformat=utf8");
 
-		$templateMgr =& TemplateManager::getManager();
-		$templateMgr->assign('pageToDisplay', $page);
-		$templateMgr->assign('director', $user->getFullName());
-		$templateMgr->assign('directorOptions', $filterDirectorOptions);
-		$templateMgr->assign('trackOptions', $filterTrackOptions);
-		$templateMgr->assign_by_ref('submissions', $submissions);
-		$templateMgr->assign_by_ref('reviewFiles', $reviewFiles); //workaround
-		$templateMgr->assign('filterDirector', $filterDirector);
-		$templateMgr->assign('filterTrack', $filterTrack);
-		$templateMgr->assign('yearOffsetFuture', SCHED_CONF_DATE_YEAR_OFFSET_FUTURE);
-		$templateMgr->assign('durationOptions', TrackDirectorHandler::getDurationOptions());
-		$sessionTypesArray = array();
-		$paperTypeDao = DAORegistry::getDAO('PaperTypeDAO');
-		$sessionTypes = $paperTypeDao->getPaperTypes($schedConfId);
-		while ($sessionType = $sessionTypes->next()) {
-			$sessionTypesArray[$sessionType->getId()] = $sessionType;
+				$p->set_info("Creator", $schedConf->getLocalizedTitle());
+				$p->set_info("Author", $user->getFullName());
+				$p->set_info("Title", $page);
+		
+				$p->begin_page_ext(595, 842, "");
+				// use unicode version of font
+				$font = $p->load_font("Helvetica-Bold", "unicode", "");
+		
+				$p->setfont($font, 13.0);
+				$p->set_text_pos(50, 800);
+				$p->show("Hello world!");
+				$p->continue_text("(says PHP)");
+				$p->continue_text($user->getFullName());
+				$p->end_page_ext("");
+		
+				$p->end_document("");
+		
+				$buf = $p->get_buffer();
+				$len = strlen($buf);
+		
+				header("Content-type: application/pdf");
+				header("Content-Length: $len");
+				header("Content-Disposition: inline; filename=" . $page . ".pdf");
+				print $buf;
+			}
+			catch (PDFlibException $e) {
+					die("PDFlib exception occurred in hello sample:\n" .
+					"[" . $e->get_errnum() . "] " . $e->get_apiname() . ": " .
+					$e->get_errmsg() . "\n");
+			}
+			catch (Exception $e) {
+					die($e);
+			}
+			$p = 0;
+		}else{
+			$templateMgr =& TemplateManager::getManager();
+			$templateMgr->assign('pageToDisplay', $page);
+			$templateMgr->assign('director', $user->getFullName());
+			$templateMgr->assign('directorOptions', $filterDirectorOptions);
+			$templateMgr->assign('trackOptions', $filterTrackOptions);
+			$templateMgr->assign_by_ref('submissions', $submissions);
+			$templateMgr->assign_by_ref('reviewFiles', $reviewFiles); //workaround
+			$templateMgr->assign('filterDirector', $filterDirector);
+			$templateMgr->assign('filterTrack', $filterTrack);
+			$templateMgr->assign('yearOffsetFuture', SCHED_CONF_DATE_YEAR_OFFSET_FUTURE);
+			$templateMgr->assign('durationOptions', TrackDirectorHandler::getDurationOptions());
+			$sessionTypesArray = array();
+			$paperTypeDao = DAORegistry::getDAO('PaperTypeDAO');
+			$sessionTypes = $paperTypeDao->getPaperTypes($schedConfId);
+			while ($sessionType = $sessionTypes->next()) {
+				$sessionTypesArray[$sessionType->getId()] = $sessionType;
+			}
+			$templateMgr->assign('sessionTypes', $sessionTypesArray);
+
+			// Set search parameters
+			$duplicateParameters = array(
+				'searchField', 'searchMatch', 'search'
+			);
+			foreach ($duplicateParameters as $param)
+				$templateMgr->assign($param, Request::getUserVar($param));
+
+			$templateMgr->assign('reviewType', Array(
+				REVIEW_STAGE_ABSTRACT => __('submission.abstract'),
+				REVIEW_STAGE_PRESENTATION => __('submission.paper')
+			));
+
+			$templateMgr->assign('fieldOptions', Array(
+				SUBMISSION_FIELD_TITLE => 'paper.title',
+				SUBMISSION_FIELD_AUTHOR => 'user.role.author',
+				SUBMISSION_FIELD_DIRECTOR => 'user.role.director',
+				SUBMISSION_FIELD_REVIEWER => 'user.role.reviewer'
+			));
+
+			$templateMgr->assign('helpTopicId', $helpTopicId);
+			$templateMgr->assign('sort', $sort);
+			$templateMgr->assign('sortDirection', $sortDirection);
+			$templateMgr->display('director/submissions.tpl');
 		}
-		$templateMgr->assign('sessionTypes', $sessionTypesArray);
-
-		// Set search parameters
-		$duplicateParameters = array(
-			'searchField', 'searchMatch', 'search'
-		);
-		foreach ($duplicateParameters as $param)
-			$templateMgr->assign($param, Request::getUserVar($param));
-
-		$templateMgr->assign('reviewType', Array(
-			REVIEW_STAGE_ABSTRACT => __('submission.abstract'),
-			REVIEW_STAGE_PRESENTATION => __('submission.paper')
-		));
-
-		$templateMgr->assign('fieldOptions', Array(
-			SUBMISSION_FIELD_TITLE => 'paper.title',
-			SUBMISSION_FIELD_AUTHOR => 'user.role.author',
-			SUBMISSION_FIELD_DIRECTOR => 'user.role.director',
-			SUBMISSION_FIELD_REVIEWER => 'user.role.reviewer'
-		));
-
-		$templateMgr->assign('helpTopicId', $helpTopicId);
-		$templateMgr->assign('sort', $sort);
-		$templateMgr->assign('sortDirection', $sortDirection);
-		$templateMgr->display('director/submissions.tpl');
 	}
 
 	/**
