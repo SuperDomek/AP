@@ -241,17 +241,32 @@ class DirectorHandler extends TrackDirectorHandler {
 				$p->set_info("Author", $user->getFullName());
 				$p->set_info("Title", $page);
 		
-				$p->begin_page_ext(595, 842, "");
+				$p->begin_page_ext(0, 0, "width=a4.width height=a4.height");
 				// use unicode version of font
-				$font = $p->load_font("Helvetica-Bold", "unicode", "");
+				$font = $p->load_font("Helvetica", "unicode", "");
 		
+				// document header
 				$p->setfont($font, 13.0);
-				$p->set_text_pos(50, 800);
-				$p->show("Hello world!");
-				$p->continue_text("(says PHP)");
-				$p->continue_text($user->getFullName());
+				$p->set_text_pos(50, 792);
+				$p->show("Editorial manager export");
+				$p->continue_text("Conference: ". $schedConf->getLocalizedTitle());
+				$p->continue_text("Type: ". $page);
+				$p->continue_text("Exported by: " . $user->getFullName());
+				$p->continue_text("Date: " . date("d. m. Y"));
+				$this->renderPDFTable($p, $page, $submissions->toArray());
+				
+				// header division line
+
+				/* Set the drawing properties for the dash patterns */
+				$p->setlinewidth(0.6);
+				/* Set the first dash pattern with a dash and gap length of 3 */
+				$p->set_graphics_option("dasharray={3 3}");
+				/* Stroke a line with that pattern */
+				$p->moveto(50, 730);
+				$p->lineto(545, 730);
+				$p->stroke();
+
 				$p->end_page_ext("");
-		
 				$p->end_document("");
 		
 				$buf = $p->get_buffer();
@@ -263,7 +278,7 @@ class DirectorHandler extends TrackDirectorHandler {
 				print $buf;
 			}
 			catch (PDFlibException $e) {
-					die("PDFlib exception occurred in hello sample:\n" .
+					die("PDFlib exception occurred during the export:\n" .
 					"[" . $e->get_errnum() . "] " . $e->get_apiname() . ": " .
 					$e->get_errmsg() . "\n");
 			}
@@ -685,6 +700,96 @@ class DirectorHandler extends TrackDirectorHandler {
 		$templateMgr->assign('helpTopicId', 'editorial.directorsRole.summaryPage.submissionManagement');
 
 		$templateMgr->display('director/manageTrackDirectors.tpl');
+	}
+
+	/**
+	 * Renders the corresponding table to the PDF file
+	 * @dependance pdflib.dll
+	 * @param $p The object with PDF typesetting
+	 * @param $page The page that is being exported
+	 * 
+	 */
+	function renderPDFTable(&$p, $page = false, $submissionsArray){
+		$llx= 50; $lly=50; $urx=545; $ury=710;
+		$tf=0; $tbl=0;
+		$row = 1;
+		$col = 1;
+		$p->set_text_pos(50, 710);
+		if ($page == "submissionsUnassigned"){
+
+		}
+		else if($page == "submissionsAccepted"){
+
+		}
+		else if($page == "submissionsArchives"){
+
+		}
+		else if($page == "submissionsInReview"){
+			
+			// Header
+			$font = $p->load_font("Helvetica-Bold", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=14} ";
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.submitted'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submission.done'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submission.decision'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col, $row++, __('user.role.trackDirectors'), $optlist);
+
+			// Rows
+			$font = $p->load_font("Helvetica", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=14} ";
+			foreach($submissionsArray as $submission){
+				$col = 1;
+				$tbl = $p->add_table_cell($tbl, $col++, $row++, $submission->getId(), $optlist);
+			}
+		}
+		else{
+			
+			$p->show("Error: no export page selected.");
+		}
+		/* ---------- Place the table on one or more pages ---------- */
+
+		/*
+		 * Loop until all of the table is placed; create new pages
+		 * as long as more table instances need to be placed.
+		 */
+		do {
+			
+
+			/* Shade every other $row; draw lines for all table cells.
+			 * Add "showcells showborder" to visualize cell borders 
+			 */
+			$optlist = "header=1 rowheightdefault=auto " .
+			"fill={{area=rowodd fillcolor={gray 0.9}}} " .
+			"stroke={{line=other}} ";
+
+			/* Place the table instance */
+			$result = $p->fit_table($tbl, $llx, $lly, $urx, $ury, $optlist);
+			if ($result ==  "_error") {
+					die("Couldn't place table: " . $p->get_errmsg());
+			}
+
+
+		} while ($result == "_boxfull");
+
+	/* Check the $result; "_stop" means all is ok. */
+	if ($result != "_stop") {
+			if ($result ==  "_error") {
+					die("Error when placing table: " . $p->get_errmsg());
+			}
+			else {
+					/* Any other return value is a user exit caused by
+					 * the "return" option; this requires dedicated code to
+					 * deal with.
+					 */
+					die("User return found in Table");
+			}
+	}
+
+	/* This will also delete Textflow handles used in the table */
+	$p->delete_table($tbl, "");
 	}
 
 	/**
