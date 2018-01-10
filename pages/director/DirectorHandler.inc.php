@@ -253,8 +253,6 @@ class DirectorHandler extends TrackDirectorHandler {
 				$p->continue_text("Type: ". $page);
 				$p->continue_text("Exported by: " . $user->getFullName());
 				$p->continue_text("Date: " . date("d. m. Y"));
-				$this->renderPDFTable($p, $page, $submissions->toArray());
-				
 				// header division line
 
 				/* Set the drawing properties for the dash patterns */
@@ -266,7 +264,11 @@ class DirectorHandler extends TrackDirectorHandler {
 				$p->lineto(545, 730);
 				$p->stroke();
 
-				$p->end_page_ext("");
+				$this->renderPDFTable($p, $page, $submissions->toArray());
+				
+				
+
+				//$p->end_page_ext("");
 				$p->end_document("");
 		
 				$buf = $p->get_buffer();
@@ -722,27 +724,102 @@ class DirectorHandler extends TrackDirectorHandler {
 
 		}
 		else if($page == "submissionsArchives"){
-
-		}
-		else if($page == "submissionsInReview"){
-			
 			// Header
 			$font = $p->load_font("Helvetica-Bold", "unicode", "");
-			$optlist = "fittextline={position=center font=" . $font . " fontsize=14} ";
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=15 margin=5} ";
 			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
 			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.submitted'), $optlist);
 			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
 			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
-			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submission.done'), $optlist);
+			//$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.reviewStage'), $optlist);
 			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submission.decision'), $optlist);
 			$tbl = $p->add_table_cell($tbl, $col, $row++, __('user.role.trackDirectors'), $optlist);
 
 			// Rows
 			$font = $p->load_font("Helvetica", "unicode", "");
-			$optlist = "fittextline={position=center font=" . $font . " fontsize=14} ";
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=13 margin=5} ";
 			foreach($submissionsArray as $submission){
+				// restart col index for the new row
 				$col = 1;
-				$tbl = $p->add_table_cell($tbl, $col++, $row++, $submission->getId(), $optlist);
+				// set up decision tag
+				$decision = end(end($submission->getDecisions()));
+				$decisionTag = '';
+				switch ($decision['decision']) {
+					case SUBMISSION_DIRECTOR_DECISION_ACCEPT:
+					$decisionTag = 'ACC';
+					break;
+					case SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS:
+					case SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS:
+					$decisionTag = 'REV';
+					break;
+					case SUBMISSION_DIRECTOR_DECISION_DECLINE:
+					$decisionTag = 'DEC';
+					break;
+					case '':
+					case NULL:
+					$decisionTag = '';
+					break;
+					default:
+					$decisionTag = 'ERR';
+				}
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getPaperId(), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getDateSubmitted(), 0, 10), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getAuthorString(true), 0, 30), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getLocalizedTitle(), 0, 40), $optlist);
+				//$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getStage(), $optlist);
+				
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $decisionTag, $optlist);
+				$tbl = $p->add_table_cell($tbl, $col, $row++, substr($submission->getTrackDirectorString(true), 0, 30), $optlist);
+			}
+		}
+		else if($page == "submissionsInReview"){
+			
+			// Header
+			$font = $p->load_font("Helvetica-Bold", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=15 margin=5} ";
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.submitted'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
+			//$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.reviewStage'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submission.decision'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col, $row++, __('user.role.trackDirectors'), $optlist);
+
+			// Rows
+			$font = $p->load_font("Helvetica", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=13 margin=5} ";
+			foreach($submissionsArray as $submission){
+				// restart col index for the new row
+				$col = 1;
+				// set up decision tag
+				$decision = end(end($submission->getDecisions()));
+				$decisionTag = '';
+				switch ($decision['decision']) {
+					case SUBMISSION_DIRECTOR_DECISION_ACCEPT:
+					$decisionTag = 'ACC';
+					break;
+					case SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS:
+					case SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS:
+					$decisionTag = 'REV';
+					break;
+					case SUBMISSION_DIRECTOR_DECISION_DECLINE:
+					$decisionTag = 'DEC';
+					break;
+					case '':
+					case NULL:
+					$decisionTag = '';
+					break;
+					default:
+					$decisionTag = 'ERR';
+				}
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getPaperId(), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getDateSubmitted(), 0, 10), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getAuthorString(true), 0, 30), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getLocalizedTitle(), 0, 40), $optlist);
+				//$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getStage(), $optlist);
+				
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $decisionTag, $optlist);
+				$tbl = $p->add_table_cell($tbl, $col, $row++, substr($submission->getTrackDirectorString(true), 0, 30), $optlist);
 			}
 		}
 		else{
@@ -750,13 +827,22 @@ class DirectorHandler extends TrackDirectorHandler {
 			$p->show("Error: no export page selected.");
 		}
 		/* ---------- Place the table on one or more pages ---------- */
-
+		// First page is special
+		$optlist = "header=1 rowheightdefault=auto " .
+			"fill={{area=rowodd fillcolor={gray 0.9}}} " .
+			"stroke={{line=other}} ";
+		/* Place the table instance */
+		$result = $p->fit_table($tbl, $llx, $lly, $urx, $ury, $optlist);
+		if ($result ==  "_error") {
+				die("Couldn't place table: " . $p->get_errmsg());
+		}
+		$p->end_page_ext("");
 		/*
 		 * Loop until all of the table is placed; create new pages
 		 * as long as more table instances need to be placed.
 		 */
-		do {
-			
+		while($result == "_boxfull") {
+			$p->begin_page_ext(0, 0, "width=a4.width height=a4.height");
 
 			/* Shade every other $row; draw lines for all table cells.
 			 * Add "showcells showborder" to visualize cell borders 
@@ -766,13 +852,13 @@ class DirectorHandler extends TrackDirectorHandler {
 			"stroke={{line=other}} ";
 
 			/* Place the table instance */
-			$result = $p->fit_table($tbl, $llx, $lly, $urx, $ury, $optlist);
+			$result = $p->fit_table($tbl, $llx, $lly, $urx, 792, $optlist);
 			if ($result ==  "_error") {
 					die("Couldn't place table: " . $p->get_errmsg());
 			}
 
-
-		} while ($result == "_boxfull");
+			$p->end_page_ext("");
+		}
 
 	/* Check the $result; "_stop" means all is ok. */
 	if ($result != "_stop") {
