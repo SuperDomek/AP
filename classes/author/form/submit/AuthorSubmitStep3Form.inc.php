@@ -44,10 +44,17 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				$trackDao =& DAORegistry::getDAO('TrackDAO');
 				$track = $trackDao->getTrack($paper->getTrackId());
 				/** using old methods and fields from word count; now char count **/
+				$minCharCount = $track->getAbstractMinCharCount();
 				$abstractCharCount = $track->getAbstractWordCount();
 				$this->addCheck(new FormValidatorLocale($this, 'abstract1', 'required', 'author.submit.form.abstractRequired'));
 				$this->addCheck(new FormValidatorLocale($this, 'abstract2', 'required', 'author.submit.form.abstractRequired'));
 				$this->addCheck(new FormValidatorLocale($this, 'abstract3', 'required', 'author.submit.form.abstractRequired'));
+				if (isset($minCharCount) && $minCharCount > 0) {
+					// The anonymous function uses an array of multi-language abstract
+					$this->addCheck(new FormValidatorCustom($this, 'abstract1', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] > $charCount; }'), array($minCharCount, &$this)));
+					$this->addCheck(new FormValidatorCustom($this, 'abstract2', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] > $charCount; }'), array($minCharCount, &$this)));
+					$this->addCheck(new FormValidatorCustom($this, 'abstract3', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] > $charCount; }'), array($minCharCount, &$this)));
+				}
 				if (isset($abstractCharCount) && $abstractCharCount > 0) {
 					// The anonymous function uses an array of multi-language abstract
 					$this->addCheck(new FormValidatorCustom($this, 'abstract1', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] <= $charCount; }'), array($abstractCharCount, &$this)));

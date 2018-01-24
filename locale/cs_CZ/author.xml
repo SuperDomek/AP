@@ -66,7 +66,7 @@
 	<message key="author.submit.form.authorRequiredFields">Zadejte jméno, příjmení, emailovou adresu a afilaci každého autora.</message>
 	<message key="author.submit.form.trackRequired">Zvolte, prosím, odpovídající sekci konference pro tento příspěvek.</message>
 	<message key="author.submit.form.abstractRequired">Vložte prosím abstrakt svého příspěvku.</message>
-	<message key="author.submit.form.abstractLimit">Limit celkové délky abstraktu je 3 300 znaků.</message>
+	<message key="author.submit.form.abstractLimit">Délka abstraktu musí být mezi 500 a 3 300 znaky.</message>
 	<message key="author.submit.privacyStatement">Prohlášení o ochraně soukromí</message>
 	<message key="author.submit.reorderInstructions">Přeuspořádat autory podle toho, jak budou uvedeni v publikaci.</message>
 	<message key="author.submit.reorder">Přeuspořádat jména autorů</message>
@@ -83,6 +83,7 @@
 	<message key="presenter.submit.form.authorRequiredFields">Zadejte jméno, příjmení a emailovou adresu každého autora.</message>
 	<message key="author.submit.form.titleRequired">Zadejte, prosím, název vašeho příspěvku.</message>
 	<message key="author.submit.form.subjectClassRequired">Není možné odesla prázdné pole s klasifikací.</message>
+	<message key="author.submit.form.minCharCountAlert">Abstrakt nemá dostatečný počet znaků. Minimum je 500 znaků.</message>
 	<message key="author.submit.form.wordCountAlert">Překročen limit počtu znaků pro abstrakt. Maximum je 3 300 znaků.</message>
 	<message key="author.submit.submissionFile">Soubor s příspěvkem</message>
 	<message key="author.submit.paperTemplate">Vzor příspěvku</message>

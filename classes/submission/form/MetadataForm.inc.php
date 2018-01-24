@@ -62,7 +62,12 @@ class MetadataForm extends Form {
 			$track = $trackDao->getTrack($paper->getTrackId());
 			/** using old methods and fields from word count; now char count **/
 			$abstractCharCount = $track->getAbstractWordCount();
-			
+			$minCharCount = $track->getAbstractMinCharCount();
+			if (isset($minCharCount) && $minCharCount > 0) {
+				// The anonymous function uses an array of multi-language abstract
+				$minCharCount = $minCharCount + 70;
+				$this->addCheck(new FormValidatorCustom($this, 'abstract', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount', 'foreach ($abstract as $localizedAbstract) {return strlen(strip_tags($localizedAbstract)) > $charCount; }'), array($minCharCount)));
+			}
 			if (isset($abstractCharCount) && $abstractCharCount > 0) {
 				// adding the length of mandatory fields in abstract
 				$abstractCharCount = $abstractCharCount + 70;

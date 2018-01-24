@@ -132,6 +132,7 @@ class TrackForm extends Form {
 					'policy' => $track->getPolicy(null), // Localized
 					'hideAbout' => $track->getHideAbout(),
 					'disableComments' => $track->getDisableComments(),
+					'minCharCount' => $track->getAbstractMinCharCount(),
 					'wordCount' => $track->getAbstractWordCount()
 				);
 			}
@@ -147,7 +148,7 @@ class TrackForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {
-		$this->readUserVars(array('title', 'abbrev', 'policy', 'reviewFormId', 'metaNotReviewed', 'identifyType', 'directorRestriction', 'hideAbout', 'disableComments', 'wordCount'));
+		$this->readUserVars(array('title', 'abbrev', 'policy', 'reviewFormId', 'metaNotReviewed', 'identifyType', 'directorRestriction', 'hideAbout', 'disableComments', 'wordCount', 'minCharCount'));
 	}
 
 	/**
@@ -179,6 +180,7 @@ class TrackForm extends Form {
 		$track->setPolicy($this->getData('policy'), null); // Localized
 		$track->setHideAbout($this->getData('hideAbout'));
 		$track->setDisableComments($this->getData('disableComments') ? 1 : 0);
+		$track->setAbstractMinCharCount($this->getData('minCharCount'));
 		$track->setAbstractWordCount($this->getData('wordCount'));
 
 		if ($track->getId() != null) {

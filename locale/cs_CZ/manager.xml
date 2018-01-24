@@ -696,8 +696,10 @@
 	<message key="manager.tracks.trackDirectorInstructions">Vložte garanta sekce, kterému budou automaticky přiřazovány články podané do této sekce. (Garanty lze vkládat i manuálně až poté, co je dodán příspěvek.) Garanti sekcí jsou přiřazováni prostřednictvím kliknutí na "Garanti sekcí" v nabídce "Role při řízení konference".</message>
 	<message key="manager.tracks.unassignDirector">Zrušit garanta</message>
 	<message key="manager.tracks.unassigned">Dostupní garanti sekcí</message>
-	<message key="manager.tracks.wordCount">Počet slov</message>
-	<message key="manager.tracks.wordCountInstructions">Limit počtu slov v abstraktu pro tuto sekci (0= bez omezení):</message>
+	<message key="manager.tracks.minCharCount">Minimální počet znaků</message>
+	<message key="manager.tracks.minCharCountInstructions">Minimální limit počtu slov v abstraktu pro tuto sekci (0= bez omezení):</message>
+	<message key="manager.tracks.maxCharCount">Maximální počet znaků</message>
+	<message key="manager.tracks.maxCharCountInstructions">Maximální limit počtu slov v abstraktu pro tuto sekci (0= bez omezení):</message>
 	<message key="manager.websiteManagement">Správa webu</message>
 
 </locale>

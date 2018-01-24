@@ -150,6 +150,7 @@ class TrackDAO extends DAO {
 		$track->setHideAbout($row['hide_about']);
 		$track->setDisableComments($row['disable_comments']);
 		$track->setAbstractWordCount($row['abstract_word_count']);
+		$track->setAbstractMinCharCount($row['abstract_min_char']);
 
 		$this->getDataObjectSettings('track_settings', 'track_id', $row['track_id'], $track);
 
@@ -184,9 +185,9 @@ class TrackDAO extends DAO {
 	function insertTrack(&$track) {
 		$this->update(
 			'INSERT INTO tracks
-				(sched_conf_id, review_form_id, seq, meta_reviewed, director_restricted, hide_about, disable_comments, abstract_word_count)
+				(sched_conf_id, review_form_id, seq, meta_reviewed, director_restricted, hide_about, disable_comments, abstract_word_count, abstract_min_char)
 				VALUES
-				(?, ?, ?, ?, ?, ?, ?, ?)',
+				(?, ?, ?, ?, ?, ?, ?, ?, ?)',
 			array(
 				(int) $track->getSchedConfId(),
 				$track->getReviewFormId(),
@@ -195,7 +196,8 @@ class TrackDAO extends DAO {
 				$track->getDirectorRestricted() ? 1 : 0,
 				$track->getHideAbout() ? 1 : 0,
 				$track->getDisableComments() ? 1 : 0,
-				(int) $track->getAbstractWordCount()
+				(int) $track->getAbstractWordCount(),
+				(int) $track->getAbstractMinCharCount()
 			)
 		);
 
@@ -217,7 +219,8 @@ class TrackDAO extends DAO {
 				director_restricted = ?,
 				hide_about = ?,
 				disable_comments = ?,
-				abstract_word_count = ?
+				abstract_word_count = ?,
+				abstract_min_char = ?
 			WHERE	track_id = ?',
 			array(
 				$track->getReviewFormId(),
@@ -227,6 +230,7 @@ class TrackDAO extends DAO {
 				$track->getHideAbout()?1:0,
 				$track->getDisableComments()?1:0,
 				(int) $track->getAbstractWordCount(),
+				(int) $track->getAbstractMinCharCount(),
 				(int) $track->getId()
 			)
 		);
