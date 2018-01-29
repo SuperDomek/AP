@@ -21,20 +21,20 @@
 
 <div class="separator"></div>
 
-{if count($trackOptions) <= 1}
+{if count($trackOptions) < 1}
 	<p>{translate key="author.submit.notAccepting"}</p>
 {else}
 
 <form name="submit" method="post" action="{url op="saveSubmit" path=$submitStep}" onsubmit="return checkSubmissionChecklist()">
 {if $paperId}<input type="hidden" name="paperId" value="{$paperId|escape}" />{/if}
 
-{if count($trackOptions) == 2}{* Only one track: don't display the selection dropdown *}
+{if count($trackOptions) == 1}{* Only one track: don't display the selection dropdown *}
 	{foreach from=$trackOptions key="trackOptionKey" item="trackOption"}
 		{* Get the last key (which will be the single track ID) *}
 	{/foreach}
 	<input type="hidden" name="trackId" value="{$trackOptionKey|escape}" />
-{else}{* More than one track; display the selection dropdown *}
-	<h3>{translate key="author.submit.conferenceTrack"}</h3>
+{else}{* More than one track; select automaticaly the first track (default) *}
+	{*<h3>{translate key="author.submit.conferenceTrack"}</h3>
 
 	{url|assign:"url" page="schedConf" op="trackPolicies"}
 	<p>{translate key="author.submit.conferenceTrackDescription" aboutUrl=$url}</p>
@@ -46,7 +46,8 @@
 	</tr>
 	</table>
 
-	<div class="separator"></div>
+	<div class="separator"></div>*}
+	<input type="hidden" name="trackId" id="trackId" value="{$trackOptions|@key}" />
 {/if}{* count($trackOptions) == 2 *}
 
 {if is_array($sessionTypes) && count($sessionTypes) != 0}
