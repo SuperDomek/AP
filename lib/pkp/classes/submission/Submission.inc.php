@@ -519,6 +519,22 @@ class Submission extends DataObject {
 		return $this->setData('citations', $citations);
 	}
 
+		/**
+	 * Get publish checkbox button.
+	 * @return string
+	 */
+	function getPublish() {
+		return $this->getData('publish');
+	}
+
+	/**
+	 * Set publish checkbox button.
+	 * @param $publish int
+	 */
+	function setPublish($publish) {
+		return $this->setData('publish', $publish);
+	}
+
 	/**
 	 * Get the localized cover filename
 	 * @return string

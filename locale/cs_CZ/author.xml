@@ -67,6 +67,7 @@
 	<message key="author.submit.form.trackRequired">Zvolte, prosím, odpovídající sekci konference pro tento příspěvek.</message>
 	<message key="author.submit.form.abstractRequired">Vložte prosím abstrakt svého příspěvku.</message>
 	<message key="author.submit.form.abstractLimit">Délka abstraktu musí být mezi 500 a 3 300 znaky.</message>
+	<message key="author.submit.publishSubmission">Publikovat ve sborníku</message>
 	<message key="author.submit.privacyStatement">Prohlášení o ochraně soukromí</message>
 	<message key="author.submit.reorderInstructions">Přeuspořádat autory podle toho, jak budou uvedeni v publikaci.</message>
 	<message key="author.submit.reorder">Přeuspořádat jména autorů</message>

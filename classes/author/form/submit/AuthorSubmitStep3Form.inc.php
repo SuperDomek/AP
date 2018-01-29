@@ -100,6 +100,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				'language' => $paper->getLanguage(),
 				'sponsor' => $paper->getSponsor(null), // Localized
 				'citations' => $paper->getCitations(),
+				'publish' => $paper->getPublish(),
 				'track' => $trackDao->getTrack($paper->getTrackId())
 			);
 
@@ -145,7 +146,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			'type',
 			'language',
 			'sponsor',
-			'citations'
+			'citations',
+			'publish'
 		);
 
 		$schedConf =& Request::getSchedConf();
@@ -313,6 +315,11 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$paper->setLanguage($this->getData('language')); // Localized
 		$paper->setSponsor($this->getData('sponsor'), null); // Localized
 		$paper->setCitations($this->getData('citations'));
+		if($this->getData('publish') === "Yes"){
+			$paper->setPublish(1);
+		}
+		else
+			$paper->setPublish(0);
 
 		// Update the submission progress if necessary.
 		if ($paper->getSubmissionProgress() <= $this->step) {
