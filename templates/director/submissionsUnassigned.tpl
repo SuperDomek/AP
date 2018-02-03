@@ -14,11 +14,10 @@
 	<tr>
 		<td width="5%">{translate key="common.id"}</td>
 		<td width="5%"><span class="disabled">MM-DD</span><br />{translate key="submissions.submit"}</td>
-		<td width="5%">{translate key="submissions.track"}</td>
 		<!--<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>-->
 		<td width="20%">{translate key="paper.authors"}</td>
 		<td width="40%">{translate key="paper.title"}</td>
-    <td width="15%">{translate key="paper.manage"}
+    <td width="20%">{translate key="paper.manage"}
 	</tr>
 	</thead>
 	<tbody>
@@ -26,7 +25,6 @@
 	<tr valign="top">
 		<td>{$submission->getPaperId()}</td>
 		<td>{$submission->getDateSubmitted()|date_format:$dateFormatTrunc}</td>
-		<td>{$submission->getTrackAbbrev()|escape}</td>
 		<!--<td>
 			{assign var="sessionTypeId" value=$submission->getData('sessionType')}
 			{if $sessionTypeId}
@@ -37,14 +35,15 @@
 		<td>{$submission->getAuthorString(true)|truncate:40:"..."|escape}</td>
 		{translate|assign:"untitledPaper" key="common.untitled"}
 		{* EDIT: Hardcoded link to first review round - abstract*}
-		<td><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:1}" class="action">{$submission->getLocalizedTitle()|default:$untitledPaper|strip_tags|truncate:60:"..."|default:"&mdash;"}</a>
-			{if $submissionProgress != 0 && ($currentStage == REVIEW_STAGE_ABSTRACT || ($currentStage == REVIEW_STAGE_PRESENTATION && $submissionProgress < 3))}
-				(<a href="{url op="deleteSubmission" path=$paperId}" class="action" onclick="return confirm('{translate|escape:"jsparam" key="author.submissions.confirmDelete"}')">{translate key="common.delete"}</a>)
+		<td><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:1}" class="action">{$submission->getLocalizedTitle()|default:$untitledPaper|strip_tags|truncate:60:"..."|default:"&mdash;"}</a></td>
+		<td>
+			{assign var="currentStage" value=$submission->getCurrentStage()}
+			{if $currentStage == $smarty.const.REVIEW_STAGE_ABSTRACT}
+				<a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:1}" class="action"><button class="button">{translate key="director.paper.recordDecision"}</button></a>
+			{else}
+				<a href="{url page="director" op="assignDirector" path="trackDirector" paperId=$submission->getPaperId()}"><button class="button">{translate key="director.paper.assignTrackDirector"}</button></a>
 			{/if}
 		</td>
-    <td>
-      <a href="{url page="director" op="assignDirector" path="trackDirector" paperId=$submission->getPaperId()}">{translate key="director.paper.assignTrackDirector"}</a>
-    </td>
 	</tr>
 {/iterate}
 {if $submissions->wasEmpty()}
