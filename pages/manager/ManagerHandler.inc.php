@@ -74,6 +74,7 @@ class ManagerHandler extends Handler {
 		$email = new MailTemplate(Request::getUserVar('template'), Request::getUserVar('locale'));
 
 		if (Request::getUserVar('send') && !$email->hasErrors()) {
+			$email->log();
 			$email->send();
 			Request::redirect(null, null, Request::getRequestedPage());
 		} else {

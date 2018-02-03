@@ -173,6 +173,8 @@ class Action {
 						$oldBody = $email->getBody();
 						if (!empty($oldBody)) $oldBody .= "\n";
 						$email->setBody($oldBody . $body);
+						
+						$email->log();
 						$email->send();
 					}
 				}

@@ -441,6 +441,7 @@ class TrackDirectorAction extends Action {
 						$email->clearAllRecipients();
 						$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 					}
+					$email->log();
 					$email->send();
 				}
 
@@ -483,6 +484,7 @@ class TrackDirectorAction extends Action {
 						$email->clearAllRecipients();
 						$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 					}
+					$email->log();
 					$email->send();
 				}
 
@@ -560,6 +562,7 @@ class TrackDirectorAction extends Action {
 					HookRegistry::call('TrackDirectorAction::cancelReview', array(&$trackDirectorSubmission, &$reviewAssignment, &$email));
 					if ($email->isEnabled()) {
 						$email->setAssoc(PAPER_EMAIL_REVIEW_CANCEL, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
+						$email->log();
 						$email->send();
 					}
 
@@ -652,6 +655,7 @@ class TrackDirectorAction extends Action {
 				$email->addRecipient($reviewer->getEmail(), $reviewer->getFullName());
 			}
 
+			$email->log();
 			$email->send();
 
 			$reviewAssignment->setDateReminded(Core::getCurrentDate());
@@ -736,6 +740,7 @@ class TrackDirectorAction extends Action {
 				$email->assignParams($paramArray);
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_THANK_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
+					$email->log();
 					$email->send();
 				}
 
@@ -753,6 +758,7 @@ class TrackDirectorAction extends Action {
 				HookRegistry::call('TrackDirectorAction::thankReviewer', array(&$trackDirectorSubmission, &$reviewAssignment, &$email));
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_THANK_REVIEWER, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
+					$email->log();
 					$email->send();
 				}
 
@@ -864,6 +870,7 @@ class TrackDirectorAction extends Action {
 								'paperTitle' => $trackDirectorSubmission->getLocalizedTitle(),
 								'url' => $url
 							));
+							$email->log();
 							$email->send();
 						}
 					}
@@ -979,6 +986,7 @@ class TrackDirectorAction extends Action {
 			HookRegistry::call('TrackDirectorAction::unsuitableSubmission', array(&$trackDirectorSubmission, &$author, &$email));
 			if ($email->isEnabled()) {
 				$email->setAssoc(PAPER_EMAIL_DIRECTOR_NOTIFY_AUTHOR_UNSUITABLE, PAPER_EMAIL_TYPE_DIRECTOR, $user->getId());
+				$email->log();
 				$email->send();
 			}
 			TrackDirectorAction::archiveSubmission($trackDirectorSubmission);
@@ -1929,12 +1937,13 @@ import('file.PaperFileManager');
 				$templateName = $isAbstract?'SUBMISSION_ABSTRACT_DECLINE':'SUBMISSION_PAPER_DECLINE';
 				break;
 		}
-
+		//error_log($templateName);
 		$user =& Request::getUser();
 		import('mail.PaperMailTemplate');
 		$email = new PaperMailTemplate($trackDirectorSubmission, $templateName, 'en_US');
 		// Přidat auto
 		if ($send && $auto){
+			//error_log("Sending e-mail to author");
 			HookRegistry::call('TrackDirectorAction::emailDirectorDecisionComment', array(&$trackDirectorSubmission, &$send));
 			$authorUser =& $userDao->getUser($trackDirectorSubmission->getUserId());
 			$authorEmail = $authorUser->getEmail();
@@ -2038,6 +2047,7 @@ import('file.PaperFileManager');
 		}
 		elseif ($send && !$email->hasErrors()) {
 			HookRegistry::call('TrackDirectorAction::emailDirectorDecisionComment', array(&$trackDirectorSubmission, &$send));
+			$email->log();
 			$email->send();
 
 			$paperComment = new PaperComment();
@@ -2180,6 +2190,7 @@ import('file.PaperFileManager');
 
 		if ($send && !$email->hasErrors() && !$inhibitExistingEmail) {
 			HookRegistry::call('TrackDirectorAction::blindCcReviewsToReviewers', array(&$paper, &$reviewAssignments, &$email));
+			$email->log();
 			$email->send();
 			return true;
 		} else {

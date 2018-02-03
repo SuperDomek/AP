@@ -301,6 +301,7 @@ class RTHandler extends PaperHandler {
 		$email = new MailTemplate('EMAIL_LINK');
 
 		if ($request->getUserVar('send') && !$email->hasErrors()) {
+			$email->log();
 			$email->send();
 
 			$templateMgr =& TemplateManager::getManager();
@@ -350,6 +351,7 @@ class RTHandler extends PaperHandler {
 		$email = new MailTemplate();
 
 		if ($request->getUserVar('send') && !$email->hasErrors()) {
+			$email->log();
 			$email->send();
 
 			$templateMgr =& TemplateManager::getManager();

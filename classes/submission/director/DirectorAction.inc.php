@@ -60,6 +60,7 @@ class DirectorAction extends TrackDirectorAction {
 			);
 			$email->assignParams($paramArray);
 			$email->setAssoc(PAPER_EMAIL_DIRECTOR_ASSIGN, PAPER_EMAIL_TYPE_DIRECTOR, $trackDirector->getId());
+			$email->log();
 			$email->send();
 
 			$editAssignment = new EditAssignment();
