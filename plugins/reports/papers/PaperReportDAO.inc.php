@@ -47,7 +47,8 @@ class PaperReportDAO extends DAO {
 				COALESCE(tl.setting_value, tpl.setting_value) AS track_title,
 				COALESCE(cvesl.setting_value, cvesp.setting_value) AS paper_type,
 				p.language AS language,
-				p.current_stage AS stage
+				p.current_stage AS stage,
+				p.publish AS publish
 			FROM	papers p
 				LEFT JOIN published_papers pp ON (p.paper_id = pp.paper_id)
 				LEFT JOIN paper_settings pspl1 ON (pspl1.paper_id=p.paper_id AND pspl1.setting_name = ? AND pspl1.locale = ?)

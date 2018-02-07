@@ -371,9 +371,6 @@ function delDiv(sel){
 			{/if}
 		</td>
 	</tr>
-	<tr>
-		<td colspan="2" class="separator">&nbsp;</td>
-	</tr>
 	{/if}
 	{if $currentSchedConf->getSetting('metaCoverage')}
 	<tr valign="top">
@@ -454,6 +451,20 @@ function delDiv(sel){
 		</td>
 	</tr>
 </table>
+</div>
+
+<div class="separator"></div>
+
+<div id="publish">
+<h3>{translate key="author.submit.publishSubmission"}</h3>
+
+<table width="100%" class="data">
+<tr valign="top">
+	<td width="10%" class="value"><input type="checkbox" name="publish" id="publish" value="1" {if $publish == '1'}checked="checked"{else}{/if}/></td>
+	<td width="90%" class="label">{fieldLabel name="publish" key="paper.author.publish"}</td>
+</tr>
+</table>
+
 </div>
 
 <div class="separator"></div>

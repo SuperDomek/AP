@@ -12,7 +12,7 @@
 <h3>{translate key="submission.metadata"}</h3>
 
 {if $mayEditPaper || $isDirector}
-	<p><a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action">{translate key="submission.editMetadata"}</a></p>
+	<p><a href="{url op="viewMetadata" path=$submission->getPaperId()}" class="action"><input type="button" class="button" value="{translate key="submission.editMetadata"}"</button></a></p>
 {/if}
 {if $isDirector}
 <div id="authors">
@@ -178,6 +178,11 @@
 	</tr>
 </table>
 </div><!-- supportingAgencies -->
+
+<div class="separator"></div>
+{assign var=publish value=$submission->getPublish()}
+<p>
+<input type="checkbox" name="publish" id="publish" value="Yes" {if $publish == 1}checked="checked"{/if} disabled="disabled"/>&nbsp;&nbsp;{translate key="paper.author.publish"}</p>
 
 {if $currentSchedConf->getSetting('metaCitations')}
 	<div id="citations">

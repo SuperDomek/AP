@@ -115,7 +115,8 @@ class MetadataForm extends Form {
 				'type' => $paper->getType(null), // Localized
 				'language' => $paper->getLanguage(),
 				'sponsor' => $paper->getSponsor(null), // Localized
-				'citations' => $paper->getCitations()
+				'citations' => $paper->getCitations(),
+				'publish' => $paper->getPublish()
 			);
 
 			$authors =& $paper->getAuthors();
@@ -210,6 +211,7 @@ class MetadataForm extends Form {
 				'type',
 				'language',
 				'sponsor',
+				'publish',
 				'citations'
 			)
 		);
@@ -251,6 +253,7 @@ class MetadataForm extends Form {
 		$paper->setLanguage($this->getData('language'));
 		$paper->setSponsor($this->getData('sponsor'), null); // Localized
 		$paper->setCitations($this->getData('citations'));
+		$paper->setPublish($this->getData('publish'));
 
 		// Update authors
 		$authors = $this->getData('authors');

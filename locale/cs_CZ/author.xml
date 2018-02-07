@@ -63,7 +63,7 @@
 	<message key="author.submit.commentsForDirector">Poznámky pro garanta konference</message>
 	<message key="author.submit.comments">Vložte text (nepovinné)</message>
 	<message key="author.submit.form.authorRequired">Zadejte alespoň jednoho autora.</message>
-	<message key="author.submit.form.authorRequiredFields">Zadejte jméno, příjmení, emailovou adresu a afilaci každého autora.</message>
+	<message key="author.submit.form.authorRequiredFields">Zadejte jméno, příjmení, emailovou adresu, afilaci a zemi každého autora.</message>
 	<message key="author.submit.form.trackRequired">Zvolte, prosím, odpovídající sekci konference pro tento příspěvek.</message>
 	<message key="author.submit.form.abstractRequired">Vložte prosím abstrakt svého příspěvku.</message>
 	<message key="author.submit.form.abstractLimit">Délka abstraktu musí být mezi 500 a 3 300 znaky.</message>

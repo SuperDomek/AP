@@ -168,7 +168,7 @@ function delDiv(sel){
 </tr>
 
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-country" key="common.country"}</td>
+	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-country" required="true" key="common.country"}</td>
 	<td width="80%" class="value">
 		<select name="authors[{$authorIndex|escape}][country]" id="authors-{$authorIndex|escape}-country" class="selectForm selectMenu">
 			<option value=""></option>
@@ -225,7 +225,7 @@ function delDiv(sel){
 	</td>
 </tr>
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-0-country" key="common.country"}</td>
+	<td width="20%" class="label">{fieldLabel name="authors-0-country" required="true" key="common.country" }</td>
 	<td width="80%" class="value">
 		<select name="authors[0][country]" id="authors-0-country" class="selectForm selectMenu">
 			<option value=""></option>

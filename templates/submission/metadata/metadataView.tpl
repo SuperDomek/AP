@@ -169,4 +169,10 @@
 	</tr>
 </table>
 
+<div class="separator"></div>
+
+<h3>{translate key="submission.supportingAgencies"}</h3>
+{assign var=publish value=$submission->getPublish()}
+<p>{translate key="author.submit.publishSubmission"}&nbsp;<input type="checkbox" name="publish" id="publish" value="Yes" {if $publish == 1}checked="checked"{/if} disabled="disabled"/></p>
+
 {include file="common/footer.tpl"}

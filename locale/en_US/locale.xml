@@ -211,6 +211,7 @@
 	<message key="paper.sessionType">Session Type</message>
 	<message key="paper.previousRounds.show">Show previous review rounds</message>
 	<message key="paper.previousRounds.hide">Hide previous review rounds</message>
+	<message key="paper.publish">Publish</message>
 
 	<!-- Submission Tracking - Common -->
 	<message key="submission.fromTime">From</message>
