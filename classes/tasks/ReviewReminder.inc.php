@@ -95,6 +95,7 @@ class ReviewReminder extends ScheduledTask {
 		);
 		$email->assignParams($paramArray);
 
+		$email->log();
 		$email->send();
 
 		$reviewAssignment->setDateReminded(Core::getCurrentDate());

@@ -9,18 +9,18 @@
  * $Id$
  *}
 <div id="submissions">
-<table class="listing" width="100%">
-	<tr><td colspan="6" class="headseparator">&nbsp;</td></tr>
-	<tr class="heading" valign="bottom">
-		<td width="5%">{sort_heading key="common.id" sort="id"}</td>
-		<td width="5%"><span class="disabled">MM-DD</span><br />{sort_heading key="submissions.submit" sort="submitDate"}</td>
-		<td width="5%">{sort_heading key="submissions.track" sort="track"}</td>
-		<td width="25%">{sort_heading key="paper.authors" sort="authors"}</td>
-		<td width="35%">{sort_heading key="paper.title" sort="title"}</td>
-		<td width="25%" align="right">{sort_heading key="common.status" sort="status"}</td>
+<table class="listing sortable" width="100%">
+<thead>
+	<tr>
+		<td width="5%">{translate key="common.id"}</td>
+		<td width="7%"><span class="disabled">MM-DD</span><br />{translate key="submissions.submit"}</td>
+		<td width="5%">{translate key="submissions.track"}</td>
+		<td width="25%">{translate key="paper.authors"}</td>
+		<td width="35%">{translate key="paper.title"}</td>
+		<td width="23%" align="right">{translate key="common.status"}</td>
 	</tr>
-	<tr><td colspan="6" class="headseparator">&nbsp;</td></tr>
-
+</thead>
+<tbody>
 {iterate from=submissions item=submission}
 	{assign var="paperId" value=$submission->getPaperId()}
 	{assign var="currentStage" value=$submission->getCurrentStage()}
@@ -40,11 +40,14 @@
 					{assign var=decision value=$submission->getMostRecentDecision()}
 					{if $currentStage>=REVIEW_STAGE_PRESENTATION}
 						<a href="{url op="submissionReview" path=$paperId|to_array}" class="action">
-              {if $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+							{if $submission->getAuthorFileRevisions($submission->getCurrentStage())}
+            		<span>{translate key="author.submissions.queuedPaperReviewRevisions.uploaded"}</span>
+              {elseif $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
               $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
               $decision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
                 {translate key="author.submissions.queuedPaperReviewRevisions"}
-							{else}{translate key="submissions.queuedPaperReview"}
+							{else}
+								{translate key="submissions.queuedPaperReview"}
 							{/if}
 						</a>
 					{else}
@@ -78,22 +81,16 @@
 		{/if}
 	</tr>
 
-	<tr>
-		<td colspan="6" class="{if $submissions->eof()}end{/if}separator">&nbsp;</td>
-	</tr>
 {/iterate}
 {if $submissions->wasEmpty()}
 	<tr>
 		<td colspan="6" class="nodata">{translate key="submissions.noSubmissions"}</td>
 	</tr>
-	<tr>
-		<td colspan="6" class="endseparator">&nbsp;</td>
-	</tr>
-{else}
-	<tr>
-		<td colspan="4" align="left">{page_info iterator=$submissions}</td>
-		<td colspan="2" align="right">{page_links anchor="submissions" name="submissions" iterator=$submissions sort=$sort sortDirection=$sortDirection}</td>
-	</tr>
 {/if}
+</tbody>
 </table>
+<p>
+{page_info iterator=$submissions}
+{page_links anchor="submissions" name="submissions" iterator=$submissions sort=$sort sortDirection=$sortDirection}
+</p>
 </div>

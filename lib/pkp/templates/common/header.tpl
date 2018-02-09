@@ -48,6 +48,11 @@
 			fontSize("#sizer", "body", 9, 16, 32, "{/literal}{$baseUrl}{literal}"); // Initialize the font sizer
 		});
 	{/literal}</script>
+	<!-- Javascript for the sortable table headers -->
+	<!-- credit: https://kryogenix.org/code/browser/sorttable/ -->
+	<script type="text/javascript" src="{$baseUrl}/lib/pkp/js/sorttable.js"></script>
+	<!-- Javascript for blocking page -->
+	<script type="text/javascript" src="{$baseUrl}/lib/pkp/js/jquery.blockUI.js"></script>
 	{call_hook|assign:"leftSidebarCode" name="Templates::Common::LeftSidebar"}
 	{call_hook|assign:"rightSidebarCode" name="Templates::Common::RightSidebar"}
 	{if $leftSidebarCode || $rightSidebarCode}<link rel="stylesheet" href="{$baseUrl}/styles/sidebar.css" type="text/css" />{/if}

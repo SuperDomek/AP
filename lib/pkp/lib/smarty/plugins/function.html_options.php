@@ -97,7 +97,13 @@ function smarty_function_html_options($params, &$smarty)
 
 function smarty_function_html_options_optoutput($key, $value, $selected) {
     if(!is_array($value)) {
-        $_html_result = '<option label="' . smarty_function_escape_special_chars($value) . '" value="' .
+        // EDIT if the value is '' then disable this select and set it selected so it showes up first
+        // this selected should be rewritten in case other option has selected
+        if($key === '' || $key === NULL)
+            $_html_result = '<option label="' . smarty_function_escape_special_chars($value) . '" value="' .
+            smarty_function_escape_special_chars($key) . '"' . 'disabled selected';
+        else
+            $_html_result = '<option label="' . smarty_function_escape_special_chars($value) . '" value="' .
             smarty_function_escape_special_chars($key) . '"';
         if (in_array((string)$key, $selected))
             $_html_result .= ' selected="selected"';

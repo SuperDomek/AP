@@ -81,8 +81,8 @@
 
 	<!--  peer review -->
 	<message key="submission.reviewForm">Formulář posudku</message>
-	<message key="submission.reviewFormResponse">Zobrazit posudek</message>
-	<message key="submission.yourReviewFormResponse">Vyplnit posudek</message>
+	<message key="submission.reviewFormResponse">Zobrazit</message>
+	<message key="submission.yourReviewFormResponse">Vyplnit</message>
 	<message key="submission.confirmSubmit">Po odeslání již nepůjde posudek upravit.\nKlikněte na OK pro odeslání recenzního formuláře nebo Zrušit pro návrat na recenzní formulář.</message>
 
 	<message key="editor.paper.reviewForms">Formuláře posudků</message>
@@ -124,6 +124,8 @@
 	<message key="common.homePageHeader.altText">Obrázek hlavičky domovské stránky</message>
 	<message key="common.conferenceHomepageImage.altText">Obrázek na domovské stránce konference</message>
 	<message key="common.specSymbol">Spec. symbol</message>
+	<message key="common.previousSchedConfs.hide">Skrýt předešlé ročníky</message>
+	<message key="common.previousSchedConfs.show">Zobrazit předešlé ročníky</message>
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Nápověda konference</message>
@@ -170,9 +172,11 @@
 	<message key="paper.papers">Příspěvky</message>
 	<message key="paper.submissionId">ID příspěvku</message>
 	<message key="paper.submitterId">ID autora</message>
+	<message key="paper.author.publish">Souhlasím s publikací příspěvku ve sborníku této konference.</message>
 	<message key="paper.title">Název</message>
 	<message key="paper.manage">Správa</message>
 	<message key="paper.authors">Autoři</message>
+	<message key="paper.authors.mail">Kontaktovat autory</message>
 	<message key="paper.conferenceTrack">Sekce konference</message>
 	<message key="paper.file">Soubor</message>
 	<message key="paper.suppFile">Doplňkový soubor</message>
@@ -208,6 +212,9 @@
 	<message key="paper.fontSize.medium.altText">Střední</message>
 	<message key="paper.fontSize.large.altText">Velké</message>
 	<message key="paper.sessionType">Typ sekce</message>
+	<message key="paper.previousRounds.show">Zobrazit předchozí kola recenze</message>
+	<message key="paper.previousRounds.hide">Skrýt předchozí kola recenze</message>
+	<message key="paper.publish">Publikovat</message>
 
 	<!-- Submission Tracking - Common -->
 	<message key="submission.fromTime">Od</message>
@@ -217,7 +224,7 @@
 	<message key="submission.paperReview">Posudek příspěvku</message>
 	<message key="submission.paperReviews">Posudky příspěvku</message>
 	<message key="submission.page.abstractReview">Posudek abstraktu č. {$id}</message>
-	<message key="submission.page.paperReview">Posudek příspěvku č. {$id}</message>
+	<message key="submission.page.paperReview">Recenze příspěvku č. {$id}</message>
 	<message key="submission.uploadFile">Nahrát příspěvek</message>
 	<message key="submission.fileChanges">Seznam provedených úprav (více než 10 znaků)</message>
 	<message key="submission.changeTrack">Změnit na</message>
@@ -327,12 +334,14 @@
 	<message key="user.createAccountForOtherConferences">Vytvořit účet pro další konference</message>
 	<message key="user.myConferences">Mé konference</message>
 	<message key="user.noRoles.chooseConference">Váš účet není v současné době spojen s žádnou konferencí. Vyberte, prosím, konferenci:</message>
-	<message key="user.noRoles.noRolesForConference">Váš účet v současné době nemá pro tuto konferenci žádné role. Vyberte, prosím, jednu z níže uvedených akcí:</message>
+	<message key="user.noRoles.noRolesForConference">Váš účet v současné době nemá pro tento ročník konference žádnou roli. Vyberte, prosím, jednu z níže uvedených akcí:</message>
 	<message key="user.noRoles.submitProposal">Zaslat návrh příspěvku</message>
 	<message key="user.noRoles.submitProposalRegClosed">Zaslat návrh příspěvku: Registrace autorů je v tomto momentě uzavřena.</message>
 	<message key="user.noRoles.submitProposalSubmissionsClosed">Zaslat návrh příspěvku: Podávání příspěvků je v tomto momentě uzavřeno.</message>
+	<message key="user.noRoles.regAuthor">Registrovat se jako autor</message>
+	<message key="user.noRoles.regAuthorClosed">Registrovat se jako autor: registrace autorů je v tomto momentě uzavřena.</message>
 	<message key="user.noRoles.regReviewer">Registrovat jako oponenta konference</message>
-	<message key="user.noRoles.regReviewerClosed">Registrovat jako oponenta konference: registrace oponentů je v tomto momentě uzavřena.</message>
+	<message key="user.noRoles.regReviewerClosed">Registrovat se jako oponent: registrace recenzentů je v tomto momentě uzavřena.</message>
 	<message key="user.noRoles.register">Registrovat k účasti na konferenci</message>
 	<message key="user.noRoles.registerUnavailable">Registrovat k účasti na konferenci: registrace nejsou v tomto momentě přijímány.</message>
 
@@ -513,7 +522,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.submissionDirector">Garant příspěvků</message>
 	<message key="reviewer.paper.reviewerCommentsDescription">Vepište či vložte komentáře oponenta</message>
 	<message key="reviewer.paper.directorToEnter">Vložit doporučení za recenzenta</message>
-	<message key="reviewer.paper.recomendation.formFirst">Prosíme vyplňte recenzní formulář.</message>
+	<message key="reviewer.paper.recomendation.formFirst">Nejdříve vyplňte recenzní formulář</message>
 	<message key="reviewer.paper.sendReminder">Odeslat připomenutí</message>
 	<message key="reviewer.paper.automatic">(Auto)</message>
 	<message key="reviewer.paper.selectRecommendation">Vybrat doporučení</message>
@@ -521,6 +530,7 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.submitReview">Předat oponenturu garantovi</message>
 	<message key="reviewer.paper.reviewerComments">Komentáře</message>
 	<message key="reviewer.paper.uploadedFile">Nahrané soubory</message>
+	<message key="reviewer.paper.table.order">Pořadí</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersion">Verze nahraná oponentem</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersionDescription">(Chcete-li psát poznámky pro garanta přímo do souboru, uložte soubor na pevný disk a poté použijte Najít/načíst.)</message>
 	<message key="reviewer.paper.schedule.request">Požadavek garanta</message>
@@ -538,6 +548,14 @@ Aktivní odkazuje na počet oponentů, kteří ještě zvažují přijetí.]]></
 	<message key="reviewer.paper.decision.decline">Odmítnout příspěvek</message>
 	<message key="reviewer.paper.decision.seeComments">Prohlížet komentáře</message>
 	<message key="reviewer.paper.schedule">Program</message>
+	<message key="reviewer.paper.status">Stav recenze</message>
+	<message key="reviewer.paper.status.cancelled">Zrušeno</message>
+	<message key="reviewer.paper.status.finished">Dokončeno</message>
+	<message key="reviewer.paper.status.overdue">Po termínu</message>
+	<message key="reviewer.paper.status.declined">Odmítnuto</message>
+	<message key="reviewer.paper.status.active">Recenzuje</message>
+	<message key="reviewer.paper.status.assigned">Požádáno</message>
+	<message key="reviewer.paper.status.unknown">Neznámo</message>
 	<message key="reviewer.paper.submissionToBeReviewed">Příspěvek k oponentuře</message>
 	<message key="reviewer.paper.reviewSchedule">Rozvrh oponentur</message>
 	<message key="reviewer.paper.reviewSteps">Kroky oponentury</message>

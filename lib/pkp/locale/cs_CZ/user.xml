@@ -67,6 +67,7 @@
 	<message key="user.profile.form.emailRequired">Je vyžadována platná emailová adresa.</message>
 	<message key="user.profile.form.addressRequired">Prosíme, vyplňte Vaši korespondenční adresu.</message>
 	<message key="user.profile.form.affiliationRequired">Prosíme, vyplňte položku pracoviště.</message>
+	<message key="user.profile.form.countryRequired">Prosíme, vyplňte položku země.</message>
 	<message key="user.profile.form.firstNameRequired">Je vyžadováno jméno.</message>
 	<message key="user.profile.form.lastNameRequired">Je vyžadováno příjmení.</message>
 	<message key="user.profile.form.newPasswordRequired">Musíte vložit Vaše nové heslo.</message>
@@ -82,7 +83,7 @@
 	<message key="user.profile.newPassword">Nové heslo</message>
 	<message key="user.profile.oldPassword">Současné heslo</message>
 	<message key="user.profile">Profil</message>
-	<message key="user.profile.publicProfile">Profil uživatele</message>
+	<message key="user.profile.publicProfile">Profil uživatele {$user}</message>
 	<message key="user.profile.repeatNewPassword">Nové heslo znovu</message>
 	<message key="user.register.form.emailExists">Zvolenou emailovou adresu již používá jiný uživatel.</message>
 	<message key="user.register.form.passwordsDoNotMatch">Hesla nejsou totožná.</message>
@@ -98,6 +99,7 @@
 	<message key="user.role.reviewers">Recenzenti</message>
 	<message key="user.role.siteAdmin">Administrátor stránky</message>
 	<message key="user.role.siteAdmins">Administrátoři stránky</message>
+	<message key="user.role">Role</message>
 	<message key="user.roles">Role</message>
 	<message key="user.salutation">Oslovení</message>
 	<message key="user.sendPassword">Potvrzení</message>

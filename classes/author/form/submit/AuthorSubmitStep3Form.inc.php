@@ -26,7 +26,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 
 		// Validation checks for this form
 		$this->addCheck(new FormValidatorCustom($this, 'authors', 'required', 'author.submit.form.authorRequired', create_function('$authors', 'return count($authors) > 0;')));
-		$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName', 'affiliation_select', 'affiliation')));
+		$this->addCheck(new FormValidatorArray($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', array('firstName', 'lastName', 'affiliation_select', 'affiliation', 'country')));
 		$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'author.submit.form.authorRequiredFields', create_function('$email, $regExp', 'return String::regexp_match($regExp, $email);'), array(ValidatorEmail::getRegexp()), false, array('email')));
 		$this->addCheck(new FormValidatorArrayCustom($this, 'authors', 'required', 'user.profile.form.urlInvalid', create_function('$url, $regExp', 'return empty($url) ? true : String::regexp_match($regExp, $url);'), array(ValidatorUrl::getRegexp()), false, array('url')));
 		$this->addCheck(new FormValidatorLocale($this, 'title', 'required', 'author.submit.form.titleRequired'));
@@ -44,10 +44,17 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				$trackDao =& DAORegistry::getDAO('TrackDAO');
 				$track = $trackDao->getTrack($paper->getTrackId());
 				/** using old methods and fields from word count; now char count **/
+				$minCharCount = $track->getAbstractMinCharCount();
 				$abstractCharCount = $track->getAbstractWordCount();
 				$this->addCheck(new FormValidatorLocale($this, 'abstract1', 'required', 'author.submit.form.abstractRequired'));
 				$this->addCheck(new FormValidatorLocale($this, 'abstract2', 'required', 'author.submit.form.abstractRequired'));
 				$this->addCheck(new FormValidatorLocale($this, 'abstract3', 'required', 'author.submit.form.abstractRequired'));
+				if (isset($minCharCount) && $minCharCount > 0) {
+					// The anonymous function uses an array of multi-language abstract
+					$this->addCheck(new FormValidatorCustom($this, 'abstract1', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] > $charCount; }'), array($minCharCount, &$this)));
+					$this->addCheck(new FormValidatorCustom($this, 'abstract2', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] > $charCount; }'), array($minCharCount, &$this)));
+					$this->addCheck(new FormValidatorCustom($this, 'abstract3', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] > $charCount; }'), array($minCharCount, &$this)));
+				}
 				if (isset($abstractCharCount) && $abstractCharCount > 0) {
 					// The anonymous function uses an array of multi-language abstract
 					$this->addCheck(new FormValidatorCustom($this, 'abstract1', 'required', 'author.submit.form.wordCountAlert', create_function('$abstract, $charCount, $form', 'foreach ($abstract as $key => $localizedAbstract) {return $form->getData(\'abstractTotalChars\')[$key] <= $charCount; }'), array($abstractCharCount, &$this)));
@@ -93,6 +100,7 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				'language' => $paper->getLanguage(),
 				'sponsor' => $paper->getSponsor(null), // Localized
 				'citations' => $paper->getCitations(),
+				'publish' => $paper->getPublish(),
 				'track' => $trackDao->getTrack($paper->getTrackId())
 			);
 
@@ -107,7 +115,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 						'lastName' => $authors[$i]->getLastName(),
 						'affiliation_select' => $authors[$i]->getAffiliationSelect(),
 						'affiliation' => $authors[$i]->getAffiliation(),
-						'attends' => $authors[$i]->getAttends(),
 						'country' => $authors[$i]->getCountry(),
 						'email' => $authors[$i]->getEmail(),
 						'url' => $authors[$i]->getUrl(),
@@ -139,7 +146,8 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 			'type',
 			'language',
 			'sponsor',
-			'citations'
+			'citations',
+			'publish'
 		);
 
 		$schedConf =& Request::getSchedConf();
@@ -307,6 +315,11 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 		$paper->setLanguage($this->getData('language')); // Localized
 		$paper->setSponsor($this->getData('sponsor'), null); // Localized
 		$paper->setCitations($this->getData('citations'));
+		if($this->getData('publish') === "Yes"){
+			$paper->setPublish(1);
+		}
+		else
+			$paper->setPublish(0);
 
 		// Update the submission progress if necessary.
 		if ($paper->getSubmissionProgress() <= $this->step) {
@@ -358,7 +371,6 @@ class AuthorSubmitStep3Form extends AuthorSubmitForm {
 				$author->setAffiliationSelect($authors[$i]['affiliation_select']);
 				$author->setAffiliation($authors[$i]['affiliation']);
 				$author->setCountry($authors[$i]['country']);
-				$author->setAttends($authors[$i]['attends']);
 				$author->setEmail($authors[$i]['email']);
 				$author->setUrl($authors[$i]['url']);
 				$author->setBiography($authors[$i]['biography'], null); // Localized

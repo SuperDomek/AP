@@ -38,12 +38,12 @@
 		<td class="label">{translate key="user.biography"}</td>
 		<td class="value">{$author.biography.$formLocale|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
 	</tr>-->
-  <tr valign="top">
+  {*<tr valign="top">
   	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-attends" key="common.attends"}</td>
   	<td width="80%" class="value">
   		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if !$authors.attends} checked="checked" {/if}/>
   	</td>
-  </tr>
+  </tr>*}
 	{if !$smarty.foreach.authors.last}
 	<tr>
 		<td colspan="2" class="separator">&nbsp;</td>
@@ -168,5 +168,11 @@
 		<td width="80%" class="value">{$sponsor[$formLocale]|escape|default:"&mdash;"}</td>
 	</tr>
 </table>
+
+<div class="separator"></div>
+
+<h3>{translate key="submission.supportingAgencies"}</h3>
+{assign var=publish value=$submission->getPublish()}
+<p>{translate key="author.submit.publishSubmission"}&nbsp;<input type="checkbox" name="publish" id="publish" value="Yes" {if $publish == 1}checked="checked"{/if} disabled="disabled"/></p>
 
 {include file="common/footer.tpl"}

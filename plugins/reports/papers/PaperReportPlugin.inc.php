@@ -122,7 +122,8 @@ class PaperReportPlugin extends ReportPlugin {
 			//'room' => __('manager.scheduler.room'),
 			'status' => __('common.status'),
 			//'paper_type' => __('paper.sessionType'),
-			'comments' => __('paper.commentsToDirector')
+			'comments' => __('paper.commentsToDirector'),
+			'publish' => __('paper.publish')
 		));
 
 		//EDIT Add BOM
@@ -212,7 +213,8 @@ class PaperReportPlugin extends ReportPlugin {
 				} elseif (strstr($index, 'biography') !== false) {
 					// "Convert" HTML to text for export
 					$columns[$index] = isset($authors[$index])?html_entity_decode(strip_tags($authors[$index]), ENT_QUOTES, 'UTF-8'):'';
-				}*/ else {
+				}*/ 
+				else {
 					if (isset($row[$index])) {
 						$columns[$index] = $row[$index];
 					} else if (isset($authors[$index])) {

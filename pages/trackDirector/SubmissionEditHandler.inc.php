@@ -154,6 +154,9 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$submission =& $this->submission;
 		$commentDao =& DAORegistry::getDAO('PaperCommentDAO');
 
+		$roleDao =& DAORegistry::getDAO('RoleDAO');
+		$isDirector = $roleDao->roleExists($conference->getId(), $schedConf->getId(), $user->getId(), ROLE_ID_DIRECTOR);
+
 		$stage = (isset($args[1]) ? (int) $args[1] : null);
 		$reviewMode = $submission->getReviewMode();
 		switch ($reviewMode) {
@@ -176,8 +179,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$paperEventLogDao =& DAORegistry::getDAO('PaperEventLogDAO');
 
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
-		$tracks =& $trackDao->getSchedConfTracks($schedConf->getId());
-
+		$tracks =& $trackDao->getTrackTitles($schedConf->getId());
 		$directorDecisions = $submission->getDecisions($stage);
 		$lastDecision = count($directorDecisions) >= 1 ? $directorDecisions[count($directorDecisions) - 1]['decision'] : null;
 
@@ -233,9 +235,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$reviewFormDao =& DAORegistry::getDAO('ReviewFormDAO');
 		$reviewFormTitles = array();
+		$reviewStatusOptions = array();
 
 		if ($submission->getReviewAssignments($stage)) {
 			foreach ($submission->getReviewAssignments($stage) as $reviewAssignment) {
+				if(empty($reviewStatusOptions))
+					$reviewStatusOptions = $reviewAssignment->getReviewStatusOptions();
 				$reviewForm =& $reviewFormDao->getReviewForm($reviewAssignment->getReviewFormId());
 				if ($reviewForm) {
 					$reviewFormTitles[$reviewForm->getId()] = $reviewForm->getLocalizedTitle();
@@ -275,6 +280,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('reviewIndexes', $reviewAssignmentDao->getReviewIndexesForStage($paperId, $stage));
 		$templateMgr->assign('stage', $stage);
 		$templateMgr->assign_by_ref('reviewAssignments', $submission->getReviewAssignments($stage));
+		$templateMgr->assign('reviewStatusOptions', $reviewStatusOptions);
 		$templateMgr->assign('reviewFormResponses', $reviewFormResponses);
 		$templateMgr->assign('reviewFormTitles', $reviewFormTitles);
 		$templateMgr->assign_by_ref('notifyReviewerLogs', $notifyReviewerLogs);
@@ -285,12 +291,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign_by_ref('directorFile', $submission->getDirectorFile());
 		$templateMgr->assign('rateReviewerOnQuality', $schedConf->getSetting('rateReviewerOnQuality'));
 		$templateMgr->assign('showPeerReviewOptions', $showPeerReviewOptions);
-		$templateMgr->assign_by_ref('tracks', $tracks->toArray());
+		$templateMgr->assign_by_ref('tracks', $tracks);
 		$templateMgr->assign_by_ref('directorDecisionOptions', TrackDirectorSubmission::getDirectorDecisionOptions(null, $stage));
 		$templateMgr->assign_by_ref('lastDecision', $lastDecision);
-		$templateMgr->assign_by_ref('directorDecisions', $directorDecisions);
+		$templateMgr->assign_by_ref('directorDecisions', array_reverse($directorDecisions));
 		$templateMgr->assign('isReviewer', $this->isReviewer($stage));
-		$templateMgr->assign('isDirector', Validation::isDirector($schedConf->getConferenceId(), $schedConf->getId()));
+		$templateMgr->assign('isDirector', $isDirector);
 		$templateMgr->assign_by_ref('user', $user);
 		$templateMgr->assign('submitterId', $submission->getUserId());
 		$templateMgr->assign('changes', $changes);
@@ -394,11 +400,16 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$schedConf =& Request::getSchedConf();
 		$submission =& $this->submission;
 
+		$from = Request::getUserVar('from');
+		if(!empty(Request::getUserVar('stage')))
+			$fromStage = Request::getUserVar('stage');
+		else
+		$fromStage = null;
 		$trackId = Request::getUserVar('trackId');
 
 		TrackDirectorAction::changeTrack($submission, $trackId);
 
-		Request::redirect(null, null, null, 'submission', $paperId);
+		Request::redirect(null, null, null, $from, array($paperId, $fromStage));
 	}
 
 	/**

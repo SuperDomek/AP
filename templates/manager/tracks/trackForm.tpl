@@ -170,9 +170,15 @@
 </tr>
 {/if}
 <tr valign="top">
-	<td rowspan="2" class="label">{fieldLabel key="manager.tracks.wordCount"}</td>
+	<td class="label">{fieldLabel key="manager.tracks.minCharCount"}</td>
 	<td class="value">
-		{fieldLabel name="wordCount" key="manager.tracks.wordCountInstructions"}&nbsp;&nbsp;<input type="text" name="wordCount" id="abbrev" value="{$wordCount}" size="10" maxlength="20" class="textField" />
+		{fieldLabel name="minCharCount" key="manager.tracks.minCharCountInstructions"}&nbsp;&nbsp;<input type="text" name="minCharCount" id="minCharCount" value="{$minCharCount}" size="10" maxlength="20" class="textField" />
+	</td>
+</tr>
+<tr valign="top">
+	<td class="label">{fieldLabel key="manager.tracks.maxCharCount"}</td>
+	<td class="value">
+		{fieldLabel name="wordCount" key="manager.tracks.maxCharCountInstructions"}&nbsp;&nbsp;<input type="text" name="wordCount" id="abbrev" value="{$wordCount}" size="10" maxlength="20" class="textField" />
 	</td>
 </tr>
 </table>

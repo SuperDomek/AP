@@ -195,7 +195,7 @@
 	<message key="submission.peerReview">Peer&amp;nbsp;Review</message>
 	<message key="submission.recommendation">Recommendation</message>
 	<message key="submission.rejected">Rejected</message>
-	<message key="submission.request">Requested</message>
+	<message key="submission.request">Assigned</message>
 	<message key="submission.response">Response</message>
 	<message key="submission.restrictions">Restrictions</message>
 	<message key="submission.reviewMetadata">Review Metadata</message>
@@ -234,6 +234,7 @@
 	<message key="submission.loadMessage">Please wait while your file is uploaded to the server.</message>
 	<message key="submission.fileDetails">File Details</message>
 	<message key="submission.fileNotChecked">File is waiting to be checked by the editor.</message>
+	<message key="submission.fileNotChecked.block">Available after the editor approves the review file</message>
 	<message key="submission.fileOkay">Send to review</message>
 	<message key="submission.fileOkayed">Review file checked</message>
 	<message key="submission.fileNotOkay">Revise file</message>

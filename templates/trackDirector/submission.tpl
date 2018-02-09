@@ -16,7 +16,7 @@
 
 <ul class="menu">
 	<li class="current"><a href="{url op="submission" path=$submission->getPaperId()}">{translate key="submission.summary"}</a></li>
-	{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL}
+	{if $submission->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL && $isDirector}
 		<li><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$smarty.const.REVIEW_STAGE_ABSTRACT}">
 			{translate key="submission.abstractReview"}</a>
 		</li>
@@ -24,7 +24,7 @@
 			{translate key="submission.paperReview"}</a>
 		</li>
 	{else}
-		<li><a href="{url op="submissionReview" path=$submission->getPaperId()}">{translate key="submission.review"}</a></li>
+		<li><a href="{url op="submissionReview" path=$submission->getPaperId()|to_array:$submission->getCurrentStage()}">{translate key="submission.review"}</a></li>
 	{/if}
   {if $isDirector}
 	 <li><a href="{url op="submissionHistory" path=$submission->getPaperId()}">{translate key="submission.history"}</a></li>
@@ -32,8 +32,6 @@
 </ul>
 
 {include file="trackDirector/submission/management.tpl"}
-
-<div class="separator"></div>
 
 {include file="trackDirector/submission/directors.tpl"}
 

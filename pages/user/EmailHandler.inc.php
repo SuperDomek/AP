@@ -133,7 +133,8 @@ class EmailHandler extends UserHandler {
 				$templateMgr->assign('backLinkLabel', 'email.compose');
 				return $templateMgr->display('common/message.tpl');
 			}
-
+			
+			$email->log();
 			$email->send();
 			$redirectUrl = Request::getUserVar('redirectUrl');
 			if (empty($redirectUrl)) $redirectUrl = Request::url(null, null, 'user');

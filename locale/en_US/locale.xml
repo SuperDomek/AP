@@ -78,8 +78,8 @@
 
 	<!--  peer review -->
 	<message key="submission.reviewForm">Review Form</message>
-	<message key="submission.reviewFormResponse">View Review Form</message>
-	<message key="submission.yourReviewFormResponse">Fill in the Review Form</message>
+	<message key="submission.reviewFormResponse">View</message>
+	<message key="submission.yourReviewFormResponse">Fill in</message>
 	<message key="submission.confirmSubmit">After submitting the Review Form it can no longer be edited.\nClick OK to submit the Review Form or Cancel to get back.</message>
 
 	<message key="editor.paper.reviewForms">Review Forms</message>
@@ -121,6 +121,8 @@
 	<message key="common.homePageHeader.altText">Homepage Header Image</message>
 	<message key="common.conferenceHomepageImage.altText">Conference Homepage Image</message>
 	<message key="common.specSymbol">Spec. symbol</message>
+	<message key="common.previousSchedConfs.hide">Hide previous years</message>
+	<message key="common.previousSchedConfs.show">Show previous years</message>
 
 	<!-- Navigation -->
 	<message key="navigation.conferenceHelp">Conference Help</message>
@@ -167,9 +169,11 @@
 	<message key="paper.papers">Papers</message>
 	<message key="paper.submissionId">Submission ID</message>
 	<message key="paper.submitterId">Author ID</message>
+	<message key="paper.author.publish">I agree with the publication of this submission in the conference proceedings.</message>
 	<message key="paper.title">Title</message>
 	<message key="paper.manage">Management</message>
 	<message key="paper.authors">Authors</message>
+	<message key="paper.authors.mail">Mail the authors</message>
 	<message key="paper.conferenceTrack">Conference Track</message>
 	<message key="paper.file">File</message>
 	<message key="paper.suppFile">Supplementary File</message>
@@ -205,6 +209,9 @@
 	<message key="paper.fontSize.medium.altText">Medium</message>
 	<message key="paper.fontSize.large.altText">Large</message>
 	<message key="paper.sessionType">Session Type</message>
+	<message key="paper.previousRounds.show">Show previous review rounds</message>
+	<message key="paper.previousRounds.hide">Hide previous review rounds</message>
+	<message key="paper.publish">Publish</message>
 
 	<!-- Submission Tracking - Common -->
 	<message key="submission.fromTime">From</message>
@@ -324,12 +331,14 @@
 	<message key="user.createAccountForOtherConferences">Create an Account for Other Conferences</message>
 	<message key="user.myConferences">My Conferences</message>
 	<message key="user.noRoles.chooseConference">Your account is not currently associated with any conferences. Please choose a conference:</message>
-	<message key="user.noRoles.noRolesForConference">Your account does not currently have any roles for this conference. Please choose from the actions below:</message>
+	<message key="user.noRoles.noRolesForConference">Your account does not currently have any roles for this year of conference. Please choose from the actions below:</message>
 	<message key="user.noRoles.submitProposal">Submit a Proposal</message>
 	<message key="user.noRoles.submitProposalRegClosed">Submit a Proposal: Author registration is currently closed.</message>
 	<message key="user.noRoles.submitProposalSubmissionsClosed">Submit a Proposal: Submissions are currently closed.</message>
+	<message key="user.noRoles.regAuthor">Register as an Author</message>
+	<message key="user.noRoles.regAuthorClosed">Register as an Author: Author registration is currently closed.</message>
 	<message key="user.noRoles.regReviewer">Register as a Conference Reviewer</message>
-	<message key="user.noRoles.regReviewerClosed">Register as a Conference Reviewer: Reviewer registration is currently closed.</message>
+	<message key="user.noRoles.regReviewerClosed">Register as a Reviewer: Reviewer registration is currently closed.</message>
 	<message key="user.noRoles.register">Register to attend the conference</message>
 	<message key="user.noRoles.registerUnavailable">Register to attend the conference: Registration is not currently accepted.</message>
 
@@ -510,7 +519,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.submissionDirector">Submission Editor</message>
 	<message key="reviewer.paper.reviewerCommentsDescription">Type or paste in review comments here</message>
 	<message key="reviewer.paper.directorToEnter">Enter the recommendation for reviewer</message>
-	<message key="reviewer.paper.recomendation.formFirst">Please fill in the Review Form first.</message>
+	<message key="reviewer.paper.recomendation.formFirst">Fill in Review Form</message>
 	<message key="reviewer.paper.sendReminder">Send Reminder</message>
 	<message key="reviewer.paper.automatic">(Auto)</message>
 	<message key="reviewer.paper.selectRecommendation">Select a recommendation</message>
@@ -518,6 +527,7 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.submitReview">Submit Review To Director</message>
 	<message key="reviewer.paper.reviewerComments">Comments</message>
 	<message key="reviewer.paper.uploadedFile">Uploaded files</message>
+	<message key="reviewer.paper.table.order">Order</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersion">Version uploaded by reviewer</message>
 	<message key="reviewer.paper.reviewersAnnotatedVersionDescription">(If you want to annotate the file, for the director, save on your hard drive and use Browse/Upload.)</message>
 	<message key="reviewer.paper.schedule.request">Editor's Request</message>
@@ -535,6 +545,14 @@ Active is how many reviews are currently being considered or underway.]]></messa
 	<message key="reviewer.paper.decision.decline">Reject the paper</message>
 	<message key="reviewer.paper.decision.seeComments">See Comments</message>
 	<message key="reviewer.paper.schedule">Schedule</message>
+	<message key="reviewer.paper.status">Review status</message>
+	<message key="reviewer.paper.status.cancelled">Cancelled</message>
+	<message key="reviewer.paper.status.finished">Finished</message>
+	<message key="reviewer.paper.status.overdue">Overdue</message>
+	<message key="reviewer.paper.status.declined">Declined</message>
+	<message key="reviewer.paper.status.active">Reviewing</message>
+	<message key="reviewer.paper.status.assigned">Requested</message>
+	<message key="reviewer.paper.status.unknown">Unknown</message>
 	<message key="reviewer.paper.submissionToBeReviewed">Submission To Be Reviewed</message>
 	<message key="reviewer.paper.reviewSchedule">Review Schedule</message>
 	<message key="reviewer.paper.reviewSteps">Review Steps</message>

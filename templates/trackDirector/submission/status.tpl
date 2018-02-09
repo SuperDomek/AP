@@ -11,46 +11,45 @@
 <div id="status">
 <h3>{translate key="common.status"}</h3>
 
-<table width="100%" class="data">
-	<tr>
+<ul class="no-list">
+	<li>
 		{assign var="status" value=$submission->getSubmissionStatus()}
-		<td width="20%" class="label">{translate key="common.status"}</td>
-		<td width="30%" class="value">
-			{if $status == STATUS_ARCHIVED}{translate key="submissions.archived"}
-			{elseif $status == STATUS_QUEUED_UNASSIGNED}{translate key="submissions.queuedUnassigned"}
-			{elseif $status == STATUS_QUEUED_EDITING}{translate key="submissions.queuedEditing"}
-			{elseif $status == STATUS_QUEUED_REVIEW}
-				{if $submission->getCurrentStage()==REVIEW_STAGE_PRESENTATION}
-					{translate key="submissions.queuedPaperReview"}
-				{else}
-					{translate key="submissions.queuedAbstractReview"}
-				{/if}
-			{elseif $status == STATUS_PUBLISHED}{translate key="submissions.published"}
-			{elseif $status == STATUS_DECLINED}{translate key="submissions.declined"}
-			{/if}
-		</td>
-		<td width="50%" class="value">
-			{if $status != STATUS_ARCHIVED}
-				<a href="{url op="unsuitableSubmission" paperId=$submission->getPaperId()}" class="action">{translate key="director.paper.archiveSubmission"}</a>
+		<header>{translate key="common.status"}</header>
+		{if $status == STATUS_ARCHIVED}{translate key="submissions.archived"}
+		{elseif $status == STATUS_QUEUED_UNASSIGNED}{translate key="submissions.queuedUnassigned"}
+		{elseif $status == STATUS_QUEUED_EDITING}{translate key="submissions.queuedEditing"}
+		{elseif $status == STATUS_QUEUED_REVIEW}
+			{if $submission->getCurrentStage() >= REVIEW_STAGE_PRESENTATION}
+				{translate key="submissions.queuedPaperReview"}
 			{else}
-				<a href="{url op="restoreToQueue" path=$submission->getPaperId()}" class="action">{translate key="director.paper.restoreToQueue"}</a>
+				{translate key="submissions.queuedAbstractReview"}
 			{/if}
-		</td>
-	</tr>
-	<tr>
-		<td class="label">{translate key="submission.initiated"}</td>
-		<td colspan="2" class="value">{$submission->getDateStatusModified()|date_format:$dateFormatShort}</td>
-	</tr>
-	<tr>
-		<td class="label">{translate key="submission.lastModified"}</td>
-		<td colspan="2" class="value">{$submission->getLastModified()|date_format:$dateFormatShort}</td>
-	</tr>
+		{elseif $status == STATUS_PUBLISHED}{translate key="submissions.published"}
+		{elseif $status == STATUS_DECLINED}{translate key="submissions.declined"}
+		{elseif $status == STATUS_INCOMPLETE}{translate key="submissions.incomplete"}
+		{/if}
+		<br />
+		{if $status != STATUS_ARCHIVED}
+			<a href="{url op="unsuitableSubmission" paperId=$submission->getPaperId()}">
+				<button class="button">{translate key="director.paper.archiveSubmission"}</button></a>
+		{else}
+			<a href="{url op="restoreToQueue" path=$submission->getPaperId()}">
+				<button class="button">{translate key="director.paper.restoreToQueue"}</button></a>
+		{/if}
+	</li>
+	<li>
+		<header>{translate key="submission.initiated"}</header>
+		{$submission->getDateStatusModified()|date_format:$dateFormatShort}
+	</li>
+	<li>
+		<header>{translate key="submission.lastModified"}</header>
+		{$submission->getLastModified()|date_format:$dateFormatShort}
+	</li>
 {if $enableComments}
-	<tr>
-		<td class="label">{translate key="comments.readerComments"}</td>
-		<td class="value">{translate key=$submission->getCommentsStatusString()}</td>
-		<td class="value"><form action="{url op="updateCommentsStatus" path=$submission->getPaperId()}" method="post">{translate key="submission.changeComments"} <select name="commentsStatus" size="1" class="selectMenu">{html_options_translate options=$commentsStatusOptions selected=$submission->getCommentsStatus()}</select> <input type="submit" value="{translate key="common.record"}" class="button" /></form></td>
-	</tr>
+	<li>
+		<header>{translate key="comments.readerComments"}</header>
+		{translate key=$submission->getCommentsStatusString()}
+		<form action="{url op="updateCommentsStatus" path=$submission->getPaperId()}" method="post">{translate key="submission.changeComments"} <select name="commentsStatus" size="1" class="selectMenu">{html_options_translate options=$commentsStatusOptions selected=$submission->getCommentsStatus()}</select> <input type="submit" value="{translate key="common.record"}" class="button" /></form>
+	</li>
 {/if}
-</table>
 </div>

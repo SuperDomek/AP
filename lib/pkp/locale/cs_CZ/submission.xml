@@ -195,7 +195,7 @@
 	<message key="submission.peerReview"><![CDATA[Recenzní&nbsp;řízení]]></message>
 	<message key="submission.recommendation">Doporučení</message>
 	<message key="submission.rejected">Zamítnut</message>
-	<message key="submission.request">Požádáno</message>
+	<message key="submission.request">Přiřazen/a</message>
 	<message key="submission.response">Odpověď</message>
 	<message key="submission.restrictions">Omezení</message>
 	<message key="submission.reviewMetadata">Zkontrolovat metadata</message>
@@ -234,6 +234,7 @@
 	<message key="submission.loadMessage">Prosím čekejte, Váš soubor je nahráván na server.</message>
 	<message key="submission.fileDetails">Detaily souboru</message>
 	<message key="submission.fileNotChecked">Soubor čeká na schválení editorem.</message>
+	<message key="submission.fileNotChecked.block">Zpřístupní se po schválení recenzního souboru editorem</message>
 	<message key="submission.fileOkay">Schválit k recenzi</message>
 	<message key="submission.fileOkayed">Soubor zkontrolován</message>
 	<message key="submission.fileNotUploadedYet">Autor ještě nenahrál příspěvek k recenzi</message>

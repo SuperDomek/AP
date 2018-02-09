@@ -62,7 +62,12 @@ class MetadataForm extends Form {
 			$track = $trackDao->getTrack($paper->getTrackId());
 			/** using old methods and fields from word count; now char count **/
 			$abstractCharCount = $track->getAbstractWordCount();
-			
+			$minCharCount = $track->getAbstractMinCharCount();
+			if (isset($minCharCount) && $minCharCount > 0) {
+				// The anonymous function uses an array of multi-language abstract
+				$minCharCount = $minCharCount + 70;
+				$this->addCheck(new FormValidatorCustom($this, 'abstract', 'required', 'author.submit.form.minCharCountAlert', create_function('$abstract, $charCount', 'foreach ($abstract as $localizedAbstract) {return strlen(strip_tags($localizedAbstract)) > $charCount; }'), array($minCharCount)));
+			}
 			if (isset($abstractCharCount) && $abstractCharCount > 0) {
 				// adding the length of mandatory fields in abstract
 				$abstractCharCount = $abstractCharCount + 70;
@@ -110,7 +115,8 @@ class MetadataForm extends Form {
 				'type' => $paper->getType(null), // Localized
 				'language' => $paper->getLanguage(),
 				'sponsor' => $paper->getSponsor(null), // Localized
-				'citations' => $paper->getCitations()
+				'citations' => $paper->getCitations(),
+				'publish' => $paper->getPublish()
 			);
 
 			$authors =& $paper->getAuthors();
@@ -126,7 +132,6 @@ class MetadataForm extends Form {
 						'affiliation' => $authors[$i]->getAffiliation(),
 						'country' => $authors[$i]->getCountry(),
 						'countryLocalized' => $authors[$i]->getCountryLocalized(),
-						'attends' => $authors[$i]->getAttends(),
 						'email' => $authors[$i]->getEmail(),
 						'url' => $authors[$i]->getUrl(),
 						'biography' => $authors[$i]->getBiography(null) // Localized
@@ -206,6 +211,7 @@ class MetadataForm extends Form {
 				'type',
 				'language',
 				'sponsor',
+				'publish',
 				'citations'
 			)
 		);
@@ -247,6 +253,7 @@ class MetadataForm extends Form {
 		$paper->setLanguage($this->getData('language'));
 		$paper->setSponsor($this->getData('sponsor'), null); // Localized
 		$paper->setCitations($this->getData('citations'));
+		$paper->setPublish($this->getData('publish'));
 
 		// Update authors
 		$authors = $this->getData('authors');
@@ -273,7 +280,6 @@ class MetadataForm extends Form {
 				$author->setAffiliationSelect($authors[$i]['affiliation_select']);
 				$author->setAffiliation($authors[$i]['affiliation']);
 				$author->setCountry($authors[$i]['country']);
-				$author->setAttends($authors[$i]['attends']);
 				$author->setEmail($authors[$i]['email']);
 				$author->setUrl($authors[$i]['url']);
 				$author->setBiography($authors[$i]['biography'], null); // Localized

@@ -140,6 +140,22 @@ class Track extends DataObject {
 	function setAbbrev($abbrev, $locale) {
 		return $this->setData('abbrev', $abbrev, $locale);
 	}
+
+	/**
+	 * Get abstract min char count limit.
+	 * @return int
+	 */
+	function getAbstractMinCharCount() {
+		return $this->getData('minCharCount');
+	}
+
+	/**
+	 * Set abstract min char count limit.
+	 * @param $minCharCount int
+	 */
+	function setAbstractMinCharCount($minCharCount) {
+		return $this->setData('minCharCount', $minCharCount);
+	}
 	
 	/**
 	 * Get abstract word count limit.

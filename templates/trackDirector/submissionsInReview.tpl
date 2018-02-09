@@ -9,17 +9,17 @@
  * $Id$
  *}
 <div id="submissions">
-<table width="100%" class="listing">
-	<tr><td colspan="8" class="headseparator">&nbsp;</td></tr>
-	<tr class="heading" valign="bottom">
-		<td width="5%">{sort_search key="common.id" sort="id"}</td>
-		<td width="8%"><span class="disabled">MM-DD</span><br />{sort_search key="submissions.submit" sort="submitDate"}</td>
+<table width="100%" class="listing sortable">
+	<thead>
+	<tr>
+		<td width="5%">{translate key="common.id"}</td>
+		<td width="8%"><span class="disabled">MM-DD</span><br />{translate key="submissions.submit"}</td>
 		<!--<td width="5%">{sort_search key="submissions.track" sort="track"}</td>-->
 		<!--<td width="5%">{sort_search key="paper.sessionType" sort="sessionType"}</td>->
   <!--
 		<td width="20%">{sort_search key="paper.authors" sort="authors"}</td>
   -->
-		<td width="44%">{sort_search key="paper.title" sort="title"}</td>
+		<td width="44%">{translate key="paper.title"}</td>
 		<td width="30%">
 			<center style="border-bottom: 1px solid gray;margin-bottom: 3px;">{translate key="submission.peerReview"}</center>
 			<table width="100%">
@@ -34,8 +34,8 @@
 		<td width="7%">{translate key="submissions.ruling"}</td>
     <td width="6%">{translate key="submission.fileOkayed"}</td>
 	</tr>
-	<tr><td colspan="8" class="headseparator">&nbsp;</td></tr>
-
+	</thead>
+	<tbody>
 {iterate from=submissions item=submission}
 
 	{assign var="paperId" value=$submission->getPaperId()}
@@ -98,7 +98,7 @@
       {assign var=reviewFile value=$submission->getReviewFile()}
       {if $reviewFile}
         {if $reviewFile->getChecked() == 1}
-          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted""}</span>
+          <span style="color:#0b9e3f;">{translate key="submission.fileAccepted"}</span>
         {else}
           <span style="color:#e85a09;">{translate key="submission.filePending"}</span>
         {/if}
@@ -107,22 +107,17 @@
       {/if}
     </td>
 	</tr>
-	<tr>
-		<td colspan="8" class="{if $submissions->eof()}end{/if}separator">&nbsp;</td>
-	</tr>
 {/iterate}
+
 {if $submissions->wasEmpty()}
 	<tr>
 		<td colspan="8" class="nodata">{translate key="submissions.noSubmissions"}</td>
 	</tr>
-	<tr>
-		<td colspan="8" class="endseparator">&nbsp;</td>
-	</tr>
-{else}
-	<tr>
-		<td colspan="6" align="left">{page_info iterator=$submissions}</td>
-		<td colspan="2" align="right">{page_links anchor="submissions" name="submissions" iterator=$submissions searchField=$searchField searchMatch=$searchMatch search=$search track=$track sort=$sort sortDirection=$sortDirection}</td>
-	</tr>
 {/if}
+</tbody>
 </table>
+<p>
+{page_info iterator=$submissions}
+{page_links anchor="submissions" name="submissions" iterator=$submissions searchField=$searchField searchMatch=$searchMatch search=$search track=$track sort=$sort sortDirection=$sortDirection}
+</p>
 </div>

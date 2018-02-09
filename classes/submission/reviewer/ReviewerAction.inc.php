@@ -60,6 +60,7 @@ class ReviewerAction extends Action {
 				HookRegistry::call('ReviewerAction::confirmReview', array(&$reviewerSubmission, &$email, $decline));
 				if ($email->isEnabled()) {
 					$email->setAssoc($decline?PAPER_EMAIL_REVIEW_DECLINE:PAPER_EMAIL_REVIEW_CONFIRM, PAPER_EMAIL_TYPE_REVIEW, $reviewId);
+					$email->log();
 					$email->send();
 				}
 
@@ -166,6 +167,7 @@ class ReviewerAction extends Action {
 
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_COMPLETE, PAPER_EMAIL_TYPE_REVIEW, $reviewerSubmission->getReviewId());
+					$email->log();
 					$email->send();
 				}
 				$reviewAssignment->setRecommendation($recommendation);
@@ -192,6 +194,7 @@ class ReviewerAction extends Action {
 				HookRegistry::call('ReviewerAction::recordRecommendation', array(&$reviewerSubmission, &$email, $recommendation));
 				if ($email->isEnabled()) {
 					$email->setAssoc(PAPER_EMAIL_REVIEW_COMPLETE, PAPER_EMAIL_TYPE_REVIEW, $reviewerSubmission->getReviewId());
+					$email->log();
 					$email->send();
 				}
 

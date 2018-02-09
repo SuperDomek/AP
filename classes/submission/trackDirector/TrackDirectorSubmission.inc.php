@@ -104,14 +104,16 @@ class TrackDirectorSubmission extends Paper {
 	function updateReviewAssignment($reviewAssignment) {
 		$reviewAssignments = array();
 		$stageReviewAssignments = $this->reviewAssignments[$reviewAssignment->getStage()];
-		for ($i=0, $count=count($stageReviewAssignments); $i < $count; $i++) {
-			if ($stageReviewAssignments[$i]->getReviewId() == $reviewAssignment->getId()) {
-				array_push($reviewAssignments, $reviewAssignment);
-			} else {
-				array_push($reviewAssignments, $stageReviewAssignments[$i]);
+		if(!empty($stageReviewAssignments)){
+			for ($i=0, $count=count($stageReviewAssignments); $i < $count; $i++) {
+				if ($stageReviewAssignments[$i]->getReviewId() == $reviewAssignment->getId()) {
+					array_push($reviewAssignments, $reviewAssignment);
+				} else {
+					array_push($reviewAssignments, $stageReviewAssignments[$i]);
+				}
 			}
+			$this->reviewAssignments[$reviewAssignment->getStage()] = $reviewAssignments;
 		}
-		$this->reviewAssignments[$reviewAssignment->getStage()] = $reviewAssignments;
 	}
 
 	/**
@@ -444,7 +446,7 @@ class TrackDirectorSubmission extends Paper {
 		if (!$schedConf || $this->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL){
 			if($stage == REVIEW_STAGE_ABSTRACT){
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_INVITE] = 'director.abstract.decision.invitePresentation';
-				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.abstract.decision.pendingRevisions';
+				//$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.abstract.decision.pendingRevisions';
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.abstract.decision.decline';
 			}
 			else if($stage >= REVIEW_STAGE_PRESENTATION){

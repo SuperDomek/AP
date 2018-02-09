@@ -67,7 +67,6 @@ a:hover {
 	background-color: #c3262a;
   color: white;
   line-height: 50px;
-  padding-left: 1%;
 }
 
 #main {
@@ -386,6 +385,19 @@ a.largeFont:hover {
 	background: url(../lib/pkp/templates/images/icons/font-up.png);
 	color: none;
 }
+
 .hidden {
 	display:none;
+}
+
+.hiddenMenu{
+	display:none;
+}
+
+.previousRounds{
+	visibility: collapse;
+}
+
+.sortable thead td:hover {
+	background-color: rgba(128, 128, 128, 0.281);
 }

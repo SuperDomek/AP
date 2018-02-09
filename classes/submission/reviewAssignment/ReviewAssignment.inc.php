@@ -29,6 +29,14 @@ define('SUBMISSION_REVIEWER_RATING_AVERAGE', 3);
 define('SUBMISSION_REVIEWER_RATING_POOR', 2);
 define('SUBMISSION_REVIEWER_RATING_VERY_POOR', 1);
 
+define('REVIEW_STATUS_CANCELLED', 1);
+define('REVIEW_STATUS_DECLINED', 2);
+define('REVIEW_STATUS_UNKNOWN', 3);
+define('REVIEW_STATUS_ASSIGNED', 4);
+define('REVIEW_STATUS_ACTIVE', 5);
+define('REVIEW_STATUS_OVERDUE', 6);
+define('REVIEW_STATUS_FINISHED', 7);
+
 class ReviewAssignment extends DataObject {
 
 	/** @var array PaperFiles the revisions of the reviewer file */
@@ -141,6 +149,55 @@ class ReviewAssignment extends DataObject {
 	 */
 	function setRecommendation($recommendation) {
 		return $this->setData('recommendation', $recommendation);
+	}
+
+	/**
+	 * Get status of the review.
+	 * @return int
+	 */
+	function getReviewStatus(){
+		if($this->getCancelled()){
+			return REVIEW_STATUS_CANCELLED;
+		}
+		else if ($this->getDateCompleted()){
+			return (int) REVIEW_STATUS_FINISHED;
+		}
+		else if(strtotime($this->getDateDue() < time())){
+			return REVIEW_STATUS_OVERDUE;
+		}
+		else if($this->getDeclined()){
+			return REVIEW_STATUS_DECLINED;
+		}
+		else if($this->getDateConfirmed()){
+			return REVIEW_STATUS_ACTIVE;
+		}
+		else if($this->getDateAssigned()){
+			return REVIEW_STATUS_ASSIGNED;
+		}
+		else{
+			return REVIEW_STATUS_UNKNOWN;
+		}
+	}
+
+	/**
+	 * Get review status options
+	 * @return array
+	 */
+
+	function &getReviewStatusOptions(){
+		static $reviewStatusOptions;
+		if (!isset($reviewStatusOptions)){
+			$reviewStatusOptions = array(
+				REVIEW_STATUS_CANCELLED => 'reviewer.paper.status.cancelled',
+				REVIEW_STATUS_FINISHED => 'reviewer.paper.status.finished',
+				REVIEW_STATUS_OVERDUE => 'reviewer.paper.status.overdue',
+				REVIEW_STATUS_DECLINED => 'reviewer.paper.status.declined',
+				REVIEW_STATUS_ACTIVE => 'reviewer.paper.status.active',
+				REVIEW_STATUS_ASSIGNED => 'reviewer.paper.status.assigned',
+				REVIEW_STATUS_UNKNOWN => 'reviewer.paper.status.unknown'
+			);
+		}
+		return $reviewStatusOptions;
 	}
 
 	/**

@@ -193,7 +193,7 @@ function showAffilBox(sel) {
 </tr>
 
 <tr valign="top">
-	<td class="label">{fieldLabel name="country" key="common.country"}</td>
+	<td class="label">{fieldLabel name="country" key="common.country" required="true"}</td>
 	<td class="value">
 		<select name="country" id="country" class="selectMenu selectForm">
 			<option value=""></option>
@@ -237,9 +237,11 @@ function showAffilBox(sel) {
 	<tr valign="top">
 		<td class="label">{translate key="user.roles"}</td>
 		<td class="value">
-			{if $allowRegReader}
+			{*{if $allowRegReader}
 				<input type="checkbox" id="readerRole" name="readerRole" {if $isReader || $readerRole}checked="checked" {/if}/>&nbsp;{fieldLabel name="readerRole" key="user.role.reader"}<br/>
-			{/if}
+			{/if}*}
+			<!-- HIDDEN reader -->
+			<input type="hidden" id="readerRole" name="readerRole" value="checked"/>
 			{if $allowRegAuthor}
 				<input type="checkbox" id="authorRole" name="authorRole" {if $isAuthor || $authorRole}checked="checked" {/if}/>&nbsp;{fieldLabel name="authorRole" key="user.role.author"}<br/>
 			{/if}

@@ -46,7 +46,7 @@ div {
 table {
 	border: 0;
 	border-spacing: 0;
-	font-size: 1.0em;
+	font-size: 1.0eem;
 }
 
 form {
@@ -91,11 +91,18 @@ select.selectForm {
 	width: 60%;
 }
 
-input.button {
-	padding-left: 0.5em;
-	padding-right: 0.5em;
+.button {
+	padding: 0.2em;
 	background-color: #E8E8E1;
-	font-size: 1em;
+	font-size: 1.0rem;
+}
+
+.button:hover{
+	background-color: Highlight;
+}
+
+.button:disabled{
+	background-color: #E8E8E1;
 }
 
 input.defaultButton {
@@ -114,6 +121,7 @@ input.defaultButton {
 	min-width: 730px !important;
 	max-width: 1140px !important;
 	margin: 0px auto;
+	padding: 5px;
 	text-align: center;
 }
 
@@ -146,6 +154,9 @@ input.defaultButton {
 	position: static;
 	clear: both;
 	text-align: left;
+}
+#footer p{
+	padding-left: 5px;
 }
 
 #footerContent {
@@ -294,13 +305,35 @@ table.info td {
 	padding-right: 0.5em;
 }
 
+table.listing{
+	width: 100%;
+	border-collapse: collapse;
+}
+
 table.listing td {
-	padding: 0.25em 1.5em 0.25em 0.5em;
+	padding: 5px;
+	vertical-align: middle;
+}
+
+table.listing tbody tr{
+	border-bottom: 1px solid gray;
+	padding: 5px;
+}
+
+table.listing tbody tr:last-child{
+	border-bottom: none;
+}
+
+table.listing thead{
+	background-color: #cfcfcf;
+	font-weight: bold;
 }
 
 table.listing tr.heading td, table.listing td.heading, table.info td.heading {
-	font-size: 0.85em;
+	/*font-size: 0.85em;font-size: 0.85em;*/
 	padding: 0.75em 1.5em 1em 0.5em;
+	background-color: #cfcfcf;
+	font-weight: bold;
 }
 
 table.info td.heading {
@@ -463,8 +496,8 @@ ul.filter li {
 
 div.separator {
 	width: 100%;
-	margin-top: 1em;
-	margin-bottom: 0.25em;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	padding: 0;
 	border-bottom: 1px dotted #000;
 	font-size: 0.5em;

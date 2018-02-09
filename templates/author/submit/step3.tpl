@@ -168,7 +168,7 @@ function delDiv(sel){
 </tr>
 
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-country" key="common.country"}</td>
+	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-country" required="true" key="common.country"}</td>
 	<td width="80%" class="value">
 		<select name="authors[{$authorIndex|escape}][country]" id="authors-{$authorIndex|escape}-country" class="selectForm selectMenu">
 			<option value=""></option>
@@ -177,12 +177,12 @@ function delDiv(sel){
 	</td>
 </tr>
 
-<tr valign="top">
+{*<tr valign="top">
 	<td width="20%" class="label">{fieldLabel name="authors-$authorIndex-attends" key="common.attends"}</td>
 	<td width="80%" class="value">
 		<input type="checkbox" name="authors[{$authorIndex|escape}][attends]" id="authors-{$authorIndex|escape}-attends" {if $smarty.foreach.authors.total <= 1} checked="checked" {/if}/>
 	</td>
-</tr>
+</tr>*}
 
 {if $smarty.foreach.authors.total > 1}
 <tr valign="top">
@@ -225,7 +225,7 @@ function delDiv(sel){
 	</td>
 </tr>
 <tr valign="top">
-	<td width="20%" class="label">{fieldLabel name="authors-0-country" key="common.country"}</td>
+	<td width="20%" class="label">{fieldLabel name="authors-0-country" required="true" key="common.country" }</td>
 	<td width="80%" class="value">
 		<select name="authors[0][country]" id="authors-0-country" class="selectForm selectMenu">
 			<option value=""></option>
@@ -446,6 +446,7 @@ function delDiv(sel){
 </tr>-->
 </table>
 </div>
+
 <div class="separator"></div>
 
 <div id="supportingAgencies">
@@ -459,7 +460,6 @@ function delDiv(sel){
 </tr>
 </table>
 </div>
-<div class="separator"></div>
 
 {if $currentSchedConf->getSetting('metaCitations')}
 <div id="metaCitations">
@@ -474,9 +474,24 @@ function delDiv(sel){
 </tr>
 </table>
 </div>
+{/if}
 
 <div class="separator"></div>
-{/if}
+
+<div id="publish">
+<h3>{translate key="author.submit.publishSubmission"}</h3>
+
+<table width="100%" class="data">
+<tr valign="top">
+	<input type="hidden" name="publish" value="No"/>
+	<td width="10%" class="value"><input type="checkbox" name="publish" id="publish" value="Yes" {if $publish == 'No'}{else}checked="checked"{/if}/></td>
+	<td width="90%" class="label">{fieldLabel name="publish" key="paper.author.publish"}</td>
+</tr>
+</table>
+
+</div>
+
+<div class="separator"></div>
 
 <p><input type="submit" value="{translate key="common.saveAndContinue"}" class="button defaultButton" /> <input type="button" value="{translate key="common.cancel"}" class="button" onclick="confirmAction('{url page="author"}', '{translate|escape:"jsparam" key="author.submit.cancelSubmission"}')" /></p>
 
