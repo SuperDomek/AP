@@ -13,11 +13,11 @@
 		{if $isUserLoggedIn}
       {* Hardcoded link to home page of the user in current conference *}
 			<li><a href="{url conference="ap" schedConf="2018" page="user"}">{translate key="navigation.home"}</a></li>
-      <li><a href="http://ap.pef.czu.cz" target="_blank">{translate key="navigation.about"}</a></li>
-      <li><a href="http://ap.pef.czu.cz/cs/r-12146-for-authors" target="_blank">{translate key="navigation.infoForAuthors"}</a></li>
+      <li><a href="https://ap.pef.czu.cz" target="_blank">{translate key="navigation.about"}</a></li>
+      <li><a href="https://ap.pef.czu.cz/cs/r-12146-for-authors" target="_blank">{translate key="navigation.infoForAuthors"}</a></li>
       <li><a href="{url page="login" op="signOut"}">{translate key="user.logOut"}</a></li>
 		{else}
-      <li><a href="http://ap.pef.czu.cz" target="_blank">{translate key="navigation.about"}</a></li>
+      <li><a href="https://ap.pef.czu.cz" target="_blank">{translate key="navigation.about"}</a></li>
       <li><a href="https://ap.pef.czu.cz/cs/r-12146-for-authors" target="_blank">{translate key="navigation.infoForAuthors"}</a></li>
 			<li><a href="{url page="login"}">{translate key="navigation.login"}</a></li>
 			<li><a href="{url page="user" op="account"}">{translate key="navigation.account"}</a></li>
