@@ -18,8 +18,8 @@
 
 {include file="common/formErrors.tpl"}
 
-{url|assign:"url" page="author" op="submissionReview" path=$paperId|to_array:1}
-{translate key="author.submit.uploadInformation" abstractURL=$url}
+
+{translate key="author.submit.uploadInformation"}
 
 <a href="{$publicFilesDir}/ap2018-paper-template.docx">{translate key="author.submit.paperTemplate"}</a><br />
 

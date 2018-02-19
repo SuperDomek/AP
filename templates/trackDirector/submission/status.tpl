@@ -29,12 +29,14 @@
 		{elseif $status == STATUS_INCOMPLETE}{translate key="submissions.incomplete"}
 		{/if}
 		<br />
-		{if $status != STATUS_ARCHIVED}
-			<a href="{url op="unsuitableSubmission" paperId=$submission->getPaperId()}">
-				<button class="button">{translate key="director.paper.archiveSubmission"}</button></a>
-		{else}
-			<a href="{url op="restoreToQueue" path=$submission->getPaperId()}">
-				<button class="button">{translate key="director.paper.restoreToQueue"}</button></a>
+		{if $isDirector}
+			{if $status != STATUS_ARCHIVED}
+				<a href="{url op="unsuitableSubmission" paperId=$submission->getPaperId()}">
+					<button class="button">{translate key="director.paper.archiveSubmission"}</button></a>
+			{else}
+				<a href="{url op="restoreToQueue" path=$submission->getPaperId()}">
+					<button class="button">{translate key="director.paper.restoreToQueue"}</button></a>
+			{/if}
 		{/if}
 	</li>
 	<li>

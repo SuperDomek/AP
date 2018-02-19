@@ -14,7 +14,7 @@
 	{literal}
 	<script type="text/javascript">
 	$(function(){
-		var reviewFile = {/literal}{$reviewFile->getChecked()}{literal};
+		var reviewFile = "{/literal}{$reviewFile->getChecked()}{literal}";
 		if(reviewFile != 1){
 			$('div.blockable').block({
 				message: '<h4>{/literal}{translate key="submission.fileNotChecked.block"}{literal}</h4>',

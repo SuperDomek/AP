@@ -242,7 +242,10 @@ class PaperFile extends DataObject {
 	 */
 
 	function getChecked() {
-		return $this->getData('checked');
+		if ($this->getData('checked'))
+			return true;
+		else
+			return false;
 	}
 
 
