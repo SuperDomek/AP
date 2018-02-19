@@ -21,7 +21,7 @@
 {url|assign:"url" page="author" op="submissionReview" path=$paperId|to_array:1}
 {translate key="author.submit.uploadInformation" abstractURL=$url}
 
-<a href="{$publicFilesDir}/ap2017-paper-template-final.docx">{translate key="author.submit.paperTemplate"}</a><br />
+<a href="{$publicFilesDir}/ap2018-paper-template.docx">{translate key="author.submit.paperTemplate"}</a><br />
 
 <p>{translate key="author.submit.removeAuthorInfo"}<br />
 <a href="{$publicFilesDir}/Remove_author_info.pdf">{translate key="author.submit.removeAuthorInfoManual"}</a>
