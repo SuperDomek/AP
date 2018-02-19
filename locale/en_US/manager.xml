@@ -326,8 +326,8 @@
 	<message key="manager.schedConfSetup.review.numWeeksPerReview1">Allow reviewers</message>
 	<message key="manager.schedConfSetup.review.numWeeksPerReview1b">Allow reviewers until</message>
 	<message key="manager.schedConfSetup.review.numWeeksPerReview2">weeks to review submissions.</message>
-	<message key="manager.schedConfSetup.review.numWeeksPerReview2b">to review submissions.</message>
-	<message key="manager.schedConfSetup.review.numWeeksPerReview2bAbstract">to review abstracts.</message>
+	<message key="manager.schedConfSetup.review.numWeeksPerReview2b">to review during second phase.</message>
+	<message key="manager.schedConfSetup.review.numWeeksPerReview2bAbstract">to review during first phase.</message>
 	<message key="manager.schedConfSetup.review.onQuality">Directors are able to rate reviewers on a five-point scale.</message>
 	<message key="manager.schedConfSetup.review.pageDescription">Review policies, guidelines, and access.</message>
 	<message key="manager.schedConfSetup.review.peerReview">Peer Review</message>

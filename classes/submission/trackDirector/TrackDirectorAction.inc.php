@@ -289,13 +289,15 @@ class TrackDirectorAction extends Action {
 			if ($schedConf->getSetting('reviewDeadlineType') != null) {
 				$dueDateSet = true;
 				if ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_ABSOLUTE) {
-					if($stage == REVIEW_STAGE_ABSTRACT){ // different deadline for abstract reviews
-						$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsoluteAbstract');
-						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDate);
+					$today = getDate();
+					$todayTimestamp = mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
+					$reviewDeadlineDateFirst = $schedConf->getSetting('numWeeksPerReviewAbsoluteAbstract');
+					$reviewDeadlineDateSecond = $schedConf->getSetting('numWeeksPerReviewAbsolute');
+					if($todayTimestamp <= $reviewDeadlineDateFirst){ // different deadline for abstract reviews
+						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDateFirst);
 					}
 					else{
-						$reviewDeadlineDate = $schedConf->getSetting('numWeeksPerReviewAbsolute');
-						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDate);
+						$reviewDueDate = strftime(Config::getVar('general', 'date_format_short'), $reviewDeadlineDateSecond);
 					}
 					TrackDirectorAction::setDueDate($trackDirectorSubmission->getPaperId(), $reviewAssignment->getId(), $reviewDueDate, null, false);
 				} elseif ($schedConf->getSetting('reviewDeadlineType') == REVIEW_DEADLINE_TYPE_RELATIVE) {
@@ -924,11 +926,12 @@ class TrackDirectorAction extends Action {
 			$today = getDate();
 			$todayTimestamp = mktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
 			if ($dueDate != null) {
-				$dueDateParts = explode('-', $dueDate);
+				// current format is dd.mm.yyyy
+				$dueDateParts = explode('.', $dueDate);
 
 				// Ensure that the specified due date is today or after today's date.
 				if ($todayTimestamp <= strtotime($dueDate)) {
-					$reviewAssignment->setDateDue(date('Y-m-d H:i:s', mktime(0, 0, 0, $dueDateParts[1], $dueDateParts[2], $dueDateParts[0])));
+					$reviewAssignment->setDateDue(date('Y-m-d H:i:s', mktime(0, 0, 0, $dueDateParts[1], $dueDateParts[0], $dueDateParts[2])));
 				} else {
 					$reviewAssignment->setDateDue(date('Y-m-d H:i:s', $todayTimestamp));
 				}

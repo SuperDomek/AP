@@ -328,8 +328,8 @@
 	<message key="manager.schedConfSetup.review.numWeeksPerReview1">Poskytnout oponentům</message>
 	<message key="manager.schedConfSetup.review.numWeeksPerReview1b">Povolit recenzentům do</message>
 	<message key="manager.schedConfSetup.review.numWeeksPerReview2">týdnů na oponenturu.</message>
-	<message key="manager.schedConfSetup.review.numWeeksPerReview2b">recenzování příspěvku.</message>
-	<message key="manager.schedConfSetup.review.numWeeksPerReview2bAbstract">recenzování abstraktu.</message>
+	<message key="manager.schedConfSetup.review.numWeeksPerReview2b">recenzování v druhé fázi.</message>
+	<message key="manager.schedConfSetup.review.numWeeksPerReview2bAbstract">recenzování v první fázi.</message>
 	<message key="manager.schedConfSetup.review.onQuality">Garanti mohou hodnotit oponenty na pětibodové stupnici.</message>
 	<message key="manager.schedConfSetup.review.pageDescription">Postup oponování, pokyny a přístup.</message>
 	<message key="manager.schedConfSetup.review.peerReview">Oponentury</message>
