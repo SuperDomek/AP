@@ -517,7 +517,15 @@ class Paper extends Submission {
 			$editAssignments =& $editAssignmentDao->getTrackDirectorAssignmentsByPaperId($paperId);
 			while ($editAssignment =& $editAssignments->next()) {
 				$userId = $editAssignment->getDirectorId();
-				if ($userId) $userIds[] = array('id' => $userId, 'role' => 'trackDirector');
+				if ($userId){
+					// if the trackDirector is also a reviewer, leave only the trackDir role in the array
+					foreach($userIds as $key => $userArr){
+						if ($userArr['id'] === $userId && $userArr['role'] === 'reviewer'){
+							unset($userIds[$key]);
+						}
+					}
+					$userIds[] = array('id' => $userId, 'role' => 'trackDirector');
+				} 
 				unset($editAssignment);
 			}
 		}
@@ -526,7 +534,15 @@ class Paper extends Submission {
 			$editAssignments =& $editAssignmentDao->getDirectorAssignmentsByPaperId($paperId);
 			while ($editAssignment =& $editAssignments->next()) {
 				$userId = $editAssignment->getDirectorId();
-				if ($userId) $userIds[] = array('id' =>  $userId, 'role' => 'director');
+				if ($userId){
+					// if the Director is also a reviewer, leave only the Dir role in the array
+					foreach($userIds as $key => $userArr){
+						if ($userArr['id'] === $userId && $userArr['role'] === 'reviewer'){
+							unset($userIds[$key]);
+						}
+					}
+					$userIds[] = array('id' =>  $userId, 'role' => 'director');
+				}
 			}
 		}
 		// Deduplicate the array because of the reviewers; So one user don't get multiple same notifications

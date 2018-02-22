@@ -89,7 +89,7 @@ class DirectorAction extends TrackDirectorAction {
 			);
 
 			// Assign the director as a reviewer in abstract stage
-			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, true);
+			TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, false);
 			//TrackDirectorAction::addReviewer($directorSubmission, $trackDirectorId, REVIEW_STAGE_PRESENTATION, true);
 
 			// Confirm the review assignments for the director

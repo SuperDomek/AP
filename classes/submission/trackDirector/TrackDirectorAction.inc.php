@@ -848,12 +848,18 @@ class TrackDirectorAction extends Action {
 			import('mail.PaperMailTemplate');
 			import('notification.NotificationManager');
 			$notificationManager = new NotificationManager();
-			$notificationUsers = $paper->getAssociatedUserIds(false, true, false, false);
+			$notificationUsers = $paper->getAssociatedUserIds(false, true, true, false);
 			if($notificationUsers){
 				foreach ($notificationUsers as $userRole) {
 					$reviewAssignment =& $reviewAssignmentDao->getReviewAssignment($paperId, $userRole['id'], $paperFile->getStage());
 					if($reviewAssignment){
-						$url = Request::url(null, null, $userRole['role'], 'submission', $reviewAssignment->getReviewId(), null);
+						//set up URL
+						if($userRole['role'] === "trackDirector" ){
+							$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paperId, null);
+						}
+						else{
+							$url = Request::url(null, null, $userRole['role'], 'submission', $reviewAssignment->getReviewId(), null);
+						}
 						// Send notification
 						$notificationManager->createNotification(
 							$userRole['id'], 'log.director.checked',
@@ -870,7 +876,8 @@ class TrackDirectorAction extends Action {
 							$email->assignParams(array(
 								'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
 								'paperTitle' => $trackDirectorSubmission->getLocalizedTitle(),
-								'url' => $url
+								'url' => $url,
+								'dueDate' => strftime(Config::getVar('general', 'date_format_short'), strtotime($reviewAssignment->getDateDue()))
 							));
 							$email->log();
 							$email->send();
@@ -1401,8 +1408,11 @@ class TrackDirectorAction extends Action {
 			}
 		}
 		// ConfirmReview for all the reassigned reviewers
-		foreach($trackDirectorSubmission->getReviewAssignments($trackDirectorSubmission->getCurrentStage()) as $reviewAssignment){
-			TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
+		$reviewAssignments = $trackDirectorSubmission->getReviewAssignments($trackDirectorSubmission->getCurrentStage());
+		if($reviewAssignments){
+			foreach($reviewAssignments as $reviewAssignment){
+				TrackDirectorAction::confirmReviewForReviewer($reviewAssignment->getId());
+			}
 		}
 	}
 

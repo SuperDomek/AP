@@ -248,7 +248,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 				/* EDIT Automaticaly send Acknowledge e-mail if the review is done
 				*/
-				$reviewId =& $reviewAssignment->getId();
+				/*$reviewId =& $reviewAssignment->getId();
 				if ($reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== '') {
 					if(!$reviewAssignment->getDateAcknowledged()){
 						if (TrackDirectorAction::thankReviewer($submission, $reviewId, false, true)) {
@@ -256,7 +256,7 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 							exit();	// stop executing code so page reloads instanteously
 						}
 					}
-				}
+				}*/
 				unset($reviewForm);
 				$reviewFormResponses[$reviewAssignment->getId()] = $reviewFormResponseDao->reviewFormResponseExists($reviewAssignment->getId());
 			}
@@ -859,17 +859,20 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$revision = Request::getUserVar('revision');
 		$checked = Request::getUserVar('checked');
 
+		
 		$revising = false;
 		// the decision is revisions
 		if($lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
 			$lastDecision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS)
 			$revising = true;
-		
+		/* we want to send e-mail to reviewers all the time
 		// allow the file for review
 		if($revising)
-			TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked);
+			TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked,);
 		else // not revising we want to inform the reviewer by e-mail
-			TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked, true);
+			TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked, true);*/
+		
+		TrackDirectorAction::makeFileChecked($paperId, $fileId, $revision, $checked, true);
 		// refresh the submission
 		$submission =& $trackDirectorSubmissionDao->getTrackDirectorSubmission($paperId);
 		// move to the next stage if necessary
