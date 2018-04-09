@@ -15,6 +15,8 @@
 
 // $Id$
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 import('trackDirector.TrackDirectorHandler');
 
@@ -226,8 +228,9 @@ class DirectorHandler extends TrackDirectorHandler {
 			unset($submissions);
 		}
 		// END Workaround
+
 		// so far the only export format is PDF so in future you'll need to distinguish what is inside $export
-		if ($export){
+		if ($export === "PDF"){
 			try {
 				$p = new PDFlib();
 				/*  open new PDF file; insert a file name to create the PDF on disk */
@@ -290,7 +293,21 @@ class DirectorHandler extends TrackDirectorHandler {
 					die($e);
 			}
 			$p = 0;
-		}else{
+		}
+		else if ($export === "XLSX"){
+			
+			// Creating spreadsheet
+			$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+
+			// Exporting to a XLSX file
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+			$writer->save("05featuredemo.xlsx");
+
+			// Clearing Workbook
+			$spreadsheet->disconnectWorksheets();
+			unset($spreadsheet);
+		}
+		else{
 			$templateMgr =& TemplateManager::getManager();
 			$templateMgr->assign('pageToDisplay', $page);
 			$templateMgr->assign('director', $user->getFullName());
