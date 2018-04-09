@@ -298,10 +298,15 @@ class DirectorHandler extends TrackDirectorHandler {
 			
 			// Creating spreadsheet
 			$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$this->renderSpreadsheet($spreadsheet, $page, $submissions->toArray());
+			// redirect output to client browser
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			header('Content-Disposition: attachment;filename="myfile.xlsx"');
+			header('Cache-Control: max-age=0');
 
 			// Exporting to a XLSX file
-			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-			$writer->save("05featuredemo.xlsx");
+			$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+			$writer->save('php://output');
 
 			// Clearing Workbook
 			$spreadsheet->disconnectWorksheets();
@@ -933,6 +938,163 @@ class DirectorHandler extends TrackDirectorHandler {
 
 	/* This will also delete Textflow handles used in the table */
 	$p->delete_table($tbl, "");
+	}
+
+
+	/**
+	 * Renders the corresponding table to the Spreadsheet Object
+	 * @dependance phpoffice/phpspreadsheet
+	 * @param $spreadsheet The Spreadsheet object
+	 * @param $page The page that is being exported
+	 * @param $submissionsArray Array with submissions to export
+	 */
+	function renderSpreadsheet(&$spreadsheet, $page = false, $submissionsArray){
+		// Sheet setting
+
+		if ($page == "submissionsUnassigned"){
+			// Header
+			$font = $p->load_font("Helvetica-Bold", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=15 margin=" . $margin_head . "} ";
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col, $row++, __('user.role.trackDirectors'), $optlist);
+			// Rows
+			$font = $p->load_font("Helvetica", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=13 margin=" . $margin_body . "} ";
+			foreach($submissionsArray as $submission){
+				// restart col index for the new row
+				$col = 1;
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getPaperId(), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getAuthorString(true), 0, 30), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col, $row++, substr($submission->getLocalizedTitle(), 0, 50), $optlist);
+			}
+		}
+		else if($page == "submissionsAccepted"){
+			// Header
+			$font = $p->load_font("Helvetica-Bold", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=15 margin=" . $margin_head . "} ";
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.country'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col, $row++, __('submissions.track'), $optlist);
+
+			// Rows
+			$font = $p->load_font("Helvetica", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=13 margin=" . $margin_body . "} ";
+			foreach($submissionsArray as $submission){
+				// restart col index for the new row
+				$user = $submission->getUser();
+				$col = 1;
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getPaperId(), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getAuthorString(true), 0, 30), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getLocalizedTitle(), 0, 40), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $user->getcountry(), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col, $row++, substr($submission->getTrackTitle(), 0, 20), $optlist);
+			}
+		}
+		else if($page == "submissionsArchives"){
+			// Header
+			$font = $p->load_font("Helvetica-Bold", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=15 margin=" . $margin_head . "} ";
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
+			//$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.submitted'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
+			//$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.reviewStage'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.status'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.date'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col, $row++, __('user.role.trackDirectors'), $optlist);
+
+			// Rows
+			$font = $p->load_font("Helvetica", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=13 margin=" . $margin_body . "} ";
+			foreach($submissionsArray as $submission){
+				// restart col index for the new row
+				$col = 1;
+				switch ($submission->getStatus()){
+					case STATUS_ARCHIVED:
+						$date = $submission->getDateToArchive();
+						$status = __('submissions.archived');
+						break;
+					case STATUS_DECLINED:
+						$decision = end(end($submission->getDecisions()));
+						$date = $decision['dateDecided'];
+						$status = __('submissions.declined');
+						break;
+					case STATUS_PUBLISHED:
+					default:
+						$date = "";
+						$status = "";
+				}
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getPaperId(), $optlist);
+				//$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getDateSubmitted(), 0, 10), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getAuthorString(true), 0, 30), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getLocalizedTitle(), 0, 40), $optlist);
+				//$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getStage(), $optlist);
+				
+				//$tbl = $p->add_table_cell($tbl, $col++, $row, $decisionTag, $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $status, $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($date, 0, 10), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col, $row++, substr($submission->getTrackDirectorString(true), 0, 30), $optlist);
+			}
+		}
+		else if($page == "submissionsInReview"){
+			// Header
+			$font = $p->load_font("Helvetica-Bold", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=15 margin=" . $margin_head . "} ";
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('common.id'), $optlist);
+			//$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.submitted'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.authors'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('paper.title'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submissions.reviewStage'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col++, $row, __('submission.decision'), $optlist);
+			$tbl = $p->add_table_cell($tbl, $col, $row++, __('user.role.trackDirectors'), $optlist);
+
+			// Rows
+			$font = $p->load_font("Helvetica", "unicode", "");
+			$optlist = "fittextline={position=center font=" . $font . " fontsize=13 margin=" . $margin_body . "} ";
+			foreach($submissionsArray as $submission){
+				// restart col index for the new row
+				$col = 1;
+				// get Paper object
+				//$paper = $paperDao->getPaper()
+				// set up decision tag
+				$decision = end(end($submission->getDecisions()));
+				$decisionTag = '';
+				switch ($decision['decision']) {
+					case SUBMISSION_DIRECTOR_DECISION_ACCEPT:
+					$decisionTag = 'ACC';
+					break;
+					case SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS:
+					case SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS:
+					$decisionTag = 'REV';
+					break;
+					case SUBMISSION_DIRECTOR_DECISION_DECLINE:
+					$decisionTag = 'DEC';
+					break;
+					case '':
+					case NULL:
+					$decisionTag = '';
+					break;
+					default:
+					$decisionTag = 'ERR';
+				}
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getPaperId(), $optlist);
+				//$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getDateSubmitted(), 0, 10), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getAuthorString(true), 0, 30), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, substr($submission->getLocalizedTitle(), 0, 40), $optlist);
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $submission->getCurrentStage() - 1, $optlist);
+				
+				$tbl = $p->add_table_cell($tbl, $col++, $row, $decisionTag, $optlist);
+				$tbl = $p->add_table_cell($tbl, $col, $row++, substr($submission->getTrackDirectorString(true), 0, 30), $optlist);
+			}
+		}
+		else{
+			
+			$p->show("Error: no export page selected.");
+		}
 	}
 
 	/**
