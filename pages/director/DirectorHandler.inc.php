@@ -73,6 +73,7 @@ class DirectorHandler extends TrackDirectorHandler {
 
 		$directorSubmissionDao =& DAORegistry::getDAO('DirectorSubmissionDAO');
 		$trackDao =& DAORegistry::getDAO('TrackDAO');
+		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
 		$reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
 
 		$page = isset($args[0]) ? $args[0] : '';
@@ -183,26 +184,11 @@ class DirectorHandler extends TrackDirectorHandler {
 			$submissions =& ArrayItemIterator::fromRangeInfo($submissionsArray, $rangeInfo);
 		}
 
-		// Workaround because can't access ReviewFiles through submissions in the template
 		$reviewFiles;
-		$tempSubmissions = $submissions->toArray();
-		foreach($tempSubmissions as $submission){
-			if($submission->getCurrentStage() >= 2){ //PRESENTATION STAGE
-				// FIX warnings when no reviewAssignments in the stage
-				$reviewAssignmentsStages = $submission->getReviewAssignments();
-				if (array_key_exists($submission->getCurrentStage(), $reviewAssignmentsStages))
-					$reviewAssignments = $submission->getReviewAssignments()[$submission->getCurrentStage()];
-				else
-					$reviewAssignments = null;
-				if($reviewAssignments){
-					foreach($reviewAssignments as $reviewAssignment){
-						if($submission->getReviewFileId() == $reviewAssignment->getReviewFileId()){
-							if(!is_null($reviewAssignment->getReviewFile()))
-								$reviewFiles[$submission->getPaperId()] = (int) $reviewAssignment->getReviewFile()->getChecked();
-						}
-					}
-				}
-			}
+		while($submission =& $submissions->next()){
+			$reviewFile =& $paperFileDao->getPaperFile($submission->getReviewFileId(), null, $submission->getPaperId());
+			if($submission->getReviewFileId())
+				$reviewFiles[$submission->getPaperId()] = $reviewFile->getChecked();
 		}
 
 		// Need to reinitialize the $submissions object
@@ -227,7 +213,6 @@ class DirectorHandler extends TrackDirectorHandler {
 			$rangeInfo =& $submissions->getLastPageRangeInfo();
 			unset($submissions);
 		}
-		// END Workaround
 
 		// so far the only export format is PDF so in future you'll need to distinguish what is inside $export
 		if ($export === "PDF"){
