@@ -59,7 +59,7 @@
 // Initialize global environment
 define('INDEX_FILE_LOCATION', __FILE__);
 require('lib/pkp/includes/bootstrap.inc.php');
-require Core::getBaseDir() . '\vendor\autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 // Serve the request
 $application =& PKPApplication::getApplication();
