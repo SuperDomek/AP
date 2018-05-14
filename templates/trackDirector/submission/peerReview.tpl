@@ -188,6 +188,7 @@
 					</table>
 				</div>
 			{/if}
+	
 			{if $reviewFile->getChecked() == null && $isDirector}
 			<form method="post" id="formCheck" action="{url op="makeFileChecked"}">
 				<input type="hidden" name="paperId" value="{$submission->getPaperId()}"/>
