@@ -29,7 +29,6 @@ class FacturationReportDAO extends DAO {
 	function getFacturationReport($conferenceId, $schedConfId) {
 		$primaryLocale = AppLocale::getPrimaryLocale();
 		$locale = AppLocale::getLocale();
-
 		$result =& $this->retrieve(
 			'SELECT
 				r.registration_id AS registration_id,
@@ -59,6 +58,7 @@ class FacturationReportDAO extends DAO {
 					LEFT JOIN papers p ON (r.user_id=p.user_id)
 			WHERE
 				r.sched_conf_id = ?
+				AND p.sched_conf_id = ?
 				AND p.status BETWEEN 2 AND 3
 			UNION
 			SELECT
@@ -101,11 +101,12 @@ class FacturationReportDAO extends DAO {
 			array(
 				$primaryLocale,
 				'name',
-				(int) $schedConfId,
+				$schedConfId,
+				$schedConfId,
 				$primaryLocale,
 				'name',
-				(int) $schedConfId,
-				(int) $schedConfId
+				$schedConfId,
+				$schedConfId
 			)
 		);
 		// prepare an iterator of all the registration information
