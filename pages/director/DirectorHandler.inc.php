@@ -1007,7 +1007,8 @@ class DirectorHandler extends TrackDirectorHandler {
 				->setCellValue($column++ . $row, __('paper.authors'))
 				->setCellValue($column++ . $row, __('paper.title'))
 				->setCellValue($column++ . $row, __('common.country'))
-				->setCellValue($column++ . $row, __('submissions.track'));
+				->setCellValue($column++ . $row, __('submissions.track'))
+				->setCellValue($column++ . $row, __('paper.publish'));
 
 			$spreadsheet->getActiveSheet()->getStyle('A1:'. $column . $row)
 				->getFont()->setBold(true);
@@ -1019,13 +1020,15 @@ class DirectorHandler extends TrackDirectorHandler {
 				$column = 'A';
 				$row++;
 				$user = $submission->getUser();
+				$publish = $submission->getPublish() ? __('common.yes') : __('common.no');
 
 				$spreadsheet->getActiveSheet()
 				->setCellValue($column++ . $row, $submission->getPaperId())
 				->setCellValue($column++ . $row, $submission->getAuthorString(true))
 				->setCellValue($column++ . $row, $submission->getLocalizedTitle())
 				->setCellValue($column++ . $row, $user->getcountry())
-				->setCellValue($column++ . $row, $submission->getTrackTitle());
+				->setCellValue($column++ . $row, $submission->getTrackTitle())
+				->setCellValue($column++ . $row, $publish);
 			}
 			// Formatting
 
