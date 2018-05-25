@@ -97,7 +97,9 @@ class FacturationReportPlugin extends ReportPlugin {
 		$columns = array_merge($columns, array(
 			'regdate' => __('manager.registration.dateRegistered'),
 			'paiddate' => __('manager.registration.datePaid'),
-			'source' => __('plugins.reports.facturation.source')
+			'source' => __('plugins.reports.facturation.source'),
+			'paperid' => __('paper.submissionId'),
+			'status' => __('common.status')
 			));
 
 		//EDIT Add BOM
@@ -114,10 +116,24 @@ class FacturationReportPlugin extends ReportPlugin {
 			}
 			foreach ($columns as $index => $junk) {
 				if (isset($row[$index])) {
-					if ($index == 'affiliation')
-						$columns[$index] = html_entity_decode(strip_tags($row[$index]), ENT_QUOTES, 'UTF-8');
+					if ($index == 'affiliation'){
+						$withoutCRLF = str_replace(array("\r\n", "\n\r", "\n", "\r"), ", ", $row[$index]);
+						$columns[$index] = html_entity_decode(strip_tags($withoutCRLF), ENT_QUOTES, 'UTF-8');
+					}
+					elseif ($index == 'billing_address') {
+						$withoutCRLF = str_replace(array("\r\n", "\n\r", "\n", "\r"), ", ", $row[$index]);
+						$columns[$index] = html_entity_decode(strip_tags($withoutCRLF), ENT_QUOTES, 'UTF-8');
+					}
 					else if ($index == 'regdate' || $index == 'paiddate')
 						$columns[$index] = $facturationReportDao->dateFromDB($row[$index]);
+					else if ($index == 'status'){
+						if ($row[$index] == 2)
+							$columns[$index] = __('submissions.layout');
+						else if ($row[$index] == 3)
+							$columns[$index] = __('submissions.published');
+						else if ($row[$index] == 'None')
+							$columns[$index] = "None";
+					}
 					else
 						$columns[$index] = $row[$index];
 				} else if (isset($options[$index])) {

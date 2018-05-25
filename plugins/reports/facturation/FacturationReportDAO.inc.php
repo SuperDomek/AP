@@ -49,7 +49,9 @@ class FacturationReportDAO extends DAO {
 				r.date_registered AS regdate,
 				r.date_paid AS paiddate,
 				r.special_requests AS specialreq,
-				"article" AS source
+				"article" AS source,
+				p.paper_id AS paperid,
+				p.status AS status
 			FROM
 				registrations r
 					JOIN users u ON r.user_id=u.user_id
@@ -57,8 +59,7 @@ class FacturationReportDAO extends DAO {
 					LEFT JOIN papers p ON (r.user_id=p.user_id)
 			WHERE
 				r.sched_conf_id = ?
-				AND p.status = 3
-			GROUP BY userid
+				AND p.status BETWEEN 2 AND 3
 			UNION
 			SELECT
 				r.registration_id AS registration_id,
@@ -78,7 +79,9 @@ class FacturationReportDAO extends DAO {
 				r.date_registered AS regdate,
 				r.date_paid AS paiddate,
 				r.special_requests AS specialreq,
-				"self-registration" AS source
+				"self-registration" AS source,
+				"None" AS paperid,
+				"None" AS status
 			FROM
 				registrations r
 					JOIN users u ON r.user_id=u.user_id
