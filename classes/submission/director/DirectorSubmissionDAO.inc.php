@@ -325,7 +325,7 @@ class DirectorSubmissionDAO extends DAO {
 			$schedConfId, $trackId, $directorId,
 			$searchField, $searchMatch, $search,
 			$dateField, $dateFrom, $dateTo,
-			'p.status = ' . STATUS_QUEUED . ' AND e.edit_id IS NULL',
+			'p.status = ' . STATUS_QUEUED . ' AND e.edit_id IS NULL ' . 'AND (p.submission_progress = 0 OR (p.review_mode = ' . REVIEW_MODE_BOTH_SEQUENTIAL . ' AND p.current_stage > 1))',
 			$rangeInfo, $sortBy, $sortDirection
 		);
 		$returner = new DAOResultFactory($result, $this, '_returnDirectorSubmissionFromRow');
@@ -428,7 +428,7 @@ class DirectorSubmissionDAO extends DAO {
 				AND p.status = ' . STATUS_QUEUED . '
 				AND e2.edit_id IS NULL
 				AND e.edit_id IS NULL
-				AND (p.submission_progress = 0 OR (p.review_mode = ' . REVIEW_MODE_BOTH_SEQUENTIAL . ' AND p.submission_progress <> 1))',
+				AND (p.submission_progress = 0 OR (p.review_mode = ' . REVIEW_MODE_BOTH_SEQUENTIAL . ' AND p.current_stage > 1))',
 			array((int) $schedConfId)
 		);
 		$submissionsCount[0] = $result->Fields('unassigned_count');

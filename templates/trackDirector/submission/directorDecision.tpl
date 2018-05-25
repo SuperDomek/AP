@@ -150,12 +150,12 @@ function confirmDecision(sel){
   {/if}
 </div>
 {if $isFinalReview}
-
 	<div class="separator"></div>
 
 	{include file="trackDirector/submission/complete.tpl"}
 
+	{if $isDirector}
 	<div class="separator"></div>
-
-	{include file="trackDirector/submission/layout.tpl"}
+		{include file="trackDirector/submission/layout.tpl"}
+	{/if}
 {/if}

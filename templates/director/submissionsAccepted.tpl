@@ -18,7 +18,8 @@
 		<td width="19%">{translate key="paper.authors"}</td>
 		<td width="56%">{translate key="paper.title"}</td>
 		<!--<td width="8%">{translate key="common.order"}</td>-->
-		<td width="8%">{translate key="common.country"}</td>
+		<td width="4%">{translate key="common.country"}</td>
+		<td width="4%">{translate key="paper.publish"}</td>
 		<td width="10%" align="right">{translate key="common.status"}</td>
 	</tr>
 </thead>
@@ -42,6 +43,14 @@
 		<td>
 			{$user->getCountry()}
 		</td>
+		<td>
+			{assign var="publish" value=$submission->getPublish()}
+			{if $publish == 1}
+				{translate key="common.yes"}
+			{else}
+				{translate key="common.no"}
+			{/if}
+		</td>
 		<td align="right">
 			{assign var="status" value=$submission->getStatus()}
 			{if $status == STATUS_ARCHIVED}
@@ -56,7 +65,7 @@
 {/iterate}
 {if $submissions->wasEmpty()}
 	<tr>
-		<td colspan="7" class="nodata">{translate key="submissions.noSubmissions"}</td>
+		<td colspan="8" class="nodata">{translate key="submissions.noSubmissions"}</td>
 	</tr>
 {/if}
 </tbody>

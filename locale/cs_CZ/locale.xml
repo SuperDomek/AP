@@ -172,6 +172,7 @@
 	<message key="paper.papers">Příspěvky</message>
 	<message key="paper.submissionId">ID příspěvku</message>
 	<message key="paper.submitterId">ID autora</message>
+	<message key="paper.publish">Publikovat</message>
 	<message key="paper.author.publish">Souhlasím s publikací příspěvku ve sborníku této konference.</message>
 	<message key="paper.title">Název</message>
 	<message key="paper.manage">Správa</message>

@@ -169,6 +169,7 @@
 	<message key="paper.papers">Papers</message>
 	<message key="paper.submissionId">Submission ID</message>
 	<message key="paper.submitterId">Author ID</message>
+	<message key="paper.publish">Publish</message>
 	<message key="paper.author.publish">I agree with the publication of this submission in the conference proceedings.</message>
 	<message key="paper.title">Title</message>
 	<message key="paper.manage">Management</message>

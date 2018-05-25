@@ -85,11 +85,11 @@ function showMenu(){
 			{assign var="hasRole" value=1}
 			{/if}
 			<div id="schedConf-{$schedConf->getSequence()}">
-		{else}
-		{*if $schedConfsCount > 1 && $smarty.foreach.schedConfs.iteration == 2*}
+		{elseif $smarty.foreach.schedConfs.iteration == 2}
 			<button type="button" onclick="showMenu();" id="hideButton">{translate key="common.previousSchedConfs.show"}</button>
-		{*/if*}
-		<div id="schedConf-{$schedConf->getSequence()}" class="hiddenMenu">
+			<div id="schedConf-{$schedConf->getSequence()}" class="hiddenMenu">
+		{else}
+			<div id="schedConf-{$schedConf->getSequence()}" class="hiddenMenu">
 		{/if}
 		
 		<h5><a href="{url conference=$conference->getPath() schedConf=$schedConf->getPath() page="index"}">{$schedConf->getSchedConfTitle()|escape}</a></h5>
