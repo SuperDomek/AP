@@ -129,7 +129,7 @@ function confirmDecision(sel){
 	<ul class="no-list">
 		<li>
 		<header>{translate key="submission.directorDecisionComment"}</header>
-				<span>{$decisionComment|escape}</span>
+				<span>{$decisionComment|nl2br}</span>
 		</li>
 		{*
 		{if not $reviewingAbstractOnly}

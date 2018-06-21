@@ -67,7 +67,7 @@ $('#file_changes').live('input',function() {
 			<tr valign="top">
 				<td class="label" width="20%">{translate key="submission.directorDecisionComment"}</td>
 				<td class="value" width="80%">
-					<p>{$lastDecisionComment|escape}</p>
+					<p>{$lastDecisionComment|nl2br}</p>
 				</td>
 			</tr>
 		{*/if*}
@@ -89,7 +89,7 @@ $('#file_changes').live('input',function() {
 				<label>{translate key="common.checklistOfAdjustments"}</label>
 			</td>
 			<td class="value" width="80%">
-					<span>{$changes|escape}</span>
+					<span>{$changes|nl2br}</span>
 			</td>
 		</tr>
 		<tr valign="top">
