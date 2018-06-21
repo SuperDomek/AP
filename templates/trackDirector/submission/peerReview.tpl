@@ -67,9 +67,13 @@
 <li><header>{translate key="user.role.trackDirector"}</header>
 			{assign var=editAssignments value=$submission->getEditAssignments()}
 			{foreach from=$editAssignments item=editAssignment}
-				{url|assign:"url" page="trackdirector" op="userProfile" path=$editAssignment->getDirectorId()}
-				<a href="{$url}" alt="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}" title="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}">{$editAssignment->getDirectorFullName()|escape}</a> {*icon name="mail" url=$url*}
-				<br/>
+				{url|assign:"url" page="director" op="userProfile" path=$editAssignment->getDirectorId()}
+				{if $isDirector}
+					<a href="{$url}" alt="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}" title="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}">{$editAssignment->getDirectorFullName()|escape}</a> {*icon name="mail" url=$url*}
+					<br/>
+				{else}
+					{$editAssignment->getDirectorFullName()|escape}
+				{/if}
 			{foreachelse}
 				{if $isDirector}
 				<a href="{url page="director" op="assignDirector" path="trackDirector" paperId=$submission->getPaperId()}">

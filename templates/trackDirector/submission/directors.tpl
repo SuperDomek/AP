@@ -42,8 +42,13 @@
 		<tr valign="top">
 			<td>{if $editAssignment->getIsDirector()}{translate key="user.role.director"}{else}{translate key="user.role.trackDirector"}{/if}</td>
 			<td>
-				{url|assign:"url" page="trackdirector" op="userProfile" path=$editAssignment->getDirectorId()}
-				<a href="{$url}" alt="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}" title="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}">{$editAssignment->getDirectorFullName()|escape}</a> {*icon name="mail" url=$url*}
+				{url|assign:"url" page="director" op="userProfile" path=$editAssignment->getDirectorId()}
+				{if $isDirector}
+					<a href="{$url}" alt="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}" title="{translate key="user.profile.publicProfile" user=$editAssignment->getDirectorFullName()|escape}">{$editAssignment->getDirectorFullName()|escape}</a> {*icon name="mail" url=$url*}
+					<br/>
+				{else}
+					{$editAssignment->getDirectorFullName()|escape}
+				{/if}
 			</td>
 			<td>{if $editAssignment->getDateNotified()}{$editAssignment->getDateNotified()|date_format:$dateFormatShort}{else}&mdash;{/if}</td>
 			{if $isDirector}
