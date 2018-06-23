@@ -239,9 +239,7 @@ class EditAssignmentDAO extends DAO {
 				papers p
 			WHERE	ea.paper_id=p.paper_id AND
 				p.sched_conf_id = ? AND (
-					p.status = ' . STATUS_ARCHIVED . ' OR
-					p.status = ' . STATUS_PUBLISHED . ' OR
-					p.status = ' . STATUS_DECLINED . '
+					p.status = ' . STATUS_PUBLISHED . '
 				)
 			GROUP BY ea.director_id',
 			$schedConfId
@@ -251,6 +249,52 @@ class EditAssignmentDAO extends DAO {
 			$row = $result->GetRowAssoc(false);
 			if (!isset($statistics[$row['director_id']])) $statistics[$row['director_id']] = array();
 			$statistics[$row['director_id']]['complete'] = $row['complete'];
+			$result->MoveNext();
+		}
+		$result->Close();
+		unset($result);
+
+		// Get counts of declined submissions
+		$result =& $this->retrieve(
+			'SELECT	ea.director_id,
+				COUNT(ea.paper_id) AS declined
+			FROM	edit_assignments ea,
+				papers p
+			WHERE	ea.paper_id=p.paper_id AND
+				p.sched_conf_id = ? AND (
+					p.status = ' . STATUS_DECLINED . '
+				)
+			GROUP BY ea.director_id',
+			$schedConfId
+		);
+
+		while (!$result->EOF) {
+			$row = $result->GetRowAssoc(false);
+			if (!isset($statistics[$row['director_id']])) $statistics[$row['director_id']] = array();
+			$statistics[$row['director_id']]['declined'] = $row['declined'];
+			$result->MoveNext();
+		}
+		$result->Close();
+		unset($result);
+
+		// Get counts of archived submissions
+		$result =& $this->retrieve(
+			'SELECT	ea.director_id,
+				COUNT(ea.paper_id) AS archived
+			FROM	edit_assignments ea,
+				papers p
+			WHERE	ea.paper_id=p.paper_id AND
+				p.sched_conf_id = ? AND (
+					p.status = ' . STATUS_ARCHIVED . '
+				)
+			GROUP BY ea.director_id',
+			$schedConfId
+		);
+
+		while (!$result->EOF) {
+			$row = $result->GetRowAssoc(false);
+			if (!isset($statistics[$row['director_id']])) $statistics[$row['director_id']] = array();
+			$statistics[$row['director_id']]['archived'] = $row['archived'];
 			$result->MoveNext();
 		}
 		$result->Close();

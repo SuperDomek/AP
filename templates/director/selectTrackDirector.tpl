@@ -30,16 +30,18 @@
 <p>{foreach from=$alphaList item=letter}<a href="{url op="assignDirector" path=$rolePath paperId=$paperId searchInitial=$letter}">{if $letter == $searchInitial}<strong>{$letter|escape}</strong>{else}{$letter|escape}{/if}</a> {/foreach}<a href="{url op="assignDirector" paperId=$paperId}">{if $searchInitial==''}<strong>{translate key="common.all"}</strong>{else}{translate key="common.all"}{/if}</a></p>
 
 <div id="directors">
-<table width="100%" class="listing">
-<tr><td colspan="5" class="headseparator">&nbsp;</td></tr>
-<tr valign="bottom">
-	<td class="heading" width="30%">{translate key="user.name"}</td>
-	<td class="heading" width="20%">{translate key="track.tracks"}</td>
-	<td class="heading" width="20%">{translate key="submissions.completed"}</td>
-	<td class="heading" width="20%">{translate key="submissions.active"}</td>
-	<td class="heading" width="10%">{translate key="common.action"}</td>
-</tr>
-<tr><td colspan="5" class="headseparator">&nbsp;</td></tr>
+<table width="100%" class="listing sortable">
+<thead>
+	<tr>
+		<td width="30%">{translate key="user.name"}</td>
+		<td width="15%">{translate key="track.tracks"}</td>
+		<td width="15%">{translate key="common.queue.short.submissionsAccepted"}</td>
+		<td width="15%">{translate key="common.queue.short.submissionsInReview"}</td>
+		<td width="15%">{translate key="submissions.declined"}</td>
+		<td width="10%">{translate key="common.action"}</td>
+	</tr>
+</thead>
+<tbody>
 {iterate from=directors item=director}
 {assign var=directorId value=$director->getId()}
 <tr valign="top">
@@ -66,21 +68,27 @@
 			0
 		{/if}
 	</td>
-	<td><a class="action" href="{url op="assignDirector" paperId=$paperId directorId=$directorId}">{translate key="common.assign"}</a></td>
+	<td>
+		{if $directorStatistics[$directorId] && $directorStatistics[$directorId].declined}
+			{$directorStatistics[$directorId].declined}
+		{else}
+			0
+		{/if}
+	</td>
+	<td><a class="action" href="{url op="assignDirector" paperId=$paperId directorId=$directorId}"><button class="button">{translate key="common.assign"}</button></a></td>
 </tr>
-<tr><td colspan="5" class="{if $directors->eof()}end{/if}separator">&nbsp;</td></tr>
 {/iterate}
 {if $directors->wasEmpty()}
 <tr>
-<td colspan="5" class="nodata">{translate key="manager.people.noneEnrolled"}</td>
+<td colspan="6" class="nodata">{translate key="manager.people.noneEnrolled"}</td>
 </tr>
-<tr><td colspan="5" class="{if $directors->eof()}end{/if}separator">&nbsp;</td></tr>
 {else}
 	<tr>
-		<td colspan="2" align="left">{page_info iterator=$directors}</td>
+		<td colspan="3" align="left">{page_info iterator=$directors}</td>
 		<td colspan="3" align="right">{page_links anchor="directors" name="directors" iterator=$directors searchInitial=$searchInitial searchField=$searchField searchMatch=$searchMatch search=$search dateFromDay=$dateFromDay dateFromYear=$dateFromYear dateFromMonth=$dateFromMonth dateToDay=$dateToDay dateToYear=$dateToYear dateToMonth=$dateToMonth paperId=$paperId}</td>
 	</tr>
 {/if}
+</tbody>
 </table>
 </div>
 {include file="common/footer.tpl"}

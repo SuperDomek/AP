@@ -15,7 +15,7 @@
  {/strip}
 
 <h3>{translate key="director.paper.selectDirector" roleName=$roleName|translate}</h3>
-
+<div style="float:left;">
 <form name="submit" method="post" action="{url op="manageTrackDirectors"}">
 	<select name="searchField" size="1" class="selectMenu">
 		{html_options_translate options=$fieldOptions selected=$searchField}
@@ -29,14 +29,21 @@
 </form>
 
 <p>{foreach from=$alphaList item=letter}<a href="{url op="manageTrackDirectors" searchInitial=$letter}">{if $letter == $searchInitial}<strong>{$letter|escape}</strong>{else}{$letter|escape}{/if}</a> {/foreach}<a href="{url op="manageTrackDirectors"}">{if $searchInitial==''}<strong>{translate key="common.all"}</strong>{else}{translate key="common.all"}{/if}</a></p>
+</div>
+
+<div style="position:relative;float:right;">
+<a href="javascript:window.print()"><img src="{$baseUrl}/lib/pkp/templates/images/structure/pdf.png" alt="Download PDF" width="64px"/></a>
+</div>
 
 <div id="trackDirectors">
   <table width="100%" class="listing sortable">
 	<thead>
   <tr>
-  	<td width="60%">{translate key="user.name"}</td>
-  	<td width="20%">{translate key="submissions.completed"}</td>
-  	<td width="20%">{translate key="submissions.active"}</td>
+  	<td width="40%">{translate key="user.name"}</td>
+  	<td width="15%">{translate key="common.queue.short.submissionsAccepted"}</td>
+  	<td width="15%">{translate key="common.queue.short.submissionsInReview"}</td>
+	<td width="15%">{translate key="submissions.declined"}</td>	
+	<td width="15%">{translate key="submissions.archived"}</td>
   </tr>
 	</thead>
   {iterate from=directors item=director}
@@ -57,11 +64,25 @@
   			0
   		{/if}
   	</td>
+	<td>
+		{if $directorStatistics[$directorId] && $directorStatistics[$directorId].declined}
+			{$directorStatistics[$directorId].declined}
+		{else}
+			0
+		{/if}
+	</td>
+	<td>
+  		{if $directorStatistics[$directorId] && $directorStatistics[$directorId].archived}
+  			{$directorStatistics[$directorId].archived}
+  		{else}
+  			0
+  		{/if}
+  	</td>
   </tr>
   {/iterate}
   {if $directors->wasEmpty()}
   <tr>
-  <td colspan="3" class="nodata">{translate key="manager.people.noneEnrolled"}</td>
+  <td colspan="5" class="nodata">{translate key="manager.people.noneEnrolled"}</td>
   </tr>
   {/if}
   </table>
