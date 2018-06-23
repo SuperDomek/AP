@@ -72,13 +72,13 @@ function confirmDecision(sel){
 {/if}
 {if $isDirector}
 	{if $lastDecision == SUBMISSION_DIRECTOR_DECISION_DECLINE}
-    {if $submission->getStatus() == STATUS_ARCHIVED}
+    	{if $submission->getStatus() == STATUS_ARCHIVED}
 			{translate key="submissions.archived"}
 		{else}
 			<a href="{url op="archiveSubmission" path=$submission->getPaperId()}" onclick="return window.confirm('{translate|escape:"jsparam" key="director.submissionReview.confirmToArchive"}')">
-			<button class="button">{translate key="director.paper.sendToArchive"}</button></a>
+			<button class="button" type="button">{translate key="director.paper.sendToArchive"}</button></a>
 		{/if}
-    {if $submission->getDateToArchive()}
+    	{if $submission->getDateToArchive()}
 			{$submission->getDateToArchive()|date_format:$dateFormatShort}
 		{/if}
 	{/if}
