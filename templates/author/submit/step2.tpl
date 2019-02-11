@@ -21,10 +21,10 @@
 
 {translate key="author.submit.uploadInformation"}
 
-<a href="{$publicFilesDir}/ap2018-paper-template.docx">{translate key="author.submit.paperTemplate"}</a><br />
+<a href="{$publicFilesDir}/paper-template.docx">{translate key="author.submit.paperTemplate"}</a><br />
 
 <p>{translate key="author.submit.removeAuthorInfo"}<br />
-<a href="{$publicFilesDir}/Remove_author_info.pdf">{translate key="author.submit.removeAuthorInfoManual"}</a>
+<a href="{$publicFilesDir}/Remove_author_info.pdf" target="_blank">{translate key="author.submit.removeAuthorInfoManual"}</a>
 </p>
 
 <div class="separator"></div>
