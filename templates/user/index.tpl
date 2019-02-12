@@ -242,8 +242,8 @@ function showMenu(){
 			<li>&#187; <a href="{url conference="index" page="user"}">{translate key="user.showAllConferences"}</a></li>
 		{/if}
 	{/if}
-  {if $schedConfPostPayment}<li>&#187; <a href="{url page="schedConf" schedConf="2018" op="registration"}">{translate key="schedConf.registration"}</a></li>{/if}
-	<li>&#187; <a href="{url page="user" schedConf="2018" op="profile"}">{translate key="user.editMyProfile"}</a></li>
+  	{if $schedConfPostPayment}<li>&#187; <a href="{url page="schedConf" schedConf=$currentSchedConf->getPath() op="registration"}">{translate key="schedConf.registration"}</a></li>{/if}
+	<li>&#187; <a href="{url page="user" schedConf=$currentSchedConf->getPath() op="profile"}">{translate key="user.editMyProfile"}</a></li>
 	<li>&#187; <a href="{url page="user" op="changePassword"}">{translate key="user.changeMyPassword"}</a></li>
 	<li>&#187; <a href="{url page="login" op="signOut"}">{translate key="user.logOut"}</a></li>
 	{call_hook name="Templates::User::Index::MyAccount"}
