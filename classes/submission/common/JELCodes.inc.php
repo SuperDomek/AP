@@ -132,6 +132,25 @@ class JELCodes {
 	}
 
 	/**
+	*	Deletes all JEL codes for a given paper
+	*	@param $paper_id ID of the paper to set up JEL code
+	*/
+	function dropCodes($paper_id){
+		$conn = $this->_dataSource;
+		if(isset($paper_id)){
+			$sql = "DELETE FROM `paper_jel_codes` WHERE `paper_id` = ?";
+			$err = $conn->Execute($sql, array($paper_id));
+			if($err === false){
+				error_log("Error while inserting JEL code: " . $conn->ErrorMsg());
+			}
+		}
+		else {
+			error_log("Error while setting up JEL code: Paper ID not set up.");
+			return false;
+		}
+	}
+
+	/**
 	*	Sets up the array with JEL Classification for the select in form
 	*/
 	function init(){

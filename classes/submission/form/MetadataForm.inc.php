@@ -239,6 +239,7 @@ class MetadataForm extends Form {
 
 		// Set up JEL codes
 		//$JELCodes = $JEL->getCodes();
+		$JEL->dropCodes($paperId);
 		foreach ($this->getData('subjectClass') as $key => $value) {
 				$JEL->setCode($paperId, $value, $JEL->getKeyword($value));
 		}
