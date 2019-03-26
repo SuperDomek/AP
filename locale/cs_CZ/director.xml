@@ -97,8 +97,10 @@
 	<message key="director.paper.selectDirector">Zvolit {$roleName}</message>
 	<message key="director.paper.selectDecision">Vybrat rozhodnutí</message>
 	<message key="director.abstract.decision.invitePresentation">Přijmout abstrakt</message>
+	<message key="director.abstract.decision.invitePresentationTopic">Přijmout abstrakt s výhradami</message>
 	<message key="director.abstract.decision.pendingRevisions">Přijmout abstrakt po úpravách</message>
 	<message key="director.abstract.decision.decline">Odmítnout abstrakt</message>
+	<message key="director.abstract.decision.declineTopic">Odmítnout abstrakt kvůli tématu</message>
 	<message key="director.paper.decision.invitePresentation">Požádat o prezentaci</message>
 	<message key="director.paper.decision.accept">Přijmout příspěvek beze změn</message>
 	<message key="director.paper.decision.pendingRevisions">Jsou vyžadovány úpravy</message>

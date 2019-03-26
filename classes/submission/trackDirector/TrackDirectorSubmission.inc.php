@@ -446,8 +446,10 @@ class TrackDirectorSubmission extends Paper {
 		if (!$schedConf || $this->getReviewMode() == REVIEW_MODE_BOTH_SEQUENTIAL){
 			if($stage == REVIEW_STAGE_ABSTRACT){
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_INVITE] = 'director.abstract.decision.invitePresentation';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC] = 'director.abstract.decision.invitePresentationTopic';
 				//$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS] = 'director.abstract.decision.pendingRevisions';
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE] = 'director.abstract.decision.decline';
+				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC] = 'director.abstract.decision.declineTopic';
 			}
 			else if($stage >= REVIEW_STAGE_PRESENTATION){
 				$directorDecisionOptions[SUBMISSION_DIRECTOR_DECISION_ACCEPT] = 'director.paper.decision.accept';

@@ -95,8 +95,10 @@
 	<message key="director.paper.selectDirector">Select {$roleName}</message>
 	<message key="director.paper.selectDecision">Select decision</message>
 	<message key="director.abstract.decision.invitePresentation">Accept abstract</message>
+	<message key="director.abstract.decision.invitePresentationTopic">Accept abstract with suggestions</message>
 	<message key="director.abstract.decision.pendingRevisions">Accept abstract with suggestions</message>
 	<message key="director.abstract.decision.decline">Reject abstract</message>
+	<message key="director.abstract.decision.declineTopic">Reject abstract - out of scope</message>
 	<message key="director.paper.decision.accept">Accept paper without changes</message>
 	<message key="director.paper.decision.pendingRevisions">Revisions Required</message>
 	<message key="director.paper.decision.pendingMinorRevisions">Accept paper after minor revisions</message>

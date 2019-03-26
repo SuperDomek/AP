@@ -79,6 +79,14 @@ class TrackDirectorAction extends Action {
 			if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE) {
 				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
 				$trackDirectorSubmission->stampStatusModified();
+			}
+			else if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC) {
+				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
+				// add comment to the decision for topic reason
+				//
+				//
+				//
+				$trackDirectorSubmission->stampStatusModified();
 			} else {
 				$trackDirectorSubmission->setStatus(STATUS_QUEUED);
 				$trackDirectorSubmission->stampStatusModified();
@@ -122,6 +130,11 @@ class TrackDirectorAction extends Action {
 			// Send e-mail to Author
 			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true, $comment);
 
+			// clearing the variable for purpose of the decline with message
+			if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC){
+				unset($comment);
+			}
+
 			// Insert comment into the DB 
 			if(isset($comment)){
 				//
@@ -145,7 +158,7 @@ class TrackDirectorAction extends Action {
 			}
 		}
 
-		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE) {
+		if($decision == SUBMISSION_DIRECTOR_DECISION_ACCEPT || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC) {
 			// completeReview will take care of updating the
 			// submission with the new decision.
 			$trackDirectorSubmissionDao->updateTrackDirectorSubmission($trackDirectorSubmission);
