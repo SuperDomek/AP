@@ -14,6 +14,7 @@
  */
 
 import('submission.common.Action');
+import('classes.paper.Paper');
 
 class TrackDirectorAction extends Action {
 
@@ -66,6 +67,7 @@ class TrackDirectorAction extends Action {
 		//EDIT do not check for editAssignments
 		//if (empty($editAssignments)) return;
 
+		AppLocale::requireComponents(array(LOCALE_COMPONENT_OCS_DIRECTOR));
 		$trackDirectorSubmissionDao =& DAORegistry::getDAO('TrackDirectorSubmissionDAO');
 		$user =& Request::getUser();
 		$directorDecision = array(
@@ -82,6 +84,16 @@ class TrackDirectorAction extends Action {
 			}
 			else if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC) {
 				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
+				$comment = __('director.abstract.decisionComment.declineTopic');
+				// add comment to the decision for topic reason
+				//
+				//
+				//
+				$trackDirectorSubmission->stampStatusModified();
+			}
+			else if ($decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC) {
+				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
+				$comment = __('director.abstract.decisionComment.invitePresentationTopic');
 				// add comment to the decision for topic reason
 				//
 				//
@@ -131,7 +143,7 @@ class TrackDirectorAction extends Action {
 			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true, $comment);
 
 			// clearing the variable for purpose of the decline with message
-			if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC){
+			if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC){
 				unset($comment);
 			}
 
@@ -1957,9 +1969,11 @@ import('file.PaperFileManager');
 			case SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS:
 			case SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS:
 			case SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS:
+			case SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC:
 				$templateName = $isAbstract?'SUBMISSION_ABSTRACT_REVISE':'SUBMISSION_PAPER_REVISE';
 				break;
 			case SUBMISSION_DIRECTOR_DECISION_DECLINE:
+			case SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC:
 				$templateName = $isAbstract?'SUBMISSION_ABSTRACT_DECLINE':'SUBMISSION_PAPER_DECLINE';
 				break;
 		}
