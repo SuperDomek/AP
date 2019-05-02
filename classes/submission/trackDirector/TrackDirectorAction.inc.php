@@ -83,13 +83,13 @@ class TrackDirectorAction extends Action {
 				$trackDirectorSubmission->stampStatusModified();
 			}
 			else if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC) {
-				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
 				$comment = __('director.abstract.decisionComment.declineTopic');
+				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
 				$trackDirectorSubmission->stampStatusModified();
 			}
 			else if ($decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC) {
-				$trackDirectorSubmission->setStatus(STATUS_DECLINED);
 				$comment = __('director.abstract.decisionComment.invitePresentationTopic');
+				$trackDirectorSubmission->setStatus(STATUS_QUEUED);
 				$trackDirectorSubmission->stampStatusModified();
 			} else {
 				$trackDirectorSubmission->setStatus(STATUS_QUEUED);
