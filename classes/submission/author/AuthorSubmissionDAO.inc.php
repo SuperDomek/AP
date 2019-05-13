@@ -221,8 +221,8 @@ class AuthorSubmissionDAO extends DAO {
 				LEFT JOIN track_settings tal ON (t.track_id = tal.track_id AND tal.setting_name = ? AND tal.locale = ?)
 			WHERE	p.sched_conf_id = ?
 				AND p.user_id = ?' .
-				($active?(' AND p.status = ' . (int) STATUS_QUEUED):(
-					' AND ((p.status <> ' . (int) STATUS_QUEUED . ' AND p.submission_progress = 0) OR (p.status = ' . (int) STATUS_ARCHIVED . '))'
+				($active?(' AND p.status BETWEEN ' . STATUS_QUEUED . ' AND ' . STATUS_LAYOUT):(
+					' AND ((p.status NOT BETWEEN ' . STATUS_QUEUED . ' AND ' . STATUS_LAYOUT . ' AND p.submission_progress = 0) OR (p.status = ' . (int) STATUS_ARCHIVED . ') OR (p.status = ' . (int) STATUS_DECLINED . '))'
 				)) .
 				($sortBy?(' ORDER BY ' . $this->getSortMapping($sortBy) . ' ' . $this->getDirectionMapping($sortDirection)) : ''),
 			array(
@@ -299,6 +299,8 @@ class AuthorSubmissionDAO extends DAO {
 		$submissionsCount = array();
 		$submissionsCount[0] = 0;
 		$submissionsCount[1] = 0;
+		$submissionsCount[2] = 0;
+		$submissionsCount[3] = 0;
 
 		$sql = '
 			SELECT	count(*), status
@@ -310,11 +312,30 @@ class AuthorSubmissionDAO extends DAO {
 		$result =& $this->retrieve($sql, array($schedConfId, $authorId));
 
 		while (!$result->EOF) {
-			if ($result->fields['status'] != 1) {
+			switch ($result->fields['status']){
+				case 0: // Archived
+				case 3: // Accepted
+					$submissionsCount[2] += $result->fields[0];
+					break;
+				case 1: // In Review
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+				case 2: // Layout
+					$submissionsCount[0] += $result->fields[0];
+					break;
+				case 4: // Rejected
+					$submissionsCount[2] += $result->fields[0];
+					break;
+				default:
+				$submissionsCount[2] += $result->fields[0];	
+			}
+			/*if ($result->fields['status'] != 1) {
 				$submissionsCount[1] += $result->fields[0];
 			} else {
 				$submissionsCount[0] += $result->fields[0];
-			}
+			}*/
 			$result->moveNext();
 		}
 

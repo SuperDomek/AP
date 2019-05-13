@@ -69,17 +69,15 @@ function showRounds(){
       {assign var=authorFiles value=$submission->getAuthorFileRevisions($stage)}
       {assign var="directorFiles" value=$submission->getDirectorFileRevisions($stage)}
       {assign var="viewableFiles" value=$authorViewableFilesByStage[$stage]}
+      {assign var="decisions" value=$submission->getDecisions($smarty.const.REVIEW_STAGE_ABSTRACT)}
+      {assign var="lastDecision" value=$decisions|@end}
 
       <tr valign="top">
         <td class="label" width="20%">
           {translate key="submission.initiated"}
         </td>
         <td class="value" width="80%">
-          {if $reviewEarliestNotificationByStage[$stageTemp]}
-            {$reviewEarliestNotificationByStage[$stageTemp]|date_format:$dateFormatShort}
-          {else}
-            &mdash;
-          {/if}
+          {$submission->getDateSubmitted()|date_format:$dateFormatShort}
         </td>
       </tr>
       <tr valign="top">
@@ -87,42 +85,22 @@ function showRounds(){
           {translate key="submission.lastModified"}
         </td>
         <td class="value" width="80%">
-          {if $reviewModifiedByStage[$stageTemp]}
-            {$reviewModifiedByStage[$stageTemp]|date_format:$dateFormatShort}
+          {if $decisions}
+            {$lastDecision.dateDecided|date_format:$dateFormatShort}
           {else}
             &mdash;
           {/if}
         </td>
       </tr>
+      <tr valign="top">
+        <td class="label">{translate key="paper.abstract"}</td>
+        <td class="value">{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
+      </tr>
+      <tr valign="top">
+        <td colspan="2"><a href="{url op="submission" path=$submission->getPaperId()}"><button type="button">{translate key="submission.viewMetadata"}</button></a></td>
+      </tr>
 
-      {assign var="start" value="A"|ord}
-      {foreach from=$reviewAssignments[$stageTemp] item=reviewAssignment key=reviewKey}
-        {assign var="reviewId" value=$reviewAssignment->getId()}
-        {if not $reviewAssignment->getCancelled()}
-          <tr>
-            {assign var="reviewIndex" value=$reviewIndexesStage[$reviewId]}
-            <td class="label" width="20%">
-              <h5>{translate key="user.role.reviewer"} {$reviewIndex+$start|chr}</h5>
-            </td>
-            <td class="value" width="80%">
-              {if $reviewAssignment->getRecommendation() !== null && $reviewAssignment->getRecommendation() !== ''}
-                {assign var="recommendation" value=$reviewAssignment->getRecommendation()}
-                {translate key=$reviewerRecommendationOptions.$recommendation}
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="javascript:openComments('{url op="viewReviewFormResponse" path=$submission->getPaperId()|to_array:$reviewAssignment->getId()}');" class="icon">{icon name="letter"}</a>
-              {else}
-                {translate key="common.none"}
-              {/if}
-            </td>
-          </tr>
-        {/if}
-      {foreachelse}
-        <tr>
-          <td colspan="2">
-            {translate key="common.noneAssigned"}
-          </td>
-        </tr>
-      {/foreach}
+      
     {elseif $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION && $stageTemp >= $smarty.const.REVIEW_STAGE_PRESENTATION}
       {* Paper review *}
       {if $stage != $stageTemp}

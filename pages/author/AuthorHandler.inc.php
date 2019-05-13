@@ -43,10 +43,12 @@ class AuthorHandler extends Handler {
 		
 		$conference =& Request::getConference();
 		$schedConf =& Request::getSchedConf();
+		$schedConfId = $schedConf->getId();
 
 		$user =& Request::getUser();
 		$rangeInfo =& Handler::getRangeInfo('submissions');
 		$authorSubmissionDao =& DAORegistry::getDAO('AuthorSubmissionDAO');
+		$authorSubmissionsCount = $authorSubmissionDao->getSubmissionsCount($user->getId(), $schedConfId);
 
 		$page = isset($args[0]) ? $args[0] : '';
 		switch($page) {
