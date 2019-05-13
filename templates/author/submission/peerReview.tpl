@@ -73,26 +73,6 @@ function showRounds(){
       {assign var="lastDecision" value=$decisions|@end}
 
       <tr valign="top">
-        <td class="label" width="20%">
-          {translate key="submission.initiated"}
-        </td>
-        <td class="value" width="80%">
-          {$submission->getDateSubmitted()|date_format:$dateFormatShort}
-        </td>
-      </tr>
-      <tr valign="top">
-        <td class="label" width="20%">
-          {translate key="submission.lastModified"}
-        </td>
-        <td class="value" width="80%">
-          {if $decisions}
-            {$lastDecision.dateDecided|date_format:$dateFormatShort}
-          {else}
-            &mdash;
-          {/if}
-        </td>
-      </tr>
-      <tr valign="top">
         <td class="label">{translate key="paper.abstract"}</td>
         <td class="value">{$submission->getLocalizedAbstract()|strip_unsafe_html|nl2br|default:"&mdash;"}</td>
       </tr>
