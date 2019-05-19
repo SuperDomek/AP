@@ -186,6 +186,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			$submissions =& ArrayItemIterator::fromRangeInfo($submissionsArray, $rangeInfo);
 		}
 
+		// Gets the latest review file for a paper and stores it's checked value
 		$reviewFiles;
 		while($submission =& $submissions->next()){
 			$reviewFile =& $paperFileDao->getPaperFile($submission->getReviewFileId(), null, $submission->getPaperId());
@@ -301,7 +302,7 @@ class DirectorHandler extends TrackDirectorHandler {
 				//->setTitle();
 				->setTitle(date("d. m. Y"));
 
-			$this->renderSpreadsheet($spreadsheet, $page, $submissions->toArray());
+			$this->renderSpreadsheet($spreadsheet, $page, $submissions->toArray(), $reviewFiles);
 			// redirect output to client browser
 			$fileName = $schedConf->getLocalizedSetting('acronym') . $schedConf->getPath() . "-" . $page . ".xlsx";
 			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -951,8 +952,9 @@ class DirectorHandler extends TrackDirectorHandler {
 	 * @param $spreadsheet The Spreadsheet object
 	 * @param $page The page that is being exported
 	 * @param $submissionsArray Array with submissions to export
+	 * @param $reviewFiles Array with the most recent review files checked values
 	 */
-	function renderSpreadsheet(&$spreadsheet, $page = false, $submissionsArray){
+	function renderSpreadsheet(&$spreadsheet, $page = false, $submissionsArray, $reviewFiles){
 		// Sheet setting
 		\PhpOffice\PhpSpreadsheet\Cell\Cell::setValueBinder( new \PhpOffice\PhpSpreadsheet\Cell\AdvancedValueBinder() );
 
@@ -964,21 +966,31 @@ class DirectorHandler extends TrackDirectorHandler {
 				->setCellValue($column++ . $row, __('common.id'))
 				->setCellValue($column++ . $row, __('submissions.submitted'))
 				->setCellValue($column++ . $row, __('paper.authors'))
-				->setCellValue($column . $row, __('paper.title'));
+				->setCellValue($column++ . $row, __('paper.title'))
+				->setCellValue($column++ . $row, __('paper.file'));
 			
-				$spreadsheet->getActiveSheet()->getStyle('A1:'. $column . $row)
-					->getFont()->setBold(true);
-				$spreadsheet->getActiveSheet()->getStyle('A1:'. $column . $row)
-					->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$spreadsheet->getActiveSheet()->getStyle('A1:'. $column . $row)
+				->getFont()->setBold(true);
+			$spreadsheet->getActiveSheet()->getStyle('A1:'. $column . $row)
+				->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+			foreach($reviewFiles as $paperId => $status){
+				if($status == 1)
+					$reviewFiles[$paperId] = __('submission.fileAccepted');
+				else
+					$reviewFiles[$paperId] = __('submission.filePending');
+			}
 			// Rows
 			foreach($submissionsArray as $submission){
 				$column = 'A';
 				$row++;
+				$paperId = $submission->getPaperId();
 				$spreadsheet->getActiveSheet()
-				->setCellValue($column++ . $row, $submission->getPaperId())
+				->setCellValue($column++ . $row, $paperId)
 				->setCellValue($column++ . $row, $submission->getDateSubmitted())
 				->setCellValue($column++ . $row, $submission->getAuthorString(true))
-				->setCellValue($column++ . $row, $submission->getLocalizedTitle());
+				->setCellValue($column++ . $row, $submission->getLocalizedTitle())
+				->setCellValue($column++ . $row, array_key_exists($paperId, $reviewFiles) ? $reviewFiles[$paperId] : __('submission.noFile'));
 			}
 			// Formating
 			$spreadsheet->getActiveSheet()->getStyle('B2:B' . $row)
@@ -996,6 +1008,9 @@ class DirectorHandler extends TrackDirectorHandler {
 			$spreadsheet->getActiveSheet()
 				->getColumnDimension('D')
 				->setWidth(60);
+			$spreadsheet->getActiveSheet()
+				->getColumnDimension('E')
+				->setWidth(20);
 		}
 		else if($page == "submissionsAccepted"){
 			// Set up Header
