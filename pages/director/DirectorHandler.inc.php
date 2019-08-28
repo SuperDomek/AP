@@ -229,7 +229,7 @@ class DirectorHandler extends TrackDirectorHandler {
 				$p->set_option("stringformat=utf8");
 
 				$p->set_info("Creator", $schedConf->getLocalizedTitle());
-				$p->set_info("Author", $user->getFullName());
+				$p->set_info("Author", $user->getFullName(true));
 				$p->set_info("Title", $page);
 		
 				$p->begin_page_ext(0, 0, "width=a4.width height=a4.height");
@@ -1039,7 +1039,7 @@ class DirectorHandler extends TrackDirectorHandler {
 
 				$spreadsheet->getActiveSheet()
 				->setCellValue($column++ . $row, $submission->getPaperId())
-				->setCellValue($column++ . $row, $submission->getAuthorString(true))
+				->setCellValue($column++ . $row, $submission->getAuthorString())
 				->setCellValue($column++ . $row, $submission->getLocalizedTitle())
 				->setCellValue($column++ . $row, $user->getcountry())
 				->setCellValue($column++ . $row, $submission->getTrackTitle())

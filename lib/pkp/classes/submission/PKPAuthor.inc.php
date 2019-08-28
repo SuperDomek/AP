@@ -28,9 +28,21 @@ class PKPAuthor extends DataObject {
 	/**
 	 * Get the author's complete name.
 	 * Includes first name, middle name (if applicable), and last name.
+	 * @param $initials boolean	Show only initials from first and middle names
 	 * @return string
 	 */
-	function getFullName() {
+	function getFullName($initials = false) {
+		
+		if($initials){
+			$str = $this->getData('lastName');
+			$names = explode(" ", $this->getData('firstName'));
+			if (!empty($this->getData('middleName')))
+				$names = array_merge($names, explode(" ", $this->getData('middleName')));
+			foreach($names as $name){
+				$str .= " " . strtoupper(substr($name, 0, 1)) . ".";
+			}
+			return  $str;
+		}
 		return $this->getData('firstName') . ' ' . ($this->getData('middleName') != '' ? $this->getData('middleName') . ' ' : '') . $this->getData('lastName');
 	}
 
