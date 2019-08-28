@@ -32,14 +32,14 @@ class PKPAuthor extends DataObject {
 	 * @return string
 	 */
 	function getFullName($initials = false) {
-		
 		if($initials){
 			$str = $this->getData('lastName');
 			$names = explode(" ", $this->getData('firstName'));
 			if (!empty($this->getData('middleName')))
 				$names = array_merge($names, explode(" ", $this->getData('middleName')));
 			foreach($names as $name){
-				$str .= " " . strtoupper(substr($name, 0, 1)) . ".";
+				if(!empty($name))
+					$str .= " " . mb_strtoupper(mb_substr($name, 0, 1)) . ".";
 			}
 			return  $str;
 		}
