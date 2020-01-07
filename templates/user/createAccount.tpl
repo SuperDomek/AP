@@ -281,6 +281,19 @@ function showBillAddr(checkbox){
 	</td>
 </tr>
 {/if}
+
+<!-- GDPR -->
+
+	<tr valign="top">
+		<td class="label">
+			<input type="checkbox" id="gdpr" name="gdpr" {if $gdprState}checked="checked" {/if}/>&nbsp;{fieldLabel name="gdpr" key=" " required="true"}
+		</td>
+		<td class="value">
+			{translate key="user.gdpr.text"}
+		</td>
+	</tr>
+
+<!-- GDPR -->
 </table>
 
 <!--<h5>{translate key="schedConf.registration"}</h5>-->
