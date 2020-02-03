@@ -135,9 +135,9 @@ class TrackDirectorAction extends Action {
 			TrackDirectorAction::emailDirectorDecisionComment($trackDirectorSubmission, true, true, $comment);
 
 			// clearing the variable for purpose of the decline with message
-			if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC){
+			/* if ($decision == SUBMISSION_DIRECTOR_DECISION_DECLINE_TOPIC || $decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC){
 				unset($comment);
-			}
+			} */
 
 			// Insert comment into the DB 
 			if(isset($comment)){

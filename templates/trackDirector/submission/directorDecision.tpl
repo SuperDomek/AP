@@ -125,7 +125,8 @@ function confirmDecision(sel){
 
   {if $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
       $lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS ||
-			$lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS}
+		$lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
+		$lastDecision == $smarty.const.SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC}
 	<ul class="no-list">
 		<li>
 		<header>{translate key="submission.directorDecisionComment"}</header>

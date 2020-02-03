@@ -440,7 +440,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		// Use comment field only when Revision decision
 		if($decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
 		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS)
+		$decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS ||
+		$decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC)
 			$comment = Request::getUserVar('comment_text');
 		else
 			$comment = null;

@@ -62,7 +62,8 @@ $('#file_changes').live('input',function() {
 	</tr>
 	{if $lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS ||
 		$lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS ||
-		$lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS}
+		$lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS ||
+		$lastDirectorDecision.decision == SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC}
 		{*if $lastDecisionComment*}
 			<tr valign="top">
 				<td class="label" width="20%">{translate key="submission.directorDecisionComment"}</td>
