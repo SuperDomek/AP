@@ -1993,7 +1993,8 @@ import('file.PaperFileManager');
 				'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
 				'locationCity' => $schedConf->getSetting('locationCity'),
 				'paperTitle' => $trackDirectorSubmission->getLocalizedTitle(),
-				'comment' => $comment
+				'comment' => $comment,
+				'submissionUpDeadline' => strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('paperSubmissionDeadline'))
 			));
 
 			// Add reviews to the e-mail (doesn't work - the translation doesn't translate and no reviews append)
