@@ -556,6 +556,7 @@ class DirectorHandler extends TrackDirectorHandler {
 
 		$conference =& Request::getConference();
 		$conferenceId = $conference->getId();
+		
 		$schedConf =& Request::getSchedConf();
 		$schedConfId = $schedConf->getId();
 
@@ -564,6 +565,7 @@ class DirectorHandler extends TrackDirectorHandler {
 
 		import('mail.MassMail');
 		$email = new MassMail('PUBLISH_NOTIFY');
+		$email->setFrom($schedConf->getSetting('contactEmail'), $user->getFullName());
 
 		if (Request::getUserVar('send') && !$email->hasErrors()) {
 			$email->addRecipient($user->getEmail(), $user->getFullName());
@@ -579,6 +581,9 @@ class DirectorHandler extends TrackDirectorHandler {
 					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_INVITE, true);
 					break;
 				case 'allAuthorsAbstractRevisions':
+					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS, true);
+					break;
+				case 'allAuthorsPaperRevisions':
 					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS, true);
 					break;
 				case 'allAuthors':
@@ -642,6 +647,9 @@ class DirectorHandler extends TrackDirectorHandler {
 			$authorsAbstractRevisions =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
 			$authorsAbstractRevisionsCount = $authorsAbstractRevisions->getCount();
 
+			$authorsPaperRevisions =& $authorDao->getAuthorsAlphabetizedRevisionsPending($schedConfId, STATUS_QUEUED);
+			$authorsPaperRevisionsCount = $authorsPaperRevisions->getCount();
+
 			$email->displayEditForm(
 				Request::url(null, null, null, 'notifyUsers'),
 				array(),
@@ -651,6 +659,7 @@ class DirectorHandler extends TrackDirectorHandler {
 					'allAuthorsCount' => $allAuthorsCount,
 					'allAuthorsAbstractAcceptedCount' => $authorsAbstractAcceptedCount,
 					'allAuthorsAbstractRevisionsCount' => $authorsAbstractRevisionsCount,
+					'allAuthorsPaperRevisionsCount' => $authorsPaperRevisionsCount,
 					'allPaidRegistrantsCount' => $registrationDao->getRegisteredUserCount($schedConfId),
 					'allRegistrantsCount' => $registrationDao->getRegisteredUserCount($schedConfId, false),
 					'allUsersCount' => $roleDao->getSchedConfUsersCount($schedConfId)

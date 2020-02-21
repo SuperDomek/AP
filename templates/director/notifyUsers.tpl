@@ -50,12 +50,6 @@
 	</td>
 </tr>
 <tr valign="top">
-	<td><input type="radio" id="allReaders" name="whichUsers" value="allReaders"/></td>
-	<td class="label">
-		<label for="allReaders">{translate key="director.notifyUsers.allReaders" count=$allReadersCount|default:0}</label>
-	</td>
-</tr>
-<tr valign="top">
 	<td><input type="radio" id="allAuthorsAbstractAccepted" name="whichUsers" value="allAuthorsAbstractAccepted"/></td>
 	<td class="label">
 		<label for="allAuthorsAbstractAccepted">{translate key="director.notifyUsers.allAuthorsAbstractAccepted" count=$allAuthorsAbstractAcceptedCount|default:0}</label>
@@ -65,6 +59,12 @@
 	<td><input type="radio" id="allAuthorsAbstractRevisions" name="whichUsers" value="allAuthorsAbstractRevisions"/></td>
 	<td class="label">
 		<label for="allAuthorsAbstractRevisions">{translate key="director.notifyUsers.allAuthorsAbstractRevisions" count=$allAuthorsAbstractRevisionsCount|default:0}</label>
+	</td>
+</tr>
+<tr valign="top">
+	<td><input type="radio" id="allAuthorsPaperRevisions" name="whichUsers" value="allAuthorsPaperRevisions"/></td>
+	<td class="label">
+		<label for="allAuthorsPaperRevisions">{translate key="director.notifyUsers.allAuthorsPaperRevisions" count=$allAuthorsPaperRevisionsCount|default:0}</label>
 	</td>
 </tr>
 <tr valign="top">
@@ -79,12 +79,6 @@
 		<label for="allRegistrants">{translate key="director.notifyUsers.allRegistrants" count=$allRegistrantsCount|default:0}</label>
 	</td>
 </tr>
-<tr valign="top">
-	<td><input type="radio" id="allPaidRegistrants" name="whichUsers" value="allPaidRegistrants"/></td>
-	<td class="label">
-		<label for="allPaidRegistrants">{translate key="director.notifyUsers.allPaidRegistrants" count=$allPaidRegistrantsCount|default:0}</label>
-	</td>
-</tr>
 {if $senderEmail}
 	<tr valign="top">
 		<td><input type="checkbox" name="bccSender" value="1"{if $bccSender} checked{/if}/></td>
@@ -93,12 +87,6 @@
 		</td>
 	</tr>
 {/if}
-<tr valign="top">
-	<td><input type="checkbox" name="includeToc" id="includeToc" value="1"/></td>
-	<td class="label">
-		<label for="includeToc">{translate key="director.notifyUsers.includeToc"}</label>
-	</td>
-</tr>
 </table>
 
 <br/>
