@@ -173,8 +173,6 @@ class MailTemplate extends PKPMailTemplate {
 			} else {
 				$this->setBody(str_replace($searchString, $emailSignature, $this->getBody()));
 			}
-			error_log(print_r($this->getFrom(), TRUE));
-			error_log($this->getBody());
 			
 
 			if (!empty($envelopeSender) && Config::getVar('email', 'allow_envelope_sender')) $this->setEnvelopeSender($envelopeSender);

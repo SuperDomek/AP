@@ -257,17 +257,6 @@ class AuthorDAO extends DAO {
 			$statusSql = 'AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
 		}
 
-		/* if (isset($stage)) {
-			$params[] = $stage;
-			$stageSql = ' AND (ed.paper_id, ed.date_decided) IN (
-											SELECT ed2.paper_id, MAX(ed2.date_decided)
-											FROM edit_decisions AS ed2
-											WHERE ed2.stage = ?
-											GROUP BY ed2.paper_id)';
-		} else {
-			$stageSql = '';
-		} */
-
 		// only decisions for paper revisions
 		$decisionSql = ' AND (ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS . ')';
 		// return papers which don't have a revised version uploaded for current stage
