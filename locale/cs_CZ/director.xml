@@ -103,7 +103,7 @@
 	<message key="director.abstract.decision.decline">Odmítnout abstrakt</message>
 	<message key="director.abstract.decision.declineTopic">Odmítnout abstrakt kvůli tématu</message>
 	<message key="director.abstract.decisionComment.declineTopic">Abstrakt byl odmítnut z důvodu nesouladu se zaměřením konference.</message>
-	<message key="director.abstract.decisionComment.invitePresentationTopic">Abstrakt byl přijat k recenznímu řízení pod podmínkou, že autoři jej přizpůsobí tak, aby odpovídal zaměření konference</message>
+	<message key="director.abstract.decisionComment.invitePresentationTopic">Abstrakt byl přijat k recenznímu řízení pod podmínkou, že autoři přizpůsobí příspěvek, aby více odpovídal zaměření konference.</message>
 	<message key="director.paper.decision.invitePresentation">Požádat o prezentaci</message>
 	<message key="director.paper.decision.accept">Přijmout příspěvek beze změn</message>
 	<message key="director.paper.decision.pendingRevisions">Jsou vyžadovány úpravy</message>
