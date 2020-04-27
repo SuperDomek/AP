@@ -260,11 +260,6 @@ class AuthorDAO extends DAO {
 
 		// only decisions for paper revisions
 		$decisionSql = ' AND (ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC . ')';
-		// return papers which don't have a revised version uploaded for current stage
-		$paperFileSql = " AND (a.paper_id, a.current_stage) NOT IN (
-			SELECT pf2.paper_id, pf2.stage
-			FROM paper_files AS pf2
-			WHERE pf2.type LIKE 'submission/director')";
 
 		$result =& $this->retrieveRange(
 			'SELECT	DISTINCT CAST(\'\' AS CHAR) AS url,
@@ -282,15 +277,15 @@ class AuthorDAO extends DAO {
 				FROM users aa,
 				papers a,
 				sched_confs e,
-				edit_decisions ed,
-				paper_files pf
+				edit_decisions ed
 			WHERE aa.user_id = a.user_id
 				' . (isset($schedConfId)?'AND a.sched_conf_id = ? ':'') . '
 				AND a.paper_id = ed.paper_id
-				AND a.current_stage = ed.stage ' . $statusSql . '
+				AND a.current_stage = 2
+				AND a.submission_progress = 2
+				AND ed.stage = 1 ' . $statusSql . '
 				AND (aa.last_name IS NOT NULL
-				AND aa.last_name <> \'\')
-				AND a.paper_id = pf.paper_id' . $decisionSql . $paperFileSql . ' ORDER BY aa.last_name, aa.first_name',
+				AND aa.last_name <> \'\')' . $decisionSql . ' ORDER BY aa.last_name, aa.first_name',
 			empty($params)?false:$params,
 			$rangeInfo
 		);
