@@ -235,6 +235,71 @@ class AuthorDAO extends DAO {
 	}
 
 	/**
+	 * Retrieve all authors for scheduled conference with accepted abstracts
+	 * Accepted means Accepted or Accepted with suggestions 
+	 * Note that if schedConfId is null, alphabetized authors for all
+	 * scheduled conferences are returned.
+	 * @param $schedConfId int
+	 * @param $status status of the wanted papers; if null then both Published and Queued
+	 * @param $includeEmail Whether or not to include the email in the select distinct
+	 * @return object ItemIterator Authors ordered by sequence
+	 */
+
+	function &getAuthorsAlphabetizedAbstractAccepted($schedConfId = null, $status = null, $includeEmail = false) {
+		$params = array();
+		$rangeInfo = null;
+
+		if (isset($schedConfId)) $params[] = $schedConfId;
+
+		if (isset($status)) {
+			$params[] = $status;
+			$statusSql = ' AND a.status = ?';
+		} else {
+			$statusSql = 'AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
+		}
+
+		// only decisions for paper revisions
+		$decisionSql = ' AND (ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC . ')';
+		// return papers which don't have a revised version uploaded for current stage
+		$paperFileSql = " AND (a.paper_id, a.current_stage) NOT IN (
+			SELECT pf2.paper_id, pf2.stage
+			FROM paper_files AS pf2
+			WHERE pf2.type LIKE 'submission/director')";
+
+		$result =& $this->retrieveRange(
+			'SELECT	DISTINCT CAST(\'\' AS CHAR) AS url,
+				0 AS author_id,
+				0 AS paper_id,
+				' . ($includeEmail?'aa.email AS email,':'CAST(\'\' AS CHAR) AS email,') . '
+				0 AS primary_contact,
+				0 AS seq,
+				aa.first_name AS first_name,
+				aa.middle_name AS middle_name,
+				aa.last_name AS last_name,
+				aa.affiliation_select AS affiliation_select,
+				aa.affiliation AS affiliation,
+				aa.country
+				FROM users aa,
+				papers a,
+				sched_confs e,
+				edit_decisions ed,
+				paper_files pf
+			WHERE aa.user_id = a.user_id
+				' . (isset($schedConfId)?'AND a.sched_conf_id = ? ':'') . '
+				AND a.paper_id = ed.paper_id
+				AND a.current_stage = ed.stage ' . $statusSql . '
+				AND (aa.last_name IS NOT NULL
+				AND aa.last_name <> \'\')
+				AND a.paper_id = pf.paper_id' . $decisionSql . $paperFileSql . ' ORDER BY aa.last_name, aa.first_name',
+			empty($params)?false:$params,
+			$rangeInfo
+		);
+		
+		$returner = new DAOResultFactory($result, $this, '_returnAuthorFromRow');
+		return $returner;
+	}
+
+	/**
 	 * Retrieve all authors for scheduled conference with papers still in review
 	 * and decision for revisions who did not submit revision file yet.
 	 * Note that if schedConfId is null, alphabetized authors for all

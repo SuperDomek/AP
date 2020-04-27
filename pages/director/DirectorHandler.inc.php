@@ -578,13 +578,13 @@ class DirectorHandler extends TrackDirectorHandler {
 					$recipients =& $registrationDao->getRegisteredUsers($schedConfId, false);
 					break;
 				case 'allAuthorsAbstractAccepted':
-					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_INVITE, true);
+					$recipients =& $authorDao->getAuthorsAlphabetizedAbstractAccepted($schedConfId, STATUS_QUEUED);
 					break;
 				case 'allAuthorsAbstractRevisions':
 					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS, true);
 					break;
 				case 'allAuthorsPaperRevisions':
-					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS, true);
+					$recipients =& $authorDao->getAuthorsAlphabetizedRevisionsPending($schedConfId, STATUS_QUEUED);
 					break;
 				case 'allAuthors':
 					$recipients =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId, null, null, true);
@@ -641,7 +641,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			$allAuthors =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId);
 			$allAuthorsCount = $allAuthors->getCount();
 
-			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_INVITE);
+			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedAbstractAccepted($schedConfId, STATUS_QUEUED);
 			$authorsAbstractAcceptedCount = $authorsAbstractAccepted->getCount();
 
 			$authorsAbstractRevisions =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
