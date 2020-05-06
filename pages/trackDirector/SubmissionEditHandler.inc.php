@@ -2037,7 +2037,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 
 		$this->validate($paperId);
 		$ithenticate = new Ithenticate("blahad@lib.czu.cz", "YC^e8k2Fu$");
-		var_dump($ithenticate);
+		echo "<br />";
+		print_r("SID: " . $ithenticate->getSid());
 		/*if (!TrackDirectorAction::viewFile($paperId, $fileId, $revision)) {
 			Request::redirect(null, null, null, 'submission', $paperId);
 		}*/
