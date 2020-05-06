@@ -15,6 +15,7 @@
 
 // $Id$
 
+use bsobbe\ithenticate\Ithenticate;
 
 define('TRACK_DIRECTOR_ACCESS_EDIT', 0x00001);
 define('TRACK_DIRECTOR_ACCESS_REVIEW', 0x00002);
@@ -2023,6 +2024,23 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		if (!TrackDirectorAction::viewFile($paperId, $fileId, $revision)) {
 			Request::redirect(null, null, null, 'submission', $paperId);
 		}
+	}
+
+	/**
+	 * Uploads file to iThenticate
+	 * @param $args array ($paperId, $fileId, [$revision])
+	 */
+	function ithenticateUpload($args) {
+		$paperId = isset($args[0]) ? $args[0] : 0;
+		$fileId = isset($args[1]) ? $args[1] : 0;
+		$revision = isset($args[2]) ? $args[2] : null;
+
+		$this->validate($paperId);
+		$ithenticate = new Ithenticate("blahad@lib.czu.cz", "YC^e8k2Fu$");
+		var_dump($ithenticate);
+		/*if (!TrackDirectorAction::viewFile($paperId, $fileId, $revision)) {
+			Request::redirect(null, null, null, 'submission', $paperId);
+		}*/
 	}
 
 	/**

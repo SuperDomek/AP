@@ -138,10 +138,13 @@
 									{icon name="page_text"}
 								</a>
 							</td>
-							<td width="50%">
+							<td width="25%">
 								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>
 							</td>
 							<td><span style="color: #0b9e3f;">{translate key="submission.fileAccepted"}</span></td>
+							<td width="25%">
+								<a href="{url op="ithenticateUpload" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" ><button>Upload to iThenticate</button></a>
+							</td>
 							<td width="10%">{$reviewFile->getNiceFileSize()}</td>
 							{*<td width="20%">{$reviewFile->getFileType()|truncate:30}</td>*}
 							<td width="15%">{$reviewFile->getDateModified()|date_format:$dateFormatShort}</td>
@@ -158,7 +161,7 @@
 						{translate key="common.none"}
 					{/if}
 					</p>
-				{/if} {* $stage > $smarty.const.REVIEW_STAGE_PRESENTATION *}
+				{/if} {* $stage >= $smarty.const.REVIEW_STAGE_PRESENTATION *}
 			{elseif $isDirector}
 				<div class="tbl-container">
 					<table class="files">

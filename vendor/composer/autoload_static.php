@@ -68,9 +68,14 @@ class ComposerStaticInitf9174a9873e5151161f73883c82477a1
     );
 
     public static $prefixLengthsPsr4 = array (
+        'b' => 
+        array (
+            'bsobbe\\ithenticate\\' => 19,
+        ),
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
+            'PhpXmlRpc\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'M' => 
@@ -84,9 +89,17 @@ class ComposerStaticInitf9174a9873e5151161f73883c82477a1
     );
 
     public static $prefixDirsPsr4 = array (
+        'bsobbe\\ithenticate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bsobbe/ithenticate',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'PhpXmlRpc\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpxmlrpc/phpxmlrpc/src',
         ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
