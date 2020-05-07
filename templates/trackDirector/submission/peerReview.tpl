@@ -143,7 +143,12 @@
 							</td>
 							<td><span style="color: #0b9e3f;">{translate key="submission.fileAccepted"}</span></td>
 							<td width="25%">
-								<a href="{url op="ithenticateUpload" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" ><button>Upload to iThenticate</button></a>
+								{*Check whether we have iThenticate document ID in DB*}
+								{if $reviewFile->getIthenticateId()}
+								
+								{else}
+								<a href="{url op="ithenticateUpload" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" ><button>{translate key="paper.ithenticate.upload"}</button></a>
+								{/if}
 							</td>
 							<td width="10%">{$reviewFile->getNiceFileSize()}</td>
 							{*<td width="20%">{$reviewFile->getFileType()|truncate:30}</td>*}

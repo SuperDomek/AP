@@ -213,6 +213,7 @@
 	<message key="paper.previousRounds.show">Show previous review rounds</message>
 	<message key="paper.previousRounds.hide">Hide previous review rounds</message>
 	<message key="paper.publish">Publish</message>
+	<message key="paper.ithenticate.upload">Upload to iThenticate</message>
 
 	<!-- Submission Tracking - Common -->
 	<message key="submission.fromTime">From</message>

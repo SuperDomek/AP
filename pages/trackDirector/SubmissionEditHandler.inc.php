@@ -272,7 +272,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			$abstractChanges = $abstractChangesTemp->toArray();
 			$abstractChangesLast = array_shift($abstractChanges); // first element is the most recent event
 		}
-		
+
+		// if we have ithenticateId for a reviewFile then load the information about it
 
 
 		$templateMgr =& TemplateManager::getManager();
@@ -2027,21 +2028,52 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 	}
 
 	/**
-	 * Uploads file to iThenticate
+	 * Uploads given file to iThenticate
 	 * @param $args array ($paperId, $fileId, [$revision])
 	 */
 	function ithenticateUpload($args) {
 		$paperId = isset($args[0]) ? $args[0] : 0;
 		$fileId = isset($args[1]) ? $args[1] : 0;
 		$revision = isset($args[2]) ? $args[2] : null;
+		$paperFileDao =& DAORegistry::getDAO('PaperFileDAO');
+		$paperFile =& $paperFileDao->getPaperFile($fileId, $revision); // here store DocumentId
 
+		$paperDao =& DAORegistry::getDAO('PaperDAO');
+		$paper =& $paperDao->getPaper($paperId); // take the paper metadata
+
+		$title = $paper->getLocalizedTitle();
+		$authors = $paper->getAuthorString(true);
+		$filename = $paperFile->getFileName();
+		$filepath = $paperFile->getFilePath();
+
+		
 		$this->validate($paperId);
-		$ithenticate = new Ithenticate("blahad@lib.czu.cz", "YC^e8k2Fu$");
-		echo "<br />";
-		print_r("SID: " . $ithenticate->getSid());
-		/*if (!TrackDirectorAction::viewFile($paperId, $fileId, $revision)) {
+		$login = Config::getVar('ithenticate', 'login');
+		$password = Config::getVar('ithenticate', 'password');
+		$folder = Config::getVar('ithenticate', 'folder');
+
+		// Check for information in Config
+		if($login == null || $password == null){
+			error_log("Missing credentials for iThenticate");
 			Request::redirect(null, null, null, 'submission', $paperId);
-		}*/
+		}
+		else if ($folder == null){
+			error_log("Missing iThenticate upload folder");
+			Request::redirect(null, null, null, 'submission', $paperId);
+		}
+
+		// Login
+		$ithenticate = new Ithenticate($login, $password);
+
+		//upload file
+		$document_id = $ithenticate->submitDocument($title, "", $authors, $filename, file_get_contents($filepath), $folder);
+		
+		// update document_id
+		$paperFile->setIthenticateId($document_id);
+		$paperFileDao->updatePaperFile($paperFile);
+		if (!TrackDirectorAction::viewFile($paperId, $fileId, $revision)) {
+			Request::redirect(null, null, null, 'submissionReview', $paperId);
+		}
 	}
 
 	/**
