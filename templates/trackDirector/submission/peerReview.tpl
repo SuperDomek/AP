@@ -146,8 +146,10 @@
 							<td width="25%">
 								{*Check whether we have iThenticate document ID in DB*}
 								{if $reviewFile->getIthenticateId()}
-									{if $ithDocRepState.is_pending == 0}
+									{if $ithDocRepState.is_pending == 0 && $ithDocRepState.url != ''}
 										<span>{$ithDocRepState.percent_match} % <a href="{$ithDocRepState.url}" target="_blank"><button>{translate key="paper.ithenticate.report"}</button></a></span>
+									{elseif $ithDocRepState.url != ''}
+										{translate key="paper.ithenticate.notAvailable"}
 									{else}
 										{translate key="paper.ithenticate.pending"}
 									{/if}

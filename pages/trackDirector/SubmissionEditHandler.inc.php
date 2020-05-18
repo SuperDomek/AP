@@ -276,7 +276,8 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		// if we have ithenticateId for a reviewFile then load the information about it
 		$ithenticateOn = Config::getVar('ithenticate', 'ithenticate');
 		$reviewFile =& $submission->getReviewFile();
-		$ithenticateId = $reviewFile->getIthenticateId();
+		if(isset($reviewFile))
+			$ithenticateId = $reviewFile->getIthenticateId();
 		if($ithenticateOn && $ithenticateId){
 			$login = Config::getVar('ithenticate', 'login');
 			$password = Config::getVar('ithenticate', 'password');
@@ -286,7 +287,6 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 			
 			$ithDocRepState['reportId'] = $ithenticate->fetchDocumentReportId($ithenticateId);
 			$ithDocRepState['url'] = $ithenticate->fetchDocumentReportUrl($ithDocRepState['reportId']);
-			print_r($ithDocRepState);
 		}
 
 
