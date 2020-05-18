@@ -142,14 +142,20 @@
 								<a href="{url op="downloadFile" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" >{$reviewFile->getFileName()|escape}</a>
 							</td>
 							<td><span style="color: #0b9e3f;">{translate key="submission.fileAccepted"}</span></td>
+							{if $ithenticateOn}
 							<td width="25%">
 								{*Check whether we have iThenticate document ID in DB*}
 								{if $reviewFile->getIthenticateId()}
-								
+									{if $ithDocRepState.is_pending == 0}
+										<span>{$ithDocRepState.percent_match} % <a href="{$ithDocRepState.url}" target="_blank"><button>{translate key="paper.ithenticate.report"}</button></a></span>
+									{else}
+										{translate key="paper.ithenticate.pending"}
+									{/if}
 								{else}
 								<a href="{url op="ithenticateUpload" path=$submission->getPaperId()|to_array:$reviewFile->getFileId():$reviewFile->getRevision()}" class="file" ><button>{translate key="paper.ithenticate.upload"}</button></a>
 								{/if}
 							</td>
+							{/if}
 							<td width="10%">{$reviewFile->getNiceFileSize()}</td>
 							{*<td width="20%">{$reviewFile->getFileType()|truncate:30}</td>*}
 							<td width="15%">{$reviewFile->getDateModified()|date_format:$dateFormatShort}</td>

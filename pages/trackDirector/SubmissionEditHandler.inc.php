@@ -274,6 +274,20 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		}
 
 		// if we have ithenticateId for a reviewFile then load the information about it
+		$ithenticateOn = Config::getVar('ithenticate', 'ithenticate');
+		$reviewFile =& $submission->getReviewFile();
+		$ithenticateId = $reviewFile->getIthenticateId();
+		if($ithenticateOn && $ithenticateId){
+			$login = Config::getVar('ithenticate', 'login');
+			$password = Config::getVar('ithenticate', 'password');
+			$folder = Config::getVar('ithenticate', 'folder');
+			$ithenticate = new Ithenticate($login, $password);
+			$ithDocRepState = $ithenticate->fetchDocumentReportState($ithenticateId);
+			
+			$ithDocRepState['reportId'] = $ithenticate->fetchDocumentReportId($ithenticateId);
+			$ithDocRepState['url'] = $ithenticate->fetchDocumentReportUrl($ithDocRepState['reportId']);
+			print_r($ithDocRepState);
+		}
 
 
 		$templateMgr =& TemplateManager::getManager();
@@ -285,10 +299,12 @@ class SubmissionEditHandler extends TrackDirectorHandler {
 		$templateMgr->assign('reviewStatusOptions', $reviewStatusOptions);
 		$templateMgr->assign('reviewFormResponses', $reviewFormResponses);
 		$templateMgr->assign('reviewFormTitles', $reviewFormTitles);
+		$templateMgr->assign('ithenticateOn', $ithenticateOn);
+		$templateMgr->assign('ithDocRepState', $ithDocRepState);
 		$templateMgr->assign_by_ref('notifyReviewerLogs', $notifyReviewerLogs);
 		$templateMgr->assign_by_ref('submissionFile', $submission->getSubmissionFile());
 		$templateMgr->assign_by_ref('suppFiles', $submission->getSuppFiles());
-		$templateMgr->assign_by_ref('reviewFile', $submission->getReviewFile());
+		$templateMgr->assign_by_ref('reviewFile', $reviewFile);
 		$templateMgr->assign_by_ref('revisedFile', $submission->getRevisedFile());
 		$templateMgr->assign_by_ref('directorFile', $submission->getDirectorFile());
 		$templateMgr->assign('rateReviewerOnQuality', $schedConf->getSetting('rateReviewerOnQuality'));

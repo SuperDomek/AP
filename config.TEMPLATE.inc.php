@@ -326,6 +326,24 @@ items_per_page = 25
 page_links = 10
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+; iThenticate Settings ;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+[ithenticate]
+
+; Turn on / off iThenticate connection
+ithenticate = off
+
+; Login to iThenticate (usually e-mail)
+login = dummy@mail.com
+
+; Password to iThenticate
+password = 123456789
+
+; Folder ID on iThenticate where to store uploaded files
+folder = 12345678
+
 ;;;;;;;;;;;;;;;;;;;;
 ; Captcha Settings ;
 ;;;;;;;;;;;;;;;;;;;;
