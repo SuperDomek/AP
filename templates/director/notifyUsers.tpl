@@ -56,6 +56,12 @@
 	</td>
 </tr>
 <tr valign="top">
+	<td><input type="radio" id="allAuthorsPaperAccepted" name="whichUsers" value="allAuthorsPaperAccepted"/></td>
+	<td class="label">
+		<label for="allAuthorsPaperAccepted">{translate key="director.notifyUsers.allAuthorsPaperAccepted" count=$allAuthorsPaperAcceptedCount|default:0}</label>
+	</td>
+</tr>
+<tr valign="top">
 	<td><input type="radio" id="allAuthorsAbstractRevisions" name="whichUsers" value="allAuthorsAbstractRevisions"/></td>
 	<td class="label">
 		<label for="allAuthorsAbstractRevisions">{translate key="director.notifyUsers.allAuthorsAbstractRevisions" count=$allAuthorsAbstractRevisionsCount|default:0}</label>

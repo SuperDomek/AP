@@ -578,7 +578,10 @@ class DirectorHandler extends TrackDirectorHandler {
 					$recipients =& $registrationDao->getRegisteredUsers($schedConfId, false);
 					break;
 				case 'allAuthorsAbstractAccepted':
-					$recipients =& $authorDao->getAuthorsAlphabetizedAbstractAccepted($schedConfId, STATUS_QUEUED);
+					$recipients =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT);
+					break;
+				case 'allAuthorsPaperAccepted':
+					$recipients =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId);
 					break;
 				case 'allAuthorsAbstractRevisions':
 					$recipients =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS, true);
@@ -641,8 +644,11 @@ class DirectorHandler extends TrackDirectorHandler {
 			$allAuthors =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId);
 			$allAuthorsCount = $allAuthors->getCount();
 
-			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedAbstractAccepted($schedConfId, STATUS_QUEUED);
+			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT);
 			$authorsAbstractAcceptedCount = $authorsAbstractAccepted->getCount();
+
+			$authorsPaperAccepted =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId);
+			$authorsPaperAcceptedCount = $authorsPaperAccepted->getCount();
 
 			$authorsAbstractRevisions =& $authorDao->getAuthorsAlphabetizedByStageAndDecision($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT, SUBMISSION_DIRECTOR_DECISION_PENDING_REVISIONS);
 			$authorsAbstractRevisionsCount = $authorsAbstractRevisions->getCount();
@@ -658,6 +664,7 @@ class DirectorHandler extends TrackDirectorHandler {
 					'allReadersCount' => $roleDao->getSchedConfUsersCount($schedConfId, ROLE_ID_READER),
 					'allAuthorsCount' => $allAuthorsCount,
 					'allAuthorsAbstractAcceptedCount' => $authorsAbstractAcceptedCount,
+					'allAuthorsPaperAcceptedCount' => $authorsPaperAcceptedCount,
 					'allAuthorsAbstractRevisionsCount' => $authorsAbstractRevisionsCount,
 					'allAuthorsPaperRevisionsCount' => $authorsPaperRevisionsCount,
 					'allPaidRegistrantsCount' => $registrationDao->getRegisteredUserCount($schedConfId),

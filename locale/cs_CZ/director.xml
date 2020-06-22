@@ -39,6 +39,7 @@
 	<message key="director.notifyUsers.allReaders">Všichni čtenáři ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allAuthors">Všichni publikovaní prezentující ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allAuthorsAbstractAccepted">Všichni autoři se schváleným abstraktem ({$count} uživatelů)</message>
+	<message key="director.notifyUsers.allAuthorsPaperAccepted">Všichni autoři se schváleným příspěvkem nebo příspěvkem v recenzi ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allAuthorsAbstractRevisions">Všichni autoři s abstraktem s nutností revizí ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allAuthorsPaperRevisions">Všichni autoři s článkem s nutností revizí, kteří ještě neodeslali opravu ({$count} uživatelů)</message>
 	<message key="director.notifyUsers.allPaidRegistrants">Všichni se zaplaceným vložným ({$count} uživatelů)</message>

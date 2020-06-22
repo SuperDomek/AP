@@ -37,6 +37,7 @@
 	<message key="director.notifyUsers.allReaders">All readers ({$count} users)</message>
 	<message key="director.notifyUsers.allAuthors">All published presenters ({$count} users)</message>
 	<message key="director.notifyUsers.allAuthorsAbstractAccepted">All authors with accepted abstract ({$count} users)</message>
+	<message key="director.notifyUsers.allAuthorsPaperAccepted">All authors with accepted paper or paper in review ({$count} users)</message>
 	<message key="director.notifyUsers.allAuthorsAbstractRevisions">All authors with abstract needing revision ({$count} users)</message>
 	<message key="director.notifyUsers.allAuthorsPaperRevisions">All authors with paper needing revision who did not submit the revision yet ({$count} users)</message>
 	<message key="director.notifyUsers.allPaidRegistrants">All paid registrants ({$count} users)</message>

@@ -241,11 +241,12 @@ class AuthorDAO extends DAO {
 	 * scheduled conferences are returned.
 	 * @param $schedConfId int
 	 * @param $status status of the wanted papers; if null then both Published and Queued
+	 * @param $stage stage where to look for papers; if null then all stages
 	 * @param $includeEmail Whether or not to include the email in the select distinct
 	 * @return object ItemIterator Authors ordered by sequence
 	 */
 
-	function &getAuthorsAlphabetizedAbstractAccepted($schedConfId = null, $status = null, $includeEmail = false) {
+	function &getAuthorsAlphabetizedSubmissionAccepted($schedConfId = null, $status = null, $stage = null, $includeEmail = false) {
 		$params = array();
 		$rangeInfo = null;
 
@@ -255,11 +256,22 @@ class AuthorDAO extends DAO {
 			$params[] = $status;
 			$statusSql = ' AND a.status = ?';
 		} else {
-			$statusSql = 'AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
+			$statusSql = ' AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
 		}
 
-		// only decisions for paper revisions
-		$decisionSql = ' AND (ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC . ')';
+		if (isset($stage)) {
+			//$progress = $stage + 1;
+			$stageSql = ' AND ed.stage = ' . $stage;
+		}
+		else {
+			$stageSql = ' AND a.current_stage = ed.stage';
+		}
+
+		// only decisions for papers accepted or accepted with revisions
+		//
+		//
+		$decisionSql = ' AND (ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_ACCEPT . '
+		OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS . ')';
 
 		$result =& $this->retrieveRange(
 			'SELECT	DISTINCT CAST(\'\' AS CHAR) AS url,
@@ -280,10 +292,7 @@ class AuthorDAO extends DAO {
 				edit_decisions ed
 			WHERE aa.user_id = a.user_id
 				' . (isset($schedConfId)?'AND a.sched_conf_id = ? ':'') . '
-				AND a.paper_id = ed.paper_id
-				AND a.current_stage = 2
-				AND a.submission_progress = 2
-				AND ed.stage = 1 ' . $statusSql . '
+				AND a.paper_id = ed.paper_id' . $stageSql . $statusSql . '
 				AND (aa.last_name IS NOT NULL
 				AND aa.last_name <> \'\')' . $decisionSql . ' ORDER BY aa.last_name, aa.first_name',
 			empty($params)?false:$params,
