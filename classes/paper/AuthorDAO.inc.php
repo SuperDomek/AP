@@ -235,43 +235,39 @@ class AuthorDAO extends DAO {
 	}
 
 	/**
-	 * Retrieve all authors for scheduled conference with accepted abstracts
-	 * Accepted means Accepted or Accepted with suggestions 
+	 * Retrieve unique submitters for scheduled conference with accepted abstracts for REVIEW_STAGE_ABSTRACT
+	 * or published papers and papers in review for > REVIEW_STAGE_ABSTRACT
+	 * Accepted abstract means Accepted or Accepted with suggestions 
 	 * Note that if schedConfId is null, alphabetized authors for all
 	 * scheduled conferences are returned.
+	 * If stage null then accepted papers and papers for review will be selected
 	 * @param $schedConfId int
-	 * @param $status status of the wanted papers; if null then both Published and Queued
-	 * @param $stage stage where to look for papers; if null then all stages
+	 * @param $stage stage abstract or review; if null then all stages
 	 * @param $includeEmail Whether or not to include the email in the select distinct
 	 * @return object ItemIterator Authors ordered by sequence
 	 */
 
-	function &getAuthorsAlphabetizedSubmissionAccepted($schedConfId = null, $status = null, $stage = null, $includeEmail = false) {
+	function &getAuthorsAlphabetizedSubmissionAccepted($schedConfId = null, $stage = null, $includeEmail = false) {
 		$params = array();
 		$rangeInfo = null;
 
 		if (isset($schedConfId)) $params[] = $schedConfId;
 
-		if (isset($status)) {
+		/* if (isset($status)) {
 			$params[] = $status;
 			$statusSql = ' AND a.status = ?';
 		} else {
 			$statusSql = ' AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
-		}
+		} */
 
-		if (isset($stage)) {
-			//$progress = $stage + 1;
-			$stageSql = ' AND ed.stage = ' . $stage;
+		if ($stage <> REVIEW_STAGE_ABSTRACT) {
+			$statusSql = ' AND (a.status = ' . STATUS_PUBLISHED . ' OR a.status = ' . STATUS_QUEUED . ')';
+			$sub_progress = ' AND a.submission_progress = 0'; // papers with uploaded first review file
 		}
 		else {
-			$stageSql = ' AND a.current_stage = ed.stage';
+			$statusSql = ' AND a.status = ' . STATUS_QUEUED . ' AND a.current_stage = 2'; // first paper review stage
+			$sub_progress = ' AND a.submission_progress = 2'; // papers waiting to upload first review file
 		}
-
-		// only decisions for papers accepted or accepted with revisions
-		//
-		//
-		$decisionSql = ' AND (ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_INVITE_TOPIC . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_ACCEPT . '
-		OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_PENDING_MINOR_REVISIONS . ' OR ed.decision = ' . SUBMISSION_DIRECTOR_DECISION_PENDING_MAJOR_REVISIONS . ')';
 
 		$result =& $this->retrieveRange(
 			'SELECT	DISTINCT CAST(\'\' AS CHAR) AS url,
@@ -292,9 +288,9 @@ class AuthorDAO extends DAO {
 				edit_decisions ed
 			WHERE aa.user_id = a.user_id
 				' . (isset($schedConfId)?'AND a.sched_conf_id = ? ':'') . '
-				AND a.paper_id = ed.paper_id' . $stageSql . $statusSql . '
+				AND a.paper_id = ed.paper_id' . $sub_progress . $statusSql . '
 				AND (aa.last_name IS NOT NULL
-				AND aa.last_name <> \'\')' . $decisionSql . ' ORDER BY aa.last_name, aa.first_name',
+				AND aa.last_name <> \'\')' . ' ORDER BY aa.last_name, aa.first_name',
 			empty($params)?false:$params,
 			$rangeInfo
 		);

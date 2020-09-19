@@ -578,7 +578,7 @@ class DirectorHandler extends TrackDirectorHandler {
 					$recipients =& $registrationDao->getRegisteredUsers($schedConfId, false);
 					break;
 				case 'allAuthorsAbstractAccepted':
-					$recipients =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT);
+					$recipients =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId, REVIEW_STAGE_ABSTRACT);
 					break;
 				case 'allAuthorsPaperAccepted':
 					$recipients =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId);
@@ -644,7 +644,7 @@ class DirectorHandler extends TrackDirectorHandler {
 			$allAuthors =& $authorDao->getAuthorsAlphabetizedBySchedConf($schedConfId);
 			$allAuthorsCount = $allAuthors->getCount();
 
-			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId, STATUS_QUEUED, REVIEW_STAGE_ABSTRACT);
+			$authorsAbstractAccepted =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId, REVIEW_STAGE_ABSTRACT);
 			$authorsAbstractAcceptedCount = $authorsAbstractAccepted->getCount();
 
 			$authorsPaperAccepted =& $authorDao->getAuthorsAlphabetizedSubmissionAccepted($schedConfId);
