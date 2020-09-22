@@ -14,11 +14,29 @@
 {include file="common/header.tpl"}
 {/strip}
 
-<form method="post" action="{$formActionUrl}">
+<script type="text/javascript">
+{literal}
+<!--
+function deleteAttachment(fileId) {
+	document.emailForm.deleteAttachment.value = fileId;
+	document.emailForm.submit();
+}
+// -->
+{/literal}
+</script>
+
+<form method="post" action="{$formActionUrl}"{if $attachmentsEnabled} enctype="multipart/form-data"{/if}>
 <input type="hidden" name="continued" value="1"/>
 {if $hiddenFormParams}
 	{foreach from=$hiddenFormParams item=hiddenFormParam key=key}
 		<input type="hidden" name="{$key|escape}" value="{$hiddenFormParam|escape}" />
+	{/foreach}
+{/if}
+
+{if $attachmentsEnabled}
+	<input type="hidden" name="deleteAttachment" value="" />
+	{foreach from=$persistAttachments item=temporaryFile}
+		{if is_object($temporaryFile)}<input type="hidden" name="persistAttachments[]" value="{$temporaryFile->getFileId()}" />{/if}
 	{/foreach}
 {/if}
 
@@ -110,6 +128,30 @@
 	<td class="label">{fieldLabel name="body" key="email.body"}</td>
 	<td class="value"><textarea name="body" cols="60" rows="15" class="textArea">{$body|escape}</textarea></td>
 </tr>
+{if $attachmentsEnabled}
+<tr valign="top">
+	<td colspan="2">&nbsp;</td>
+</tr>
+<tr valign="top">
+	<td class="label">{translate key="email.attachments"}</td>
+	<td class="value">
+		{assign var=attachmentNum value=1}
+		{foreach from=$persistAttachments item=temporaryFile}
+			{if is_object($temporaryFile)}
+				{$attachmentNum|escape}.&nbsp;{$temporaryFile->getOriginalFileName()|escape}&nbsp;
+				({$temporaryFile->getNiceFileSize()})&nbsp;
+				<a href="javascript:deleteAttachment({$temporaryFile->getFileId()})" class="action">{translate key="common.delete"}</a>
+				<br/>
+				{assign var=attachmentNum value=$attachmentNum+1}
+			{/if}
+		{/foreach}
+
+		{if $attachmentNum != 1}<br/>{/if}
+
+		<input type="file" name="newAttachment" class="uploadField" /> <input name="addAttachment" type="submit" class="button" value="{translate key="common.upload"}" />
+	</td>
+</tr>
+{/if}
 </table>
 
 <p><input name="send" type="submit" value="{translate key="email.send"}" class="button defaultButton" /> <input type="button" value="{translate key="common.cancel"}" class="button" onclick="history.go(-1)" /></p>
