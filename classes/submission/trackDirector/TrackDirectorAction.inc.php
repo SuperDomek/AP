@@ -1973,6 +1973,9 @@ import('file.PaperFileManager');
 		$user =& Request::getUser();
 		import('mail.PaperMailTemplate');
 		$email = new PaperMailTemplate($trackDirectorSubmission, $templateName, 'en_US');
+		$conferenceDate = strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate'));
+		$conferenceDate .= " - ";
+		$conferenceDate .= strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('endDate'));
 		// Přidat auto
 		if ($send && $auto){
 			//error_log("Sending e-mail to author");
@@ -1987,7 +1990,7 @@ import('file.PaperFileManager');
 			}
 			$email->setFrom($schedConf->getSetting('contactEmail'), $schedConf->getSetting('contactName'));
 			$email->assignParams(array(
-				'conferenceDate' => strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate')),
+				'conferenceDate' => $conferenceDate,
 				'authorName' => $authorUser->getFullName(),
 				'conferenceTitle' => $conference->getConferenceTitle(),
 				'editorialContactSignature' => $schedConf->getSetting('contactName') . "\n" . $conference->getConferenceTitle(),
@@ -2107,7 +2110,7 @@ import('file.PaperFileManager');
 					}
 				}
 				$email->assignParams(array(
-					'conferenceDate' => strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate')),
+					'conferenceDate' => $conferenceDate,
 					'authorName' => $authorUser->getFullName(),
 					'conferenceTitle' => $conference->getConferenceTitle(),
 					'editorialContactSignature' => $user->getContactSignature(),
