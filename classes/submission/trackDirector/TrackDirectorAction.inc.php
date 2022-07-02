@@ -1973,9 +1973,15 @@ import('file.PaperFileManager');
 		$user =& Request::getUser();
 		import('mail.PaperMailTemplate');
 		$email = new PaperMailTemplate($trackDirectorSubmission, $templateName, 'en_US');
-		$conferenceDate = strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate'));
-		$conferenceDate .= " - ";
-		$conferenceDate .= strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('endDate'));
+		//set the conference date variable with date range if more dates
+		if($schedConf->getSetting('startDate') != $schedConf->getSetting('endDate')){
+			$conferenceDate = strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate'));
+			$conferenceDate .= " - ";
+			$conferenceDate .= strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('endDate'));
+		}
+		else {
+			$conferenceDate = strftime(Config::getVar('general', 'date_format_short'), $schedConf->getSetting('startDate'));
+		}
 		// Přidat auto
 		if ($send && $auto){
 			//error_log("Sending e-mail to author");
